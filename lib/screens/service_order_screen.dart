@@ -45,12 +45,12 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     'نجارين': Icons.handyman,
     'محلات جزارة': Icons.storefront,
     'صيدليات': Icons.local_pharmacy,
-    'صالة ألعاب رياضية': Icons.fitness_center,
+    'صالة ألعاب رياضية': Icons.fitness_center, // أيقونة الجيم
   };
 
+  List<String> selectedCategories = [];
   List<Map<String, String>> displayedServices = [];
   String searchQuery = '';
-  List<String> selectedCategories = [];
 
   @override
   void initState() {
@@ -61,61 +61,66 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   void filterServices() {
     setState(() {
       displayedServices = allServices.where((service) {
+        final matchesCategory = selectedCategories.isEmpty ||
+            selectedCategories.contains(service['category']);
         final matchesSearch = service['name']!
             .toLowerCase()
             .contains(searchQuery.toLowerCase().trim());
-        final matchesCategory = selectedCategories.isEmpty ||
-            selectedCategories.contains(service['category']);
-        return matchesSearch && matchesCategory;
+        return matchesCategory && matchesSearch;
       }).toList();
     });
   }
 
   void showFilterDialog() {
-    List<String> tempSelectedCategories = List.from(selectedCategories);
+    final categories =
+        allServices.map((service) => service['category']!).toSet();
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setDialogState) {
+          builder: (context, setState) {
             return AlertDialog(
-              title: const Text('تصفية حسب الفئة',
-                  textDirection: TextDirection.rtl),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: categoryIcons.keys.map((category) {
-                    return CheckboxListTile(
-                      title: Text(category, textDirection: TextDirection.rtl),
-                      value: tempSelectedCategories.contains(category),
-                      onChanged: (bool? value) {
-                        setDialogState(() {
-                          if (value == true) {
-                            tempSelectedCategories.add(category);
-                          } else {
-                            tempSelectedCategories.remove(category);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
+              title:
+                  const Text('اختر الفئات', textDirection: TextDirection.rtl),
+              content: SizedBox(
+                height: 300, // تحديد ارتفاع يسمح بالـ Scroll
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: categories
+                        .map(
+                          (category) => CheckboxListTile(
+                            title: Text(category,
+                                textDirection: TextDirection.rtl),
+                            value: selectedCategories.contains(category),
+                            activeColor: Colors.blue,
+                            checkColor: Colors.white,
+                            onChanged: (bool? isChecked) {
+                              setState(() {
+                                if (isChecked ?? false) {
+                                  selectedCategories.add(category);
+                                } else {
+                                  selectedCategories.remove(category);
+                                }
+                              });
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
-                  },
-                  child: const Text('إلغاء'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedCategories = tempSelectedCategories;
-                      filterServices();
-                    });
-                    Navigator.pop(context);
+                    filterServices();
                   },
                   child: const Text('تطبيق'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('إلغاء'),
                 ),
               ],
             );
@@ -125,11 +130,33 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     );
   }
 
+  void openServiceDetails(String serviceName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text(serviceName, textDirection: TextDirection.rtl),
+            centerTitle: true,
+          ),
+          body: Center(
+            child: Text(
+              'تفاصيل $serviceName',
+              style: const TextStyle(fontSize: 20),
+              textDirection: TextDirection.rtl,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('طلبات الخدمة', textDirection: TextDirection.rtl),
+        automaticallyImplyLeading: false, // إزالة زر الرجوع
         centerTitle: true,
       ),
       body: Padding(
@@ -154,7 +181,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                     textDirection: TextDirection.rtl,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(Icons.filter_list),
                   onPressed: showFilterDialog,
@@ -163,35 +190,24 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.3,
-                ),
+              child: ListView.builder(
                 itemCount: displayedServices.length,
                 itemBuilder: (context, index) {
                   final service = displayedServices[index];
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade100,
-                        borderRadius: BorderRadius.circular(12),
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      title: Text(
+                        service['name']!,
+                        textDirection: TextDirection.rtl,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            categoryIcons[service['category']] ?? Icons.store,
-                            size: 40,
-                            color: Colors.blue.shade700,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(service['name']!, textAlign: TextAlign.center),
-                        ],
+                      subtitle: Text(
+                        service['category']!,
+                        textDirection: TextDirection.rtl,
                       ),
+                      leading: Icon(categoryIcons[service['category']] ??
+                          Icons.storefront),
+                      onTap: () => openServiceDetails(service['name']!),
                     ),
                   );
                 },

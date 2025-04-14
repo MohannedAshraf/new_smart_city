@@ -1,4 +1,5 @@
 import 'package:city/generated/l10n.dart';
+import 'package:city/screens/on_boarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
@@ -8,7 +9,6 @@ import 'screens/service_order_screen.dart';
 import 'screens/about.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
-import 'screens/login_page.dart';
 
 void main() {
   runApp(const CityApp());
@@ -29,7 +29,7 @@ class CityApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const StartPage(),
     );
   }
 }
@@ -79,27 +79,23 @@ class HomePageState extends State<HomePage> {
                   ),
                   Text(
                     'مرحباً بك .....',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                 ],
-              )
+              ),
             ],
           ),
           actions: [
             IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Notifications()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Notifications(),
+                  ),
+                );
               },
-              icon: const Icon(
-                Icons.notifications,
-                color: Colors.white,
-              ),
+              icon: const Icon(Icons.notifications, color: Colors.white),
             ),
           ],
         ),
@@ -110,9 +106,7 @@ class HomePageState extends State<HomePage> {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF3D6643),
-              ),
+              decoration: BoxDecoration(color: Color(0xFF3D6643)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -126,10 +120,7 @@ class HomePageState extends State<HomePage> {
                   ),
                   Text(
                     'مرحباً بكم!',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                 ],
               ),
@@ -179,8 +170,10 @@ class HomePageState extends State<HomePage> {
               title: const Text('من نحن..؟'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AboutUs()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AboutUs()),
+                );
               },
             ),
             ListTile(
@@ -188,8 +181,10 @@ class HomePageState extends State<HomePage> {
               title: const Text('الملف الشخصي'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Profile()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
               },
             ),
             ListTile(
@@ -197,8 +192,10 @@ class HomePageState extends State<HomePage> {
               title: const Text('تسجيل الخروج'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const StartPage()),
+                );
               },
             ),
           ],

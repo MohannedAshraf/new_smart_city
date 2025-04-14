@@ -1,4 +1,3 @@
-import 'package:city/screens/government_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -177,23 +176,23 @@ class _IssueScreenState extends State<IssueScreen> {
                       ],
                     ),
                   ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GovernmentScreen()),
-                    );
-                  },
-                  child: const Text(
-                    'عرض جميع الشكاوي',
-                    style: TextStyle(
-                      color: Color(0xFF3D6643),
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const GovernmentScreen()),
+                //     );
+                //   },
+                //   child: const Text(
+                //     'عرض جميع الشكاوي',
+                //     style: TextStyle(
+                //       color: Color(0xFF3D6643),
+                //       fontWeight: FontWeight.bold,
+                //       decoration: TextDecoration.underline,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           );

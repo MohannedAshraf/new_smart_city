@@ -7,6 +7,7 @@ class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _IssueScreenState createState() => _IssueScreenState();
 }
 

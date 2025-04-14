@@ -52,41 +52,71 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `All`
+  /// `اامدينتنا`
+  String get appName {
+    return Intl.message(
+      'اامدينتنا',
+      name: 'appName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `مرحباً بك .....`
+  String get welcome {
+    return Intl.message(
+      'مرحباً بك .....',
+      name: 'welcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `الجميع`
   String get all {
     return Intl.message(
-      'All',
+      'الجميع',
       name: 'all',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sent`
+  /// `المرسلة`
   String get sent {
     return Intl.message(
-      'Sent',
+      'المرسلة',
       name: 'sent',
       desc: '',
       args: [],
     );
   }
 
-  /// `Under Review`
+  /// `المراجعة`
   String get underreview {
     return Intl.message(
-      'Under Review',
+      'المراجعة',
       name: 'underreview',
       desc: '',
       args: [],
     );
   }
 
-  /// `Resolved`
+  /// `تم حلها`
   String get resolved {
     return Intl.message(
-      'Resolved',
+      'تم حلها',
       name: 'resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `المرفوضة`
+  String get rejected {
+    return Intl.message(
+      'المرفوضة',
+      name: 'rejected',
       desc: '',
       args: [],
     );

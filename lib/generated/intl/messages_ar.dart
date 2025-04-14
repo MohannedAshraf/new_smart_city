@@ -4,15 +4,13 @@
 // function name.
 
 // Ignore issues from commonly used lints in this file.
-// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
+// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new, depend_on_referenced_packages
 // ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
 // ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
 // ignore_for_file:unused_import, file_names, avoid_escaping_inner_quotes
 // ignore_for_file:unnecessary_string_interpolations, unnecessary_string_escapes
 
-// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
-// ignore: depend_on_referenced_packages
 import 'package:intl/message_lookup_by_library.dart';
 
 final messages = new MessageLookup();
@@ -25,8 +23,11 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "all": MessageLookupByLibrary.simpleMessage("الجميع"),
+        "appName": MessageLookupByLibrary.simpleMessage("اامدينتنا"),
+        "rejected": MessageLookupByLibrary.simpleMessage("المرفوضة"),
         "resolved": MessageLookupByLibrary.simpleMessage("تم حلها"),
         "sent": MessageLookupByLibrary.simpleMessage("المرسلة"),
-        "underreview": MessageLookupByLibrary.simpleMessage("المراجعة")
+        "underreview": MessageLookupByLibrary.simpleMessage("المراجعة"),
+        "welcome": MessageLookupByLibrary.simpleMessage("مرحباً بك .....")
       };
 }
