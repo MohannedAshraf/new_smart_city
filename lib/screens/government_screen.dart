@@ -14,14 +14,15 @@ class GovernmentScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: GestureDetector(
           onTap: () {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(const SnackBar(content: Text('Image Clicked!')));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Image Clicked!')));
           },
           child: const CircleAvatar(
             radius: 55,
             backgroundColor: MyColors.themecolor,
             child: CircleAvatar(
-              backgroundImage: AssetImage('images/logo1.png'),
+              backgroundImage: AssetImage('assets/image/logo1.png'),
               radius: 50,
             ),
           ),
@@ -39,35 +40,26 @@ class GovernmentScreen extends StatelessWidget {
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               indicator: const BoxDecoration(
-                  color: MyColors.cardcolor,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
+                color: MyColors.cardcolor,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
               labelColor: MyColors.cardfontcolor,
               unselectedLabelColor: Colors.black,
               tabs: [
-                TabItem(
-                  title: S.of(context).resolved,
-                ),
-                TabItem(
-                  title: S.of(context).underreview,
-                ),
-                TabItem(
-                  title: S.of(context).rejected,
-                ),
+                TabItem(title: S.of(context).resolved),
+                TabItem(title: S.of(context).underreview),
+                TabItem(title: S.of(context).rejected),
               ],
             ),
           ),
         ),
-        body: const TabBarView(children: [
-          TabBarViewItem(
-            title: 'Completed',
-          ),
-          TabBarViewItem(
-            title: 'Pending',
-          ),
-          TabBarViewItem(
-            title: 'Rejected',
-          )
-        ]),
+        body: const TabBarView(
+          children: [
+            TabBarViewItem(title: 'Completed'),
+            TabBarViewItem(title: 'Pending'),
+            TabBarViewItem(title: 'Rejected'),
+          ],
+        ),
       ),
     );
   }
