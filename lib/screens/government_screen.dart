@@ -14,15 +14,24 @@ class GovernmentScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: GestureDetector(
           onTap: () {
+<<<<<<< HEAD
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text('Image Clicked!')));
+=======
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text('Image Clicked!')));
+>>>>>>> 7890ee5142d3fccbef3ddee2f2f3de39f2520121
           },
           child: const CircleAvatar(
             radius: 55,
             backgroundColor: MyColors.themecolor,
             child: CircleAvatar(
+<<<<<<< HEAD
               backgroundImage: AssetImage('assets/image/logo1.png'),
+=======
+              backgroundImage: AssetImage('images/logo1.png'),
+>>>>>>> 7890ee5142d3fccbef3ddee2f2f3de39f2520121
               radius: 50,
             ),
           ),
@@ -40,6 +49,7 @@ class GovernmentScreen extends StatelessWidget {
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               indicator: const BoxDecoration(
+<<<<<<< HEAD
                 color: MyColors.cardcolor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -49,10 +59,27 @@ class GovernmentScreen extends StatelessWidget {
                 TabItem(title: S.of(context).resolved),
                 TabItem(title: S.of(context).underreview),
                 TabItem(title: S.of(context).rejected),
+=======
+                  color: MyColors.cardcolor,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              labelColor: MyColors.cardfontcolor,
+              unselectedLabelColor: Colors.black,
+              tabs: [
+                TabItem(
+                  title: S.of(context).resolved,
+                ),
+                TabItem(
+                  title: S.of(context).underreview,
+                ),
+                TabItem(
+                  title: S.of(context).rejected,
+                ),
+>>>>>>> 7890ee5142d3fccbef3ddee2f2f3de39f2520121
               ],
             ),
           ),
         ),
+<<<<<<< HEAD
         body: const TabBarView(
           children: [
             TabBarViewItem(title: 'Completed'),
@@ -60,6 +87,19 @@ class GovernmentScreen extends StatelessWidget {
             TabBarViewItem(title: 'Rejected'),
           ],
         ),
+=======
+        body: const TabBarView(children: [
+          TabBarViewItem(
+            title: 'Completed',
+          ),
+          TabBarViewItem(
+            title: 'Pending',
+          ),
+          TabBarViewItem(
+            title: 'Rejected',
+          )
+        ]),
+>>>>>>> 7890ee5142d3fccbef3ddee2f2f3de39f2520121
       ),
     );
   }
