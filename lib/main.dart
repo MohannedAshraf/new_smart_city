@@ -50,7 +50,7 @@ class HomePageState extends State<HomePage> {
     const GovernmentScreen(),
     const IssueScreen(),
     const ServiceOrderScreen(),
-    const SocilaMedia(),
+
     const AboutUs(),
     const Notifications(),
     const Profile(),
@@ -174,7 +174,7 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SocilaMedia()),
+                  MaterialPageRoute(builder: (context) => SocialMedia()),
                 );
               },
             ),
