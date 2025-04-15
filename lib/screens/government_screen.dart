@@ -3,7 +3,8 @@ import 'package:city/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/tab_item.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+final Uri _url = Uri.parse('https://dribbble.com/shots/popular/mobile');
 class GovernmentScreen extends StatelessWidget {
   const GovernmentScreen({super.key});
 
@@ -13,47 +14,60 @@ class GovernmentScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         floatingActionButton: GestureDetector(
-          onTap: () {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Image Clicked!')));
-          },
-          child: const CircleAvatar(
+          onTap: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('سيتم تحويلك خارج تطبيق citio'),
+              content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text('الغاء'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    launchUrl(_url, mode: LaunchMode.inAppWebView);
+                  },
+                  child: const Text('نعم'),
+                ),
+              ],
+            ),
+          ),
+          child: CircleAvatar(
             radius: 55,
             backgroundColor: MyColors.themecolor,
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/image/logo1.png'),
+              backgroundImage: AssetImage('images/logo1.png'),
               radius: 50,
             ),
           ),
         ),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Container(
-            //margin: EdgeInsets.all(0),
             decoration: BoxDecoration(
-              // ignore: deprecated_member_use
               color: Colors.grey.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10),
             ),
-            // color: Colors.grey.withOpacity(0.3),
+
             child: TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
-              indicator: const BoxDecoration(
+              indicator: BoxDecoration(
                 color: MyColors.cardcolor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               labelColor: MyColors.cardfontcolor,
               unselectedLabelColor: Colors.black,
               tabs: [
-                TabItem(title: S.of(context).resolved),
-                TabItem(title: S.of(context).underreview),
-                TabItem(title: S.of(context).rejected),
+                TabItem(title: 'تم حلها'),
+                TabItem(title: 'تحت المراجعة'),
+                TabItem(title: 'المرفوضة'),
               ],
             ),
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             TabBarViewItem(title: 'Completed'),
             TabBarViewItem(title: 'Pending'),

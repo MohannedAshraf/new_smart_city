@@ -1,6 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'intl/messages_all.dart';
@@ -52,71 +50,41 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `اامدينتنا`
-  String get appName {
-    return Intl.message(
-      'اامدينتنا',
-      name: 'appName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `مرحباً بك .....`
-  String get welcome {
-    return Intl.message(
-      'مرحباً بك .....',
-      name: 'welcome',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `الجميع`
+  /// `All`
   String get all {
     return Intl.message(
-      'الجميع',
+      'All',
       name: 'all',
       desc: '',
       args: [],
     );
   }
 
-  /// `المرسلة`
+  /// `Sent`
   String get sent {
     return Intl.message(
-      'المرسلة',
+      'Sent',
       name: 'sent',
       desc: '',
       args: [],
     );
   }
 
-  /// `المراجعة`
+  /// `Under Review`
   String get underreview {
     return Intl.message(
-      'المراجعة',
+      'Under Review',
       name: 'underreview',
       desc: '',
       args: [],
     );
   }
 
-  /// `تم حلها`
+  /// `Resolved`
   String get resolved {
     return Intl.message(
-      'تم حلها',
+      'Resolved',
       name: 'resolved',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `المرفوضة`
-  String get rejected {
-    return Intl.message(
-      'المرفوضة',
-      name: 'rejected',
       desc: '',
       args: [],
     );

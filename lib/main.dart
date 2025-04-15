@@ -9,6 +9,7 @@ import 'screens/service_order_screen.dart';
 import 'screens/about.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
+import 'screens/social_media.dart';
 
 void main() {
   runApp(const CityApp());
@@ -49,6 +50,7 @@ class HomePageState extends State<HomePage> {
     const GovernmentScreen(),
     const IssueScreen(),
     const ServiceOrderScreen(),
+    const SocilaMedia(),
     const AboutUs(),
     const Notifications(),
     const Profile(),
@@ -163,6 +165,17 @@ class HomePageState extends State<HomePage> {
                   currentIndex = 3;
                 });
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.groups),
+              title: const Text('Social Media'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SocilaMedia()),
+                );
               },
             ),
             ListTile(

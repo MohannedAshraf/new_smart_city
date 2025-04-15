@@ -1,6 +1,10 @@
 {
-    "all":"All",
-    "sent":"Sent",
-    "underreview":"Under Review",
-    "resolved":"Resolved"
+    "appName":"اامدينتنا",
+    "welcome":"مرحباً بك .....",
+    "all":"الجميع",
+    "sent":"المرسلة",
+    "underreview":"المراجعة",
+    "resolved":"تم حلها",
+    "rejected":"المرفوضة"
+    
 }

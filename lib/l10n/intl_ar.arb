@@ -1,7 +1,9 @@
 {
+    "appName":"اامدينتنا",
+    "welcome":"مرحباً بك .....",
     "all":"الجميع",
     "sent":"المرسلة",
     "underreview":"المراجعة",
-    "resolved":"تم حلها"
-    
+    "resolved":"تم حلها",
+    "rejected":"المرفوضة"
 }
