@@ -10,10 +10,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: SearchBar(),
-            ),
+            const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
             _buildBoxesSection(context, 'الخدمات الحكومية'),
@@ -45,13 +42,16 @@ class HomeScreen extends StatelessWidget {
             itemCount: 6,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServiceDetailsScreen(
-                        serviceName: '$title ${index + 1}'),
-                  ),
-                ),
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => ServiceDetailsScreen(
+                              serviceName: '$title ${index + 1}',
+                            ),
+                      ),
+                    ),
                 child: ServiceBox(title: '$title ${index + 1}'),
               );
             },
@@ -63,14 +63,14 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({super.key});
+class MySearchBar extends StatelessWidget {
+  const MySearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Search For..?',
+        hintText: 'ماذا تريد ',
         prefixIcon: const Icon(Icons.search),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
         filled: true,
@@ -143,19 +143,19 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
   final List<Map<String, String>> _imageData = const [
     {
       'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'محمد رمضان'
+      'caption': 'محمد رمضان',
     },
     {
       'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'المكسيكي'
+      'caption': 'المكسيكي',
     },
     {
       'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'رابعه حاسبات'
+      'caption': 'رابعه حاسبات',
     },
     {
       'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'التخرج'
+      'caption': 'التخرج',
     },
   ];
 
@@ -169,15 +169,17 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
             height: 150.0,
             autoPlay: true,
             enlargeCenterPage: true,
-            onPageChanged: (index, reason) =>
-                setState(() => _currentIndex = index),
+            onPageChanged:
+                (index, reason) => setState(() => _currentIndex = index),
           ),
         ),
         const SizedBox(height: 10.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(_imageData.length,
-              (index) => Indicator(isActive: _currentIndex == index)),
+          children: List.generate(
+            _imageData.length,
+            (index) => Indicator(isActive: _currentIndex == index),
+          ),
         ),
       ],
     );
@@ -191,33 +193,41 @@ class ImageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              ServiceDetailsScreen(serviceName: data['caption']!),
-        ),
-      ),
+      onTap:
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      ServiceDetailsScreen(serviceName: data['caption']!),
+            ),
+          ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Stack(
           children: [
-            Image.network(data['url']!,
-                fit: BoxFit.cover, width: double.infinity),
+            Image.network(
+              data['url']!,
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
             Positioned(
               bottom: 20.0,
               left: 10.0,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 5.0,
+                ),
                 // ignore: deprecated_member_use
                 color: Colors.black.withOpacity(0.15),
                 child: Text(
                   data['caption']!,
                   style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

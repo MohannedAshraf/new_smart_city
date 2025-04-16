@@ -1,7 +1,7 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/category_circle.dart';
-import 'package:city/core/widgets/categorysubcategory.dart';
+import 'package:city/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -46,30 +46,34 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
           children: [
             const SizedBox(height: 20),
 
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextFormField(
-                controller: _controller,
-                onChanged: (value) {
-                  setState(() {
-                    searchText = value;
-                  });
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  suffixIcon: Icon(Icons.search),
-                  hintText: "ابحث  عن اي  خدمه ",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
+            // Container(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.circular(12),
+            //   ),
+            //   child: TextFormField(
+            //     controller: _controller,
+            //     onChanged: (value) {
+            //       setState(() {
+            //         searchText = value;
+            //       });
+            //     },
+            //     decoration: const InputDecoration(
+            //       border: InputBorder.none,
+
+            //       hintText: "ابحث  عن اي  خدمه ",
+            //       hintStyle: TextStyle(
+            //         color: Colors.grey,
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w400,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: MySearchBar(),
             ),
 
             const SizedBox(height: 30),
@@ -136,102 +140,128 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 
             const SizedBox(height: 30),
 
-            const Categorysubcategory(
-              category: "Food",
-              subcat: "Fast Food",
-              subcat1: "Bakeries",
-              subcat2: "Seafood",
-              subcat3: "Snacks",
-              subcat4: "Organic Food",
-              subcat5: "Dairy Products",
+            const ProductCard(
+              image: MyAssetsImage.sandwitch,
+              price: "100 LE",
+              rating: 3.5,
             ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Beverages",
-              subcat: "Juices",
-              subcat1: "Soft Drinks",
-              subcat2: "Tea",
-              subcat3: "Coffee Beans",
-              subcat4: "Energy Drinks",
+            const ProductCard(
+              image: MyAssetsImage.burger,
+              price: "150 LE",
+              rating: 4.25,
             ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Clothing",
-              subcat: "Men's Clothing",
-              subcat1: "Women's Clothing",
-              subcat2: "Children's Clothing",
-              subcat3: "Sportswear",
-              subcat4: "Accessories",
+            const ProductCard(
+              image: MyAssetsImage.sandwitch,
+              price: "100 LE",
+              rating: 3.5,
             ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Electronics",
-              subcat: "Mobile Phones",
-              subcat1: "Laptops",
-              subcat2: "Gaming Consoles",
-              subcat3: "Televisions",
-              subcat4: "Accessories",
-              subcat5: "Air Conditioners",
-              subcat6: "Refrigerators",
-              subcat7: "Washing Machines",
-              subcat8: "Microwave Ovens",
-              subcat9: "Cameras",
+            const ProductCard(
+              image: MyAssetsImage.sandwitch,
+              price: "100 LE",
+              rating: 3.5,
             ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Health & Personal Care",
-              subcat: "Hair Salons",
-              subcat1: "Fitness Centers",
-              subcat2: "Clinics",
-              subcat3: "Pharmacies",
-              subcat4: "Spas",
+            const ProductCard(
+              image: MyAssetsImage.sandwitch,
+              price: "100 LE",
+              rating: 3.5,
             ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Public Services",
-              subcat: "Electricity",
-              subcat1: "Water Supply",
-              subcat2: "Waste Collection",
-              subcat3: "Public Transportation",
-              subcat4: "Emergency Services",
-              subcat5: "Postal Services",
-            ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Education & Training",
-              subcat: "Schools",
-              subcat1: "Universities",
-              subcat2: "Language Centers",
-              subcat3: "Online Courses",
-              subcat4: "Skill Development",
-            ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Entertainment",
-              subcat: "Cinemas",
-              subcat1: "Theme Parks",
-              subcat2: "Concerts",
-              subcat3: "Gaming Centers",
-              subcat4: "Theaters",
-            ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Furniture",
-              subcat: "Living Room Furniture",
-              subcat1: "Bedroom Furniture",
-              subcat2: "Office Furniture",
-              subcat3: "Outdoor Furniture",
-              subcat4: "Decor",
-            ),
-            const SizedBox(height: 30),
-            const Categorysubcategory(
-              category: "Automotive Services",
-              subcat: "Car Wash",
-              subcat1: "Tire Shops",
-              subcat2: "Auto Repair",
-              subcat3: "Car Rentals",
-              subcat4: "Car Accessories",
-            ),
+
+            // const Categorysubcategory(
+            //   category: "Food",
+            //   subcat: "Fast Food",
+            //   subcat1: "Bakeries",
+            //   subcat2: "Seafood",
+            //   subcat3: "Snacks",
+            //   subcat4: "Organic Food",
+            //   subcat5: "Dairy Products",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Beverages",
+            //   subcat: "Juices",
+            //   subcat1: "Soft Drinks",
+            //   subcat2: "Tea",
+            //   subcat3: "Coffee Beans",
+            //   subcat4: "Energy Drinks",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Clothing",
+            //   subcat: "Men's Clothing",
+            //   subcat1: "Women's Clothing",
+            //   subcat2: "Children's Clothing",
+            //   subcat3: "Sportswear",
+            //   subcat4: "Accessories",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Electronics",
+            //   subcat: "Mobile Phones",
+            //   subcat1: "Laptops",
+            //   subcat2: "Gaming Consoles",
+            //   subcat3: "Televisions",
+            //   subcat4: "Accessories",
+            //   subcat5: "Air Conditioners",
+            //   subcat6: "Refrigerators",
+            //   subcat7: "Washing Machines",
+            //   subcat8: "Microwave Ovens",
+            //   subcat9: "Cameras",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Health & Personal Care",
+            //   subcat: "Hair Salons",
+            //   subcat1: "Fitness Centers",
+            //   subcat2: "Clinics",
+            //   subcat3: "Pharmacies",
+            //   subcat4: "Spas",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Public Services",
+            //   subcat: "Electricity",
+            //   subcat1: "Water Supply",
+            //   subcat2: "Waste Collection",
+            //   subcat3: "Public Transportation",
+            //   subcat4: "Emergency Services",
+            //   subcat5: "Postal Services",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Education & Training",
+            //   subcat: "Schools",
+            //   subcat1: "Universities",
+            //   subcat2: "Language Centers",
+            //   subcat3: "Online Courses",
+            //   subcat4: "Skill Development",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Entertainment",
+            //   subcat: "Cinemas",
+            //   subcat1: "Theme Parks",
+            //   subcat2: "Concerts",
+            //   subcat3: "Gaming Centers",
+            //   subcat4: "Theaters",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Furniture",
+            //   subcat: "Living Room Furniture",
+            //   subcat1: "Bedroom Furniture",
+            //   subcat2: "Office Furniture",
+            //   subcat3: "Outdoor Furniture",
+            //   subcat4: "Decor",
+            // ),
+            // const SizedBox(height: 30),
+            // const Categorysubcategory(
+            //   category: "Automotive Services",
+            //   subcat: "Car Wash",
+            //   subcat1: "Tire Shops",
+            //   subcat2: "Auto Repair",
+            //   subcat3: "Car Rentals",
+            //   subcat4: "Car Accessories",
+            // ),
           ],
         ),
       ),
@@ -246,12 +276,27 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 //   Widget build(BuildContext context) {
 //     return  Scaffold(
 //       appBar: AppBar(
-//         centerTitle:  true, 
+//         centerTitle:  true,
 //         title:  const  Text("Service Order") ,
 //         backgroundColor: const Color(0xFF3D6643),
-
 
 //       ),
 //     );
 //   }
 // }
+class MySearchBar extends StatelessWidget {
+  const MySearchBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: 'ماذا تريد ',
+        prefixIcon: const Icon(Icons.search),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
+  }
+}
