@@ -1,10 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:city/core/widgets/tab_bar_view.dart';
-import 'package:city/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/tab_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 final Uri _url = Uri.parse('https://dribbble.com/shots/popular/mobile');
+
 class GovernmentScreen extends StatelessWidget {
   const GovernmentScreen({super.key});
 
@@ -14,26 +17,28 @@ class GovernmentScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         floatingActionButton: GestureDetector(
-          onTap: () => showDialog<String>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('سيتم تحويلك خارج تطبيق citio'),
-              content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Cancel'),
-                  child: const Text('الغاء'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    launchUrl(_url, mode: LaunchMode.inAppWebView);
-                  },
-                  child: const Text('نعم'),
-                ),
-              ],
-            ),
-          ),
-          child: CircleAvatar(
+          onTap:
+              () => showDialog<String>(
+                context: context,
+                builder:
+                    (BuildContext context) => AlertDialog(
+                      title: const Text('سيتم تحويلك خارج تطبيق citio'),
+                      content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('الغاء'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            launchUrl(_url, mode: LaunchMode.inAppWebView);
+                          },
+                          child: const Text('نعم'),
+                        ),
+                      ],
+                    ),
+              ),
+          child: const CircleAvatar(
             radius: 55,
             backgroundColor: MyColors.themecolor,
             child: CircleAvatar(
@@ -50,7 +55,7 @@ class GovernmentScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
 
-            child: TabBar(
+            child: const TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
               dividerColor: Colors.transparent,
               indicator: BoxDecoration(
@@ -67,7 +72,7 @@ class GovernmentScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             TabBarViewItem(title: 'Completed'),
             TabBarViewItem(title: 'Pending'),

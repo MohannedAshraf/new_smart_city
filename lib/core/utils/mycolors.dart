@@ -11,6 +11,6 @@ class MyColors {
   // ignore: use_full_hex_values_for_flutter_colors
   static const Color gray2 = Color(0xff00000040);
   static const Color mintgreen = Color.fromARGB(255, 193, 233, 213);
-  static const Color lightgreen = const Color.fromARGB(255, 141, 177, 146);
+  static const Color lightgreen = Color.fromARGB(255, 141, 177, 146);
   static const Color homecolor = Color.fromARGB(255, 233, 189, 212);
 }
