@@ -58,7 +58,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(85),
+        preferredSize: const Size.fromHeight(60),
         child: AppBar(
           backgroundColor: const Color(0xFF3D6643),
           elevation: 0,

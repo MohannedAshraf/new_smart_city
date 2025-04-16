@@ -1,4 +1,6 @@
 import 'package:city/core/utils/assets_image.dart';
+import 'package:city/core/utils/variables.dart';
+import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/categorysubcategory.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -18,15 +20,26 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     MyAssetsImage.nescalop,
   ];
 
+  late TextEditingController _controller;
+  String searchText = "";
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: const Text("Service Order"),
-      //   backgroundColor: const Color(0xFF3D6643),
-      // ),
+      backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,12 +47,22 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             const SizedBox(height: 20),
 
             Container(
-              decoration: const BoxDecoration(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: TextFormField(
+                controller: _controller,
+                onChanged: (value) {
+                  setState(() {
+                    searchText = value;
+                  });
+                },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
-                  icon: Icon(Icons.search),
-                  hintText: "Search any service",
+                  suffixIcon: Icon(Icons.search),
+                  hintText: "ابحث  عن اي  خدمه ",
                   hintStyle: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -49,6 +72,25 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
               ),
             ),
 
+            const SizedBox(height: 30),
+            const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CategoryCircle(circlename: "Food"),
+                  CategoryCircle(circlename: "Beverages"),
+                  CategoryCircle(circlename: "Clothing"),
+                  CategoryCircle(circlename: "Eltronics"),
+                  CategoryCircle(circlename: "Health&Personal Care "),
+                  CategoryCircle(circlename: "Public Services"),
+                  CategoryCircle(circlename: "Education"),
+                  CategoryCircle(circlename: "Entertainment"),
+                  CategoryCircle(circlename: "Furniture"),
+                  CategoryCircle(circlename: "Automotive Services "),
+                ],
+              ),
+            ),
             const SizedBox(height: 30),
             CarouselSlider(
               items:
@@ -93,6 +135,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             ),
 
             const SizedBox(height: 30),
+
             const Categorysubcategory(
               category: "Food",
               subcat: "Fast Food",
