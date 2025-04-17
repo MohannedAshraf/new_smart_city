@@ -25,6 +25,8 @@ class ProductCard extends StatelessWidget {
             child: Image.asset(image, fit: BoxFit.cover),
           ),
           const SizedBox(height: 10),
+          const Text("اسم المنتج "),
+          const Text(" الوصف "),
           Text(price),
           const SizedBox(height: 10),
           RatingBarIndicator(

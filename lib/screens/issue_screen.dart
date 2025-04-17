@@ -1,3 +1,4 @@
+import 'package:city/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,26 +19,36 @@ class _IssueScreenState extends State<IssueScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: MyColors.backgroundColor,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(" المشاكل"),
+          backgroundColor: MyColors.backgroundColor,
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                        child:
-                            buildButton("الشرطة", Icons.local_police_outlined)),
+                      child: buildButton("الشرطة", Icons.local_police_outlined),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
-                        child:
-                            buildButton("المطافي", Icons.fire_truck_outlined)),
+                      child: buildButton("المطافي", Icons.fire_truck_outlined),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
-                        child: buildButton(
-                            "الاسعاف", Icons.local_hospital_outlined)),
+                      child: buildButton(
+                        "الاسعاف",
+                        Icons.local_hospital_outlined,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -59,8 +70,9 @@ class _IssueScreenState extends State<IssueScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
       onPressed: () {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('الاتصال ب $text ')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('الاتصال ب $text ')));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +110,8 @@ class _IssueScreenState extends State<IssueScreen> {
               ElevatedButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('تم تقديم الشكوى')));
+                    const SnackBar(content: Text('تم تقديم الشكوى')),
+                  );
                   _complaintController.clear();
                 },
                 style: ElevatedButton.styleFrom(
@@ -119,8 +132,9 @@ class _IssueScreenState extends State<IssueScreen> {
   }
 
   Future<List<String>> fetchMessages() async {
-    final response =
-        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+    final response = await http.get(
+      Uri.parse('https://jsonplaceholder.typicode.com/posts'),
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
@@ -161,16 +175,15 @@ class _IssueScreenState extends State<IssueScreen> {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.messenger_outlined,
-                          size: 12,
-                        ),
+                        const Icon(Icons.messenger_outlined, size: 12),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             message,
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ],

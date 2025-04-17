@@ -57,49 +57,55 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: AppBar(
-          backgroundColor: const Color(0xFF3D6643),
-          elevation: 0,
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'اامدينتنا',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+      appBar:
+          currentIndex == 0
+              ? PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: AppBar(
+                  backgroundColor: const Color(0xFF3D6643),
+                  elevation: 0,
+                  title: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'اامدينتنا',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'مرحباً بك .....',
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Notifications(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'مرحباً بك .....',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Notifications(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.notifications, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+                  ],
+                ),
+              )
+              : null,
       body: pages[currentIndex],
       drawer: Drawer(
         child: ListView(

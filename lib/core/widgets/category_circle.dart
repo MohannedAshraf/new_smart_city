@@ -8,8 +8,8 @@ class CategoryCircle extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(left: 10),
       child: CircleAvatar(
-        radius: 100,
-        backgroundColor: Colors.greenAccent,
+        radius: 30,
+        backgroundColor: const Color(0xFF3D6643),
         child: Text(circlename, style: const TextStyle(color: Colors.white)),
       ),
     );

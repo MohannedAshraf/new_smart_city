@@ -39,6 +39,12 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: MyColors.backgroundColor,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: const Text("طلب الخدمات"),
+      ),
       backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
@@ -82,16 +88,16 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CategoryCircle(circlename: "Food"),
-                  CategoryCircle(circlename: "Beverages"),
-                  CategoryCircle(circlename: "Clothing"),
-                  CategoryCircle(circlename: "Eltronics"),
-                  CategoryCircle(circlename: "Health&Personal Care "),
-                  CategoryCircle(circlename: "Public Services"),
-                  CategoryCircle(circlename: "Education"),
-                  CategoryCircle(circlename: "Entertainment"),
-                  CategoryCircle(circlename: "Furniture"),
-                  CategoryCircle(circlename: "Automotive Services "),
+                  CategoryCircle(circlename: "طعام"),
+                  CategoryCircle(circlename: "مشروبات"),
+                  CategoryCircle(circlename: "ملابس"),
+                  CategoryCircle(circlename: "الكترونيات"),
+                  CategoryCircle(circlename: "الصحه "),
+                  CategoryCircle(circlename: "خدمات"),
+                  CategoryCircle(circlename: "تعليم"),
+                  CategoryCircle(circlename: "ترفيه"),
+                  CategoryCircle(circlename: "اثاث"),
+                  CategoryCircle(circlename: " سيارات "),
                 ],
               ),
             ),
@@ -129,9 +135,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                         shape: BoxShape.circle,
                         color:
                             _currentIndex == entry.key
-                                ? const Color(
-                                  0xFF3D6643,
-                                ) // اللون اللي انت عايزه
+                                ? const Color(0xFF3D6643)
                                 : Colors.grey,
                       ),
                     );
@@ -140,30 +144,54 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 
             const SizedBox(height: 30),
 
-            const ProductCard(
-              image: MyAssetsImage.sandwitch,
-              price: "100 LE",
-              rating: 3.5,
-            ),
-            const ProductCard(
-              image: MyAssetsImage.burger,
-              price: "150 LE",
-              rating: 4.25,
-            ),
-            const ProductCard(
-              image: MyAssetsImage.sandwitch,
-              price: "100 LE",
-              rating: 3.5,
-            ),
-            const ProductCard(
-              image: MyAssetsImage.sandwitch,
-              price: "100 LE",
-              rating: 3.5,
-            ),
-            const ProductCard(
-              image: MyAssetsImage.sandwitch,
-              price: "100 LE",
-              rating: 3.5,
+            const SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                      ProductCard(
+                        image: MyAssetsImage.sandwitch,
+                        price: "100 LE",
+                        rating: 3.5,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
 
             // const Categorysubcategory(

@@ -114,14 +114,14 @@ class _LoginPageState extends State<MyloginPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Smart City',
+                  'Citio',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 40),
                 TextFormField(
                   controller: emailController,
                   decoration: const InputDecoration(
-                    labelText: 'البريد الإلكتروني',
+                    hintText: 'البريد الإلكتروني',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
@@ -142,7 +142,7 @@ class _LoginPageState extends State<MyloginPage> {
                   controller: passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    labelText: 'كلمة المرور',
+                    hintText: 'كلمة المرور',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {

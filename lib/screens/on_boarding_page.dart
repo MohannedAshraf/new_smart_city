@@ -16,7 +16,7 @@ class StartPage extends StatelessWidget {
         child: Column(
           children: [
             const Text(
-              "Smart City",
+              "Citio",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
