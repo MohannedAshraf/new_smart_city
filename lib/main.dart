@@ -1,5 +1,6 @@
 import 'package:city/generated/l10n.dart';
 import 'package:city/screens/on_boarding_page.dart';
+import 'package:city/screens/social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
@@ -9,7 +10,6 @@ import 'screens/service_order_screen.dart';
 import 'screens/about.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
-import 'screens/social_media.dart';
 
 void main() {
   runApp(const CityApp());
@@ -50,7 +50,6 @@ class HomePageState extends State<HomePage> {
     const GovernmentScreen(),
     const IssueScreen(),
     const ServiceOrderScreen(),
-
     const AboutUs(),
     const Notifications(),
     const Profile(),
@@ -59,49 +58,55 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(85),
-        child: AppBar(
-          backgroundColor: const Color(0xFF3D6643),
-          elevation: 0,
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'اامدينتنا',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+      appBar:
+          currentIndex == 0
+              ? PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: AppBar(
+                  backgroundColor: const Color(0xFF3D6643),
+                  elevation: 0,
+                  title: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'اامدينتنا',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'مرحباً بك .....',
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Notifications(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'مرحباً بك .....',
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Notifications(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.notifications, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+                  ],
+                ),
+              )
+              : null,
       body: pages[currentIndex],
       drawer: Drawer(
         child: ListView(
@@ -168,8 +173,8 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.groups),
-              title: const Text('Social Media'),
+              leading: const Icon(Icons.groups_outlined),
+              title: const Text('Social media'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(

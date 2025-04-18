@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Request {
   final int requestId;
   final int serviceId;
@@ -22,7 +24,9 @@ class Request {
       requestId: jsonData['requestId'],
       serviceId: jsonData['serviceId'],
       serviceName: jsonData['serviceName'],
-      requestDate: jsonData['requestDate'],
+      requestDate: DateFormat.yMMMMd(
+        'en_US',
+      ).add_jm().format(DateTime.parse(jsonData['requestDate'])),
       requestStatus: jsonData['requestStatus'],
       responseStatus: jsonData['responseStatus'],
       responseText: jsonData['responseText'],

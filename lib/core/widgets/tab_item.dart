@@ -13,6 +13,8 @@ class TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
+      height: 30,
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -1,6 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 class MyColors {
+  static const Color bluesBackgroundColor = Color(0xFFF4F4F4);
+  static const Color bluesAppBarcolor = Color(0xFFDAE8F1);
+  static const Color blueschosenCard = Color(0xFF94BBDB);
+  static const Color bluesBlue = Color(0xFF323E66);
   static const Color backgroundColor = Color(0xffF3F5F4);
   static const Color red = Color(0xffE4312B);
   static const Color green = Color(0xff149954);

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 abstract class MyColors {
+  static const Color bluesBackgroundColor = Color(0xFFF4F4F4);
+  static const Color bluesAppBarcolor = Color(0xFFDAE8F1);
+  static const Color blueschosenCard = Color(0xFF94BBDB);
+  static const Color bluesBlue = Color(0xFF323E66);
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   static const Color cardcolor = Color.fromARGB(255, 141, 177, 146);
   static const Color themecolor = Color(0xFF3D6643);

@@ -101,17 +101,21 @@ class MapScreenState extends State<Profile>
                                 ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 90.0,
+                                right: 100.0,
+                              ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   CircleAvatar(
                                     backgroundColor: Colors.red,
                                     radius: 25.0,
-                                    child: Icon(
-                                      Icons.camera_alt,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.camera_alt),
                                       color: Colors.white,
+                                      onPressed: () => {},
                                     ),
                                   ),
                                 ],

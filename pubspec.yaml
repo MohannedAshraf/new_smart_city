@@ -36,6 +36,11 @@ dependencies:
   http: ^1.2.2
   url_launcher: ^6.3.1
   video_player: ^2.9.5
+  multi_image_layout: ^0.1.2
+  permission_handler: ^12.0.0+1
+  galleryimage: ^2.0.1
+  flick_video_player: ^0.9.0 
+  intl:
   flutter:
     sdk: flutter
   flutter_localizations:
