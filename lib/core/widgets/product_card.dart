@@ -14,15 +14,20 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 200,
-            height: 200,
-            child: Image.asset(image, fit: BoxFit.cover),
+            width: 165,
+            height: 100,
+            child: Image.asset(image, fit: BoxFit.contain),
           ),
           const SizedBox(height: 10),
           const Text("اسم المنتج "),
@@ -37,6 +42,7 @@ class ProductCard extends StatelessWidget {
             itemSize: 30.0,
             direction: Axis.horizontal,
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

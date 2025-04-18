@@ -1,3 +1,4 @@
+import 'package:city/core/utils/mycolors.dart';
 import 'package:city/generated/l10n.dart';
 import 'package:city/screens/on_boarding_page.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,10 @@ class CityApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
       home: const StartPage(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(backgroundColor: MyColors.newbackground),
+        scaffoldBackgroundColor: MyColors.newbackground,
+      ),
     );
   }
 }

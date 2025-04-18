@@ -1,5 +1,4 @@
 import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +38,14 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       appBar: AppBar(
-        backgroundColor: MyColors.backgroundColor,
+        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: const Text("طلب الخدمات"),
       ),
-      backgroundColor: MyColors.backgroundColor,
+      //  backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   CategoryCircle(circlename: "طعام"),
                   CategoryCircle(circlename: "مشروبات"),
                   CategoryCircle(circlename: "ملابس"),
-                  CategoryCircle(circlename: "الكترونيات"),
+                  CategoryCircle(circlename: "الكترو"),
                   CategoryCircle(circlename: "الصحه "),
                   CategoryCircle(circlename: "خدمات"),
                   CategoryCircle(circlename: "تعليم"),
@@ -144,54 +144,51 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 
             const SizedBox(height: 30),
 
-            const SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                      ProductCard(
-                        image: MyAssetsImage.sandwitch,
-                        price: "100 LE",
-                        rating: 3.5,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            const Column(
+              children: [
+                Row(
+                  children: [
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                    ProductCard(
+                      image: MyAssetsImage.sandwitch,
+                      price: "100 LE",
+                      rating: 3.5,
+                    ),
+                  ],
+                ),
+              ],
             ),
 
             // const Categorysubcategory(
@@ -321,7 +318,14 @@ class MySearchBar extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'ماذا تريد ',
         prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
         filled: true,
         fillColor: Colors.white,
       ),

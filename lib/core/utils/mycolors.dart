@@ -12,4 +12,5 @@ class MyColors {
   static const Color gray2 = Color(0xff00000040);
   static const Color mintgreen = Color.fromARGB(255, 193, 233, 213);
   static const Color homecolor = Color.fromARGB(255, 233, 189, 212);
+  static const Color newbackground = Color.fromARGB(255, 220, 226, 223);
 }

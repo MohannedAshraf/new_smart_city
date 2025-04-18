@@ -112,16 +112,25 @@ class _LoginPageState extends State<MyloginPage> {
                 _validate ? AutovalidateMode.always : AutovalidateMode.disabled,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Citio',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                const Center(
+                  child: Text(
+                    'Citio',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 40),
+                const Text(
+                  "البريد الاكتروني ",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
                   decoration: const InputDecoration(
-                    hintText: 'البريد الإلكتروني',
+                    //  hintText: 'البريد الإلكتروني',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
@@ -138,11 +147,16 @@ class _LoginPageState extends State<MyloginPage> {
                   },
                 ),
                 const SizedBox(height: 16),
+                const Text(
+                  "كلمة المرور",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    hintText: 'كلمة المرور',
+                    // hintText: 'كلمة المرور',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {

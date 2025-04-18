@@ -72,7 +72,14 @@ class MySearchBar extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'ماذا تريد ',
         prefixIcon: const Icon(Icons.search),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
         filled: true,
         fillColor: Colors.white,
       ),
