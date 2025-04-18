@@ -19,6 +19,8 @@ class CustomCard extends StatelessWidget {
       color: MyColors.white,
       shadowColor: MyColors.white,
       surfaceTintColor: MyColors.white,
+
+      
       child: Container(
         padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
         height: 100,
