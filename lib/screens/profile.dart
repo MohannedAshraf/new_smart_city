@@ -1,9 +1,36 @@
+import 'dart:io';
 import 'package:city/core/utils/assets_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'edit_profile.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  File? _imageFile;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      // هنا ممكن تطبع أو تسجل الخطأ، لكن مش هنعمل حاجة عشان مفيش استثناء يظهر
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +42,14 @@ class Profile extends StatelessWidget {
           children: [
             Stack(
               children: [
-                const CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 211, 158, 139),
+                CircleAvatar(
+                  backgroundColor: const Color.fromARGB(255, 211, 158, 139),
                   radius: 60,
-                  backgroundImage: AssetImage(MyAssetsImage.logo),
+                  backgroundImage:
+                      _imageFile != null
+                          ? FileImage(_imageFile!)
+                          : const AssetImage(MyAssetsImage.logo)
+                              as ImageProvider,
                 ),
                 Positioned(
                   bottom: 0,
@@ -28,14 +59,13 @@ class Profile extends StatelessWidget {
                     radius: 15,
                     child: Center(
                       child: IconButton(
+                        padding: EdgeInsets.zero,
                         icon: const Icon(
                           Icons.camera_alt,
                           size: 15,
                           color: Colors.white,
                         ),
-                        onPressed: () {
-                          // وظيفة تغيير الصورة
-                        },
+                        onPressed: _pickImage,
                       ),
                     ),
                   ),
@@ -93,13 +123,11 @@ class Profile extends StatelessWidget {
             const SizedBox(height: 20),
 
             Container(
-              //margin: const EdgeInsets.symmetric(horizontal: 15),
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.blue,
               ),
-
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
