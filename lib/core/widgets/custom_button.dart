@@ -16,9 +16,9 @@ class MyTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(top: 20),
       decoration: BoxDecoration(
-        color: MyColors.green,
+        color: MyColors.gray,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Center(
