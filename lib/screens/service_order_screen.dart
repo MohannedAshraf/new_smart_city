@@ -1,6 +1,7 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
+import 'package:city/screens/subcategory_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -83,21 +84,31 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             ),
 
             const SizedBox(height: 30),
-            const SingleChildScrollView(
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CategoryCircle(circlename: "طعام"),
-                  CategoryCircle(circlename: "مشروبات"),
-                  CategoryCircle(circlename: "ملابس"),
-                  CategoryCircle(circlename: "الكترو"),
-                  CategoryCircle(circlename: "الصحه "),
-                  CategoryCircle(circlename: "خدمات"),
-                  CategoryCircle(circlename: "تعليم"),
-                  CategoryCircle(circlename: "ترفيه"),
-                  CategoryCircle(circlename: "اثاث"),
-                  CategoryCircle(circlename: " سيارات "),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FoodPage(),
+                        ),
+                      );
+                    },
+                    child: const CategoryCircle(circlename: "طعام"),
+                  ),
+                  const CategoryCircle(circlename: "مشروبات"),
+                  const CategoryCircle(circlename: "ملابس"),
+                  const CategoryCircle(circlename: "الكترو"),
+                  const CategoryCircle(circlename: "الصحه "),
+                  const CategoryCircle(circlename: "خدمات"),
+                  const CategoryCircle(circlename: "تعليم"),
+                  const CategoryCircle(circlename: "ترفيه"),
+                  const CategoryCircle(circlename: "اثاث"),
+                  const CategoryCircle(circlename: " سيارات "),
                 ],
               ),
             ),
