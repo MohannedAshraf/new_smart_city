@@ -15,19 +15,25 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-      padding: const EdgeInsets.all(5),
+
+      // padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: 165,
             height: 100,
-            child: Image.asset(image, fit: BoxFit.contain),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Image.asset(image, fit: BoxFit.cover),
+            ),
           ),
           const SizedBox(height: 10),
           const Text("اسم المنتج "),
