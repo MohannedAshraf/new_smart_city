@@ -1,3 +1,4 @@
+import 'package:city/core/widgets/build_boxes.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
-            _buildBoxesSection(context, 'الخدمات الحكومية'),
+            BuildBoxes(title: 'الخدمات الحكومية'),
             _buildBoxesSection(context, 'المشاكل'),
             _buildBoxesSection(context, 'طلب الخدمات'),
           ],

@@ -1,6 +1,7 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/generated/l10n.dart';
 import 'package:city/screens/on_boarding_page.dart';
+import 'package:city/screens/social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
@@ -174,6 +175,17 @@ class HomePageState extends State<HomePage> {
                   currentIndex = 3;
                 });
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.groups_outlined),
+              title: const Text('Social media'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SocialMedia()),
+                );
               },
             ),
             ListTile(
