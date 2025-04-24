@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:city/core/utils/assets_image.dart';
+import 'package:city/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'edit_profile.dart';
@@ -137,6 +138,30 @@ class _ProfileState extends State<Profile> {
                 },
                 child: const Text(
                   'تعديل البيانات',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.red,
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MyloginPage()),
+                  );
+                },
+                child: const Text(
+                  ' مسح الحساب',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
