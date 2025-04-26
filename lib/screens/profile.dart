@@ -3,6 +3,7 @@ import 'package:city/core/utils/assets_image.dart';
 import 'package:city/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile.dart';
 
 class Profile extends StatefulWidget {
@@ -14,8 +15,30 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File? _imageFile;
-
+  bool _isLoading = true;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  Future<void> _loadImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final imagePath = prefs.getString('profile_image');
+    if (imagePath != null) {
+      _imageFile = File(imagePath);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _saveImage(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile_image', path);
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -27,14 +50,28 @@ class _ProfileState extends State<Profile> {
         setState(() {
           _imageFile = File(pickedFile.path);
         });
+        await _saveImage(pickedFile.path);
       }
     } catch (e) {
-      // هنا ممكن تطبع أو تسجل الخطأ، لكن مش هنعمل حاجة عشان مفيش استثناء يظهر
+      // ممكن تطبع الايرور هنا لو عايز
     }
+  }
+
+  Future<void> _deleteProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('profile_image');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const MyloginPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('الملف الشخصي'), centerTitle: true),
       body: SingleChildScrollView(
@@ -122,7 +159,6 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             const SizedBox(height: 20),
-
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -154,14 +190,9 @@ class _ProfileState extends State<Profile> {
                 color: Colors.red,
               ),
               child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MyloginPage()),
-                  );
-                },
+                onPressed: _deleteProfile,
                 child: const Text(
-                  ' مسح الحساب',
+                  'مسح الحساب',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

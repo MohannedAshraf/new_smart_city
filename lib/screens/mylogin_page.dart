@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'package:city/core/widgets/custom_button.dart';
 import 'package:city/main.dart';
-//import 'package:city/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +11,6 @@ class MyloginPage extends StatefulWidget {
   const MyloginPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -22,8 +20,8 @@ class _LoginPageState extends State<MyloginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _validate = false;
   bool _isLoading = false;
+  bool _obscurePassword = true;
 
-  // ✅ دالة تسجيل الدخول والتعامل مع التوكن
   Future<void> loginUser(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
       setState(() => _validate = true);
@@ -55,17 +53,13 @@ class _LoginPageState extends State<MyloginPage> {
         final String? token = responseData["value"]?["token"];
 
         if (token != null) {
-          // ignore: unused_element
           void saveToken(String token) async {
             final SharedPreferences sharedPreferences =
                 await SharedPreferences.getInstance();
             await sharedPreferences.setString('token', token);
-            // ignore: duplicate_ignore
-            // ignore: avoid_print
             print("✅ Token Saved: $token");
           }
 
-          // ✅ نجاح تسجيل الدخول → الانتقال للصفحة الرئيسية
           if (context.mounted) {
             Navigator.pushReplacement(
               context,
@@ -76,7 +70,6 @@ class _LoginPageState extends State<MyloginPage> {
           throw Exception("التوكن غير موجود في الاستجابة!");
         }
       } else {
-        // ❌ فشل تسجيل الدخول
         final responseData = jsonDecode(response.body);
         String errorMessage =
             responseData["message"] ?? "حدث خطأ أثناء تسجيل الدخول";
@@ -98,6 +91,14 @@ class _LoginPageState extends State<MyloginPage> {
         );
       }
     }
+  }
+
+  OutlineInputBorder myBorder() {
+    return const OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.black, // لون البوردر أسود ثابت
+      ),
+    );
   }
 
   @override
@@ -122,16 +123,16 @@ class _LoginPageState extends State<MyloginPage> {
                 ),
                 const SizedBox(height: 40),
                 const Text(
-                  "البريد الاكتروني ",
+                  "البريد الإلكتروني",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: emailController,
-                  decoration: const InputDecoration(
-                    //  hintText: 'البريد الإلكتروني',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -154,10 +155,24 @@ class _LoginPageState extends State<MyloginPage> {
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    // hintText: 'كلمة المرور',
-                    border: OutlineInputBorder(),
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
