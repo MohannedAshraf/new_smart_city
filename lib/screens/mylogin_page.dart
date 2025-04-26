@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_element
 
 import 'dart:convert';
 import 'package:city/core/widgets/custom_button.dart';
@@ -11,6 +11,7 @@ class MyloginPage extends StatefulWidget {
   const MyloginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 

@@ -1,7 +1,6 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
-import 'package:city/screens/subcategory_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -19,6 +18,32 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     MyAssetsImage.drink,
     MyAssetsImage.nescalop,
   ];
+
+  final List<String> categories = [
+    "طعام",
+    "مشروبات",
+    "ملابس",
+    "الكترون",
+    "الصحة",
+    "خدمات",
+    "تعليم",
+    "ترفيه",
+    "أثاث",
+    "سيارات",
+  ];
+
+  final List<String> subCategories = [
+    "فرعي 1",
+    "فرعي 2",
+    "فرعي 3",
+    "فرعي 4",
+    "فرعي 5",
+    "فرعي 6",
+    "فرعي 7",
+    "فرعي 8",
+  ];
+
+  int? selectedCategoryIndex;
 
   late TextEditingController _controller;
   String searchText = "";
@@ -46,37 +71,59 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
         automaticallyImplyLeading: false,
         title: const Text("طلب الخدمات"),
       ),
-      //  backgroundColor: MyColors.backgroundColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: MySearchBar(),
             ),
-
             const SizedBox(height: 30),
-            const SingleChildScrollView(
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CategoryCircle(circlename: "طعام"),
-                  CategoryCircle(circlename: "مشروبات"),
-                  CategoryCircle(circlename: "ملابس"),
-                  CategoryCircle(circlename: "الكترو"),
-                  CategoryCircle(circlename: "الصحه "),
-                  CategoryCircle(circlename: "خدمات"),
-                  CategoryCircle(circlename: "تعليم"),
-                  CategoryCircle(circlename: "ترفيه"),
-                  CategoryCircle(circlename: "اثاث"),
-                  CategoryCircle(circlename: " سيارات "),
-                ],
+                children: List.generate(categories.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (selectedCategoryIndex == index) {
+                          selectedCategoryIndex = null;
+                        } else {
+                          selectedCategoryIndex = index;
+                        }
+                      });
+                    },
+                    child: CategoryCircle(circlename: categories[index]),
+                  );
+                }),
               ),
             ),
+            if (selectedCategoryIndex != null) ...[
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(subCategories.length, (index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (_) => SubCategoryScreen(
+                                  subCategoryName: subCategories[index],
+                                ),
+                          ),
+                        );
+                      },
+                      child: CategoryCircle(circlename: subCategories[index]),
+                    );
+                  }),
+                ),
+              ),
+            ],
             const SizedBox(height: 30),
             CarouselSlider(
               items:
@@ -117,9 +164,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                     );
                   }).toList(),
             ),
-
             const SizedBox(height: 30),
-
             const Column(
               children: [
                 Row(
@@ -180,18 +225,51 @@ class MySearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: 'ماذا تريد ',
+        hintText: 'ماذا تريد',
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(25.0),
         ),
         focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.black),
           borderRadius: BorderRadius.circular(25.0),
-          borderSide: const BorderSide(color: Colors.grey),
         ),
         filled: true,
         fillColor: Colors.white,
+      ),
+    );
+  }
+}
+
+class SubCategoryScreen extends StatelessWidget {
+  final String subCategoryName;
+
+  const SubCategoryScreen({super.key, required this.subCategoryName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(subCategoryName),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+      ),
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // اتنين جنب بعض
+          childAspectRatio: 3 / 4,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+        ),
+        itemCount: 20, // عدد المنتجات اللي عايز تظهره
+        itemBuilder: (context, index) {
+          return const ProductCard(
+            image: MyAssetsImage.sandwitch,
+            price: "100 LE",
+            rating: 3.5,
+          );
+        },
       ),
     );
   }

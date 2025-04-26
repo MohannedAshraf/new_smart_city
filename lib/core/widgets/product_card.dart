@@ -25,7 +25,7 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 165,
+            width: 175,
             height: 100,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
