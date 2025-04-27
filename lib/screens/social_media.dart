@@ -10,6 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 final Uri _url = Uri.parse('https://x.com/home');
 
 class SocialMedia extends StatefulWidget {
+  const SocialMedia({super.key});
+
   @override
   _SocialMediaState createState() => _SocialMediaState();
 }
@@ -82,7 +84,7 @@ class _SocialMediaState extends State<SocialMedia> {
             ],
           ),
         ),
-        body: SocialmediaTabView(),
+        body: const SocialmediaTabView(),
       ),
     );
   }
