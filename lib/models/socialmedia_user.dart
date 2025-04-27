@@ -7,7 +7,7 @@ class SocialmediaUser {
   SocialmediaUser({required this.userName, required this.name, this.avatar});
   factory SocialmediaUser.fromJason(jsonData) {
     return SocialmediaUser(
-      userName: jsonData['userName'],
+      userName: '@' + jsonData['userName'],
       name: jsonData['localUserName'],
       avatar: baseUrl + jsonData['avatarUrl'],
     );

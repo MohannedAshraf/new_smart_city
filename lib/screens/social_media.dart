@@ -20,7 +20,7 @@ class _SocialMediaState extends State<SocialMedia> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: 2,
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           onPressed:
@@ -65,24 +65,16 @@ class _SocialMediaState extends State<SocialMedia> {
           backgroundColor: MyColors.white,
           bottom: const TabBar(
             padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            isScrollable: true,
+            //isScrollable: true,
             indicatorSize: TabBarIndicatorSize.tab,
             dividerColor: MyColors.themecolor,
             indicatorColor: MyColors.themecolor,
             labelColor: MyColors.fontcolor,
             unselectedLabelColor: Colors.black,
-            tabs: [
-              TabItem(title: 'الأكثر رواجا'),
-              TabItem(title: 'الأحدث'),
-              TabItem(title: 'الأشخاص'),
-              TabItem(title: 'الوسائط'),
-              TabItem(title: 'الأخبار'),
-              TabItem(title: 'الرياضة'),
-              TabItem(title: 'Entertainment'),
-            ],
+            tabs: [TabItem(title: 'Feed'), TabItem(title: 'Profile')],
           ),
         ),
-        body: SocialmediaTabView(),
+        body: TabBarView(children: [SocialmediaTabView()]),
       ),
     );
   }

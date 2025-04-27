@@ -47,7 +47,7 @@ class Data {
               : null,
       shareCount: jasonData['shareCount'],
       saveCount: jasonData['saveCount'],
-      date: DateFormat.yMMMMd(
+      date: DateFormat.MMMMd(
         'en_US',
       ).format(DateTime.parse(jasonData['createdAt'])),
 

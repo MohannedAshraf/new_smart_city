@@ -93,14 +93,9 @@ class SocialmediaTabView extends StatelessWidget {
                                             child: Text(
                                               user.userName,
                                               style: const TextStyle(
-                                                fontSize: 13,
+                                                fontSize: 9,
                                                 // fontWeight: FontWeight.normal,
-                                                color: Color.fromRGBO(
-                                                  134,
-                                                  133,
-                                                  133,
-                                                  1,
-                                                ),
+                                                color: MyColors.black,
                                               ),
                                             ),
                                           ),
