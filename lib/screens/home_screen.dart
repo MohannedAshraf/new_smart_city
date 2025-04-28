@@ -1,4 +1,5 @@
 import 'package:city/core/widgets/build_boxes.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -14,33 +15,118 @@ class HomeScreen extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
-            BuildBoxes(title: 'الخدمات الحكومية'),
-            _buildBoxesSection(context, 'المشاكل'),
-            _buildBoxesSection(context, 'طلب الخدمات'),
+            _buildBoxesSection(
+              context,
+              'الخدمات الحكومية',
+              160,
+              'لاصدار رخصة قيادة الأوراق المطلوبة يمكنك اصدارها من الويبسايت مباشرة',
+              140,
+              'https://cdn-icons-png.flaticon.com/128/18395/18395873.png',
+              50,
+              50,
+              BoxFit.contain,
+              EdgeInsets.fromLTRB(10, 10, 10, 4),
+              5,
+            ),
+            _buildBoxesSection(
+              context,
+              'Providers',
+              180,
+              'category',
+              150,
+              'https://images.pexels.com/photos/1020370/pexels-photo-1020370.jpeg?auto=compress&cs=tinysrgb&w=600',
+              80,
+              180,
+              BoxFit.cover,
+              EdgeInsets.fromLTRB(0, 0, 0, 4),
+              5,
+            ),
+            _buildBoxesSection(
+              context,
+              'Products',
+              120,
+              'details',
+              120,
+              'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600',
+              55,
+              120,
+              BoxFit.cover,
+              EdgeInsets.fromLTRB(0, 0, 0, 4),
+              10,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBoxesSection(BuildContext context, String title) {
+  Widget _buildBoxesSection(
+    BuildContext context,
+    String title,
+    double width,
+    String details,
+    double height,
+    String image,
+    double imageHeight,
+    double imageWidth,
+    BoxFit fit,
+    EdgeInsetsGeometry imagePadding,
+    int itemCount,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            textDirection: TextDirection.rtl,
+          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          child: Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textDirection: TextDirection.rtl,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'عرض الجميع',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 99, 167, 222),
+                              fontSize: 12,
+                            ),
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print(' Text Clicked');
+                                  },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 10.0),
+        // const SizedBox(height: 10.0),
         SizedBox(
-          height: 100.0,
+          height: height,
+
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 6,
+            itemCount: itemCount,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap:
@@ -53,7 +139,16 @@ class HomeScreen extends StatelessWidget {
                             ),
                       ),
                     ),
-                child: ServiceBox(title: '$title ${index + 1}'),
+                child: ServiceBox(
+                  title: '$title ${index + 1}',
+                  width: width,
+                  details: details,
+                  image: image,
+                  imageHeight: imageHeight,
+                  imageWidth: imageWidth,
+                  fit: fit,
+                  imagePadding: imagePadding,
+                ),
               );
             },
           ),
@@ -90,13 +185,30 @@ class MySearchBar extends StatelessWidget {
 
 class ServiceBox extends StatelessWidget {
   final String title;
-  const ServiceBox({super.key, required this.title});
+  final String details;
+  final double width;
+  final String image;
+  final double imageHeight;
+  final double imageWidth;
+  final BoxFit? fit;
+  final EdgeInsetsGeometry imagePadding;
+  const ServiceBox({
+    super.key,
+    required this.title,
+    required this.width,
+    required this.details,
+    required this.image,
+    required this.imageHeight,
+    required this.imageWidth,
+    required this.imagePadding,
+    this.fit,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90.0,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      width: width,
+      margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(12.0),
@@ -109,12 +221,64 @@ class ServiceBox extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(color: Colors.black87, fontSize: 12.0),
-          textAlign: TextAlign.center,
-        ),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            child: Padding(
+              padding: imagePadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.network(
+                    width: imageWidth,
+                    height: imageHeight,
+                    image,
+                    fit: fit,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
+            child: Row(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    maxLines: 2,
+                    details,
+                    style: const TextStyle(
+                      color: Color.fromARGB(221, 59, 58, 58),
+                      fontSize: 12.0,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -262,4 +426,14 @@ class Indicator extends StatelessWidget {
       ),
     );
   }
+}
+
+class items {
+  String image;
+  int height;
+  int width;
+  String title;
+  String details;
+
+  items(this.image, this.height, this.width, this.title, this.details);
 }
