@@ -5,6 +5,7 @@ import 'package:city/models/socialmedia_post.dart';
 import 'package:city/models/socialmedia_user.dart';
 import 'package:city/services/get_post.dart';
 import 'package:city/services/get_socialmedia_user.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:galleryimage/galleryimage.dart';
 
@@ -24,7 +25,6 @@ class SocialmediaTabView extends StatelessWidget {
             scrollDirection: Axis.vertical,
             itemCount: posts.length,
             itemBuilder: (context, index) {
-              print(posts[index].media?[0].url ?? 'No Image');
               // ignore: avoid_unnecessary_containers
               return Card(
                 color: MyColors.white,
@@ -37,7 +37,7 @@ class SocialmediaTabView extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       SocialmediaUser user = snapshot.data!;
-                      print(user.avatar);
+
                       return Container(
                         padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
                         child: Column(
@@ -83,25 +83,10 @@ class SocialmediaTabView extends StatelessWidget {
                                               ),
                                             ),
                                           ),
+
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                              2,
-                                              5,
-                                              2,
-                                              0,
-                                            ),
-                                            child: Text(
-                                              user.userName,
-                                              style: const TextStyle(
-                                                fontSize: 9,
-                                                // fontWeight: FontWeight.normal,
-                                                color: MyColors.black,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              2,
+                                              4,
                                               5,
                                               2,
                                               0,
@@ -189,7 +174,7 @@ class SocialmediaTabView extends StatelessWidget {
                                       children: [
                                         Reactions(
                                           reactionIcon: const Icon(
-                                            Icons.favorite_border_outlined,
+                                            FluentIcons.heart_circle_16_regular,
                                           ),
                                           reactionHoverColor: Colors.red
                                               .withOpacity(.3),
@@ -215,7 +200,7 @@ class SocialmediaTabView extends StatelessWidget {
                                       children: [
                                         Reactions(
                                           reactionIcon: const Icon(
-                                            Icons.comment_outlined,
+                                            FluentIcons.comment_28_regular,
                                           ),
                                           reactionHoverColor: Colors.green
                                               .withOpacity(.3),
@@ -237,7 +222,7 @@ class SocialmediaTabView extends StatelessWidget {
                                       children: [
                                         Reactions(
                                           reactionIcon: const Icon(
-                                            Icons.repeat_rounded,
+                                            FluentIcons.share_48_regular,
                                           ),
                                           reactionHoverColor: Colors.blue
                                               .withOpacity(.3),

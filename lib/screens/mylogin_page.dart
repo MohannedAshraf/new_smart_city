@@ -56,14 +56,10 @@ class _LoginPageState extends State<MyloginPage> {
 
         if (token != null) {
           // ignore: unused_element
-          void saveToken(String token) async {
-            final SharedPreferences sharedPreferences =
-                await SharedPreferences.getInstance();
-            await sharedPreferences.setString('token', token);
-            // ignore: duplicate_ignore
-            // ignore: avoid_print
-            print("✅ Token Saved: $token");
-          }
+          final SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          await sharedPreferences.setString('token', token);
+          print("✅ Token Saved: $token");
 
           // ✅ نجاح تسجيل الدخول → الانتقال للصفحة الرئيسية
           if (context.mounted) {
