@@ -1,8 +1,23 @@
-import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/widgets/category_circle.dart';
-import 'package:city/core/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:city/core/utils/assets_image.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const ServiceOrderScreen(),
+    );
+  }
+}
 
 class ServiceOrderScreen extends StatefulWidget {
   const ServiceOrderScreen({super.key});
@@ -44,22 +59,9 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   ];
 
   int? selectedCategoryIndex;
+  int? selectedSubCategoryIndex;
 
-  late TextEditingController _controller;
-  String searchText = "";
   int _currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,14 +90,14 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        if (selectedCategoryIndex == index) {
-                          selectedCategoryIndex = null;
-                        } else {
-                          selectedCategoryIndex = index;
-                        }
+                        selectedCategoryIndex = index;
+                        selectedSubCategoryIndex = null;
                       });
                     },
-                    child: CategoryCircle(circlename: categories[index]),
+                    child: CategoryCircle(
+                      circlename: categories[index],
+                      isSelected: selectedCategoryIndex == index,
+                    ),
                   );
                 }),
               ),
@@ -113,12 +115,17 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                           MaterialPageRoute(
                             builder:
                                 (_) => SubCategoryScreen(
-                                  subCategoryName: subCategories[index],
+                                  selectedCategoryName:
+                                      categories[selectedCategoryIndex!],
+                                  selectedSubCategoryName: subCategories[index],
                                 ),
                           ),
                         );
                       },
-                      child: CategoryCircle(circlename: subCategories[index]),
+                      child: CategoryCircle(
+                        circlename: subCategories[index],
+                        isSelected: false, // هنا مش مختار حاجة لسة
+                      ),
                     );
                   }),
                 ),
@@ -164,55 +171,85 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                     );
                   }).toList(),
             ),
-            const SizedBox(height: 30),
-            const Column(
-              children: [
-                Row(
-                  children: [
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SubCategoryScreen extends StatelessWidget {
+  final String selectedCategoryName;
+  final String selectedSubCategoryName;
+
+  const SubCategoryScreen({
+    super.key,
+    required this.selectedCategoryName,
+    required this.selectedSubCategoryName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> categories = [
+      "طعام",
+      "مشروبات",
+      "ملابس",
+      "الكترون",
+      "الصحة",
+      "خدمات",
+      "تعليم",
+      "ترفيه",
+      "أثاث",
+      "سيارات",
+    ];
+
+    final List<String> subCategories = [
+      "فرعي 1",
+      "فرعي 2",
+      "فرعي 3",
+      "فرعي 4",
+      "فرعي 5",
+      "فرعي 6",
+      "فرعي 7",
+      "فرعي 8",
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(selectedSubCategoryName),
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 20),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(categories.length, (index) {
+                return CategoryCircle(
+                  circlename: categories[index],
+                  isSelected: categories[index] == selectedCategoryName,
+                );
+              }),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(subCategories.length, (index) {
+                return CategoryCircle(
+                  circlename: subCategories[index],
+                  isSelected: subCategories[index] == selectedSubCategoryName,
+                );
+              }),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // هنا تحط المنتجات بتاعتك مثلا GridView وغيره
+          const Expanded(child: Center(child: Text('المنتجات هتظهر هنا'))),
+        ],
       ),
     );
   }
@@ -242,34 +279,139 @@ class MySearchBar extends StatelessWidget {
   }
 }
 
-class SubCategoryScreen extends StatelessWidget {
-  final String subCategoryName;
+class CategoryCircle extends StatelessWidget {
+  final String circlename;
+  final bool isSelected;
 
-  const SubCategoryScreen({super.key, required this.subCategoryName});
+  const CategoryCircle({
+    super.key,
+    required this.circlename,
+    this.isSelected = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(subCategoryName),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+    return Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: Column(
+        children: [
+          const CircleAvatar(
+            radius: 30,
+            backgroundColor: Color(0xFF3D6643), // ثابت أخضر
+            child: Icon(Icons.category, color: Colors.white),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            circlename,
+            style: TextStyle(
+              color: isSelected ? Colors.red : Colors.black, // النص فقط بيتغير
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // اتنين جنب بعض
-          childAspectRatio: 3 / 4,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-        ),
-        itemCount: 20, // عدد المنتجات اللي عايز تظهره
-        itemBuilder: (context, index) {
-          return const ProductCard(
-            image: MyAssetsImage.sandwitch,
-            price: "100 LE",
-            rating: 3.5,
-          );
-        },
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  const ProductCard({
+    super.key,
+    required this.image,
+    required this.price,
+    required this.rating,
+    required this.description,
+  });
+
+  final String image;
+  final String price;
+  final double rating;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 175,
+            height: 150,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              child: Image.asset(image, fit: BoxFit.fitHeight),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0),
+            child: Row(
+              children: [
+                Text("اسم المنتج "),
+                SizedBox(width: 40),
+                Text("اسم المالك "),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.start, // لضمان محاذاة العناصر بداية السطر
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  description.length > 15
+                      ? '${description.substring(0, 15)}...'
+                      : description,
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                if (description.length > 15)
+                  InkWell(
+                    onTap: () {
+                      // ignore: avoid_print
+                      print("clik");
+                    },
+                    child: const Text(
+                      'عرض المزيد',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.blue,
+                      ), // يمكنك تغيير اللون حسب الحاجة
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(price),
+          ),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(right: 60),
+            child: RatingBarIndicator(
+              rating: rating,
+              itemBuilder:
+                  (context, index) =>
+                      const Icon(Icons.star, color: Colors.amber),
+              itemCount: 5,
+              itemSize: 20.0,
+              direction: Axis.horizontal,
+            ),
+          ),
+        ],
       ),
     );
   }
