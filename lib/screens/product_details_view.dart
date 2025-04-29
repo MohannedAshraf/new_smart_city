@@ -1,5 +1,4 @@
 import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/utils/mycolors.dart';
 import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

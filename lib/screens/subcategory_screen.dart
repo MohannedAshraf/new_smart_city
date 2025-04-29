@@ -1,6 +1,4 @@
-import 'package:city/core/utils/assets_icons.dart';
 import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/utils/mycolors.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
 import 'package:city/screens/cart_view.dart';
