@@ -3,6 +3,7 @@ import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
+import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -59,7 +60,12 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CartView()),
+          );
+        },
         child: SvgPicture.asset(
           "assets/icon/actionbutton.svg",
           width: 80, // حجم مناسب للزر

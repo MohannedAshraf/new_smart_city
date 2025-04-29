@@ -1,5 +1,6 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
+import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
@@ -17,7 +18,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CartView()),
+          );
+        },
         child: SvgPicture.asset(
           "assets/icon/actionbutton.svg",
           width: 80, // حجم مناسب للزر
