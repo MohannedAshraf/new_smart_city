@@ -1,4 +1,6 @@
 import 'package:city/core/widgets/build_boxes.dart';
+import 'package:city/screens/all_services.dart';
+import 'package:city/screens/government_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -25,8 +27,9 @@ class HomeScreen extends StatelessWidget {
               50,
               50,
               BoxFit.contain,
-              EdgeInsets.fromLTRB(10, 10, 10, 4),
+              const EdgeInsets.fromLTRB(10, 10, 10, 4),
               5,
+              const GovernmentScreen(),
             ),
             _buildBoxesSection(
               context,
@@ -38,8 +41,9 @@ class HomeScreen extends StatelessWidget {
               80,
               180,
               BoxFit.cover,
-              EdgeInsets.fromLTRB(0, 0, 0, 4),
+              const EdgeInsets.fromLTRB(0, 0, 0, 4),
               5,
+              const AllServices(),
             ),
             _buildBoxesSection(
               context,
@@ -53,6 +57,7 @@ class HomeScreen extends StatelessWidget {
               BoxFit.cover,
               EdgeInsets.fromLTRB(0, 0, 0, 4),
               10,
+              const AllServices(),
             ),
           ],
         ),
@@ -72,6 +77,7 @@ class HomeScreen extends StatelessWidget {
     BoxFit fit,
     EdgeInsetsGeometry imagePadding,
     int itemCount,
+    Widget destination,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +114,13 @@ class HomeScreen extends StatelessWidget {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    print(' Text Clicked');
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => destination,
+                                      ),
+                                    );
                                   },
                           ),
                         ],
@@ -392,13 +404,13 @@ class ImageCard extends StatelessWidget {
                   vertical: 5.0,
                 ),
                 // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.transparent,
                 child: Text(
                   data['caption']!,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -426,14 +438,4 @@ class Indicator extends StatelessWidget {
       ),
     );
   }
-}
-
-class items {
-  String image;
-  int height;
-  int width;
-  String title;
-  String details;
-
-  items(this.image, this.height, this.width, this.title, this.details);
 }

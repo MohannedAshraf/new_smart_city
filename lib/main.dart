@@ -184,7 +184,7 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SocialMedia()),
+                  MaterialPageRoute(builder: (context) => const SocialMedia()),
                 );
               },
             ),
