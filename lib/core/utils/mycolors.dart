@@ -2,6 +2,10 @@ import 'package:flutter/widgets.dart';
 
 class MyColors {
   static const Color backgroundColor = Color(0xffF3F5F4);
+  static const Color oldLace = Color(0xffFFFAFA);
+  static const Color whiteSmoke = Color(0xffF5F5F5);
+  static const Color ghostColor = Color(0xffF8F8FF);
+  static const Color offWhite = Color(0xffFAF9F6);
   static const Color red = Color(0xffE4312B);
   static const Color green = Color(0xff149954);
   static const Color white = Color(0xffFFFFFF);

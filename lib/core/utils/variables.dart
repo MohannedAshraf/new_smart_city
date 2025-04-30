@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 abstract class MyColors {
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
+  static const Color oldLace = Color(0xffFFFAFA);
+  static const Color whiteSmoke = Color(0xffF5F5F5);
+  static const Color ghostColor = Color(0xffF8F8FF);
+  static const Color offWhite = Color(0xffFAF9F6);
   static const Color cardcolor = Color.fromARGB(255, 141, 177, 146);
   static const Color themecolor = Color(0xFF3D6643);
   static const Color cardfontcolor = Colors.white;

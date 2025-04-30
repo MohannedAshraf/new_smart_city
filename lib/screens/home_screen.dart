@@ -1,6 +1,9 @@
+import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/build_boxes.dart';
+import 'package:city/models/most_recent_products.dart';
 import 'package:city/screens/all_services.dart';
 import 'package:city/screens/government_screen.dart';
+import 'package:city/services/get_most_recent_products.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -11,6 +14,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.offWhite,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -55,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               55,
               120,
               BoxFit.cover,
-              EdgeInsets.fromLTRB(0, 0, 0, 4),
+              const EdgeInsets.fromLTRB(0, 0, 0, 4),
               10,
               const AllServices(),
             ),
@@ -181,7 +185,7 @@ class MySearchBar extends StatelessWidget {
         hintText: 'ماذا تريد ',
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: MyColors.ghostColor),
           borderRadius: BorderRadius.circular(25.0),
         ),
         focusedBorder: OutlineInputBorder(
@@ -222,21 +226,21 @@ class ServiceBox extends StatelessWidget {
       width: width,
       margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: MyColors.white,
         borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             // ignore: deprecated_member_use
-            color: Colors.grey.withOpacity(0.3),
+            color: MyColors.whiteSmoke,
             blurRadius: 4.0,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
             ),
@@ -273,7 +277,7 @@ class ServiceBox extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
             child: Row(
               children: [
                 Expanded(
@@ -324,48 +328,46 @@ class CarouselWithIndicators extends StatefulWidget {
 
 class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
   int _currentIndex = 0;
-  final List<Map<String, String>> _imageData = const [
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'محمد رمضان',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'المكسيكي',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'رابعه حاسبات',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'التخرج',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CarouselSlider(
-          items: _imageData.map((data) => ImageCard(data: data)).toList(),
-          options: CarouselOptions(
-            height: 150.0,
-            autoPlay: true,
-            enlargeCenterPage: true,
-            onPageChanged:
-                (index, reason) => setState(() => _currentIndex = index),
-          ),
-        ),
-        const SizedBox(height: 10.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _imageData.length,
-            (index) => Indicator(isActive: _currentIndex == index),
-          ),
-        ),
-      ],
+    return FutureBuilder<List<MostRecentProduct>>(
+      future: MostRecentProducts().getMostRecentProduct(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<MostRecentProduct> data = snapshot.data!;
+          List<Map<String, String>> products =
+              data.map((i) => {'url': i.image, 'title': i.name}).toList();
+
+          return Column(
+            children: [
+              CarouselSlider(
+                items: products.map((data) => ImageCard(data: data)).toList(),
+                options: CarouselOptions(
+                  height: 150.0,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  onPageChanged:
+                      (index, reason) => setState(() => _currentIndex = index),
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  products.length,
+                  (index) => Indicator(isActive: _currentIndex == index),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox(
+            height: 150,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+      },
     );
   }
 }
@@ -383,7 +385,7 @@ class ImageCard extends StatelessWidget {
             MaterialPageRoute(
               builder:
                   (context) =>
-                      ServiceDetailsScreen(serviceName: data['caption']!),
+                      ServiceDetailsScreen(serviceName: data['title']!),
             ),
           ),
       child: ClipRRect(
@@ -406,7 +408,7 @@ class ImageCard extends StatelessWidget {
                 // ignore: deprecated_member_use
                 color: Colors.transparent,
                 child: Text(
-                  data['caption']!,
+                  data['title']!,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
