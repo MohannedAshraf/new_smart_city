@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CategoryCircle extends StatelessWidget {
-  final String circlename;
+  final String name; // اسم الكاتيجوري من الـ API
+  final String imageUrl; // رابط الصورة من الـ API
   final bool isSelected;
 
   const CategoryCircle({
     super.key,
-    required this.circlename,
+    required this.name,
+    required this.imageUrl,
     this.isSelected = false,
   });
 
@@ -16,17 +18,26 @@ class CategoryCircle extends StatelessWidget {
       margin: const EdgeInsets.only(left: 10),
       child: Column(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 30,
-            backgroundColor: Color(0xFF3D6643), // ثابت أخضر
-            child: Icon(Icons.category, color: Colors.white),
+            backgroundColor: const Color(0xFF3D6643), // اللون الثابت
+            backgroundImage: NetworkImage(
+              'https://service-provider.runasp.net$imageUrl', // تحميل الصورة من الـ URL
+            ),
+            child:
+                imageUrl
+                        .isEmpty // إذا كانت الصورة فارغة، نعرض الأيقونة
+                    ? const Icon(Icons.category, color: Colors.white)
+                    : null,
           ),
           const SizedBox(height: 5),
           Text(
-            circlename,
+            name, // الاسم اللي جاي من الـ API
             style: TextStyle(
               color:
-                  isSelected ? Colors.red : Colors.black, // بس النص اللي يتغير
+                  isSelected
+                      ? Colors.red
+                      : Colors.black, // تغيير لون النص إذا كانت مختارة
               fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
