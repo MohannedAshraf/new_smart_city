@@ -50,12 +50,15 @@ class GovernmentScreen extends StatelessWidget {
         ),
         appBar: AppBar(
           //flexibleSpace: Container(height: 0),
-          toolbarHeight: 20,
+          toolbarHeight: 30,
           backgroundColor: MyColors.backgroundColor,
           automaticallyImplyLeading: false,
-          title: const Text(
-            'Citio',
-            style: TextStyle(color: MyColors.themecolor, fontSize: 20),
+          title: const Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Text(
+              'Citio',
+              style: TextStyle(color: MyColors.themecolor, fontSize: 20),
+            ),
           ),
           centerTitle: true,
 

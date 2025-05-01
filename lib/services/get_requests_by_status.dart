@@ -12,8 +12,7 @@ class RequestsByStatus {
     }
 
     List<dynamic> data = await Api().get(
-      url:
-          'https://government-services.runasp.net/api/requests?requestStatus=$status',
+      url: 'https://government-services.runasp.net/api/Requests?Status=$status',
       token: token,
     );
     List<Request> requestsList = [];
