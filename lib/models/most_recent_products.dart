@@ -6,8 +6,8 @@ class MostRecentProduct {
   MostRecentProduct({required this.name, required this.image});
   factory MostRecentProduct.fromJason(jsonData) {
     return MostRecentProduct(
-      name: jsonData['nameAr'],
-      image: baseUrl + jsonData['mainImageUrl'],
+      name: jsonData['description'],
+      image: baseUrl + jsonData['imageUrl'],
     );
   }
 }
