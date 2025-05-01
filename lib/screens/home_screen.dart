@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                     items: vendors,
                     titlefontSize: 12,
                     destination: const AllServices(),
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     height: 150,
                     maximumLines: 3,
                     imageHeight: 70,
