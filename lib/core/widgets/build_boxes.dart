@@ -11,12 +11,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-Map<String, String> icons = {
+Map<String, String> iconsGov = {
   "إصدار جواز سفر": 'https://cdn-icons-png.flaticon.com/128/4774/4774004.png',
   "رخصة قيادة": 'https://cdn-icons-png.flaticon.com/128/18395/18395873.png',
   "شهادة ميلاد": 'https://cdn-icons-png.flaticon.com/128/14236/14236286.png',
   "شهادة زواج": 'https://cdn-icons-png.flaticon.com/128/9835/9835447.png',
   "تأمين صحي": 'https://cdn-icons-png.flaticon.com/128/6512/6512351.png',
+  "تسجيل ضريبي": 'https://cdn-icons-png.flaticon.com/128/12692/12692536.png',
+  "رخصة تجارية": 'https://cdn-icons-png.flaticon.com/128/1728/1728507.png',
 };
 
 class BuildBoxes extends StatelessWidget {
@@ -131,7 +133,7 @@ class BuildBoxes extends StatelessWidget {
                   details:
                       'يستغرق استخراجه ${items[index].time} بتكلفة  ${items[index].fee} جنيهًا فقط لا غير',
                   image:
-                      icons[items[index].serviceName] ??
+                      iconsGov[items[index].serviceName] ??
                       'https://cdn-icons-png.flaticon.com/128/13434/13434972.png',
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
