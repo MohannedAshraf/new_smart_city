@@ -7,4 +7,5 @@ class MyAssetsImage {
   static const String nescalop = "${baseimagepass}nescalop.jpg";
   static const String sandwitch = "${baseimagepass}sandwitch.jpg";
   static const String city = "${baseimagepass}citio.png";
+  static const String brokenImage = "${baseimagepass}broken-image.png";
 }

@@ -1,3 +1,4 @@
+import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/build_boxes.dart';
 import 'package:city/models/most_recent_products.dart';
@@ -63,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                     items: products,
                     titlefontSize: 12,
                     destination: const AllServices(),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     height: 150,
                     maximumLines: 3,
                     imageHeight: 70,
@@ -89,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                     items: vendors,
                     titlefontSize: 12,
                     destination: const AllServices(),
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                     height: 150,
                     maximumLines: 3,
                     imageHeight: 70,
@@ -215,6 +216,16 @@ class ImageCard extends StatelessWidget {
               data['url']!,
               fit: BoxFit.cover,
               width: double.infinity,
+              errorBuilder: (
+                BuildContext context,
+                Object error,
+                StackTrace? stackTrace,
+              ) {
+                return const SizedBox(
+                  height: 150,
+                  child: Image(image: AssetImage(MyAssetsImage.brokenImage)),
+                );
+              },
             ),
             Positioned(
               bottom: 20.0,

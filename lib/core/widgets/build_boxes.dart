@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
@@ -460,6 +461,19 @@ class ServiceBox extends StatelessWidget {
                     height: imageHeight,
                     image,
                     fit: fit,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object error,
+                      StackTrace? stackTrace,
+                    ) {
+                      return SizedBox(
+                        height: imageHeight,
+                        width: imageWidth,
+                        child: const Image(
+                          image: AssetImage(MyAssetsImage.brokenImage),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
