@@ -41,7 +41,9 @@ class IssuesPage extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => NewComplaintCenterPage()),
+              MaterialPageRoute(
+                builder: (context) => const NewComplaintCenterPage(),
+              ),
             );
           },
           child: const Icon(Icons.add, size: 20, color: Colors.white),

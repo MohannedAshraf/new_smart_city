@@ -1,9 +1,11 @@
-// الكود زي ما هو
-import 'package:city/core/utils/assets_image.dart';
+// ignore_for_file: avoid_print
+
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
+import 'package:city/helper/api_product_under_sub.dart';
 import 'package:city/helper/api_service.dart';
 import 'package:city/models/category_sub_category_model.dart';
+import 'package:city/models/product_under_sub_model.dart';
 import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,12 +27,15 @@ class SubCategoryScreen extends StatefulWidget {
 class _SubCategoryScreenState extends State<SubCategoryScreen> {
   List<CategoryModel> categories = [];
   List<SubCategoryModel> subCategories = [];
+  List<ProductUnderSubModel> products = [];
 
   int selectedCategoryIndex = 0;
   int selectedSubCategoryIndex = 0;
 
   bool isLoadingCategories = true;
   bool isLoadingSubCategories = true;
+  bool isLoadingProducts = false;
+
   String? errorMessage;
 
   @override
@@ -49,31 +54,38 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     } catch (e) {
       errorMessage = e.toString();
     } finally {
-      if (mounted) {
-        setState(() {
-          isLoadingCategories = false;
-        });
-      }
+      setState(() => isLoadingCategories = false);
     }
   }
 
   Future<void> fetchSubCategories(int categoryId) async {
-    if (mounted) {
-      setState(() {
-        isLoadingSubCategories = true;
-      });
-    }
+    setState(() {
+      isLoadingSubCategories = true;
+    });
     try {
       subCategories = await ApiService.fetchSubCategories(categoryId);
       selectedSubCategoryIndex = widget.selectedSubCategoryIndex;
+      await fetchProducts(subCategories[selectedSubCategoryIndex].id);
     } catch (e) {
       errorMessage = e.toString();
     } finally {
-      if (mounted) {
-        setState(() {
-          isLoadingSubCategories = false;
-        });
-      }
+      setState(() => isLoadingSubCategories = false);
+    }
+  }
+
+  Future<void> fetchProducts(int subCategoryId) async {
+    setState(() => isLoadingProducts = true);
+    try {
+      products = await ApiProductUnderSub.fetchProductsBySubCategory(
+        subCategoryId,
+      );
+      errorMessage = null; // reset error if success
+    } catch (e, s) {
+      errorMessage = e.toString();
+      print("Exception while fetching products: $e");
+      print(s); // Stack trace
+    } finally {
+      setState(() => isLoadingProducts = false);
     }
   }
 
@@ -84,7 +96,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CartView()),
+            MaterialPageRoute(builder: (_) => const CartView()),
           );
         },
         child: SvgPicture.asset(
@@ -101,19 +113,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
       ),
       body:
           errorMessage != null
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('حدث خطأ: $errorMessage'),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: fetchInitialData,
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
-              )
+              ? Center(child: Text('حدث خطأ: $errorMessage'))
               : isLoadingCategories
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
@@ -121,90 +121,105 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(categories.length, (index) {
-                          final category = categories[index];
-                          return GestureDetector(
-                            onTap: () async {
-                              if (mounted) {
-                                setState(() {
-                                  selectedCategoryIndex = index;
-                                  selectedSubCategoryIndex = 0;
-                                });
-                              }
-                              await fetchSubCategories(category.id);
-                            },
-                            child: CategoryCircle(
-                              name: category.nameAr,
-                              imageUrl: category.imageUrl,
-                              isSelected: selectedCategoryIndex == index,
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
+                    _buildCategoryList(),
                     const SizedBox(height: 10),
-                    isLoadingSubCategories
-                        ? const Center(child: CircularProgressIndicator())
-                        : subCategories.isEmpty
-                        ? const Center(child: Text('لا يوجد خدمات فرعية'))
-                        : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: List.generate(subCategories.length, (
-                              index,
-                            ) {
-                              final subCategory = subCategories[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  if (mounted) {
-                                    setState(() {
-                                      selectedSubCategoryIndex = index;
-                                    });
-                                  }
-                                },
-                                child: CategoryCircle(
-                                  name: subCategory.nameAr,
-                                  imageUrl: subCategory.imageUrl,
-                                  isSelected: selectedSubCategoryIndex == index,
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
+                    _buildSubCategoryList(),
                     const SizedBox(height: 20),
-                    // هنا هنعرض المنتجات بناءً على الـ subCategory المختار
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 8.5 / 12,
-                            crossAxisSpacing: 0,
-                            mainAxisSpacing: 0,
-                          ),
-                      itemCount:
-                          subCategories.isNotEmpty
-                              ? 5 // عدد المنتجات المؤقتة
-                              : 0,
-                      itemBuilder: (context, index) {
-                        // بيانات المنتجات الوهمية مؤقتًا
-                        return const ProductCard(
-                          productId: 5,
-                          image: MyAssetsImage.burger,
-                          price: "100 LE",
-                          rating: 3.5,
-                          description: 'وصف المنتج هنا',
-                          productName: 'dsaasasaa',
-                        );
-                      },
-                    ),
+                    isLoadingProducts
+                        ? const Center(child: CircularProgressIndicator())
+                        : products.isEmpty
+                        ? const Center(child: Text('لا توجد منتجات'))
+                        : _buildProductGrid(),
                   ],
                 ),
               ),
+    );
+  }
+
+  Widget _buildCategoryList() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(categories.length, (index) {
+          final category = categories[index];
+          return GestureDetector(
+            onTap: () async {
+              setState(() {
+                selectedCategoryIndex = index;
+                selectedSubCategoryIndex = 0;
+                products.clear();
+              });
+              await fetchSubCategories(category.id);
+            },
+            child: CategoryCircle(
+              name: category.nameAr,
+              imageUrl: category.imageUrl,
+              isSelected: selectedCategoryIndex == index,
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildSubCategoryList() {
+    return isLoadingSubCategories
+        ? const Center(child: CircularProgressIndicator())
+        : subCategories.isEmpty
+        ? const Center(child: Text('لا يوجد خدمات فرعية'))
+        : SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(subCategories.length, (index) {
+              final subCategory = subCategories[index];
+              return GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    selectedSubCategoryIndex = index;
+                    products.clear();
+                  });
+                  await fetchProducts(subCategory.id);
+                },
+                child: CategoryCircle(
+                  name: subCategory.nameAr,
+                  imageUrl: subCategory.imageUrl,
+                  isSelected: selectedSubCategoryIndex == index,
+                ),
+              );
+            }),
+          ),
+        );
+  }
+
+  Widget _buildProductGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 8.5 / 12,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        final product = products[index];
+        final imageUrl =
+            product.imageUrl.startsWith('http')
+                ? product.imageUrl
+                : '${ApiProductUnderSub.imageBaseUrl}${product.imageUrl}';
+
+        return ProductCard(
+          productId: product.id,
+          image: imageUrl,
+          price: "${product.price.toStringAsFixed(0)} LE",
+          rating: product.rating,
+          description: product.description,
+          productName: product.nameAr,
+        );
+      },
     );
   }
 }

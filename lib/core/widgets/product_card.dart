@@ -82,9 +82,11 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    description.length > 13
-                        ? '${description.substring(0, 13)}...'
-                        : description,
+                    description.isNotEmpty
+                        ? (description.length > 13
+                            ? '${description.substring(0, 13)}...'
+                            : description)
+                        : 'لا يوجد وصف',
                     style: const TextStyle(fontSize: 14),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
