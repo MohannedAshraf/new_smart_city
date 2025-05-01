@@ -30,7 +30,10 @@ class CustomCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundImage: NetworkImage(icons[cardTitle]!),
+                  backgroundImage: NetworkImage(
+                    icons[cardTitle] ??
+                        'https://www.flaticon.com/free-icon/broken-image_13434972',
+                  ),
                 ),
               ],
             ),

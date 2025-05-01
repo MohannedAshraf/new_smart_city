@@ -1,9 +1,11 @@
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/build_boxes.dart';
 import 'package:city/models/most_recent_products.dart';
+import 'package:city/models/most_requested_services.dart';
 import 'package:city/screens/all_services.dart';
 import 'package:city/screens/government_screen.dart';
 import 'package:city/services/get_most_recent_products.dart';
+import 'package:city/services/get_most_requested_services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -21,20 +23,33 @@ class HomeScreen extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
-            _buildBoxesSection(
-              context,
-              'الخدمات الحكومية',
-              160,
-              'لاصدار رخصة قيادة الأوراق المطلوبة يمكنك اصدارها من الويبسايت مباشرة',
-              140,
-              'https://cdn-icons-png.flaticon.com/128/18395/18395873.png',
-              50,
-              50,
-              BoxFit.contain,
-              const EdgeInsets.fromLTRB(10, 10, 10, 4),
-              5,
-              const GovernmentScreen(),
+            FutureBuilder<List<MostRequested>>(
+              future: MostRequestedServices().getMostRequestedServices(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<MostRequested> services = snapshot.data!;
+                  return BuildBoxes(
+                    title: 'الخدمات الحكومية',
+                    items: services,
+                    details: 'details',
+                    destination: const GovernmentScreen(),
+                    fit: BoxFit.contain,
+                    height: 150,
+
+                    imageHeight: 50,
+                    imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    imageWidth: 50,
+                    width: 160,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 140,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
             ),
+
             _buildBoxesSection(
               context,
               'Providers',
@@ -71,6 +86,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildBoxesSection(
     BuildContext context,
+
     String title,
     double width,
     String details,
