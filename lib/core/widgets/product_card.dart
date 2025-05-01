@@ -10,6 +10,7 @@ class ProductCard extends StatelessWidget {
     required this.rating,
     required this.description,
     required this.productName,
+    required this.productId,
   });
 
   final String image;
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
   final double rating;
   final String description;
   final String productName;
+  final int productId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,9 @@ class ProductCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ProductDetailsView()),
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsView(productId: productId),
+          ),
         );
       },
       child: Container(
@@ -60,9 +64,9 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
+                  const Expanded(
                     child: Text(
-                      productName,
+                      "المالك",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),

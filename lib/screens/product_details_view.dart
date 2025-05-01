@@ -1,11 +1,12 @@
-import 'package:city/core/utils/assets_image.dart';
-import 'package:city/screens/cart_view.dart';
+import 'package:city/helper/api_product_details.dart';
+import 'package:city/models/product_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 class ProductDetailsView extends StatefulWidget {
-  const ProductDetailsView({super.key});
+  const ProductDetailsView({super.key, required this.productId});
+  final int productId;
 
   @override
   State<ProductDetailsView> createState() => _ProductDetailsViewState();
@@ -13,152 +14,164 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   int itemCount = 1;
+
+  late Future<ProductDetails> _productDetailsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productDetailsFuture = ProductDetailsService.fetchProductDetails(
+      widget.productId,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج")),
       floatingActionButton: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CartView()),
-          );
+          // انتقال إلى سلة المشتريات
         },
         child: SvgPicture.asset(
           "assets/icon/actionbutton.svg",
-          width: 80, // حجم مناسب للزر
+          width: 80,
           height: 60,
         ),
       ),
+      body: FutureBuilder<ProductDetails>(
+        future: _productDetailsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("حدث خطأ: ${snapshot.error}"));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text("لم يتم العثور على المنتج"));
+          }
 
-      appBar: AppBar(centerTitle: true, title: const Text("اسم المنتج ")),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 16),
-              margin: const EdgeInsets.only(
-                // left: 10,
-                top: 30,
-                bottom: 30,
-                // right: 30,
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 16, right: 12),
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    //  margin: EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      image: const DecorationImage(
-                        image: AssetImage(MyAssetsImage.nescalop),
-                        fit: BoxFit.fill,
+          final product = snapshot.data!;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// ✅ صورة المنتج
+                Container(
+                  margin: const EdgeInsets.only(top: 30, bottom: 30),
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
                       ),
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  // Align(
-                  //   alignment: AlignmentDirectional.topEnd,
-                  //   child: SvgPicture.asset("assets/icon/redheart.svg"),
-                  // ),
-                ],
-              ),
-            ),
-            const Row(
-              children: [
-                Text(
-                  " اسم المنتج",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
-                SizedBox(width: 160),
-                Text(
-                  " اسم المالك",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+
+                /// ✅ الاسم + البائع
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      product.nameAr,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      product.vendorFullName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                /// ✅ الوصف
+                Text(product.description, style: const TextStyle(fontSize: 14)),
+
+                const SizedBox(height: 15),
+
+                /// ✅ السعر + عدد المنتجات
+                Row(
+                  children: [
+                    Text(
+                      "${product.price.toStringAsFixed(2)} ج",
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Spacer(),
+                    ItemCount(
+                      color: Colors.red,
+                      initialValue: itemCount,
+                      step: 1,
+                      minValue: 1,
+                      maxValue: 10,
+                      decimalPlaces: 0,
+                      onChanged: (value) {
+                        setState(() {
+                          itemCount = value.toInt();
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                /// ✅ زر الإضافة إلى العربة
+                Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.064,
+                  margin: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.red,
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'تم إضافة $itemCount منتج إلى العربة بنجاح!',
+                          ),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          "أضف إلي العربة",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 15),
-            const Text(
-              " الوصف",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                children: [
-                  const Text(
-                    "150 ج",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Spacer(),
-                  ItemCount(
-                    color: Colors.red,
-                    initialValue: itemCount,
-                    step: 1,
-
-                    minValue: 1,
-                    maxValue: 10,
-                    decimalPlaces: 0,
-                    onChanged: (value) {
-                      setState(() {
-                        itemCount = value.toInt();
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.064,
-              margin: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.red,
-              ),
-              child: TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'تم إضافة $itemCount منتج إلى العربة بنجاح!',
-                      ),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-                child: const Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.shopping_cart_outlined, color: Colors.white),
-                      SizedBox(width: 8),
-                      Text(
-                        "أضف إلي العربه ",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

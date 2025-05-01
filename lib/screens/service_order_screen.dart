@@ -295,6 +295,7 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
             itemBuilder: (context, index) {
               final product = products[index];
               return ProductCard(
+                productId: product.id,
                 image: ProductService.baseUrl + product.mainImageUrl,
                 price: '${product.price.toStringAsFixed(0)} LE',
                 rating: (product.requestCount / 5).clamp(0, 5).toDouble(),

@@ -193,6 +193,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                       itemBuilder: (context, index) {
                         // بيانات المنتجات الوهمية مؤقتًا
                         return const ProductCard(
+                          productId: 5,
                           image: MyAssetsImage.burger,
                           price: "100 LE",
                           rating: 3.5,
