@@ -87,7 +87,7 @@ class GovServicesDatails extends StatelessWidget {
                                           0,
                                         ),
                                         child: Text(
-                                          'يستغرق استخراجه ${services[index].time} بتكلفة  ${services[index].fee} جنيهًا فقط لا غير \n للتواصل: ${services[index].email}}',
+                                          'يستغرق استخراجه ${services[index].time} بتكلفة  ${services[index].fee} جنيهًا فقط لا غير \n للتواصل: ${services[index].email}',
                                           style: const TextStyle(
                                             color: MyColors.black,
                                             fontSize: 14,
