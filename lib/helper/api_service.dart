@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:city/models/category_sub_category_model.dart';
-import 'package:city/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -52,26 +51,4 @@ class ApiService {
   }
 
   // الدالة لجلب المنتجات الأكثر طلبًا
-  static Future<List<ProductModel>> fetchMostRequestedProducts() async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/Products/most-requested'),
-      );
-
-      // التحقق من حالة الاستجابة
-      if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
-        // تحويل البيانات من JSON إلى قائمة من الكائنات
-        return data.map((json) => ProductModel.fromJson(json)).toList();
-      } else {
-        // في حالة حدوث خطأ في الاستجابة من السيرفر
-        throw Exception(
-          'Failed to load most requested products: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      // التعامل مع الأخطاء مثل انقطاع الإنترنت أو أخطاء أخرى
-      throw Exception('Error fetching most requested products: $e');
-    }
-  }
 }

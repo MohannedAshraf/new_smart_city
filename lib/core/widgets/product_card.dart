@@ -9,12 +9,14 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.rating,
     required this.description,
+    required this.productName,
   });
 
   final String image;
   final String price;
   final double rating;
   final String description;
+  final String productName;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+        margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
@@ -35,24 +37,36 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 175,
-              height: 150,
+              width: 182,
+              height: 140,
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: Image.asset(image, fit: BoxFit.fitHeight),
+                child: Image.network(image, fit: BoxFit.fitHeight),
               ),
             ),
             const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
               child: Row(
                 children: [
-                  Text("اسم المنتج "),
-                  SizedBox(width: 40),
-                  Text("اسم المالك "),
+                  Expanded(
+                    child: Text(
+                      productName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      productName,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
                 ],
               ),
             ),

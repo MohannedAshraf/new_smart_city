@@ -197,6 +197,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                           price: "100 LE",
                           rating: 3.5,
                           description: 'وصف المنتج هنا',
+                          productName: 'dsaasasaa',
                         );
                       },
                     ),

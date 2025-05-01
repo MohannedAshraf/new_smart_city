@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
+import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
+import 'package:city/helper/api_most_product.dart';
 import 'package:city/models/category_sub_category_model.dart';
-import 'package:flutter/material.dart';
+import 'package:city/models/product_model.dart';
 import 'package:city/helper/api_service.dart';
 import 'package:city/screens/subcategory_screen.dart';
 
@@ -80,7 +82,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             const SizedBox(height: 30),
             _buildCategories(),
             if (selectedCategoryIndex != null) _buildSubCategories(),
-            SizedBox(height: 15),
+            SizedBox(height: 70),
             CarouselSlider(
               items:
                   imageList.map((imagePath) {
@@ -92,7 +94,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   }).toList(),
               options: CarouselOptions(
                 height: 190.0,
-                autoPlay: true,
+                autoPlay: false,
                 enlargeCenterPage: true,
                 onPageChanged: (index, reason) {
                   setState(() {
@@ -128,58 +130,9 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
               "أفضل التقييمات",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
-            Column(
-              children: const [
-                Row(
-                  children: [
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                    ProductCard(
-                      description: 'الوصف الكامل للمنتج',
-                      image: MyAssetsImage.sandwitch,
-                      price: "100 LE",
-                      rating: 3.5,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+
+            SizedBox(height: 30),
+            MostRequestedProductsView(),
           ],
         ),
       ),
@@ -285,6 +238,82 @@ class MySearchBar extends StatelessWidget {
         filled: true,
         fillColor: Colors.white,
       ),
+    );
+  }
+}
+
+class MostRequestedProductsView extends StatefulWidget {
+  const MostRequestedProductsView({super.key});
+
+  @override
+  State<MostRequestedProductsView> createState() =>
+      _MostRequestedProductsViewState();
+}
+
+class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
+  late Future<List<Product>> _products;
+
+  @override
+  void initState() {
+    super.initState();
+    _products = ProductService.fetchMostRequestedProducts();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Product>>(
+      future: _products,
+      builder: (context, snapshot) {
+        try {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                '❌ حصل خطأ أثناء تحميل المنتجات: ${snapshot.error}',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('لا يوجد منتجات متاحة حالياً.'));
+          }
+
+          final products = snapshot.data!;
+
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // 2 جمب بعض
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.7,
+            ),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return ProductCard(
+                image: ProductService.baseUrl + product.mainImageUrl,
+                price: '${product.price.toStringAsFixed(0)} LE',
+                rating: (product.requestCount / 5).clamp(0, 5).toDouble(),
+                description: product.description,
+                productName: product.nameEn,
+              );
+            },
+          );
+        } catch (e, stackTrace) {
+          print('❌ Exception caught in FutureBuilder: $e');
+          print('📍 Stack trace: $stackTrace');
+          return Center(
+            child: Text(
+              'حدث خطأ غير متوقع 😢',
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+      },
     );
   }
 }
