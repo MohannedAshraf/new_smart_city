@@ -3,6 +3,7 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
+import 'package:city/models/vendor.dart';
 import 'package:city/services/get_most_requested_products.dart';
 import 'package:city/services/get_most_requested_services.dart';
 import 'package:flutter/gestures.dart';
@@ -257,6 +258,133 @@ class BuildProductsBoxes extends StatelessWidget {
                   title: items[index].name,
                   width: width,
                   details: items[index].discription,
+                  image: items[index].image,
+                  imageHeight: imageHeight,
+                  imageWidth: imageWidth,
+                  fit: fit,
+                  imagePadding: imagePadding,
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 20.0),
+      ],
+    );
+  }
+}
+
+class BuildVendorssBoxes extends StatelessWidget {
+  //BuildContext context;
+  final List<Vendor> items;
+  final String title;
+  final double width;
+  //final String details;
+  final double height;
+
+  final double imageHeight;
+  final double imageWidth;
+  final BoxFit fit;
+  final EdgeInsetsGeometry imagePadding;
+  // final int itemCount;
+  final Widget destination;
+  final double? titlefontSize;
+  final int? maximumLines;
+  const BuildVendorssBoxes({
+    super.key,
+    required this.title,
+    required this.items,
+    // required this.details,
+    required this.destination,
+    required this.fit,
+    required this.height,
+
+    required this.imageHeight,
+    required this.imagePadding,
+    required this.imageWidth,
+    //  required this.itemCount,
+    required this.width,
+    this.titlefontSize,
+    this.maximumLines,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          child: Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textDirection: TextDirection.rtl,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'عرض الجميع',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 99, 167, 222),
+                              fontSize: 12,
+                            ),
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => destination,
+                                      ),
+                                    );
+                                  },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        // const SizedBox(height: 10.0),
+        SizedBox(
+          height: height,
+
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => ServiceDetailsScreen(
+                              serviceName: items[index].name,
+                            ),
+                      ),
+                    ),
+                child: ServiceBox(
+                  title: items[index].name,
+                  width: width,
+                  details: '${items[index].businessName}\n${items[index].type}',
                   image: items[index].image,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,

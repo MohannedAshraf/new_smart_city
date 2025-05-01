@@ -3,11 +3,13 @@ import 'package:city/core/widgets/build_boxes.dart';
 import 'package:city/models/most_recent_products.dart';
 import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
+import 'package:city/models/vendor.dart';
 import 'package:city/screens/all_services.dart';
 import 'package:city/screens/government_screen.dart';
 import 'package:city/services/get_most_recent_products.dart';
 import 'package:city/services/get_most_requested_products.dart';
 import 'package:city/services/get_most_requested_services.dart';
+import 'package:city/services/get_vendor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -61,7 +63,7 @@ class HomeScreen extends StatelessWidget {
                     items: products,
                     titlefontSize: 12,
                     destination: const AllServices(),
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     height: 150,
                     maximumLines: 3,
                     imageHeight: 70,
@@ -77,144 +79,35 @@ class HomeScreen extends StatelessWidget {
                 }
               },
             ),
-
-            _buildBoxesSection(
-              context,
-              'Providers',
-              180,
-              'category',
-              150,
-              'https://images.pexels.com/photos/1020370/pexels-photo-1020370.jpeg?auto=compress&cs=tinysrgb&w=600',
-              80,
-              180,
-              BoxFit.cover,
-              const EdgeInsets.fromLTRB(0, 0, 0, 4),
-              5,
-              const AllServices(),
-            ),
-            _buildBoxesSection(
-              context,
-              'Products',
-              120,
-              'details',
-              120,
-              'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=600',
-              55,
-              120,
-              BoxFit.cover,
-              const EdgeInsets.fromLTRB(0, 0, 0, 4),
-              10,
-              const AllServices(),
+            FutureBuilder<List<Vendor>>(
+              future: GetVendor().getVendor(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Vendor> vendors = snapshot.data!;
+                  return BuildVendorssBoxes(
+                    title: 'Vendors',
+                    items: vendors,
+                    titlefontSize: 12,
+                    destination: const AllServices(),
+                    fit: BoxFit.contain,
+                    height: 150,
+                    maximumLines: 3,
+                    imageHeight: 70,
+                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                    imageWidth: 180,
+                    width: 180,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 160,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildBoxesSection(
-    BuildContext context,
-
-    String title,
-    double width,
-    String details,
-    double height,
-    String image,
-    double imageHeight,
-    double imageWidth,
-    BoxFit fit,
-    EdgeInsetsGeometry imagePadding,
-    int itemCount,
-    Widget destination,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'عرض الجميع',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12,
-                            ),
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => destination,
-                                      ),
-                                    );
-                                  },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        // const SizedBox(height: 10.0),
-        SizedBox(
-          height: height,
-
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: itemCount,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => ServiceDetailsScreen(
-                              serviceName: '$title ${index + 1}',
-                            ),
-                      ),
-                    ),
-                child: ServiceBox(
-                  title: '$title ${index + 1}',
-                  width: width,
-                  details: details,
-                  image: image,
-                  imageHeight: imageHeight,
-                  imageWidth: imageWidth,
-                  fit: fit,
-                  imagePadding: imagePadding,
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 20.0),
-      ],
     );
   }
 }
@@ -238,125 +131,6 @@ class MySearchBar extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
-      ),
-    );
-  }
-}
-
-class ServiceBox extends StatelessWidget {
-  final String title;
-  final String details;
-  final double width;
-  final String image;
-  final double imageHeight;
-  final double imageWidth;
-  final BoxFit? fit;
-  final EdgeInsetsGeometry imagePadding;
-  const ServiceBox({
-    super.key,
-    required this.title,
-    required this.width,
-    required this.details,
-    required this.image,
-    required this.imageHeight,
-    required this.imageWidth,
-    required this.imagePadding,
-    this.fit,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: const [
-          BoxShadow(
-            // ignore: deprecated_member_use
-            color: MyColors.whiteSmoke,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            child: Padding(
-              padding: imagePadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.network(
-                    width: imageWidth,
-                    height: imageHeight,
-                    image,
-                    fit: fit,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
-            child: Row(
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-              ],
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    maxLines: 2,
-                    details,
-                    style: const TextStyle(
-                      color: Color.fromARGB(221, 59, 58, 58),
-                      fontSize: 12.0,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ServiceDetailsScreen extends StatelessWidget {
-  final String serviceName;
-  const ServiceDetailsScreen({super.key, required this.serviceName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(serviceName)),
-      body: Center(
-        child: Text(
-          'تفاصيل الخدمة: $serviceName',
-          style: const TextStyle(fontSize: 20),
-        ),
       ),
     );
   }
