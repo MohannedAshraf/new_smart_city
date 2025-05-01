@@ -1,10 +1,12 @@
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/build_boxes.dart';
 import 'package:city/models/most_recent_products.dart';
+import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
 import 'package:city/screens/all_services.dart';
 import 'package:city/screens/government_screen.dart';
 import 'package:city/services/get_most_recent_products.dart';
+import 'package:city/services/get_most_requested_products.dart';
 import 'package:city/services/get_most_requested_services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                   return BuildBoxes(
                     title: 'الخدمات الحكومية',
                     items: services,
-                    details: 'details',
+
                     destination: const GovernmentScreen(),
                     fit: BoxFit.contain,
                     height: 150,
@@ -44,6 +46,32 @@ class HomeScreen extends StatelessWidget {
                 } else {
                   return const SizedBox(
                     height: 140,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
+            ),
+            FutureBuilder<List<MostRequestedProduct>>(
+              future: MostRequestedProducts().getMostRequestedProduct(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<MostRequestedProduct> products = snapshot.data!;
+                  return BuildProductsBoxes(
+                    title: 'Products',
+                    items: products,
+                    titlefontSize: 12,
+                    destination: const AllServices(),
+                    fit: BoxFit.cover,
+                    height: 150,
+                    maximumLines: 3,
+                    imageHeight: 70,
+                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                    imageWidth: 180,
+                    width: 180,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 150,
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
@@ -426,8 +454,8 @@ class ImageCard extends StatelessWidget {
                 child: Text(
                   data['title']!,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
+                    color: MyColors.fontcolor,
+                    fontSize: 18.0,
                     // fontWeight: FontWeight.bold,
                   ),
                 ),
