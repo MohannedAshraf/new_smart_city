@@ -12,34 +12,22 @@ class IssueScreen extends StatelessWidget {
         children: [
           const EmergencyButton(
             color: Colors.red,
-            emicon: Icon(
-              Icons.local_hospital,
-              size: 80,
-              color: Colors.white,
-            ), // اسعاف
+            emicon: Icon(Icons.local_hospital, size: 80, color: Colors.white),
             emname: "إسعاف",
+            emergencyServiceId: "1",
           ),
-
           const EmergencyButton(
             color: Colors.orange,
-            emicon: Icon(
-              Icons.fire_truck,
-              size: 80,
-              color: Colors.white,
-            ), // مطافي
+            emicon: Icon(Icons.fire_truck, size: 80, color: Colors.white),
             emname: "مطافي",
+            emergencyServiceId: "2",
           ),
-
           const EmergencyButton(
             color: Colors.blue,
-            emicon: Icon(
-              Icons.local_police,
-              size: 80,
-              color: Colors.white,
-            ), // شرطة
+            emicon: Icon(Icons.local_police, size: 80, color: Colors.white),
             emname: "شرطة",
+            emergencyServiceId: "3",
           ),
-
           const SizedBox(height: 20),
           InkWell(
             onTap: () {
