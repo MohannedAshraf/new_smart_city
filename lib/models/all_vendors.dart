@@ -33,8 +33,8 @@ class Items {
       name: jsonData['fullName'],
       businessName: jsonData['businessName'],
       type: jsonData['businessType'],
-      profileImage: jsonData['profilePictureUrl'],
-      coverImage: jsonData['coverImageUrl'],
+      profileImage: baseUrl + jsonData['profilePictureUrl'],
+      coverImage: baseUrl + jsonData['coverImageUrl'],
       email: jsonData['email'],
     );
   }

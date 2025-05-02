@@ -20,7 +20,7 @@ class Vendor {
       name: jsonData['fullName'],
       businessName: jsonData['businessName'],
       type: jsonData['businessType'],
-      image: jsonData['profilePictureUrl'],
+      image: baseUrl + jsonData['profilePictureUrl'],
     );
   }
 }

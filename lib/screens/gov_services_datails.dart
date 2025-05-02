@@ -43,7 +43,7 @@ class GovServicesDatails extends StatelessWidget {
 
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
-                      height: 100,
+                      height: 120,
                       child: Row(
                         children: [
                           Column(
@@ -102,7 +102,7 @@ class GovServicesDatails extends StatelessWidget {
                                           0,
                                         ),
                                         child: Text(
-                                          'يستغرق استخراجه ${services[index].time} بتكلفة  ${services[index].fee} جنيهًا فقط لا غير \n للتواصل: ${services[index].email}',
+                                          'يستغرق استخراجه ${services[index].time} \nبتكلفة  ${services[index].fee} جنيهًا فقط لا غير \n للتواصل: ${services[index].email}',
                                           style: const TextStyle(
                                             color: MyColors.black,
                                             fontSize: 14,
