@@ -1,4 +1,4 @@
-String baseUrl = 'https://service-provider.runasp.net';
+String _baseUrl = 'https://service-provider.runasp.net';
 
 class AllVendor {
   List<Items> items;
@@ -33,8 +33,8 @@ class Items {
       name: jsonData['fullName'],
       businessName: jsonData['businessName'],
       type: jsonData['businessType'],
-      profileImage: baseUrl + jsonData['profilePictureUrl'],
-      coverImage: baseUrl + jsonData['coverImageUrl'],
+      profileImage: _baseUrl + jsonData['profilePictureUrl'],
+      coverImage: _baseUrl + jsonData['coverImageUrl'],
       email: jsonData['email'],
     );
   }

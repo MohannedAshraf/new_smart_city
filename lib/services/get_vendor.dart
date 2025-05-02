@@ -25,7 +25,7 @@ class GetVendor {
     }
 
     dynamic data = await Api().get(
-      url: 'https://service-provider.runasp.net/api/vendors',
+      url: 'https://service-provider.runasp.net/api/Vendors/for-mobile',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);

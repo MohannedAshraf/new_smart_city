@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-String baseUrl = 'https://graduation.amiralsayed.me';
+String _baseUrl = 'https://graduation.amiralsayed.me';
 
 class SocialmediaPost {
   List<Data> data;
@@ -66,7 +66,7 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> jsonData) {
     return Media(
       type: jsonData['type'],
-      url: baseUrl + jsonData['url'],
+      url: _baseUrl + jsonData['url'],
       sId: jsonData['_id'],
     );
   }

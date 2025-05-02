@@ -439,7 +439,6 @@ class ServiceBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         boxShadow: const [
           BoxShadow(
-            // ignore: deprecated_member_use
             color: MyColors.whiteSmoke,
             blurRadius: 4.0,
             offset: Offset(0, 2),

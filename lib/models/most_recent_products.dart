@@ -1,4 +1,4 @@
-String baseUrl = 'https://service-provider.runasp.net';
+String _baseUrl = 'https://service-provider.runasp.net';
 
 class MostRecentProduct {
   final String name;
@@ -7,7 +7,7 @@ class MostRecentProduct {
   factory MostRecentProduct.fromJason(jsonData) {
     return MostRecentProduct(
       name: jsonData['description'],
-      image: baseUrl + jsonData['imageUrl'],
+      image: _baseUrl + jsonData['imageUrl'],
     );
   }
 }

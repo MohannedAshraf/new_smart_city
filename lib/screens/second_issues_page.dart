@@ -1,6 +1,8 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/core/widgets/tab_item.dart';
+import 'package:city/models/issue.dart';
 import 'package:city/screens/add_issue_screen.dart';
+import 'package:city/services/get_issues.dart';
 import 'package:flutter/material.dart';
 
 class IssuesPage extends StatelessWidget {
@@ -43,12 +45,34 @@ class IssuesPage extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
-          children: [
-            ComplaintList(), // مقبولة
-            ComplaintList(), // مرفوضة
-            ComplaintList(), // تحت المراجعة
-          ],
+        body: FutureBuilder<Issue>(
+          future: GetIssues().getIssues(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Values> issues = snapshot.data!.values;
+              List<Values> active = [];
+              List<Values> resolved = [];
+              List<Values> inprogress = [];
+              for (int i = 0; i < issues.length; i++) {
+                if (issues[i].title == 'Active') {
+                  active.add(issues[i]);
+                } else if (issues[i].title == 'InProgress') {
+                  inprogress.add(issues[i]);
+                } else {
+                  resolved.add(issues[i]);
+                }
+              }
+              return TabBarView(
+                children: [
+                  ComplaintList(issues: active), // مقبولة
+                  ComplaintList(issues: resolved), // مرفوضة
+                  ComplaintList(issues: inprogress), // تحت المراجعة
+                ],
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue,
@@ -68,13 +92,14 @@ class IssuesPage extends StatelessWidget {
 }
 
 class ComplaintList extends StatelessWidget {
-  const ComplaintList({super.key});
+  final List<Values> issues;
+  const ComplaintList({super.key, required this.issues});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: 3, // عدد العناصر
+      itemCount: issues.length, // عدد العناصر
       itemBuilder: (context, index) {
         return const Card(
           margin: EdgeInsets.symmetric(vertical: 8),

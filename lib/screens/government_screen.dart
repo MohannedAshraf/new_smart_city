@@ -54,7 +54,7 @@ class GovernmentScreen extends StatelessWidget {
           backgroundColor: MyColors.backgroundColor,
           automaticallyImplyLeading: false,
           title: const Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
             child: Text(
               'Citio',
               style: TextStyle(color: MyColors.themecolor, fontSize: 20),

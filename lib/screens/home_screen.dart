@@ -71,8 +71,8 @@ class HomeScreen extends StatelessWidget {
                     maximumLines: 3,
                     imageHeight: 70,
                     imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    imageWidth: 180,
-                    width: 180,
+                    imageWidth: 190,
+                    width: 190,
                   );
                 } else {
                   return const SizedBox(
@@ -243,7 +243,7 @@ class ImageCard extends StatelessWidget {
                   data['title']!,
                   style: const TextStyle(
                     color: MyColors.fontcolor,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     // fontWeight: FontWeight.bold,
                   ),
                 ),
