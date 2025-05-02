@@ -9,7 +9,7 @@ class Issue {
   factory Issue.fromJason(jsonData) {
     return Issue(
       values: List<Values>.from(
-        jsonData['items'].map((x) => Values.fromJason(x)),
+        jsonData['value'].map((x) => Values.fromJason(x)),
       ),
     );
   }
