@@ -95,7 +95,14 @@ class ProductCard extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         // ignore: avoid_print
-                        print("clik");
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    ProductDetailsView(productId: productId),
+                          ),
+                        );
                       },
                       child: const Text(
                         'عرض المزيد',

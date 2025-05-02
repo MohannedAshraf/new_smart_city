@@ -1,5 +1,6 @@
 import 'package:city/helper/api_product_details.dart';
 import 'package:city/models/product_details_model.dart';
+import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
@@ -31,7 +32,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج")),
       floatingActionButton: InkWell(
         onTap: () {
-          // انتقال إلى سلة المشتريات
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CartView()),
+          );
         },
         child: SvgPicture.asset(
           "assets/icon/actionbutton.svg",

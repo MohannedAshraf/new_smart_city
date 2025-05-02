@@ -54,12 +54,10 @@ class _LoginPageState extends State<MyloginPage> {
         final String? token = responseData["value"]?["token"];
 
         if (token != null) {
-          void saveToken(String token) async {
-            final SharedPreferences sharedPreferences =
-                await SharedPreferences.getInstance();
-            await sharedPreferences.setString('token', token);
-            print("✅ Token Saved: $token");
-          }
+          final SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          await sharedPreferences.setString('token', token);
+          print("✅ Token Saved: $token");
 
           if (context.mounted) {
             Navigator.pushReplacement(

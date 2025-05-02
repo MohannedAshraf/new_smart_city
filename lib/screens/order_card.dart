@@ -1,3 +1,4 @@
+import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
@@ -5,17 +6,14 @@ import 'package:item_count_number_button/item_count_number_button.dart';
 class OrderCard extends StatelessWidget {
   const OrderCard({
     super.key,
-    required this.image,
     required this.ordername,
-    required this.orderrate,
     required this.orderprice,
-    required this.orderoldprice,
+    required this.quantity,
   });
-  final String image;
+
   final String ordername;
-  final String orderrate;
-  final String orderprice;
-  final String orderoldprice;
+  final double orderprice;
+  final int quantity;
 
   @override
   Widget build(BuildContext context) {
@@ -54,89 +52,64 @@ class OrderCard extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.345,
                 height: MediaQuery.of(context).size.height * 0.154,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(image),
+                  image: const DecorationImage(
+                    image: AssetImage(MyAssetsImage.burger),
                     fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    ordername,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      ordername,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(orderrate),
-                      const Icon(Icons.star, color: MyAppColors.yellow),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        orderoldprice,
-                        style: const TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: MyAppColors.pricegray,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                    const SizedBox(height: 12),
+                    Text(
+                      'LE ${orderprice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const SizedBox(width: 80),
+                        ItemCount(
+                          color: MyAppColors.red,
+                          initialValue: quantity,
+                          step: 1,
+                          minValue: 1,
+                          maxValue: 10,
+                          decimalPlaces: 0,
+                          onChanged: (value) {},
                         ),
-                      ),
-                      const SizedBox(width: 40),
-                      Text(
-                        orderprice,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const SizedBox(width: 80),
-                      ItemCount(
-                        color: MyAppColors.red,
-                        initialValue: 1,
-                        step: 1,
-                        minValue: 1,
-                        maxValue: 10,
-                        decimalPlaces: 0,
-                        onChanged: (value) {
-                          //using cubit to change the  value
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-
-          const Text(
-            style: TextStyle(color: MyAppColors.gray),
-            "_______________________________________________",
-          ),
-
+          const SizedBox(height: 8),
+          const Divider(color: MyAppColors.gray),
           Row(
             children: [
               const Text(
-                "Total Order :",
+                "Total Order:",
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
               ),
-              const SizedBox(width: 170),
+              const Spacer(),
               Text(
-                orderprice,
+                'LE ${(orderprice * quantity).toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

@@ -1,5 +1,6 @@
-import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
+import 'package:city/helper/api_cart.dart';
+import 'package:city/models/cart_model.dart';
 import 'package:city/screens/checkout_view.dart';
 import 'package:city/screens/order_card.dart';
 import 'package:flutter/material.dart';
@@ -17,82 +18,104 @@ class CartView extends StatelessWidget {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Shopping List",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              ),
-            ),
-            const OrderCard(
-              image: MyAssetsImage.burger,
-              ordername: "  Women’s Casual Wear  ",
-              orderrate: "  4.8",
-              orderprice: "  LE 34.00  ",
-              orderoldprice: " LE 64.00",
-            ),
-            const OrderCard(
-              image: MyAssetsImage.nescalop,
-              ordername: "Men’s Jacket",
-              orderrate: "4.7",
-              orderprice: "LE 45.00  ",
-              orderoldprice: "LE 67.00",
-            ),
-            const Text(
-              style: TextStyle(color: MyAppColors.gray),
-              "_______________________________________________________",
-            ),
-            const Row(
-              children: [Text("Subtotal"), Spacer(), Text(" LE 79.00 ")],
-            ),
-            const Row(
-              children: [Text("Tax and Fees"), Spacer(), Text(" LE 3.00 ")],
-            ),
-            const Row(
-              children: [Text("Delivery Fee"), Spacer(), Text("LE 2.00")],
-            ),
-            const Text(
-              style: TextStyle(color: MyAppColors.gray),
-              "_______________________________________________________",
-            ),
-            const Row(
-              children: [Text("Order Total"), Spacer(), Text("LE 84.00")],
-            ),
-            const SizedBox(height: 25),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 17),
-              width: double.infinity,
-              height: 55,
-              decoration: BoxDecoration(
-                color: MyAppColors.red,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CheckoutView(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Checkout",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: MyAppColors.background,
+      body: FutureBuilder<CartModel>(
+        future: ApiCartModel.fetchCart(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.items.isEmpty) {
+            return const Center(child: Text('Your cart is empty'));
+          }
+
+          final cart = snapshot.data!;
+          final items = cart.items;
+          double subtotal = items.fold(
+            0,
+            (sum, item) => sum + (item.price * item.quantity),
+          );
+
+          return Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    "Shopping List",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return OrderCard(
+                        ordername: item.nameEn,
+                        orderprice: item.price,
+                        quantity: item.quantity,
+                      );
+                    },
+                  ),
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    const Text("Subtotal"),
+                    const Spacer(),
+                    Text("LE ${subtotal.toStringAsFixed(2)}"),
+                  ],
+                ),
+                const Row(
+                  children: [Text("Tax and Fees"), Spacer(), Text("LE 3.00")],
+                ),
+                const Row(
+                  children: [Text("Delivery Fee"), Spacer(), Text("LE 2.00")],
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    const Text("Order Total"),
+                    const Spacer(),
+                    Text("LE ${(subtotal + 3 + 2).toStringAsFixed(2)}"),
+                  ],
+                ),
+                const SizedBox(height: 25),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 17),
+                  width: double.infinity,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: MyAppColors.red,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CheckoutView(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Checkout",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: MyAppColors.background,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
