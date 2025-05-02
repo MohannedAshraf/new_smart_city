@@ -1,12 +1,13 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/generated/l10n.dart';
+import 'package:city/screens/first_issue_screen.dart';
 import 'package:city/screens/on_boarding_page.dart';
 import 'package:city/screens/social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
-import 'screens/issue_screen.dart';
+
 import 'screens/service_order_screen.dart';
 import 'screens/about.dart';
 import 'screens/notifications.dart';

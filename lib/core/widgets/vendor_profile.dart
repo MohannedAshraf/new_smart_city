@@ -68,12 +68,12 @@ class VendorProfile extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.fromLTRB(0, 8, 20, 0),
                                     child: CircleAvatar(
                                       radius: 40,
                                       backgroundImage: NetworkImage(
-                                        'https://t4.ftcdn.net/jpg/00/53/44/69/240_F_53446921_CizJL26DszIeVOVvjS5EFDBiyQwsWaeZ.jpg',
+                                        vendors[index].profileImage,
                                         // vendors[index].profileImage,
                                       ),
                                     ),

@@ -1,8 +1,6 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
-import 'package:city/core/widgets/vendor_profile.dart';
 import 'package:city/models/all_vendors.dart';
-import 'package:city/screens/home_screen.dart';
 import 'package:city/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 
@@ -114,8 +112,8 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.fromLTRB(
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
                                           0,
                                           8,
                                           20,
@@ -124,7 +122,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                         child: CircleAvatar(
                                           radius: 40,
                                           backgroundImage: NetworkImage(
-                                            'https://t4.ftcdn.net/jpg/00/53/44/69/240_F_53446921_CizJL26DszIeVOVvjS5EFDBiyQwsWaeZ.jpg',
+                                            vendors[index].profileImage,
                                             // vendors[index].profileImage,
                                           ),
                                         ),
@@ -188,7 +186,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         ),
         ElevatedButton(
           onPressed: () => _showFilterModal(context),
-          child: Text("Filter"),
+          child: const Text("Filter"),
         ),
       ],
     );
@@ -201,14 +199,14 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     "Filter by Category",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -229,12 +227,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                           );
                         }).toList(),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Apply Filters"),
+                    child: const Text("Apply Filters"),
                   ),
                 ],
               ),
