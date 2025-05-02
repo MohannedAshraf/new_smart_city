@@ -6,6 +6,7 @@ import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
 import 'package:city/models/vendor.dart';
 import 'package:city/screens/all_services.dart';
+import 'package:city/screens/all_vendors_screen.dart';
 import 'package:city/screens/gov_services_datails.dart';
 import 'package:city/screens/government_screen.dart';
 import 'package:city/services/get_most_recent_products.dart';
@@ -90,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                     title: 'Vendors',
                     items: vendors,
                     titlefontSize: 12,
-                    destination: const AllServices(),
+                    destination: AllVendorsScreen(),
                     fit: BoxFit.fill,
                     height: 150,
                     maximumLines: 3,

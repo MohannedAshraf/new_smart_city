@@ -1,3 +1,4 @@
+import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/core/widgets/build_boxes.dart';
 import 'package:city/core/widgets/custom_card.dart';
@@ -48,12 +49,26 @@ class GovServicesDatails extends StatelessWidget {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundImage: NetworkImage(
-                                  iconsGov[services[index].serviceName] ??
-                                      'https://www.flaticon.com/free-icon/broken-image_13434972',
-                                ),
+                              Image.network(
+                                width: 60,
+                                height: 60,
+                                iconsGov[services[index].serviceName] ?? '',
+                                fit: BoxFit.cover,
+                                errorBuilder: (
+                                  BuildContext context,
+                                  Object error,
+                                  StackTrace? stackTrace,
+                                ) {
+                                  return const SizedBox(
+                                    height: 60,
+                                    width: 60,
+                                    child: Image(
+                                      image: AssetImage(
+                                        MyAssetsImage.brokenImage,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

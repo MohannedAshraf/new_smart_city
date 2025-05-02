@@ -1,4 +1,5 @@
 import 'package:city/helper/api.dart';
+import 'package:city/models/all_vendors.dart';
 
 import 'package:city/models/vendor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,5 +14,22 @@ class GetVendor {
       vendorList.add(Vendor.fromJason(data[i]));
     }
     return vendorList;
+  }
+
+  Future<AllVendor> getALlVendosr() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    dynamic data = await Api().get(
+      url: 'https://service-provider.runasp.net/api/vendors',
+      token: token,
+    );
+    AllVendor vendors = AllVendor.fromJason(data);
+
+    return vendors;
   }
 }

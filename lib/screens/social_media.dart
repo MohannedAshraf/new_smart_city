@@ -1,7 +1,7 @@
 import 'package:city/core/utils/variables.dart';
 
 import 'package:city/core/widgets/socialmedia_tab_view.dart';
-import 'package:city/core/widgets/socilamedia_profile.dart';
+import 'package:city/core/widgets/vendor_profile.dart';
 
 import 'package:city/core/widgets/tab_item.dart';
 import 'package:flutter/material.dart';
@@ -77,9 +77,7 @@ class _SocialMediaState extends State<SocialMedia> {
             tabs: [TabItem(title: 'Feed'), TabItem(title: 'Profile')],
           ),
         ),
-        body: TabBarView(
-          children: [SocialmediaTabView(), SocialmediaProfile()],
-        ),
+        body: TabBarView(children: [SocialmediaTabView(), VendorProfile()]),
       ),
     );
   }
