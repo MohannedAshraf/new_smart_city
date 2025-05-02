@@ -38,6 +38,7 @@ dependencies:
   image_picker:
   flutter_svg:
   item_count_number_button: ^1.9.2
+  dio: ^5.8.0+1
   
   
 

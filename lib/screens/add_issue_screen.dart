@@ -1,6 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'dart:io';
+import 'package:city/core/widgets/emergency_data.dart';
+import 'package:city/helper/api_add_issue.dart';
+import 'package:city/models/add_issue_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,6 +17,7 @@ class NewComplaintCenterPage extends StatefulWidget {
 class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   final TextEditingController _controller = TextEditingController();
   File? _selectedImage;
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(
@@ -32,12 +36,54 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     });
   }
 
-  void _sendComplaint() {
-    print('الشكوى: ${_controller.text}');
-    setState(() {
-      _controller.clear();
-      _selectedImage = null;
-    });
+  void _sendComplaint() async {
+    final description = _controller.text.trim();
+
+    if (description.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("من فضلك اكتب وصف الشكوى")));
+      return;
+    }
+
+    final address = EmergencyFakeData.getRandomAddress();
+    final latitude = EmergencyFakeData.getRandomLatitude();
+    final longitude = EmergencyFakeData.getRandomLongitude();
+    final issueKey = EmergencyFakeData.getRandomIssueCategoryKey();
+
+    setState(() => _isLoading = true);
+
+    try {
+      final service = ComplaintApiService();
+      ComplaintResponse response = await service.sendComplaint(
+        description: description,
+        address: address,
+        latitude: latitude,
+        longitude: longitude,
+        issueCategoryKey: issueKey,
+        image: _selectedImage,
+      );
+
+      if (response.isSuccess) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("تم إرسال الشكوى بنجاح")));
+        setState(() {
+          _controller.clear();
+          _selectedImage = null;
+        });
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("فشل في إرسال الشكوى")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء الإرسال: $e")));
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -51,7 +97,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -117,10 +162,15 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                       onPressed: _pickImage,
                       icon: const Icon(Icons.image, color: Colors.blue),
                     ),
-                    IconButton(
-                      onPressed: _sendComplaint,
-                      icon: const Icon(Icons.send, color: Colors.blue),
-                    ),
+                    _isLoading
+                        ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                        : IconButton(
+                          onPressed: _sendComplaint,
+                          icon: const Icon(Icons.send, color: Colors.blue),
+                        ),
                   ],
                 ),
               ],

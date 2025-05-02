@@ -24,6 +24,24 @@ class EmergencyFakeData {
     (index) => (31.00 + Random().nextDouble()).toStringAsFixed(5),
   );
 
+  static final List<String> issueCategories = [
+    'electrical_issues',
+    'plumbing_issues',
+    'waste_management',
+    'road_and_traffic',
+    'public_safety',
+    'parks_and_recreation',
+    'public_transportation',
+    'environmental_concerns',
+    'infrastructure',
+    'community_services',
+    'health_and_safety',
+    'public_events',
+    'technology_connectivity',
+    'emergency',
+    'miscellaneous',
+  ];
+
   static String getRandomAddress() {
     return addresses[Random().nextInt(addresses.length)];
   }
@@ -34,5 +52,9 @@ class EmergencyFakeData {
 
   static String getRandomLongitude() {
     return longitudes[Random().nextInt(longitudes.length)];
+  }
+
+  static String getRandomIssueCategoryKey() {
+    return issueCategories[Random().nextInt(issueCategories.length)];
   }
 }
