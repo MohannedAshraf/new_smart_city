@@ -34,10 +34,27 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(16),
-          child: SearchBar(
-            hintText: "Search providers...",
-            onChanged: (query) {},
+          padding: const EdgeInsets.all(16),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              searchBarTheme: SearchBarThemeData(
+                shadowColor: WidgetStateProperty.all(MyColors.oldLace),
+                backgroundColor: WidgetStateProperty.all(MyColors.whiteSmoke),
+                textStyle: WidgetStateProperty.all(
+                  const TextStyle(color: MyColors.black),
+                ),
+              ),
+            ),
+            child: SearchBar(
+              hintText: "Search providers...",
+              onChanged: (query) {},
+              leading: const Icon(Icons.search, color: MyColors.black),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ), // Rounded corners
+              ),
+            ),
           ),
         ),
 
