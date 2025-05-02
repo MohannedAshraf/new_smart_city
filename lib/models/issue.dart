@@ -21,6 +21,7 @@ class Values {
   final String status;
   final String? address;
   final String? image;
+  final String? description;
 
   const Values({
     required this.title,
@@ -28,6 +29,7 @@ class Values {
     required this.status,
     this.address,
     this.image,
+    this.description,
   });
   factory Values.fromJason(jsonData) {
     return Values(
@@ -36,7 +38,9 @@ class Values {
         'en_US',
       ).add_jm().format(DateTime.parse(jsonData['dateIssued'])),
       status: jsonData['reportStatus'],
-      image: _baseUrl + jsonData['imageUrl'],
+      image: jsonData['imageUrl'],
+      address: jsonData['address'],
+      description: jsonData['description'],
     );
   }
 }

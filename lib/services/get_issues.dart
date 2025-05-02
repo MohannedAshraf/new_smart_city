@@ -15,7 +15,7 @@ class GetIssues {
       url: 'https://cms-reporting.runasp.net/api/MReport/my-reports',
       token: token,
     );
-    Issue issues = data;
+    Issue issues = Issue.fromJason(data);
 
     return issues;
   }
