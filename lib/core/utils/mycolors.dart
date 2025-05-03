@@ -1,7 +1,10 @@
-import 'package:flutter/widgets.dart';
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class MyColors {
+  static const Color cardcolor = Color.fromARGB(255, 141, 177, 146);
+  static const Color themecolor = Color(0xFF3D6643);
+  static const Color cardfontcolor = Colors.white;
+  static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   static const Color backgroundColor = Color(0xffF3F5F4);
   static const Color red = Color(0xffE4312B);
   static const Color green = Color(0xff149954);
