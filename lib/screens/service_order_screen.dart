@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
+import 'package:city/helper/api_banner.dart';
+import 'package:city/models/banner_model.dart';
 import 'package:flutter/material.dart';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/widgets/category_circle.dart';
 import 'package:city/core/widgets/product_card.dart';
 import 'package:city/helper/api_most_product.dart';
@@ -24,19 +24,33 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   List<CategoryModel>? _categories;
   bool _isLoadingCategories = true;
   String? _error;
-  int _currentIndex = 0; // لتمرير الصور في الـ CarouselSlider
-  List<String> imageList = [
-    MyAssetsImage.burger, // أضف المسارات الحقيقية للصور هنا
-    MyAssetsImage.sandwitch,
-    MyAssetsImage.drink,
-    MyAssetsImage.nescalop,
-  ];
+  int _currentIndex = 0;
+  // لتمرير الصور في الـ CarouselSlider
+  List<BannerModel>? _banners;
+  bool _isLoadingBanners = true;
+  String? _bannerError;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
     _loadCategories();
+    _loadBanners();
+  }
+
+  Future<void> _loadBanners() async {
+    try {
+      final banners = await ApiTopBanners.fetchTopBanners();
+      setState(() {
+        _banners = banners;
+        _isLoadingBanners = false;
+      });
+    } catch (e) {
+      setState(() {
+        _bannerError = e.toString();
+        _isLoadingBanners = false;
+      });
+    }
   }
 
   Future<void> _loadCategories() async {
@@ -83,48 +97,83 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             _buildCategories(),
             if (selectedCategoryIndex != null) _buildSubCategories(),
             SizedBox(height: 70),
-            CarouselSlider(
-              items:
-                  imageList.map((imagePath) {
-                    return Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    );
-                  }).toList(),
-              options: CarouselOptions(
-                height: 190.0,
-                autoPlay: false,
-                enlargeCenterPage: true,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-              ),
-            ),
+            _isLoadingBanners
+                ? const Center(child: CircularProgressIndicator())
+                : _bannerError != null
+                ? Center(child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'))
+                : Column(
+                  children: [
+                    CarouselSlider(
+                      items:
+                          _banners!.map((banner) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  Image.network(
+                                    //'https://service-provider.runasp.net'
+                                    "${ApiTopBanners.baseUrl}${banner.imageUrl}",
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.broken_image),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: Container(
+                                      color: Colors.black54,
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        banner.description,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                      options: CarouselOptions(
+                        height: 190.0,
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _banners!.length,
+                        (index) => Container(
+                          width: 10.0,
+                          height: 10.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                _currentIndex == index
+                                    ? const Color(0xFF3D6643)
+                                    : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
 
             const SizedBox(height: 10),
 
             // Page Indicators
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:
-                  imageList.asMap().entries.map((entry) {
-                    return Container(
-                      width: 10.0,
-                      height: 10.0,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color:
-                            _currentIndex == entry.key
-                                ? const Color(0xFF3D6643)
-                                : Colors.grey,
-                      ),
-                    );
-                  }).toList(),
-            ),
             const SizedBox(height: 30),
             const Text(
               "أفضل التقييمات",
