@@ -35,10 +35,7 @@ class StartPage extends StatelessWidget {
             const SizedBox(height: 40),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: MyTextButton(
-                text: "Let's Start",
-                newscreen: MyloginPage(),
-              ),
+              child: MyTextButton(text: "هيا بنا ", newscreen: MyloginPage()),
             ),
           ],
         ),
