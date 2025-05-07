@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:city/core/widgets/emergency_data.dart';
-import 'package:city/helper/api_emergency.dart';
-import 'package:city/models/emergency_model.dart';
+import 'package:citio/core/widgets/emergency_data.dart';
+import 'package:citio/helper/api_emergency.dart';
+import 'package:citio/models/emergency_model.dart';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({

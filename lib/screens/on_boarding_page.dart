@@ -1,7 +1,7 @@
-import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/utils/variables.dart';
-import 'package:city/core/widgets/custom_button.dart';
-import 'package:city/screens/mylogin_page.dart';
+import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/widgets/custom_button.dart';
+import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 
 class StartPage extends StatelessWidget {

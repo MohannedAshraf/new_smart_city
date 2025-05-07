@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:city/models/product_model.dart';
+import 'package:citio/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
 class ProductService {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:city/models/cart_model.dart';
+import 'package:citio/models/cart_model.dart';
 
 class ApiCartModel {
   static const String baseUrl = 'https://service-provider.runasp.net/api';

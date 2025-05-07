@@ -1,5 +1,5 @@
-import 'package:city/core/widgets/emergency_button.dart';
-import 'package:city/screens/second_issues_page.dart';
+import 'package:citio/core/widgets/emergency_button.dart';
+import 'package:citio/screens/second_issues_page.dart';
 import 'package:flutter/material.dart';
 
 class IssueScreen extends StatelessWidget {

@@ -1,12 +1,12 @@
 // ignore_for_file: avoid_print
 
-import 'package:city/core/widgets/category_circle.dart';
-import 'package:city/core/widgets/product_card.dart';
-import 'package:city/helper/api_product_under_sub.dart';
-import 'package:city/helper/api_service.dart';
-import 'package:city/models/category_sub_category_model.dart';
-import 'package:city/models/product_under_sub_model.dart';
-import 'package:city/screens/cart_view.dart';
+import 'package:citio/core/widgets/category_circle.dart';
+import 'package:citio/core/widgets/product_card.dart';
+import 'package:citio/helper/api_product_under_sub.dart';
+import 'package:citio/helper/api_service.dart';
+import 'package:citio/models/category_sub_category_model.dart';
+import 'package:citio/models/product_under_sub_model.dart';
+import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

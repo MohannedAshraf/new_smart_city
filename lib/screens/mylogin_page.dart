@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, unused_element
 
 import 'dart:convert';
-import 'package:city/core/widgets/custom_button.dart';
-import 'package:city/main.dart';
+import 'package:citio/core/widgets/custom_button.dart';
+import 'package:citio/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

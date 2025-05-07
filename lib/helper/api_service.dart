@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:city/models/category_sub_category_model.dart';
+import 'package:citio/models/category_sub_category_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {

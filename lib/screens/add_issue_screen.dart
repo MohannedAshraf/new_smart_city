@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'dart:io';
-import 'package:city/core/widgets/emergency_data.dart';
-import 'package:city/helper/api_add_issue.dart';
-import 'package:city/models/add_issue_model.dart';
+import 'package:citio/core/widgets/emergency_data.dart';
+import 'package:citio/helper/api_add_issue.dart';
+import 'package:citio/models/add_issue_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

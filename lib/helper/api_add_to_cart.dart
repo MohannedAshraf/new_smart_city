@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:city/models/add_to_cart_model.dart';
+import 'package:citio/models/add_to_cart_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

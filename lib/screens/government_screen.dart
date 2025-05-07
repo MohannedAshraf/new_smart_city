@@ -1,8 +1,8 @@
-import 'package:city/core/widgets/tab_bar_view.dart';
-import 'package:city/generated/l10n.dart';
+import 'package:citio/core/widgets/tab_bar_view.dart';
+import 'package:citio/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:city/core/utils/variables.dart';
-import 'package:city/core/widgets/tab_item.dart';
+import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/widgets/tab_item.dart';
 
 class GovernmentScreen extends StatelessWidget {
   const GovernmentScreen({super.key});

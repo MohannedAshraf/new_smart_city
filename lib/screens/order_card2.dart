@@ -1,4 +1,4 @@
-import 'package:city/core/utils/mycolors.dart';
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard2 extends StatelessWidget {

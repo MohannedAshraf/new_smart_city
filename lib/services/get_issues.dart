@@ -1,5 +1,5 @@
-import 'package:city/helper/api.dart';
-import 'package:city/models/issue.dart';
+import 'package:citio/helper/api.dart';
+import 'package:citio/models/issue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetIssues {

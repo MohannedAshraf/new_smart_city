@@ -1,4 +1,4 @@
-import 'package:city/core/utils/variables.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:flutter/material.dart';
 
 class MyTextButton extends StatelessWidget {

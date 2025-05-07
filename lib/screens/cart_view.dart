@@ -1,8 +1,8 @@
-import 'package:city/core/utils/mycolors.dart';
-import 'package:city/helper/api_cart.dart';
-import 'package:city/models/cart_model.dart';
-import 'package:city/screens/checkout_view.dart';
-import 'package:city/screens/order_card.dart';
+import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/helper/api_cart.dart';
+import 'package:citio/models/cart_model.dart';
+import 'package:citio/screens/checkout_view.dart';
+import 'package:citio/screens/order_card.dart';
 import 'package:flutter/material.dart';
 
 class CartView extends StatelessWidget {

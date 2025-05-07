@@ -1,6 +1,6 @@
-import 'package:city/core/widgets/custom_card.dart';
-import 'package:city/models/request.dart';
-import 'package:city/services/get_requests_by_status.dart';
+import 'package:citio/core/widgets/custom_card.dart';
+import 'package:citio/models/request.dart';
+import 'package:citio/services/get_requests_by_status.dart';
 import 'package:flutter/material.dart';
 
 class TabBarViewItem extends StatelessWidget {
@@ -19,9 +19,7 @@ class TabBarViewItem extends StatelessWidget {
             itemCount: requests.length,
             itemBuilder: (context, index) {
               // ignore: avoid_unnecessary_containers
-              return Container(
-                child: CustomCard(request: requests[index]),
-              );
+              return Container(child: CustomCard(request: requests[index]));
             },
           );
         } else {

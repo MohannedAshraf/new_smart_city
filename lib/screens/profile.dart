@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:city/core/utils/assets_image.dart';
-import 'package:city/screens/mylogin_page.dart';
+import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,6 +1,6 @@
-import 'package:city/core/utils/assets_image.dart';
-import 'package:city/core/utils/mycolors.dart';
-import 'package:city/screens/order_card2.dart';
+import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/screens/order_card2.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutView extends StatelessWidget {
