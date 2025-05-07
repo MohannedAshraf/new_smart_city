@@ -20,7 +20,7 @@ class StartPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: MyColors.green,
+                color: MyColors.gray,
               ),
             ),
             const SizedBox(height: 100),
@@ -29,11 +29,17 @@ class StartPage extends StatelessWidget {
               height: 250,
               margin: const EdgeInsets.all(20),
               decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(MyAssetsImage.start)),
+                image: DecorationImage(image: AssetImage(MyAssetsImage.city)),
               ),
             ),
             const SizedBox(height: 40),
-            const MyTextButton(text: "Let's Start", newscreen: MyloginPage()),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: MyTextButton(
+                text: "Let's Start",
+                newscreen: MyloginPage(),
+              ),
+            ),
           ],
         ),
       ),
