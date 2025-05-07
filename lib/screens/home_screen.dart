@@ -18,6 +18,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+String _baseUrl = 'https://service-provider.runasp.net';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -43,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                   EmergencyButton(
                     color: Colors.orange,
                     emicon: Icon(Icons.fire_truck, color: Colors.white),
-                    emname: 'المطافيء',
+                    emname: 'المطافئ',
                     emergencyServiceId: '2',
                   ),
                   EmergencyButton(
@@ -213,7 +215,9 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
         if (snapshot.hasData) {
           List<MostRecentProduct> data = snapshot.data!;
           List<Map<String, String>> products =
-              data.map((i) => {'url': i.image, 'title': i.name}).toList();
+              data
+                  .map((i) => {'url': baseUrl + i.image!, 'title': i.name})
+                  .toList();
 
           return Column(
             children: [

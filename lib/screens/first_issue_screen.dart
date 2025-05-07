@@ -18,6 +18,7 @@ class IssueScreen extends StatelessWidget {
               color: Colors.white,
             ), // اسعاف
             emname: "إسعاف",
+            emergencyServiceId: '1',
           ),
 
           const EmergencyButton(
@@ -28,6 +29,7 @@ class IssueScreen extends StatelessWidget {
               color: Colors.white,
             ), // مطافي
             emname: "مطافي",
+            emergencyServiceId: '2',
           ),
 
           const EmergencyButton(
@@ -38,6 +40,7 @@ class IssueScreen extends StatelessWidget {
               color: Colors.white,
             ), // شرطة
             emname: "شرطة",
+            emergencyServiceId: '3',
           ),
 
           const SizedBox(height: 20),

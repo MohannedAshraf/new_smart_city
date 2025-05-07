@@ -1,5 +1,3 @@
-String _baseUrl = 'https://service-provider.runasp.net';
-
 class AllVendor {
   List<Items> items;
 
@@ -17,15 +15,15 @@ class Items {
   final String name;
   final String businessName;
   final String type;
-  final String profileImage;
-  final String coverImage;
+  final String? profileImage;
+  final String? coverImage;
   final String email;
   Items({
     required this.name,
     required this.businessName,
     required this.type,
-    required this.profileImage,
-    required this.coverImage,
+    this.profileImage,
+    this.coverImage,
     required this.email,
   });
   factory Items.fromJason(jsonData) {
@@ -33,8 +31,8 @@ class Items {
       name: jsonData['fullName'],
       businessName: jsonData['businessName'],
       type: jsonData['businessType'],
-      profileImage: _baseUrl + jsonData['profilePictureUrl'],
-      coverImage: _baseUrl + jsonData['coverImageUrl'],
+      profileImage: jsonData['profilePictureUrl'],
+      coverImage: jsonData['coverImageUrl'],
       email: jsonData['email'],
     );
   }

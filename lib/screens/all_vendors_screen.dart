@@ -1,9 +1,12 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/models/all_vendors.dart';
+import 'package:city/models/vendor.dart';
 import 'package:city/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+
+String _baseUrl = 'https://service-provider.runasp.net';
 
 class AllVendorsScreen extends StatefulWidget {
   @override
@@ -84,41 +87,50 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                               children: [
                                 Stack(
                                   clipBehavior: Clip.none,
-                                  alignment: Alignment.topRight,
+                                  //alignment: Alignment.topRight,
                                   children: [
                                     ClipRRect(
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(13),
                                         topRight: Radius.circular(13),
                                       ),
-                                      child: Image.network(
-                                        vendors[index].coverImage,
-                                        // vendors[index].coverImage,
-                                        width: double.infinity,
-                                        height: 120,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (
-                                          BuildContext context,
-                                          Object error,
-                                          StackTrace? stackTrace,
-                                        ) {
-                                          return const SizedBox(
-                                            height: 120,
-                                            width: double.infinity,
-                                            child: Image(
-                                              image: AssetImage(
+                                      child:
+                                          vendors[index].coverImage != null
+                                              ? Image.network(
+                                                baseUrl +
+                                                    vendors[index].coverImage!,
+                                                // vendors[index].coverImage,
+                                                width: double.infinity,
+                                                height: 120,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (
+                                                  BuildContext context,
+                                                  Object error,
+                                                  StackTrace? stackTrace,
+                                                ) {
+                                                  return const SizedBox(
+                                                    height: 120,
+                                                    width: double.infinity,
+                                                    child: Image(
+                                                      image: AssetImage(
+                                                        MyAssetsImage
+                                                            .brokenImage,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                              : Image.asset(
+                                                width: double.infinity,
+                                                height: 120,
                                                 MyAssetsImage.brokenImage,
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ),
                                     ),
                                     Positioned(
                                       top: 45,
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
@@ -129,10 +141,20 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                             ),
                                             child: CircleAvatar(
                                               radius: 40,
-                                              backgroundImage: NetworkImage(
-                                                vendors[index].profileImage,
-                                                // vendors[index].profileImage,
-                                              ),
+
+                                              backgroundImage:
+                                                  vendors[index].profileImage !=
+                                                          null
+                                                      ? NetworkImage(
+                                                        baseUrl +
+                                                            vendors[index]
+                                                                .profileImage!,
+                                                        // vendors[index].profileImage,
+                                                      )
+                                                      : const AssetImage(
+                                                        MyAssetsImage
+                                                            .brokenImage,
+                                                      ),
                                             ),
                                           ),
                                           Row(

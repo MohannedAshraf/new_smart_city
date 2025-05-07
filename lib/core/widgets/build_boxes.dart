@@ -10,6 +10,7 @@ import 'package:city/services/get_most_requested_services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+String _baseUrl = 'https://service-provider.runasp.net';
 // ignore: must_be_immutable
 Map<String, String> iconsGov = {
   "إصدار جواز سفر": 'https://cdn-icons-png.flaticon.com/128/4774/4774004.png',
@@ -264,7 +265,7 @@ class BuildProductsBoxes extends StatelessWidget {
                   title: items[index].name,
                   width: width,
                   details: items[index].discription,
-                  image: items[index].image,
+                  image: baseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
