@@ -13,7 +13,7 @@ class IssuesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // عدد التابات
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 35,
@@ -27,7 +27,6 @@ class IssuesPage extends StatelessWidget {
             ),
           ),
           centerTitle: true,
-
           elevation: 0,
           bottom: const TabBar(
             splashBorderRadius: BorderRadius.all(Radius.circular(10)),
@@ -55,20 +54,20 @@ class IssuesPage extends StatelessWidget {
               List<Values> active = [];
               List<Values> resolved = [];
               List<Values> inprogress = [];
-              for (int i = 0; i < issues.length; i++) {
-                if (issues[i].status == 'Resolved') {
-                  resolved.add(issues[i]);
-                } else if (issues[i].status == 'Active') {
-                  active.add(issues[i]);
+              for (var issue in issues) {
+                if (issue.status == 'Resolved') {
+                  resolved.add(issue);
+                } else if (issue.status == 'Active') {
+                  active.add(issue);
                 } else {
-                  inprogress.add(issues[i]);
+                  inprogress.add(issue);
                 }
               }
               return TabBarView(
                 children: [
-                  ComplaintList(issues: resolved), // مقبولة
-                  ComplaintList(issues: resolved), // نشطة
-                  ComplaintList(issues: inprogress), // تحت المراجعة
+                  ComplaintList(issues: resolved),
+                  ComplaintList(issues: active),
+                  ComplaintList(issues: inprogress),
                 ],
               );
             } else {
@@ -101,108 +100,92 @@ class ComplaintList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: issues.length, // عدد العناصر
+      itemCount: issues.length,
       itemBuilder: (context, index) {
         return Card(
           color: MyColors.white,
           shadowColor: MyColors.white,
           surfaceTintColor: MyColors.white,
-
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
-            height: 100,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    issues[index].image != null
-                        ? Image.network(
-                          _baseUrl + issues[index].image!,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return Container(
-                              width: 60,
-                              height: 60,
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(
-                                value:
-                                    loadingProgress.expectedTotalBytes != null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 40,
-                              height: 40,
-                              color: Colors.grey[200],
-                              child: Icon(Icons.person, size: 30),
-                            );
-                          },
-                        )
-                        : Container(
-                          width: 40,
-                          height: 40,
-                          color: Colors.grey[200],
-                          child: Icon(Icons.person, size: 30),
-                        ),
-                  ],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 2, 15, 2),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              softWrap:
-                                  true, // Default is true (enables line breaks)
-                              overflow: TextOverflow.visible,
-                              issues[index].title,
-                              style: const TextStyle(
-                                color: MyColors.fontcolor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            // SizedBox(width: 160),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: Wrap(
-                                children: [
-                                  Text(
-                                    softWrap: true,
-                                    maxLines: 3,
-                                    issues[index].description ?? 'No details',
-                                    style: const TextStyle(
-                                      color: MyColors.fontcolor,
-                                      fontSize: 12,
-                                      // fontWeight: FontWeight.bold,
-                                    ),
+                // ✅ الصورة
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.grey[200],
+                    child:
+                        issues[index].image != null
+                            ? Image.network(
+                              _baseUrl + issues[index].image!,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (
+                                context,
+                                child,
+                                loadingProgress,
+                              ) {
+                                if (loadingProgress == null) return child;
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value:
+                                        loadingProgress.expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes!
+                                            : null,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.broken_image, size: 30);
+                              },
+                            )
+                            : const Icon(Icons.person, size: 30),
                   ),
                 ),
+
+                const SizedBox(width: 12), // مسافة بين الصورة والنص
+                // ✅ النص
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        issues[index].title,
+                        style: const TextStyle(
+                          color: MyColors.fontcolor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        issues[index].description ?? 'No details',
+                        style: const TextStyle(
+                          color: MyColors.fontcolor,
+                          fontSize: 12,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 6),
+
+                // ✅ التاريخ
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       issues[index].date,
