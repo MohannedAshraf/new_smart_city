@@ -93,9 +93,10 @@ class _LoginPageState extends State<MyloginPage> {
   }
 
   OutlineInputBorder myBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.black, // لون البوردر أسود ثابت
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+      borderSide: const BorderSide(
+        color: Colors.grey, // لون البوردر أسود ثابت
       ),
     );
   }

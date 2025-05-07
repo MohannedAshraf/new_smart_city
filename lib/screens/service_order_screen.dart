@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
+import 'package:city/core/utils/mycolors.dart';
 import 'package:city/helper/api_banner.dart';
 import 'package:city/models/banner_model.dart';
 import 'package:flutter/material.dart';
@@ -103,50 +104,55 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 ? Center(child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'))
                 : Column(
                   children: [
-                    CarouselSlider(
-                      items:
-                          _banners!.map((banner) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  Image.network(
-                                    //'https://service-provider.runasp.net'
-                                    "${ApiTopBanners.baseUrl}${banner.imageUrl}",
-                                    fit: BoxFit.fill,
-                                    width: double.infinity,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.broken_image),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    left: 10,
-                                    child: Container(
-                                      color: Colors.black54,
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        banner.description,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                    InkWell(
+                      onTap: () {
+                        print("go to product with discount");
+                      },
+                      child: CarouselSlider(
+                        items:
+                            _banners!.map((banner) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Image.network(
+                                      //'https://service-provider.runasp.net'
+                                      "${ApiTopBanners.baseUrl}${banner.imageUrl}",
+                                      fit: BoxFit.fill,
+                                      width: double.infinity,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              const Icon(Icons.broken_image),
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      left: 10,
+                                      child: Container(
+                                        color: Colors.black54,
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          banner.description,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                      options: CarouselOptions(
-                        height: 190.0,
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                        options: CarouselOptions(
+                          height: 190.0,
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -275,17 +281,22 @@ class MySearchBar extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: 'ماذا تريد',
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: InkWell(
+          onTap: () {
+            print("do search function which connecting with API ");
+          },
+          child: const Icon(Icons.search),
+        ),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black),
-          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black),
-          borderRadius: BorderRadius.circular(25.0),
+          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: MyColors.newbackground,
       ),
     );
   }
