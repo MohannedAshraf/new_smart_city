@@ -1,3 +1,22 @@
+import 'package:citio/core/widgets/build_boxes.dart';
+import 'package:citio/models/most_requested_products.dart';
+import 'package:citio/services/get_most_requested_products.dart';
+import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/widgets/build_boxes.dart';
+import 'package:citio/models/most_recent_products.dart';
+import 'package:citio/models/most_requested_products.dart';
+import 'package:citio/models/most_requested_services.dart';
+import 'package:citio/models/vendor.dart';
+import 'package:citio/screens/all_services.dart';
+import 'package:citio/screens/all_vendors_screen.dart';
+import 'package:citio/screens/gov_services_datails.dart';
+import 'package:citio/screens/government_screen.dart';
+import 'package:citio/services/get_most_recent_products.dart';
+import 'package:citio/services/get_most_requested_products.dart';
+import 'package:citio/services/get_most_requested_services.dart';
+import 'package:citio/services/get_vendor.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -7,62 +26,99 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MyColors.offWhite,
       body: SingleChildScrollView(
         child: Column(
           children: [
             const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
-            _buildBoxesSection(context, 'الخدمات الحكومية'),
-            _buildBoxesSection(context, 'المشاكل'),
-            _buildBoxesSection(context, 'طلب الخدمات'),
+            FutureBuilder<List<MostRequested>>(
+              future: MostRequestedServices().getMostRequestedServices(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<MostRequested> services = snapshot.data!;
+                  return BuildBoxes(
+                    title: 'الخدمات الحكومية',
+                    items: services,
+
+                    destination: const GovServicesDatails(),
+                    fit: BoxFit.contain,
+                    height: 150,
+
+                    imageHeight: 50,
+                    imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
+                    imageWidth: 50,
+                    width: 160,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 140,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
+            ),
+            FutureBuilder<List<MostRequestedProduct>>(
+              future: MostRequestedProducts().getMostRequestedProduct(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<MostRequestedProduct> products = snapshot.data!;
+                  return BuildProductsBoxes(
+                    title: 'Products',
+                    items: products,
+                    titlefontSize: 12,
+                    destination: const AllServices(),
+                    fit: BoxFit.fill,
+                    height: 150,
+                    maximumLines: 3,
+                    imageHeight: 70,
+                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                    imageWidth: 190,
+                    width: 190,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 150,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
+            ),
+            FutureBuilder<List<Vendor>>(
+              future: GetVendor().getVendor(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Vendor> vendors = snapshot.data!;
+                  return BuildVendorssBoxes(
+                    title: 'Vendors',
+                    items: vendors,
+                    titlefontSize: 12,
+                    destination: AllVendorsScreen(),
+                    fit: BoxFit.fill,
+                    height: 150,
+                    maximumLines: 3,
+                    imageHeight: 70,
+                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                    imageWidth: 180,
+                    width: 180,
+                  );
+                } else {
+                  return const SizedBox(
+                    height: 160,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
-
-  Widget _buildBoxesSection(BuildContext context, String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            textDirection: TextDirection.rtl,
-          ),
-        ),
-        const SizedBox(height: 10.0),
-        SizedBox(
-          height: 100.0,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 6,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => ServiceDetailsScreen(
-                              serviceName: '$title ${index + 1}',
-                            ),
-                      ),
-                    ),
-                child: ServiceBox(title: '$title ${index + 1}'),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 20.0),
-      ],
-    );
-  }
 }
 
+//comment
 class MySearchBar extends StatelessWidget {
   const MySearchBar({super.key});
 
@@ -73,7 +129,7 @@ class MySearchBar extends StatelessWidget {
         hintText: 'ماذا تريد ',
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: MyColors.ghostColor),
           borderRadius: BorderRadius.circular(25.0),
         ),
         focusedBorder: OutlineInputBorder(
@@ -82,56 +138,6 @@ class MySearchBar extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
-      ),
-    );
-  }
-}
-
-class ServiceBox extends StatelessWidget {
-  final String title;
-  const ServiceBox({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 90.0,
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            // ignore: deprecated_member_use
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 4.0,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(color: Colors.black87, fontSize: 12.0),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class ServiceDetailsScreen extends StatelessWidget {
-  final String serviceName;
-  const ServiceDetailsScreen({super.key, required this.serviceName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(serviceName)),
-      body: Center(
-        child: Text(
-          'تفاصيل الخدمة: $serviceName',
-          style: const TextStyle(fontSize: 20),
-        ),
       ),
     );
   }
@@ -147,48 +153,46 @@ class CarouselWithIndicators extends StatefulWidget {
 
 class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
   int _currentIndex = 0;
-  final List<Map<String, String>> _imageData = const [
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'محمد رمضان',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'المكسيكي',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'رابعه حاسبات',
-    },
-    {
-      'url': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0',
-      'caption': 'التخرج',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CarouselSlider(
-          items: _imageData.map((data) => ImageCard(data: data)).toList(),
-          options: CarouselOptions(
-            height: 150.0,
-            autoPlay: true,
-            enlargeCenterPage: true,
-            onPageChanged:
-                (index, reason) => setState(() => _currentIndex = index),
-          ),
-        ),
-        const SizedBox(height: 10.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _imageData.length,
-            (index) => Indicator(isActive: _currentIndex == index),
-          ),
-        ),
-      ],
+    return FutureBuilder<List<MostRecentProduct>>(
+      future: MostRecentProducts().getMostRecentProduct(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<MostRecentProduct> data = snapshot.data!;
+          List<Map<String, String>> products =
+              data.map((i) => {'url': i.image, 'title': i.name}).toList();
+
+          return Column(
+            children: [
+              CarouselSlider(
+                items: products.map((data) => ImageCard(data: data)).toList(),
+                options: CarouselOptions(
+                  height: 150.0,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  onPageChanged:
+                      (index, reason) => setState(() => _currentIndex = index),
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  products.length,
+                  (index) => Indicator(isActive: _currentIndex == index),
+                ),
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox(
+            height: 150,
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+      },
     );
   }
 }
@@ -206,7 +210,7 @@ class ImageCard extends StatelessWidget {
             MaterialPageRoute(
               builder:
                   (context) =>
-                      ServiceDetailsScreen(serviceName: data['caption']!),
+                      ServiceDetailsScreen(serviceName: data['title']!),
             ),
           ),
       child: ClipRRect(
@@ -217,6 +221,16 @@ class ImageCard extends StatelessWidget {
               data['url']!,
               fit: BoxFit.cover,
               width: double.infinity,
+              errorBuilder: (
+                BuildContext context,
+                Object error,
+                StackTrace? stackTrace,
+              ) {
+                return const SizedBox(
+                  height: 150,
+                  child: Image(image: AssetImage(MyAssetsImage.brokenImage)),
+                );
+              },
             ),
             Positioned(
               bottom: 20.0,
@@ -227,13 +241,13 @@ class ImageCard extends StatelessWidget {
                   vertical: 5.0,
                 ),
                 // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.transparent,
                 child: Text(
-                  data['caption']!,
+                  data['title']!,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+                    color: MyColors.fontcolor,
+                    fontSize: 16.0,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

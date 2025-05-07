@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:city/core/utils/variables.dart';
+//import 'package:citio/core/utils/variables.dart';
 
 class TabItem extends StatelessWidget {
   final String title;
@@ -13,18 +13,16 @@ class TabItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            overflow: TextOverflow.ellipsis,
           ),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

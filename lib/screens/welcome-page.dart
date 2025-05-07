@@ -7,6 +7,7 @@ class SliderScreen extends StatefulWidget {
   const SliderScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SliderScreenState createState() => _SliderScreenState();
 }
 

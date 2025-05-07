@@ -19,7 +19,9 @@ class TabBarViewItem extends StatelessWidget {
             itemCount: requests.length,
             itemBuilder: (context, index) {
               // ignore: avoid_unnecessary_containers
-              return Container(child: CustomCard(request: requests[index]));
+              return Container(
+                child: CustomCard(request: requests[index], cardTitle: title),
+              );
             },
           );
         } else {

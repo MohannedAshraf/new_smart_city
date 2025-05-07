@@ -1,0 +1,2 @@
+A:/Projects/new_smart_city/android/app/.cxx/Debug/5f462x20/armeabi-v7a/CMakeFiles/edit_cache.dir
+A:/Projects/new_smart_city/android/app/.cxx/Debug/5f462x20/armeabi-v7a/CMakeFiles/rebuild_cache.dir
