@@ -4,6 +4,8 @@ import 'package:city/models/issue.dart';
 import 'package:city/screens/add_issue_screen.dart';
 import 'package:city/services/get_issues.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
 
 String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -82,7 +84,7 @@ class _IssueScreenState extends State<IssueScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : TabBarView(
                   children: [
-                    ComplaintList(issues: resolved),
+                    RatedComplaintList(issues: resolved),
                     ComplaintList(issues: active),
                     ComplaintList(issues: inprogress),
                   ],
@@ -100,6 +102,167 @@ class _IssueScreenState extends State<IssueScreen> {
           child: const Icon(Icons.add, size: 20, color: Colors.white),
         ),
       ),
+    );
+  }
+}
+class RatedComplaintList extends StatelessWidget {
+  final List<Values> issues;
+  const RatedComplaintList({super.key, required this.issues});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: issues.length,
+      itemBuilder: (context, index) {
+        final issue = issues[index];
+        return Card(
+          color: MyColors.white,
+          shadowColor: MyColors.white,
+          surfaceTintColor: MyColors.white,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    color: Colors.grey[200],
+                    child: issue.image != null
+                        ? Image.network(
+                            _baseUrl + issue.image!,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image, size: 30);
+                            },
+                          )
+                        : const Icon(Icons.person, size: 30),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        issue.title,
+                        style: const TextStyle(
+                          color: MyColors.fontcolor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        issue.description ?? 'No details',
+                        style: const TextStyle(
+                          color: MyColors.fontcolor,
+                          fontSize: 12,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      issue.date,
+                      style: const TextStyle(
+                        color: Color.fromRGBO(134, 133, 133, 1),
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            double rating = 0;
+                            final controller = TextEditingController();
+                            return AlertDialog(
+                              title: const Text('قيّم هذه الشكوى'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  RatingBar.builder(
+                                    initialRating: 0,
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemBuilder: (context, _) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (r) {
+                                      rating = r;
+                                    },
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextField(
+                                    controller: controller,
+                                    decoration: const InputDecoration(
+                                      hintText: 'اكتب ملاحظاتك هنا...',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    maxLines: 3,
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    // هنا تقدر تبعت الريتنج والملاحظة للـ API لو عايز
+                                    print('Rating: $rating');
+                                    print('Note: ${controller.text}');
+                                  },
+                                  child: const Text('إرسال'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Column(
+                        children: const [
+                           SizedBox(height: 16),
+                          Text(
+                            'تقييم',
+                            style: TextStyle(
+                              color: MyColors.themecolor,
+                              fontSize: 16,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
