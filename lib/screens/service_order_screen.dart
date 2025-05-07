@@ -2,6 +2,7 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/helper/api_banner.dart';
 import 'package:city/models/banner_model.dart';
+import 'package:city/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:city/core/widgets/category_circle.dart';
@@ -11,6 +12,7 @@ import 'package:city/models/category_sub_category_model.dart';
 import 'package:city/models/product_model.dart';
 import 'package:city/helper/api_service.dart';
 import 'package:city/screens/subcategory_screen.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ServiceOrderScreen extends StatefulWidget {
   const ServiceOrderScreen({super.key});
@@ -78,6 +80,19 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CartView()),
+          );
+        },
+        child: SvgPicture.asset(
+          "assets/icon/actionbutton.svg",
+          width: 80,
+          height: 60,
+        ),
+      ),
       backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 220, 226, 223),

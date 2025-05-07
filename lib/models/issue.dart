@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, unused_element
+
 import 'package:intl/intl.dart';
 
 String _baseUrl = 'https://cms-reporting.runasp.net/';

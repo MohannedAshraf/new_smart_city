@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:city/helper/api_add_to_cart.dart';
 import 'package:city/helper/api_product_details.dart';
 import 'package:city/models/product_details_model.dart';
 import 'package:city/screens/cart_view.dart';
@@ -15,8 +18,8 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   int itemCount = 1;
-
   late Future<ProductDetails> _productDetailsFuture;
+  double currentPrice = 0.0;
 
   @override
   void initState() {
@@ -55,6 +58,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           }
 
           final product = snapshot.data!;
+          currentPrice = product.price * itemCount;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -109,7 +113,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 Row(
                   children: [
                     Text(
-                      "${product.price.toStringAsFixed(2)} ج",
+                      "${(product.price * itemCount).toStringAsFixed(2)} ج",
                       style: const TextStyle(
                         fontSize: 15,
                         color: Colors.red,
@@ -145,15 +149,28 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     color: Colors.red,
                   ),
                   child: TextButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'تم إضافة $itemCount منتج إلى العربة بنجاح!',
+                    onPressed: () async {
+                      try {
+                        await AddToCartService.addToCart(
+                          productId: product.id,
+                          quantity: itemCount,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'تم إضافة $itemCount منتج إلى العربة بنجاح!',
+                            ),
+                            backgroundColor: Colors.green,
                           ),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('خطأ في الإضافة: $e'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
