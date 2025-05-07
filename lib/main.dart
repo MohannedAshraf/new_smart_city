@@ -1,6 +1,7 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/generated/l10n.dart';
 import 'package:citio/screens/on_boarding_page.dart';
+import 'package:citio/screens/welcome-page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
@@ -30,7 +31,7 @@ class CityApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
-      home: const StartPage(),
+      home: SliderScreen(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(backgroundColor: MyColors.newbackground),
         scaffoldBackgroundColor: MyColors.newbackground,
