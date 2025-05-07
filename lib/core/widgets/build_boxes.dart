@@ -36,6 +36,7 @@ class BuildBoxes extends StatelessWidget {
   // final int itemCount;
   final Widget destination;
   final double? titlefontSize;
+  final int? maximumlines;
 
   const BuildBoxes({
     super.key,
@@ -52,6 +53,7 @@ class BuildBoxes extends StatelessWidget {
     //  required this.itemCount,
     required this.width,
     this.titlefontSize,
+    this.maximumlines,
   });
   @override
   Widget build(BuildContext context) {
@@ -139,6 +141,7 @@ class BuildBoxes extends StatelessWidget {
                   imageWidth: imageWidth,
                   fit: fit,
                   imagePadding: imagePadding,
+                  maximumlines: maximumlines,
                 ),
               );
             },
@@ -393,6 +396,7 @@ class BuildVendorssBoxes extends StatelessWidget {
                   imageWidth: imageWidth,
                   fit: fit,
                   imagePadding: imagePadding,
+                  maximumlines: maximumLines,
                 ),
               );
             },
@@ -484,15 +488,20 @@ class ServiceBox extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
             child: Row(
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: titlefontSize ?? 14,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    maxLines: 1,
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: titlefontSize ?? 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                    //maxLines: 2,
                   ),
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:city/core/utils/assets_image.dart';
 import 'package:city/core/utils/variables.dart';
 import 'package:city/core/widgets/build_boxes.dart';
+import 'package:city/core/widgets/emergency_button.dart';
 import 'package:city/models/most_recent_products.dart';
 import 'package:city/models/most_requested_products.dart';
 import 'package:city/models/most_requested_services.dart';
@@ -27,6 +28,58 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 45,
+                children: [
+                  EmergencyButton(
+                    color: Colors.red,
+                    emicon: Icon(Icons.local_hospital, color: Colors.white),
+                    emname: 'الإسعاف',
+                    emergencyServiceId: '1',
+                  ),
+                  EmergencyButton(
+                    color: Colors.orange,
+                    emicon: Icon(Icons.fire_truck, color: Colors.white),
+                    emname: 'المطافيء',
+                    emergencyServiceId: '2',
+                  ),
+                  EmergencyButton(
+                    color: Colors.blue,
+                    emicon: Icon(Icons.local_police, color: Colors.white),
+                    emname: 'الشرطة',
+                    emergencyServiceId: '3',
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () => print('Icon Button Pressed'),
+                        borderRadius: BorderRadius.circular(50),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.green,
+                          ),
+                          child: Icon(Icons.add, color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        'أضف شكوى',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
             const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
@@ -41,12 +94,13 @@ class HomeScreen extends StatelessWidget {
 
                     destination: const GovServicesDatails(),
                     fit: BoxFit.contain,
-                    height: 150,
+                    height: 165,
 
                     imageHeight: 50,
                     imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
                     imageWidth: 50,
                     width: 160,
+                    maximumlines: 3,
                   );
                 } else {
                   return const SizedBox(
@@ -67,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                     titlefontSize: 12,
                     destination: const AllServices(),
                     fit: BoxFit.fill,
-                    height: 150,
+                    height: 155,
                     maximumLines: 3,
                     imageHeight: 70,
                     imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
@@ -239,14 +293,22 @@ class ImageCard extends StatelessWidget {
                 ),
                 // ignore: deprecated_member_use
                 color: Colors.transparent,
-                child: Text(
+                child: StrokeText(
+                  height: 10,
+                  width: 10,
+                  text: data['title'],
+                  textSize: 14,
+                  textColor: MyColors.white,
+                  strokeColor: MyColors.black,
+                ),
+                /*Text(
                   data['title']!,
                   style: const TextStyle(
                     color: MyColors.fontcolor,
                     fontSize: 16.0,
                     // fontWeight: FontWeight.bold,
                   ),
-                ),
+                ),*/
               ),
             ),
           ],
@@ -271,5 +333,68 @@ class Indicator extends StatelessWidget {
         color: isActive ? Colors.green : Colors.grey,
       ),
     );
+  }
+}
+
+class StrokeText extends StatefulWidget {
+  const StrokeText({
+    super.key,
+    this.width,
+    this.height,
+    this.text,
+    this.textSize,
+    this.textColor,
+    this.strokeColor,
+    this.letterSpacing,
+    this.strokeWidth,
+  });
+
+  final double? width;
+  final double? height;
+  final String? text;
+  final double? textSize;
+  final Color? textColor;
+  final Color? strokeColor;
+  final double? letterSpacing;
+  final double? strokeWidth;
+
+  @override
+  State<StrokeText> createState() => _StrokeTextState();
+}
+
+class _StrokeTextState extends State<StrokeText> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Implement the stroke
+        Text(
+          maxLines: 2,
+          textAlign: TextAlign.left,
+          widget.text ?? '',
+          style: TextStyle(
+            fontSize: widget.textSize ?? 16,
+            letterSpacing: widget.letterSpacing ?? 0,
+            fontWeight: FontWeight.bold,
+            foreground:
+                Paint()
+                  ..style = PaintingStyle.stroke
+                  ..strokeWidth = widget.strokeWidth ?? 4
+                  ..color = widget.strokeColor ?? Colors.black,
+          ),
+        ),
+        // The text inside
+        Text(
+          widget.text ?? '',
+          style: TextStyle(
+            fontSize: widget.textSize ?? 16,
+            letterSpacing: widget.letterSpacing ?? 0,
+            fontWeight: FontWeight.bold,
+            color: widget.textColor ?? Colors.white,
+          ),
+        ),
+      ],
+    );
+    ;
   }
 }

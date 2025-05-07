@@ -3,6 +3,7 @@ import 'package:city/core/utils/mycolors.dart';
 import 'package:city/models/all_vendors.dart';
 import 'package:city/services/get_vendor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 
 class AllVendorsScreen extends StatefulWidget {
   @override
@@ -64,7 +65,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
 
             Expanded(
               child: FutureBuilder<AllVendor>(
-                future: GetVendor().getALlVendosr(),
+                future: GetVendor().getAllVendors(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<Items> vendors = snapshot.data!.items;
@@ -162,20 +163,48 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        10,
-                                        45,
-                                        20,
-                                        8,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                              10,
+                                              45,
+                                              20,
+                                              8,
+                                            ),
+                                            child: Text(
+                                              vendors[index].type,
+                                              style: const TextStyle(
+                                                color: MyColors.gray,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      child: Text(
-                                        vendors[index].type,
-                                        style: const TextStyle(
-                                          color: MyColors.gray,
-                                          fontSize: 14,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                            10,
+                                            45,
+                                            20,
+                                            8,
+                                          ),
+                                          child: StarRating(
+                                            size: 20.0,
+                                            rating: 2,
+                                            color: Colors.orange,
+                                            borderColor: Colors.grey,
+                                            allowHalfRating: true,
+                                            starCount: 5,
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),

@@ -16,7 +16,7 @@ class GetVendor {
     return vendorList;
   }
 
-  Future<AllVendor> getALlVendosr() async {
+  Future<AllVendor> getAllVendors() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
 
@@ -26,6 +26,24 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url: 'https://service-provider.runasp.net/api/Vendors/for-mobile',
+      token: token,
+    );
+    AllVendor vendors = AllVendor.fromJason(data);
+
+    return vendors;
+  }
+
+  Future<AllVendor> searchVendors(String searchValue) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    dynamic data = await Api().get(
+      url:
+          'https://service-provider.runasp.net/api/Vendors/for-mobile?searchVlaue=$searchValue',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);

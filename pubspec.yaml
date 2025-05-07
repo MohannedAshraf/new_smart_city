@@ -39,6 +39,7 @@ dependencies:
   galleryimage: ^2.0.1
   url_launcher: ^6.3.1
   modal_progress_hud_nsn:
+  flutter_rating: ^2.0.2
 
   fluentui_system_icons:
   flutter:

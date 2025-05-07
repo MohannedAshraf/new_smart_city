@@ -14,7 +14,7 @@ class VendorProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.oldLace,
       body: FutureBuilder<AllVendor>(
-        future: GetVendor().getALlVendosr(),
+        future: GetVendor().getAllVendors(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Items> vendors = snapshot.data!.items;
