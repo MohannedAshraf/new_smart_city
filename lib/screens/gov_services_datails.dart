@@ -14,12 +14,13 @@ class GovServicesDatails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: MyColors.mintgreen,
         title: const Text(
           'جميع الخدمات المتاحة',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: MyColors.green,
+            color: MyColors.themecolor,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

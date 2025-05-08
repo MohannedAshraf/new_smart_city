@@ -4,6 +4,8 @@ import 'package:citio/models/all_vendors.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 
+String _baseUrl = 'https://service-provider.runasp.net';
+
 class VendorProfile extends StatelessWidget {
   // final String uderId;
 
@@ -14,7 +16,7 @@ class VendorProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: MyColors.oldLace,
       body: FutureBuilder<AllVendor>(
-        future: GetVendor().getALlVendosr(),
+        future: GetVendor().getAllVendors(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Items> vendors = snapshot.data!.items;
@@ -41,7 +43,7 @@ class VendorProfile extends StatelessWidget {
                                 topRight: Radius.circular(13),
                               ),
                               child: Image.network(
-                                vendors[index].coverImage,
+                                _baseUrl + vendors[index].coverImage!,
                                 // vendors[index].coverImage,
                                 width: double.infinity,
                                 height: 120,
@@ -69,11 +71,16 @@ class VendorProfile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 8, 20, 0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      0,
+                                      8,
+                                      20,
+                                      0,
+                                    ),
                                     child: CircleAvatar(
                                       radius: 40,
                                       backgroundImage: NetworkImage(
-                                        vendors[index].profileImage,
+                                        _baseUrl + vendors[index].profileImage!,
                                         // vendors[index].profileImage,
                                       ),
                                     ),

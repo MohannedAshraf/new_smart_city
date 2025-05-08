@@ -46,12 +46,17 @@ class CustomCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          request.serviceName,
-                          style: const TextStyle(
-                            color: MyColors.fontcolor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: Text(
+                            request.serviceName,
+                            maxLines: 1,
+
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: MyColors.fontcolor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         // SizedBox(width: 160),

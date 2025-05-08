@@ -15,7 +15,7 @@ class SocialmediaPost {
 }
 
 class Data {
-  final String caption;
+  final String? caption;
   final List<Media>? media;
   final ImpressionsCount? impressionsCount;
   final int? shareCount;
@@ -24,7 +24,7 @@ class Data {
   final String? userId;
 
   Data({
-    required this.caption,
+    this.caption,
     this.media,
     this.impressionsCount,
     this.saveCount,

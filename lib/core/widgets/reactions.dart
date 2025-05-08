@@ -5,15 +5,15 @@ import 'package:url_launcher/url_launcher.dart';
 final Uri _url = Uri.parse('https://x.com/home');
 
 class Reactions extends StatelessWidget {
-  Reactions({
+  const Reactions({
     required this.reactionIcon,
     required this.reactionHoverColor,
     this.reactionIconColor = MyColors.themecolor,
     super.key,
   });
-  Icon reactionIcon;
-  Color reactionIconColor;
-  Color reactionHoverColor;
+  final Icon reactionIcon;
+  final Color reactionIconColor;
+  final Color reactionHoverColor;
   @override
   Widget build(BuildContext context) {
     return IconButton(

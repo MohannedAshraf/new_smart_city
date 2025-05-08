@@ -1,17 +1,17 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:citio/models/most_requested_services.dart';
-import 'package:citio/services/get_most_requested_services.dart';
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/most_requested_products.dart';
-import 'package:citio/models/most_requested_services.dart';
+
 import 'package:citio/models/vendor.dart';
-import 'package:citio/services/get_most_requested_products.dart';
-import 'package:citio/services/get_most_requested_services.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+String _baseUrl = 'https://service-provider.runasp.net';
 // ignore: must_be_immutable
 Map<String, String> iconsGov = {
   "إصدار جواز سفر": 'https://cdn-icons-png.flaticon.com/128/4774/4774004.png',
@@ -38,6 +38,7 @@ class BuildBoxes extends StatelessWidget {
   // final int itemCount;
   final Widget destination;
   final double? titlefontSize;
+  final int? maximumlines;
 
   const BuildBoxes({
     super.key,
@@ -54,6 +55,7 @@ class BuildBoxes extends StatelessWidget {
     //  required this.itemCount,
     required this.width,
     this.titlefontSize,
+    this.maximumlines,
   });
   @override
   Widget build(BuildContext context) {
@@ -141,6 +143,7 @@ class BuildBoxes extends StatelessWidget {
                   imageWidth: imageWidth,
                   fit: fit,
                   imagePadding: imagePadding,
+                  maximumlines: maximumlines,
                 ),
               );
             },
@@ -263,7 +266,7 @@ class BuildProductsBoxes extends StatelessWidget {
                   title: items[index].name,
                   width: width,
                   details: items[index].discription,
-                  image: items[index].image,
+                  image: _baseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -390,11 +393,12 @@ class BuildVendorssBoxes extends StatelessWidget {
                   title: items[index].name,
                   width: width,
                   details: '${items[index].businessName}\n${items[index].type}',
-                  image: items[index].image,
+                  image: _baseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
                   imagePadding: imagePadding,
+                  maximumlines: maximumLines,
                 ),
               );
             },
@@ -486,15 +490,20 @@ class ServiceBox extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
             child: Row(
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: titlefontSize ?? 14,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    maxLines: 1,
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: titlefontSize ?? 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                    //maxLines: 2,
                   ),
-                  textAlign: TextAlign.start,
-                  maxLines: 2,
                 ),
               ],
             ),
