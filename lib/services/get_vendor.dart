@@ -6,8 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GetVendor {
   Future<List<Vendor>> getVendor() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
     List<dynamic> data = await Api().get(
       url: 'https://service-provider.runasp.net/api/Vendors/top-5-vendors',
+      token: token,
     );
     List<Vendor> vendorList = [];
     for (int i = 0; i < data.length; i++) {

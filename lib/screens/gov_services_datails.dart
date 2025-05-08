@@ -53,7 +53,8 @@ class GovServicesDatails extends StatelessWidget {
                               Image.network(
                                 width: 60,
                                 height: 60,
-                                iconsGov[services[index].serviceName] ?? '',
+                                iconsGov[services[index].serviceName] ??
+                                    'https://cdn-icons-png.flaticon.com/128/4287/4287539.png',
                                 fit: BoxFit.cover,
                                 errorBuilder: (
                                   BuildContext context,

@@ -1,5 +1,6 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/generated/l10n.dart';
+import 'package:citio/screens/all_vendors_screen.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:citio/screens/social_media.dart';
 import 'package:citio/screens/welcome-page.dart';
@@ -219,6 +220,17 @@ class HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const StartPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_basket_outlined),
+              title: const Text('Vendors'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AllVendorsScreen()),
                 );
               },
             ),
