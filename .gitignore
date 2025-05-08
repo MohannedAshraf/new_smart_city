@@ -34,6 +34,10 @@ android/app/.cxx/
 .pub-cache/
 .pub/
 /build/
+**/generated_plugins.cmake
+**/generated_plugin_registrant.cc
+**/GeneratedPluginRegistrant.swift
+
 
 # Symbolication related
 app.*.symbols
