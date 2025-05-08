@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-android/app/.cxx/
+#android/app/.cxx/
 
 
 
@@ -25,7 +25,7 @@ android/app/.cxx/
 #.vscode/
 
 # Flutter/Dart/Pub related
-**/.cxx/
+#**/.cxx/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -35,8 +35,8 @@ android/app/.cxx/
 .pub/
 /build/
 **/generated_plugins.cmake
-**/generated_plugin_registrant.cc
-**/GeneratedPluginRegistrant.swift
+#**/generated_plugin_registrant.cc
+#**/GeneratedPluginRegistrant.swift
 
 
 # Symbolication related

@@ -19,7 +19,7 @@ class MyTextButton extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       decoration: BoxDecoration(
         color: MyColors.gray,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: TextButton(
