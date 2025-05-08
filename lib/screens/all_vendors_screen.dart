@@ -2,11 +2,11 @@
 
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/widgets/vendor_profile.dart';
 import 'package:citio/models/all_vendors.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:citio/screens/vendor_profile.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
 
@@ -85,7 +85,26 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                               () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => VendorProfile(),
+                                  builder:
+                                      (context) => VendorProfile(
+                                        cover:
+                                            vendors[index].coverImage != null
+                                                ? _baseUrl +
+                                                    vendors[index].coverImage!
+                                                : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png', // صورة افتراضية
+                                        profilePic:
+                                            vendors[index].profileImage != null
+                                                ? _baseUrl +
+                                                    vendors[index].profileImage!
+                                                : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
+                                        name:
+                                            vendors[index].businessName ??
+                                            'اسم غير متوفر',
+                                        businessType:
+                                            vendors[index].type ??
+                                            'نوع غير معروف',
+                                        rating: vendors[index].rating ?? 0.0,
+                                      ),
                                 ),
                               ),
                           behavior: HitTestBehavior.opaque,
