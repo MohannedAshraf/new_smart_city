@@ -1,3 +1,4 @@
+// ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
 
 class Vendor {

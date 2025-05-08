@@ -1,9 +1,7 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/build_boxes.dart';
-import 'package:citio/core/widgets/custom_card.dart';
 import 'package:citio/models/available_services.dart';
-import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/material.dart';
 

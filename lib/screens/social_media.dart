@@ -1,12 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api, unused_element
+
 import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/core/widgets/socialmedia_tab_view.dart';
-import 'package:citio/core/widgets/vendor_profile.dart';
 
-import 'package:citio/core/widgets/tab_item.dart';
 import 'package:flutter/material.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 
 final Uri _url = Uri.parse('https://x.com/home');
 
@@ -35,7 +33,7 @@ class _SocialMediaState extends State<SocialMedia> {
         backgroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
       ),
-      body: SocialmediaTabView(),
+      body: const SocialmediaTabView(),
     );
   }
 }

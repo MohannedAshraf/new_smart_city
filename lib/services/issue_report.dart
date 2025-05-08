@@ -11,6 +11,7 @@ class AddReport {
     double longitude,
     String address,
   ) async {
+    // ignore: missing_required_param
     Map<String, dynamic> data = await Api().post(
       url: 'https://cms-reporting.runasp.net/api/MReport',
       body: {

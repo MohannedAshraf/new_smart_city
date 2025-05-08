@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/utils/mycolors.dart';
 
 import 'package:citio/core/widgets/reactions.dart';
