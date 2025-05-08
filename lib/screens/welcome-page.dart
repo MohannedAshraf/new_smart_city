@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/screens/on_boarding_page.dart';

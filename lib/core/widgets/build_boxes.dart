@@ -94,7 +94,6 @@ class BuildBoxes extends StatelessWidget {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -225,7 +224,6 @@ class BuildProductsBoxes extends StatelessWidget {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -352,7 +350,6 @@ class BuildVendorssBoxes extends StatelessWidget {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

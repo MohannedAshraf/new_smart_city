@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class ReportIssue {
   final double latitude;
   final double longitude;

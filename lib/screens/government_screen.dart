@@ -1,6 +1,5 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
-import 'package:citio/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/tab_item.dart';
