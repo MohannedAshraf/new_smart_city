@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:citio/core/widgets/custom_button.dart';
 import 'package:citio/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,7 @@ class _LoginPageState extends State<MyloginPage> {
   bool _validate = false;
   bool _isLoading = false;
   bool _obscurePassword = true;
+  bool _rememberMe = false;
 
   Future<void> loginUser(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
@@ -104,93 +106,174 @@ class _LoginPageState extends State<MyloginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            autovalidateMode:
-                _validate ? AutovalidateMode.always : AutovalidateMode.disabled,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Text(
-                    'Citio',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          autovalidateMode:
+              _validate ? AutovalidateMode.always : AutovalidateMode.disabled,
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/citio.svg",
+                width: 200,
+                height: 200,
+              ),
+              const SizedBox(height: 30),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      // ignore: deprecated_member_use
+                      color: Colors.black.withOpacity(0.2), // لون الظل
+                      spreadRadius: 2, // مدى انتشار الظل
+                      blurRadius: 10, // درجة التمويه
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 40),
-                const Text(
-                  "البريد الإلكتروني",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال البريد الإلكتروني';
-                    }
-                    final emailRegex = RegExp(
-                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                    );
-                    if (!emailRegex.hasMatch(value)) {
-                      return 'يرجى إدخال بريد إلكتروني صالح';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "كلمة المرور",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.black,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      "البريد الإلكتروني",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'يرجى إدخال البريد الإلكتروني';
+                        }
+                        final emailRegex = RegExp(
+                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                        );
+                        if (!emailRegex.hasMatch(value)) {
+                          return 'يرجى إدخال بريد إلكتروني صالح';
+                        }
+                        return null;
                       },
                     ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال كلمة المرور';
-                    }
-                    if (value.length < 6) {
-                      return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
-                    }
-                    return null;
-                  },
+                    const SizedBox(height: 16),
+                    const Text(
+                      "كلمة المرور",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'يرجى إدخال كلمة المرور';
+                        }
+                        if (value.length < 6) {
+                          return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // ضع هنا التنقل إلى صفحة استعادة كلمة المرور
+                            print("go to reset password page");
+                          },
+                          child: const Text(
+                            "نسيت كلمة المرور؟",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 100),
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              _rememberMe = value ?? false;
+                            });
+                          },
+                        ),
+                        const Text("تذكرني"),
+                      ],
+                    ),
+                    MyTextButton(
+                      text: _isLoading ? "جاري التحقق..." : "تسجيل الدخول",
+                      onPressed: () => loginUser(context),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "لا تمتلك حساب ؟",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              print("go to register page  ");
+                            },
+                            child: const Text(
+                              "افتح حساب  ",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                MyTextButton(
-                  text: _isLoading ? "جاري التحقق..." : "تسجيل الدخول",
-                  onPressed: () => loginUser(context),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

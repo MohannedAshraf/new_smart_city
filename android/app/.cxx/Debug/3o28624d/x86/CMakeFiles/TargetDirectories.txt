@@ -1,0 +1,2 @@
+D:/new_smart_city/android/app/.cxx/Debug/3o28624d/x86/CMakeFiles/edit_cache.dir
+D:/new_smart_city/android/app/.cxx/Debug/3o28624d/x86/CMakeFiles/rebuild_cache.dir
