@@ -18,6 +18,7 @@ class Items {
   final String? profileImage;
   final String? coverImage;
   final String email;
+  final double? rating;
   Items({
     required this.name,
     required this.businessName,
@@ -25,6 +26,7 @@ class Items {
     this.profileImage,
     this.coverImage,
     required this.email,
+    this.rating,
   });
   factory Items.fromJason(jsonData) {
     return Items(
@@ -34,6 +36,7 @@ class Items {
       profileImage: jsonData['profilePictureUrl'],
       coverImage: jsonData['coverImageUrl'],
       email: jsonData['email'],
+      rating: jsonData['rating'],
     );
   }
 }
