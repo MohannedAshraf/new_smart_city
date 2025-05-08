@@ -9,6 +9,9 @@
 .history
 .svn/
 migrate_working_dir/
+android/app/.cxx/
+
+
 
 # IntelliJ related
 *.iml
@@ -22,6 +25,7 @@ migrate_working_dir/
 #.vscode/
 
 # Flutter/Dart/Pub related
+**/.cxx/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
