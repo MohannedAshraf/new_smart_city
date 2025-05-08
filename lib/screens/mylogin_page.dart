@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:citio/core/widgets/custom_button.dart';
 import 'package:citio/main.dart';
+import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -120,7 +121,7 @@ class _LoginPageState extends State<MyloginPage> {
                 width: 200,
                 height: 200,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 0),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 padding: const EdgeInsets.all(10),
@@ -130,9 +131,9 @@ class _LoginPageState extends State<MyloginPage> {
                   boxShadow: [
                     BoxShadow(
                       // ignore: deprecated_member_use
-                      color: Colors.black.withOpacity(0.2), // لون الظل
-                      spreadRadius: 2, // مدى انتشار الظل
-                      blurRadius: 10, // درجة التمويه
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
                       offset: const Offset(0, 4),
                     ),
                   ],
@@ -217,8 +218,12 @@ class _LoginPageState extends State<MyloginPage> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            // ضع هنا التنقل إلى صفحة استعادة كلمة المرور
-                            print("go to reset password page");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResetPasswordView(),
+                              ),
+                            );
                           },
                           child: const Text(
                             "نسيت كلمة المرور؟",
