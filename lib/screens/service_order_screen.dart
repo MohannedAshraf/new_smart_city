@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
+import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/banner_model.dart';
+import 'package:citio/models/search_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -32,6 +34,9 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   List<BannerModel>? _banners;
   bool _isLoadingBanners = true;
   String? _bannerError;
+  List<SearchResultModel>? _searchResults;
+  bool _isSearching = false;
+  String? _searchError;
 
   @override
   void initState() {
@@ -39,6 +44,33 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     _controller = TextEditingController();
     _loadCategories();
     _loadBanners();
+    _controller = TextEditingController();
+  }
+
+  Future<void> _performSearch() async {
+    final term = _controller.text.trim();
+    if (term.isEmpty) return;
+
+    setState(() {
+      _isSearching = true;
+      _searchError = null;
+      _searchResults = null;
+    });
+
+    try {
+      final results = await ApiSearch.search(term);
+      setState(() {
+        _searchResults = results;
+      });
+    } catch (e) {
+      setState(() {
+        _searchError = e.toString();
+      });
+    } finally {
+      setState(() {
+        _isSearching = false;
+      });
+    }
   }
 
   Future<void> _loadBanners() async {
@@ -105,10 +137,57 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: MySearchBar(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: MySearchBar(
+                controller: _controller,
+                onSearch: _performSearch,
+              ),
             ),
+            if (_isSearching) ...[
+              const Center(child: CircularProgressIndicator()),
+            ] else if (_searchError != null) ...[
+              Center(child: Text('❌ خطأ في البحث: $_searchError')),
+            ] else if (_searchResults != null) ...[
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      _searchResults!.map((result) {
+                        return Card(
+                          child: ListTile(
+                            leading:
+                                result.imageUrl != null
+                                    ? Image.network(
+                                      result.imageUrl!,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    )
+                                    : const Icon(Icons.image_not_supported),
+                            title: Text(
+                              result.nameAr ??
+                                  result.nameEn ??
+                                  result.businessName ??
+                                  'بدون اسم',
+                            ),
+                            subtitle: Text(
+                              result.categoryNameAr ??
+                                  result.categoryNameEn ??
+                                  '',
+                            ),
+                            onTap: () {
+                              // يمكنك لاحقًا التنقل لصفحة التفاصيل هنا
+                              print("فتح تفاصيل العنصر: ${result.id}");
+                            },
+                          ),
+                        );
+                      }).toList(),
+                ),
+              ),
+            ],
             const SizedBox(height: 30),
             _buildCategories(),
             if (selectedCategoryIndex != null) _buildSubCategories(),
@@ -289,19 +368,23 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 }
 
 class MySearchBar extends StatelessWidget {
-  const MySearchBar({super.key});
+  final TextEditingController controller;
+  final VoidCallback onSearch;
+
+  const MySearchBar({
+    super.key,
+    required this.controller,
+    required this.onSearch,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
+      onSubmitted: (_) => onSearch(),
       decoration: InputDecoration(
         hintText: 'ماذا تريد',
-        prefixIcon: InkWell(
-          onTap: () {
-            print("do search function which connecting with API ");
-          },
-          child: const Icon(Icons.search),
-        ),
+        prefixIcon: InkWell(onTap: onSearch, child: const Icon(Icons.search)),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(20.0),
