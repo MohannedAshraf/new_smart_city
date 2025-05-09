@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, avoid_unnecessary_containers
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
@@ -202,7 +204,7 @@ class VendorProfile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(children: []),
+                      const Row(children: []),
                     ],
                   ),
                 ),
