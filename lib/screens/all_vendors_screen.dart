@@ -1,5 +1,3 @@
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
-
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/all_vendors.dart';
@@ -16,6 +14,7 @@ class AllVendorsScreen extends StatefulWidget {
 }
 
 class _AllVendorsScreenState extends State<AllVendorsScreen> {
+  String url = '0';
   List<String> selectedCategories = [];
   List<String> categories = [
     "Technology",
@@ -32,6 +31,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     Provider("Urban Dining Co.", "Restaurant & Catering", 4.8, 150),
     Provider("Metro Shopping Mall", "Retail & Entertainment", 4.6, 200),
   ];
+  Future<AllVendor> allVendors = GetVendor().getAllVendors();
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,11 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                 ),
                 child: SearchBar(
                   hintText: "Search providers...",
-                  onChanged: (query) {},
+                  onChanged: (query) {
+                    setState(() {
+                      allVendors = GetVendor().searchVendors(query);
+                    });
+                  },
                   leading: const Icon(Icons.search, color: MyColors.black),
                   shape: WidgetStateProperty.all(
                     RoundedRectangleBorder(
@@ -70,7 +74,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
 
             Expanded(
               child: FutureBuilder<AllVendor>(
-                future: GetVendor().getAllVendors(),
+                future: allVendors,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<Items> vendors = snapshot.data!.items;
