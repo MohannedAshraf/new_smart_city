@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:citio/core/widgets/custom_button.dart';
 import 'package:citio/main.dart';
+import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -154,6 +155,7 @@ class _LoginPageState extends State<MyloginPage> {
                     TextFormField(
                       controller: emailController,
                       decoration: InputDecoration(
+                        hintText: "ادخل  البريد الإلكتروني",
                         border: myBorder(),
                         enabledBorder: myBorder(),
                         focusedBorder: myBorder(),
@@ -184,6 +186,7 @@ class _LoginPageState extends State<MyloginPage> {
                       controller: passwordController,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
+                        hintText: "ادخل  كلمة المرور",
                         border: myBorder(),
                         enabledBorder: myBorder(),
                         focusedBorder: myBorder(),
@@ -263,7 +266,12 @@ class _LoginPageState extends State<MyloginPage> {
 
                           TextButton(
                             onPressed: () {
-                              print("go to register page  ");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ),
+                              );
                             },
                             child: const Text(
                               "افتح حساب  ",
