@@ -1,43 +1,44 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
-import 'package:citio/core/widgets/custom_button.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 
-class StartPage extends StatelessWidget {
+class StartPage extends StatefulWidget {
   const StartPage({super.key});
+
+  @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MyloginPage()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
-      appBar: AppBar(),
       body: Center(
-        child: Column(
-          children: [
-            const Text(
-              "Citio",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: MyColors.gray,
-              ),
+        child: Container(
+          width: 250,
+          height: 250,
+          margin: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(MyAssetsImage.city),
+              fit: BoxFit.contain,
             ),
-            const SizedBox(height: 100),
-            Container(
-              width: 250,
-              height: 250,
-              margin: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(MyAssetsImage.city)),
-              ),
-            ),
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: MyTextButton(text: "هيا بنا ", newscreen: MyloginPage()),
-            ),
-          ],
+          ),
         ),
       ),
     );

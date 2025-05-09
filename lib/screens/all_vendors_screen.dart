@@ -115,7 +115,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                           child: Card(
                             color: MyColors.white,
                             margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: Container(
+                            child: SizedBox(
                               // width: double.infinity,
                               height: 200,
                               child: Column(
