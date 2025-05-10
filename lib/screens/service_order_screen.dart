@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/search_model.dart';
 import 'package:citio/screens/cart_view.dart';
+import 'package:citio/screens/search_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:citio/core/widgets/category_circle.dart';
@@ -41,35 +42,44 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+
     _loadCategories();
     _loadBanners();
     _controller = TextEditingController();
   }
 
-  Future<void> _performSearch() async {
-    final term = _controller.text.trim();
-    if (term.isEmpty) return;
+  // Future<void> _performSearch() async {
+  //   final term = _controller.text.trim();
+  //   if (term.isEmpty) return;
 
-    setState(() {
-      _isSearching = true;
-      _searchError = null;
-      _searchResults = null;
-    });
+  //   setState(() {
+  //     _isSearching = true;
+  //     _searchError = null;
+  //     _searchResults = null;
+  //   });
 
-    try {
-      final results = await ApiSearch.search(term);
-      setState(() {
-        _searchResults = results;
-      });
-    } catch (e) {
-      setState(() {
-        _searchError = e.toString();
-      });
-    } finally {
-      setState(() {
-        _isSearching = false;
-      });
+  //   try {
+  //     final results = await ApiSearch.search(term);
+  //     setState(() {
+  //       _searchResults = results;
+  //     });
+  //   } catch (e) {
+  //     setState(() {
+  //       _searchError = e.toString();
+  //     });
+  //   } finally {
+  //     setState(() {
+  //       _isSearching = false;
+  //     });
+  //   }
+  // }
+  void _performSearch() {
+    final keyword = _controller.text.trim();
+    if (keyword.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => SearchResultsPage(keyword: keyword)),
+      );
     }
   }
 
@@ -152,42 +162,59 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      _searchResults!.map((result) {
-                        return Card(
-                          child: ListTile(
-                            leading:
-                                result.imageUrl != null
-                                    ? Image.network(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _searchResults!.length,
+                    itemBuilder: (context, index) {
+                      final result = _searchResults![index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          leading:
+                              result.imageUrl != null
+                                  ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
                                       result.imageUrl!,
                                       width: 50,
                                       height: 50,
                                       fit: BoxFit.cover,
-                                    )
-                                    : const Icon(Icons.image_not_supported),
-                            title: Text(
-                              result.nameAr ??
-                                  result.nameEn ??
-                                  result.businessName ??
-                                  'بدون اسم',
-                            ),
-                            subtitle: Text(
-                              result.categoryNameAr ??
-                                  result.categoryNameEn ??
-                                  '',
-                            ),
-                            onTap: () {
-                              // يمكنك لاحقًا التنقل لصفحة التفاصيل هنا
-                              print("فتح تفاصيل العنصر: ${result.id}");
-                            },
+                                    ),
+                                  )
+                                  : Icon(Icons.image_not_supported, size: 40),
+                          title: Text(
+                            result.nameAr ??
+                                result.nameEn ??
+                                result.businessName ??
+                                'بدون اسم',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        );
-                      }).toList(),
+                          subtitle: Text(
+                            result.categoryNameAr ??
+                                result.categoryNameEn ??
+                                'بدون تصنيف',
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                          onTap: () {
+                            print("فتح تفاصيل العنصر: ${result.id}");
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
+
             const SizedBox(height: 30),
             _buildCategories(),
             if (selectedCategoryIndex != null) _buildSubCategories(),
@@ -211,7 +238,6 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                                   fit: StackFit.expand,
                                   children: [
                                     Image.network(
-                                      //'https://service-provider.runasp.net'
                                       "${ApiTopBanners.baseUrl}${banner.imageUrl}",
                                       fit: BoxFit.fill,
                                       width: double.infinity,

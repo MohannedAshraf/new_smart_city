@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiSearch {
-  static const String _baseUrl =
+  static const String baseUrl =
       "https://service-provider.runasp.net/api/Search";
 
   static Future<List<SearchResultModel>> search(String term) async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
 
-    final url = Uri.parse("$_baseUrl?term=$term");
+    final url = Uri.parse("$baseUrl?term=$term");
 
     final response = await http.get(
       url,

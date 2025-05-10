@@ -1,5 +1,4 @@
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/widgets/custom_button.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
