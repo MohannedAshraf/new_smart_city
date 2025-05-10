@@ -48,7 +48,19 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: Image.network(image, fit: BoxFit.fitHeight),
+                child: Image.network(
+                  image,
+                  fit: BoxFit.fitHeight,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Icon(
+                        Icons.broken_image,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 10),
