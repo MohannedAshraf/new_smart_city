@@ -60,3 +60,8 @@ class GetVendor {
     return vendors;
   }
 }
+
+String changeUrl(String query) {
+  return 'https://service-provider.runasp.net/api/Vendors/for-mobile?PageSize=50' +
+      query;
+}
