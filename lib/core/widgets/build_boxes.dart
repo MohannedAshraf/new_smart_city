@@ -7,6 +7,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/most_requested_products.dart';
 
 import 'package:citio/models/vendor.dart';
+import 'package:citio/screens/vendor_profile.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -381,8 +382,22 @@ class BuildVendorssBoxes extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => ServiceDetailsScreen(
-                              serviceName: items[index].name,
+                            (context) => VendorProfile(
+                              cover:
+                                  items[index].coverImage != null
+                                      ? _baseUrl + items[index].coverImage!
+                                      : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png', // صورة افتراضية
+                              profilePic:
+                                  items[index].image != null
+                                      ? _baseUrl + items[index].image!
+                                      : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
+                              name:
+                                  items[index].businessName ?? 'اسم غير متوفر',
+                              businessType:
+                                  items[index].type ?? 'نوع غير معروف',
+                              rating: items[index].rating ?? 0.0,
+
+                              id: items[index].id,
                             ),
                       ),
                     ),

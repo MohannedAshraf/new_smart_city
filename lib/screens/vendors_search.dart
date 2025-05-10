@@ -111,6 +111,8 @@ Widget vendorsList(Future<AllVendor> allVendors) {
                             businessType:
                                 vendors[index].type ?? 'نوع غير معروف',
                             rating: vendors[index].rating ?? 0.0,
+
+                            id: vendors[index].id,
                           ),
                     ),
                   ),

@@ -17,16 +17,18 @@ class Items {
   final String type;
   final String? profileImage;
   final String? coverImage;
-  final String email;
-  final double? rating;
+
+  final double rating;
+  final String id;
   Items({
     required this.name,
     required this.businessName,
     required this.type,
     this.profileImage,
     this.coverImage,
-    required this.email,
-    this.rating,
+
+    required this.rating,
+    required this.id,
   });
   factory Items.fromJason(jsonData) {
     return Items(
@@ -35,8 +37,12 @@ class Items {
       type: jsonData['businessType'],
       profileImage: jsonData['profilePictureUrl'],
       coverImage: jsonData['coverImageUrl'],
-      email: jsonData['email'],
-      rating: jsonData['rating'],
+
+      rating:
+          jsonData['rating'] != null
+              ? double.tryParse(jsonData['rating'].toString()) ?? 0.0
+              : 0.0,
+      id: jsonData['id'],
     );
   }
 }

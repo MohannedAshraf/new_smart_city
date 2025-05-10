@@ -108,6 +108,8 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                             vendors[index].type ??
                                             'نوع غير معروف',
                                         rating: vendors[index].rating ?? 0.0,
+
+                                        id: vendors[index].id,
                                       ),
                                 ),
                               ),
@@ -260,7 +262,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                             child: StarRating(
                                               size: 20.0,
                                               rating:
-                                                  vendors[index].rating ?? 0,
+                                                  vendors[index].rating ?? 0.0,
                                               color: Colors.orange,
                                               borderColor: Colors.grey,
                                               allowHalfRating: true,
