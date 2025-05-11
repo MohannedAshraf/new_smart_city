@@ -2,7 +2,6 @@ import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/services/get_vendor.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
@@ -11,7 +10,11 @@ class CategoryTabView extends StatelessWidget {
   final String vendorId;
   final int categoryId;
 
-  const CategoryTabView({required this.categoryId, required this.vendorId});
+  const CategoryTabView({
+    super.key,
+    required this.categoryId,
+    required this.vendorId,
+  });
 
   @override
   Widget build(BuildContext context) {

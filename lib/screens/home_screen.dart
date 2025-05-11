@@ -148,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                     title: 'Vendors',
                     items: vendors,
                     titlefontSize: 12,
-                    destination: AllVendorsScreen(),
+                    destination: const AllVendorsScreen(),
                     fit: BoxFit.cover,
                     height: 150,
                     maximumLines: 3,

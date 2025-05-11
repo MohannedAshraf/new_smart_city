@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SubCategoryScreen extends StatefulWidget {
-  final int selectedCategoryIndex;
+  final int? selectedCategoryIndex;
   final int selectedSubCategoryIndex;
 
   const SubCategoryScreen({
     super.key,
-    required this.selectedCategoryIndex,
+    this.selectedCategoryIndex,
     required this.selectedSubCategoryIndex,
   });
 
@@ -48,7 +48,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     try {
       categories = await ApiService.fetchCategories();
       if (categories.isNotEmpty) {
-        selectedCategoryIndex = widget.selectedCategoryIndex;
+        selectedCategoryIndex = widget.selectedCategoryIndex!;
         await fetchSubCategories(categories[selectedCategoryIndex].id);
       }
     } catch (e) {

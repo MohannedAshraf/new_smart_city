@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
+import 'package:citio/screens/product_details_view.dart';
+import 'package:citio/screens/service_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/search_model.dart';
@@ -59,7 +61,37 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   return InkWell(
                     onTap: () {
                       print("فتح تفاصيل ${result.id}");
-                      // تقدر هنا تروح لصفحة التفاصيل إذا حبيت
+                      final type = result.type.toLowerCase();
+
+                      if (type == 'product') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => ProductDetailsView(
+                                  productId: int.parse(result.id),
+                                ),
+                          ),
+                        );
+                      } else if (type == 'subcategory') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiceOrderScreen(),
+                          ),
+                        );
+                      } else if (type == 'category') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ServiceOrderScreen(),
+                          ),
+                        );
+                      } else if (type == 'vendor') {
+                        // مستقبلًا ممكن تضيف هنا التنقل المناسب
+                      } else {
+                        print("نوع غير معروف: ${result.type}");
+                      }
                     },
                     child: Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -81,9 +113,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   height: 180,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  errorBuilder:
-                                      (context, error, stackTrace) =>
-                                          Icon(Icons.broken_image, size: 50),
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.network(
+                                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
                                 ),
                               )
                             else

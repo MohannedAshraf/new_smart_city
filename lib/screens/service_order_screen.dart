@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
-import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/search_model.dart';
 import 'package:citio/screens/cart_view.dart';

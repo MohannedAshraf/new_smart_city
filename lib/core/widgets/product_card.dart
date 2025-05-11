@@ -52,12 +52,9 @@ class ProductCard extends StatelessWidget {
                   image,
                   fit: BoxFit.fitHeight,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        size: 50,
-                        color: Colors.grey,
-                      ),
+                    return Image.network(
+                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                      fit: BoxFit.fitHeight,
                     );
                   },
                 ),

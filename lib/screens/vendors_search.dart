@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/all_vendors.dart';
@@ -5,11 +7,12 @@ import 'package:citio/screens/vendor_profile.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
-import 'package:get/state_manager.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
 
 class VendorsSearch extends StatefulWidget {
+  const VendorsSearch({super.key});
+
   @override
   _VendorSearchState createState() => _VendorSearchState();
 }
@@ -56,7 +59,7 @@ class _VendorSearchState extends State<VendorsSearch> {
       appBar: AppBar(
         title: TextField(
           controller: _searchController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Search vendors...',
             border: InputBorder.none,
           ),
@@ -120,7 +123,7 @@ Widget vendorsList(Future<AllVendor> allVendors) {
               child: Card(
                 color: MyColors.white,
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Container(
+                child: SizedBox(
                   // width: double.infinity,
                   height: 200,
                   child: Column(
