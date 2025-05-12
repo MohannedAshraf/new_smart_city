@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/all_vendors.dart';
@@ -9,6 +11,8 @@ import 'package:citio/screens/vendor_profile.dart';
 String _baseUrl = 'https://service-provider.runasp.net';
 
 class AllVendorsScreen extends StatefulWidget {
+  const AllVendorsScreen({super.key});
+
   @override
   _AllVendorsScreenState createState() => _AllVendorsScreenState();
 }

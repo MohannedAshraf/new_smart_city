@@ -65,19 +65,21 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// ✅ صورة المنتج
-                Container(
-                  margin: const EdgeInsets.only(top: 30, bottom: 30),
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
-                      ),
-                      fit: BoxFit.fill,
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
+                    height: MediaQuery.of(context).size.height * 0.40,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.network(
+                        'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                        height: MediaQuery.of(context).size.height * 0.40,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      );
+                    },
                   ),
                 ),
 
