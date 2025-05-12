@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SubCategoryScreen extends StatefulWidget {
-  final int? selectedCategoryIndex;
+  final int selectedCategoryIndex;
   final int selectedSubCategoryIndex;
 
   const SubCategoryScreen({
     super.key,
-    this.selectedCategoryIndex,
+    required this.selectedCategoryIndex,
     required this.selectedSubCategoryIndex,
   });
 

@@ -2,6 +2,7 @@
 
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
+import 'package:citio/screens/subcategory_screen.dart';
 import 'package:citio/screens/vendor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/helper/api_search.dart';
@@ -77,7 +78,13 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ServiceOrderScreen(),
+                            builder:
+                                (context) => SubCategoryScreen(
+                                  selectedSubCategoryIndex: int.parse(
+                                    result.id,
+                                  ),
+                                  selectedCategoryIndex: result.categoryId!,
+                                ),
                           ),
                         );
                       } else if (type == 'category') {
