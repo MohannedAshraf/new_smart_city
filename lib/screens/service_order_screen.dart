@@ -47,31 +47,6 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     _controller = TextEditingController();
   }
 
-  // Future<void> _performSearch() async {
-  //   final term = _controller.text.trim();
-  //   if (term.isEmpty) return;
-
-  //   setState(() {
-  //     _isSearching = true;
-  //     _searchError = null;
-  //     _searchResults = null;
-  //   });
-
-  //   try {
-  //     final results = await ApiSearch.search(term);
-  //     setState(() {
-  //       _searchResults = results;
-  //     });
-  //   } catch (e) {
-  //     setState(() {
-  //       _searchError = e.toString();
-  //     });
-  //   } finally {
-  //     setState(() {
-  //       _isSearching = false;
-  //     });
-  //   }
-  // }
   void _performSearch() {
     final keyword = _controller.text.trim();
     if (keyword.isNotEmpty) {
@@ -134,9 +109,9 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
           height: 60,
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+      // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+        // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: const Text("طلب الخدمات"),
