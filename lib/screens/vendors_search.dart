@@ -100,23 +100,7 @@ Widget vendorsList(Future<AllVendor> allVendors) {
                     context,
                     MaterialPageRoute(
                       builder:
-                          (context) => VendorProfile(
-                            cover:
-                                vendors[index].coverImage != null
-                                    ? _baseUrl + vendors[index].coverImage!
-                                    : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png', // صورة افتراضية
-                            profilePic:
-                                vendors[index].profileImage != null
-                                    ? _baseUrl + vendors[index].profileImage!
-                                    : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
-                            name:
-                                vendors[index].businessName ?? 'اسم غير متوفر',
-                            businessType:
-                                vendors[index].type ?? 'نوع غير معروف',
-                            rating: vendors[index].rating ?? 0.0,
-
-                            id: vendors[index].id,
-                          ),
+                          (context) => VendorProfile(id: vendors[index].id),
                     ),
                   ),
               behavior: HitTestBehavior.opaque,
