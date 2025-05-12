@@ -2,6 +2,7 @@
 
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
+import 'package:citio/screens/vendor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/search_model.dart';
@@ -60,7 +61,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   final result = _results![index];
                   return InkWell(
                     onTap: () {
-                      print("فتح تفاصيل ${result.id}");
                       final type = result.type.toLowerCase();
 
                       if (type == 'product') {
@@ -88,7 +88,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           ),
                         );
                       } else if (type == 'vendor') {
-                        // مستقبلًا ممكن تضيف هنا التنقل المناسب
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VendorProfile(id: result.id),
+                          ),
+                        );
                       } else {
                         print("نوع غير معروف: ${result.type}");
                       }
