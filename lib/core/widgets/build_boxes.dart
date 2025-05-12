@@ -382,23 +382,7 @@ class BuildVendorssBoxes extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => VendorProfile(
-                              cover:
-                                  items[index].coverImage != null
-                                      ? _baseUrl + items[index].coverImage!
-                                      : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png', // صورة افتراضية
-                              profilePic:
-                                  items[index].image != null
-                                      ? _baseUrl + items[index].image!
-                                      : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
-                              name:
-                                  items[index].businessName ?? 'اسم غير متوفر',
-                              businessType:
-                                  items[index].type ?? 'نوع غير معروف',
-                              rating: items[index].rating ?? 0.0,
-
-                              id: items[index].id,
-                            ),
+                            (context) => VendorProfile(id: items[index].id),
                       ),
                     ),
                 child: ServiceBox(

@@ -43,6 +43,23 @@ class GetVendor {
     return vendors;
   }
 
+  Future<Vendor> getVendorById(String id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    dynamic data = await Api().get(
+      url: 'https://service-provider.runasp.net/api/Vendors/$id',
+      token: token,
+    );
+    Vendor vendor = Vendor.fromJason(data);
+
+    return vendor;
+  }
+
   Future<AllVendor> searchVendors(String searchValue) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
