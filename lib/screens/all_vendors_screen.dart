@@ -382,7 +382,6 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         isLoading = true;
       });
 
-      pageNumber++;
       Future.delayed(const Duration(seconds: 3), () {
         GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
           setState(() {
