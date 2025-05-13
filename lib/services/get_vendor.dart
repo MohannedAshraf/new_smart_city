@@ -25,7 +25,7 @@ class GetVendor {
     return vendorList;
   }
 
-  Future<AllVendor> getAllVendors() async {
+  Future<AllVendor> getAllVendors(int pageNumber) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
 
@@ -35,7 +35,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?PageSize=50',
+          'https://service-provider.runasp.net/api/Vendors/for-mobile?pageNumer=$pageNumber&PageSize=3',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);

@@ -7,6 +7,7 @@ import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:citio/screens/vendor_profile.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
 
@@ -18,6 +19,7 @@ class AllVendorsScreen extends StatefulWidget {
 }
 
 class _AllVendorsScreenState extends State<AllVendorsScreen> {
+  final ScrollController scrollController = ScrollController();
   String url = '0';
   List<String> selectedCategories = [];
   List<String> categories = [
@@ -35,7 +37,22 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     Provider("Urban Dining Co.", "Restaurant & Catering", 4.8, 150),
     Provider("Metro Shopping Mall", "Retail & Entertainment", 4.6, 200),
   ];
-  Future<AllVendor> allVendors = GetVendor().getAllVendors();
+  List<Items> vendors = [];
+  int pageNumber = 1;
+  int totalPages = 1000000;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
+      setState(() {
+        vendors.addAll(fetchedItems.items);
+        totalPages = fetchedItems.totalPages;
+      });
+    });
+    scrollController.addListener(loadMoreData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +78,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                 ),
                 child: SearchBar(
                   hintText: "Search providers...",
-                  onChanged: (query) {
-                    setState(() {
-                      allVendors = GetVendor().searchVendors(query);
-                    });
-                  },
+
                   leading: const Icon(Icons.search, color: MyColors.black),
                   shape: WidgetStateProperty.all(
                     RoundedRectangleBorder(
@@ -77,165 +90,139 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
             ),
 
             Expanded(
-              child: FutureBuilder<AllVendor>(
-                future: allVendors,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Items> vendors = snapshot.data!.items;
-                    return ListView.builder(
-                      physics: const ClampingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: vendors.length,
-                      itemBuilder: (context, index) {
-                        // ignore: avoid_unnecessary_containers
-                        return GestureDetector(
-                          onTap:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          VendorProfile(id: vendors[index].id),
-                                ),
-                              ),
-                          behavior: HitTestBehavior.opaque,
-                          child: Card(
-                            color: MyColors.white,
-                            margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: SizedBox(
-                              // width: double.infinity,
-                              height: 200,
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    clipBehavior: Clip.none,
-                                    //alignment: Alignment.topRight,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(13),
-                                          topRight: Radius.circular(13),
-                                        ),
-                                        child:
-                                            vendors[index].coverImage != null
-                                                ? Image.network(
-                                                  _baseUrl +
-                                                      vendors[index]
-                                                          .coverImage!,
-                                                  // vendors[index].coverImage,
-                                                  width: double.infinity,
-                                                  height: 120,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (
-                                                    BuildContext context,
-                                                    Object error,
-                                                    StackTrace? stackTrace,
-                                                  ) {
-                                                    return const SizedBox(
-                                                      height: 120,
-                                                      width: double.infinity,
-                                                      child: Image(
-                                                        image: AssetImage(
-                                                          MyAssetsImage
-                                                              .brokenImage,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                )
-                                                : Image.asset(
-                                                  width: double.infinity,
-                                                  height: 120,
-                                                  MyAssetsImage.brokenImage,
-                                                ),
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                shrinkWrap: false,
+                scrollDirection: Axis.vertical,
+                controller: scrollController,
+                itemCount: vendors.length,
+                itemBuilder: (context, index) {
+                  // ignore: avoid_unnecessary_containers
+                  return GestureDetector(
+                    onTap:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    VendorProfile(id: vendors[index].id),
+                          ),
+                        ),
+                    behavior: HitTestBehavior.opaque,
+                    child: Column(
+                      children: [
+                        Card(
+                          color: MyColors.white,
+                          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: SizedBox(
+                            // width: double.infinity,
+                            height: 200,
+                            child: Column(
+                              children: [
+                                Stack(
+                                  clipBehavior: Clip.none,
+                                  //alignment: Alignment.topRight,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(13),
+                                        topRight: Radius.circular(13),
                                       ),
-                                      Positioned(
-                                        top: 45,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    0,
-                                                    8,
-                                                    20,
-                                                    0,
-                                                  ),
-                                              child: CircleAvatar(
-                                                radius: 40,
-
-                                                backgroundImage:
-                                                    vendors[index]
-                                                                .profileImage !=
-                                                            null
-                                                        ? NetworkImage(
-                                                          _baseUrl +
-                                                              vendors[index]
-                                                                  .profileImage!,
-                                                          // vendors[index].profileImage,
-                                                        )
-                                                        : const AssetImage(
-                                                          MyAssetsImage
-                                                              .brokenImage,
-                                                        ),
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                        0,
-                                                        5,
-                                                        20,
-                                                        10,
+                                      child:
+                                          vendors[index].coverImage != null
+                                              ? Image.network(
+                                                _baseUrl +
+                                                    vendors[index].coverImage!,
+                                                // vendors[index].coverImage,
+                                                width: double.infinity,
+                                                height: 120,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (
+                                                  BuildContext context,
+                                                  Object error,
+                                                  StackTrace? stackTrace,
+                                                ) {
+                                                  return const SizedBox(
+                                                    height: 120,
+                                                    width: double.infinity,
+                                                    child: Image(
+                                                      image: AssetImage(
+                                                        MyAssetsImage
+                                                            .brokenImage,
                                                       ),
-                                                  child: Text(
-                                                    vendors[index].businessName,
-                                                    style: const TextStyle(
-                                                      color: MyColors.black,
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
+                                                  );
+                                                },
+                                              )
+                                              : Image.asset(
+                                                width: double.infinity,
+                                                height: 120,
+                                                MyAssetsImage.brokenImage,
+                                              ),
+                                    ),
+                                    Positioned(
+                                      top: 45,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                              0,
+                                              8,
+                                              20,
+                                              0,
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    10,
-                                                    45,
-                                                    20,
-                                                    8,
+                                            child: CircleAvatar(
+                                              radius: 40,
+
+                                              backgroundImage:
+                                                  vendors[index].profileImage !=
+                                                          null
+                                                      ? NetworkImage(
+                                                        _baseUrl +
+                                                            vendors[index]
+                                                                .profileImage!,
+                                                        // vendors[index].profileImage,
+                                                      )
+                                                      : const AssetImage(
+                                                        MyAssetsImage
+                                                            .brokenImage,
+                                                      ),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                      0,
+                                                      5,
+                                                      20,
+                                                      10,
+                                                    ),
+                                                child: Text(
+                                                  vendors[index].businessName,
+                                                  style: const TextStyle(
+                                                    color: MyColors.black,
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                              child: Text(
-                                                vendors[index].type,
-                                                style: const TextStyle(
-                                                  color: MyColors.gray,
-                                                  fontSize: 14,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      Column(
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
@@ -244,31 +231,56 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                               20,
                                               8,
                                             ),
-                                            child: StarRating(
-                                              size: 20.0,
-                                              rating:
-                                                  vendors[index].rating ?? 0.0,
-                                              color: Colors.orange,
-                                              borderColor: Colors.grey,
-                                              allowHalfRating: true,
-                                              starCount: 5,
+                                            child: Text(
+                                              vendors[index].type,
+                                              style: const TextStyle(
+                                                color: MyColors.gray,
+                                                fontSize: 14,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                  //SizedBox(height: 20),
-                                ],
-                              ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                            10,
+                                            45,
+                                            20,
+                                            8,
+                                          ),
+                                          child: StarRating(
+                                            size: 20.0,
+                                            rating:
+                                                vendors[index].rating ?? 0.0,
+                                            color: Colors.orange,
+                                            borderColor: Colors.grey,
+                                            allowHalfRating: true,
+                                            starCount: 5,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                //SizedBox(height: 20),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                        ),
+                        if (index == vendors.length - 1 && isLoading)
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: SpinKitFadingCircle(
+                              color: MyColors.mintgreen,
+                              size: 40,
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
                 },
               ),
             ),
@@ -331,6 +343,28 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         );
       },
     );
+  }
+
+  void loadMoreData() {
+    if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent &&
+        pageNumber < totalPages &&
+        !isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+
+      pageNumber++;
+      Future.delayed(const Duration(seconds: 3), () {
+        GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
+          setState(() {
+            vendors.addAll(fetchedItems.items);
+            totalPages = fetchedItems.totalPages;
+            isLoading = false;
+          });
+        });
+      });
+    }
   }
 }
 

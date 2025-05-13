@@ -44,7 +44,7 @@ dependencies:
   
 
   
-  
+  flutter_spinkit: ^5.2.1
   
   galleryimage: ^2.0.1
   url_launcher: ^6.3.1
