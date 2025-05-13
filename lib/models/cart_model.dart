@@ -4,9 +4,11 @@ class CartItem {
   final String nameEn;
   final double price;
   final int quantity;
+  final String mainImageUrl;
 
   CartItem({
     required this.productId,
+    required this.mainImageUrl,
     required this.nameAr,
     required this.nameEn,
     required this.price,
@@ -16,6 +18,7 @@ class CartItem {
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       productId: json['productId'],
+      mainImageUrl: json['mainImageUrl'],
       nameAr: json['nameAr'],
       nameEn: json['nameEn'],
       price: json['price'].toDouble(),

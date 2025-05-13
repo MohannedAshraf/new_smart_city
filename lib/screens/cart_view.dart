@@ -58,6 +58,8 @@ class CartView extends StatelessWidget {
                         ordername: item.nameEn,
                         orderprice: item.price,
                         quantity: item.quantity,
+                        orderpic:
+                            "https://service-provider.runasp.net${item.mainImageUrl}",
                       );
                     },
                   ),

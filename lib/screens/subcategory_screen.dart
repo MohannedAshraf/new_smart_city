@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SubCategoryScreen extends StatefulWidget {
-  final int? selectedCategoryIndex;
+  final int selectedCategoryIndex;
   final int selectedSubCategoryIndex;
 
   const SubCategoryScreen({
     super.key,
-    this.selectedCategoryIndex,
+    required this.selectedCategoryIndex,
     required this.selectedSubCategoryIndex,
   });
 
@@ -105,11 +105,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           height: 60,
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+      // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       appBar: AppBar(
         title: const Text('الخدمات'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 220, 226, 223),
+        //  backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       ),
       body:
           errorMessage != null

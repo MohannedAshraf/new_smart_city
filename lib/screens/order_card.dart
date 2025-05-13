@@ -9,11 +9,13 @@ class OrderCard extends StatelessWidget {
     required this.ordername,
     required this.orderprice,
     required this.quantity,
+    required this.orderpic,
   });
 
   final String ordername;
   final double orderprice;
   final int quantity;
+  final String orderpic;
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +49,24 @@ class OrderCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                margin: const EdgeInsets.only(left: 1),
-                width: MediaQuery.of(context).size.width * 0.345,
-                height: MediaQuery.of(context).size.height * 0.154,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage(MyAssetsImage.burger),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(4),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Image.network(
+                  orderpic,
+                  width: MediaQuery.of(context).size.width * 0.345,
+                  height: MediaQuery.of(context).size.height * 0.154,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                      width: MediaQuery.of(context).size.width * 0.345,
+                      height: MediaQuery.of(context).size.height * 0.154,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
+
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
