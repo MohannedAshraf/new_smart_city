@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 class AllVendor {
   List<Items> items;
+  int totalPages;
 
-  AllVendor({required this.items});
+  AllVendor({required this.items, required this.totalPages});
   factory AllVendor.fromJason(Map<String, dynamic> jasonData) {
     return AllVendor(
       items: List<Items>.from(
         jasonData['items'].map((x) => Items.fromJason(x)),
       ),
+      totalPages: jasonData['totalPages'],
     );
   }
 }
