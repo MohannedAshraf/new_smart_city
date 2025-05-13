@@ -9,8 +9,10 @@ class SearchResultModel {
   final String? categoryNameEn;
   final String? categoryNameAr;
   final String? imageUrl;
+  final int? categoryId;
 
   SearchResultModel({
+    this.categoryId,
     required this.type,
     required this.id,
     this.nameEn,
@@ -34,6 +36,10 @@ class SearchResultModel {
       businessType: json['businessType'],
       categoryNameEn: json['categoryNameEn'],
       categoryNameAr: json['categoryNameAr'],
+      categoryId:
+          json['categoryId'] is int
+              ? json['categoryId']
+              : int.tryParse(json['categoryId']?.toString() ?? ''),
       imageUrl: json['imageUrl'],
     );
   }
