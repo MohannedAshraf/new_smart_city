@@ -83,7 +83,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   selectedSubCategoryIndex: int.parse(
                                     result.id,
                                   ),
-                                  selectedCategoryIndex: result.categoryId!,
+                                  selectedCategoryIndex:
+                                      3, //result.categoryId!,
                                 ),
                           ),
                         );

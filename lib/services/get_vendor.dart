@@ -60,9 +60,10 @@ class GetVendor {
     return vendor;
   }
 
-  Future<AllVendor> searchVendors(String searchValue) async {
+  Future<AllVendor> searchVendors(String searchValue, int pageNumber) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
+    final encodedSearch = Uri.encodeComponent(searchValue);
 
     if (token == null) {
       throw Exception('لم يتم العثور على التوكن!');
@@ -70,7 +71,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?searchVlaue=$searchValue',
+          'https://service-provider.runasp.net/api/Vendors/for-mobile?SearchValue=$encodedSearch',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);

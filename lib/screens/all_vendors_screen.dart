@@ -33,14 +33,11 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     "Books",
   ];
 
-  List<Provider> providers = [
-    Provider("Urban Dining Co.", "Restaurant & Catering", 4.8, 150),
-    Provider("Metro Shopping Mall", "Retail & Entertainment", 4.6, 200),
-  ];
   List<Items> vendors = [];
   int pageNumber = 1;
   int totalPages = 1000000;
   bool isLoading = false;
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -62,31 +59,66 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  searchBarTheme: SearchBarThemeData(
-                    shadowColor: WidgetStateProperty.all(MyColors.oldLace),
-                    backgroundColor: WidgetStateProperty.all(
-                      MyColors.whiteSmoke,
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 16, 6, 16),
+                      child: IconButton(
+                        onPressed: () => _showFilterModal(context),
+                        icon: const Icon(
+                          Icons.tune,
+                          color: MyColors.black,
+                          size: 32,
+                        ),
+                      ),
                     ),
-                    textStyle: WidgetStateProperty.all(
-                      const TextStyle(color: MyColors.black),
-                    ),
-                  ),
+                  ],
                 ),
-                child: SearchBar(
-                  hintText: "Search providers...",
+                Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 5, 16),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            searchBarTheme: SearchBarThemeData(
+                              shadowColor: WidgetStateProperty.all(
+                                MyColors.oldLace,
+                              ),
+                              backgroundColor: WidgetStateProperty.all(
+                                MyColors.whiteSmoke,
+                              ),
+                              textStyle: WidgetStateProperty.all(
+                                const TextStyle(color: MyColors.black),
+                              ),
+                            ),
+                          ),
+                          child: SearchBar(
+                            hintText: "Search providers...",
 
-                  leading: const Icon(Icons.search, color: MyColors.black),
-                  shape: WidgetStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ), // Rounded corners
+                            leading: const Icon(
+                              Icons.search,
+                              color: MyColors.black,
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ), // Rounded corners
+                            ),
+                            onSubmitted: (value) {
+                              searchVendors(value);
+                              isSearching = true;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              ],
             ),
 
             Expanded(
@@ -284,10 +316,6 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                 },
               ),
             ),
-            ElevatedButton(
-              onPressed: () => _showFilterModal(context),
-              child: const Text("Filter"),
-            ),
           ],
         ),
       ),
@@ -366,13 +394,25 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
       });
     }
   }
-}
 
-class Provider {
-  final String name;
-  final String category;
-  final double rating;
-  final int reviewCount;
+  void searchVendors(String? searchValue) {
+    if (searchValue != null) {
+      setState(() {
+        isLoading = true;
+        pageNumber = 1;
+        vendors.clear();
+      });
 
-  Provider(this.name, this.category, this.rating, this.reviewCount);
+      pageNumber++;
+
+      GetVendor().searchVendors(searchValue, pageNumber).then((fetchedItems) {
+        setState(() {
+          // vendors.clear();
+          vendors.addAll(fetchedItems.items);
+          totalPages = fetchedItems.totalPages;
+          isLoading = false;
+        });
+      });
+    }
+  }
 }
