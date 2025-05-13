@@ -48,7 +48,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     try {
       categories = await ApiService.fetchCategories();
       if (categories.isNotEmpty) {
-        selectedCategoryIndex = widget.selectedCategoryIndex!;
+        selectedCategoryIndex = widget.selectedCategoryIndex;
         await fetchSubCategories(categories[selectedCategoryIndex].id);
       }
     } catch (e) {
