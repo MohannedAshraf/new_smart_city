@@ -71,7 +71,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?SearchValue=$encodedSearch',
+          'https://service-provider.runasp.net/api/Vendors/for-mobile?SearchValue=$encodedSearch&PageSize=3',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);
