@@ -22,16 +22,30 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
   final ScrollController scrollController = ScrollController();
   String url = '0';
   List<String> selectedCategories = [];
-  List<String> categories = [
-    "Technology",
-    "Fashion",
-    "Food",
-    "Travel",
-    "Sports",
-    "Music",
-    "Art",
-    "Books",
-  ];
+  Map<String, String> categories = {
+    "Mobile Devices": "الهواتف",
+    "Interior Design": "التصميم الداخلي",
+    "Beauty Salon": "مراكز التجميل",
+    "Sports Equipment": "الأدوات الرياضية",
+    "Auto Service": "خدمة السيارات",
+    "Florist": "زهور",
+    "Book Store": "كتب",
+    "Pet Store": "مستلزمات الحيوانات",
+    "Cosmetics": "منتجات التجميل",
+    "Home Services": "الخدمات المنزلية",
+    "Food Services": "الطعام",
+    "Gardening": "تنسيق الحدائق",
+    "Plumbing Services": "السباكة",
+    "Electronics": "الكترونيات",
+    "Hardware Tools": "أدوات الصيانة",
+    "Handmade Crafts": "أعمال يدوية",
+    "Cleaning Services": "خدمات التنظيف",
+    "IT Services": "خدمات الIT",
+    "Toys & Games": "دمى وألعاب",
+    "Fashion Retail": "متاجر الملابس",
+    "Event Planning": "تنظيم الفعاليات",
+    "Restaurant": "مطاعم",
+  };
 
   List<Items> vendors = [];
   int pageNumber = 1;
@@ -67,7 +81,10 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 16, 6, 16),
                       child: IconButton(
-                        onPressed: () => _showFilterModal(context),
+                        onPressed:
+                            () => setState(() {
+                              _showFilterModal(context);
+                            }),
                         icon: const Icon(
                           Icons.tune,
                           color: MyColors.black,
@@ -323,48 +340,82 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
   }
 
   void _showFilterModal(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
+      backgroundColor: MyColors.white,
+
       context: context,
+      isScrollControlled: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Padding(
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  const Text(
-                    "Filter by Category",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children:
-                        categories.map((category) {
-                          return FilterChip(
-                            label: Text(category),
-                            selected: selectedCategories.contains(category),
-                            onSelected: (selected) {
-                              setState(() {
-                                if (selected) {
-                                  selectedCategories.add(category);
-                                } else {
-                                  selectedCategories.remove(category);
-                                }
-                              });
-                            },
-                          );
-                        }).toList(),
-                  ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Apply Filters"),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Text(
+                      "Filter by Category",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children:
+                          categories.values.map((category) {
+                            return FilterChip(
+                              selectedColor: MyColors.cardcolor,
+                              disabledColor: MyColors.white,
+                              backgroundColor: MyColors.white,
+                              checkmarkColor: MyColors.white,
+                              surfaceTintColor: MyColors.whiteSmoke,
+                              label: Text(category),
+                              selected: selectedCategories.contains(category),
+                              onSelected: (selected) {
+                                setState(() {
+                                  if (selected) {
+                                    selectedCategories.add(category);
+                                  } else {
+                                    selectedCategories.remove(category);
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          MyColors.cardcolor,
+                        ),
+                        foregroundColor: WidgetStateProperty.all(
+                          MyColors.black,
+                        ),
+                        elevation: WidgetStateProperty.all(0),
+                        shape: WidgetStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(color: MyColors.ghostColor),
+                          ),
+                        ),
+                        padding: WidgetStateProperty.all(
+                          const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Apply Filters"),
+                    ),
+                  ],
+                ),
               ),
             );
           },
