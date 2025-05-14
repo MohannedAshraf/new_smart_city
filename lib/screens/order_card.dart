@@ -9,8 +9,11 @@ class OrderCard extends StatelessWidget {
     required this.orderprice,
     required this.quantity,
     required this.orderpic,
+    required this.productId,
+    required this.onQuantityChanged,
   });
-
+  final int productId;
+  final Function(int) onQuantityChanged;
   final String ordername;
   final double orderprice;
   final int quantity;
@@ -97,7 +100,9 @@ class OrderCard extends StatelessWidget {
                           minValue: 1,
                           maxValue: 10,
                           decimalPlaces: 0,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onQuantityChanged(value.toInt());
+                          },
                         ),
                       ],
                     ),

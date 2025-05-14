@@ -99,9 +99,7 @@ class _LoginPageState extends State<MyloginPage> {
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(15),
-      borderSide: const BorderSide(
-        color: Colors.grey, // لون البوردر أسود ثابت
-      ),
+      borderSide: const BorderSide(color: Colors.grey),
     );
   }
 
@@ -235,7 +233,7 @@ class _LoginPageState extends State<MyloginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 100),
+                        const SizedBox(width: 90),
                         Checkbox(
                           value: _rememberMe,
                           onChanged: (value) {

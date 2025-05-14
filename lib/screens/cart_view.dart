@@ -1,12 +1,32 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_cart.dart';
+import 'package:citio/helper/api_edit_cart.dart';
 import 'package:citio/models/cart_model.dart';
 import 'package:citio/screens/checkout_view.dart';
 import 'package:citio/screens/order_card.dart';
 import 'package:flutter/material.dart';
 
-class CartView extends StatelessWidget {
+class CartView extends StatefulWidget {
   const CartView({super.key});
+
+  @override
+  State<CartView> createState() => _CartViewState();
+}
+
+class _CartViewState extends State<CartView> {
+  late Future<CartModel> cartFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    cartFuture = ApiCartModel.fetchCart();
+  }
+
+  void refreshCart() {
+    setState(() {
+      cartFuture = ApiCartModel.fetchCart();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +39,7 @@ class CartView extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<CartModel>(
-        future: ApiCartModel.fetchCart(),
+        future: cartFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -60,6 +80,14 @@ class CartView extends StatelessWidget {
                         quantity: item.quantity,
                         orderpic:
                             "https://service-provider.runasp.net${item.mainImageUrl}",
+                        productId: item.productId,
+                        onQuantityChanged: (newQty) async {
+                          await EditCartService.editCartItem(
+                            productId: item.productId,
+                            quantity: newQty,
+                          );
+                          refreshCart(); // تحدث الشاشة بالكامل وتعيد تحميل السعر الجديد
+                        },
                       );
                     },
                   ),
