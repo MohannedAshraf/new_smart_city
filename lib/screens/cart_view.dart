@@ -147,7 +147,8 @@ class _CartViewState extends State<CartView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CheckoutView(),
+                      builder:
+                          (context) => CheckoutView(cartItems: cart!.items),
                     ),
                   );
                 },

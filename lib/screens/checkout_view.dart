@@ -1,16 +1,23 @@
-import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/models/cart_model.dart';
+
 import 'package:citio/screens/order_card2.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutView extends StatelessWidget {
-  const CheckoutView({super.key});
+  final List<CartItem> cartItems;
+
+  const CheckoutView({super.key, required this.cartItems});
 
   @override
   Widget build(BuildContext context) {
+    double subtotal = cartItems.fold(
+      0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios),
         centerTitle: true,
         title: const Text(
           "Checkout",
@@ -18,67 +25,74 @@ class CheckoutView extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsets.only(left: 10, bottom: 20, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(children: [Icon(Icons.map), Text("Delivery Address")]),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.64,
-                  height: MediaQuery.of(context).size.width * 0.2,
-                  decoration: BoxDecoration(
-                    color: MyAppColors.background,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Address"),
-                        Text("Type address here \nor pick from map"),
-                      ],
-                    ),
-                  ),
+                InkWell(
+                  onTap: () {
+                    // ignore: avoid_print
+                    print("هنفتح الخريطه او نخليه يكتب  العنوان ايهما افضل ");
+                  },
+                  child: const Icon(Icons.location_on, size: 30),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.22,
-                  height: MediaQuery.of(context).size.width * 0.2,
-                  decoration: BoxDecoration(
-                    color: MyAppColors.red,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: const Icon(Icons.map, color: MyAppColors.background),
+                const Text(
+                  "عنوان التوصيل ",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
+            // نفس كود العنوان هنا ...
+            const SizedBox(height: 10),
 
-            const Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "    Shopping List",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            const Text(
+              "قائمه المنتجات ",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            ),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: cartItems.length,
+                itemBuilder: (context, index) {
+                  final item = cartItems[index];
+                  return OrderCard2(
+                    ordername: item.nameEn,
+                    orderprice: item.price,
+                    quantity: item.quantity,
+                    orderpic:
+                        "https://service-provider.runasp.net${item.mainImageUrl}",
+                    // No edit in checkout
+                  );
+                },
               ),
             ),
 
-            const OrderCard2(
-              image: MyAssetsImage.burger,
-              ordername: "  Women’s Casual Wear  ",
-              orderrate: "  4.8  ",
-              orderprice: "LE 34.00",
-              orderoldprice: "LE 64.00",
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                const Text("Subtotal"),
+                const Spacer(),
+                Text("LE ${subtotal.toStringAsFixed(2)}"),
+              ],
             ),
-            const OrderCard2(
-              image: MyAssetsImage.nescalop,
-              ordername: "Men’s Jacket",
-              orderrate: "  4.7",
-              orderprice: "LE 45.00",
-              orderoldprice: "LE 67.00",
+            const Row(
+              children: [Text("Tax and Fees"), Spacer(), Text("LE 3.00")],
             ),
-            const SizedBox(height: 50),
+            const Row(
+              children: [Text("Delivery Fee"), Spacer(), Text("LE 2.00")],
+            ),
+            const Divider(),
+            Row(
+              children: [
+                const Text("Order Total"),
+                const Spacer(),
+                Text("LE ${(subtotal + 3 + 2).toStringAsFixed(2)}"),
+              ],
+            ),
+            const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 17),
               width: double.infinity,
@@ -89,17 +103,10 @@ class CheckoutView extends StatelessWidget {
               ),
               child: TextButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        ' عملية ناجحه \n \n \n \n  طلبك سيصل بعد يومين والدفع عند الاستلام ',
-                      ),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
+                  // تنفيذ الطلب
                 },
                 child: const Text(
-                  "Place Order",
+                  "Confirm Order",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
