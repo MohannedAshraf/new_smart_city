@@ -1,0 +1,35 @@
+import 'dart:convert';
+import 'package:citio/models/edit_cart_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class EditCartService {
+  static const String _url =
+      "https://service-provider.runasp.net/api/Carts/items";
+
+  static Future<EditCartResponse> editCartItem({
+    required int productId,
+    required int quantity,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
+    final response = await http.put(
+      Uri.parse(_url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "productId": productId.toString(),
+        "quantity": quantity.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return EditCartResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("فشل تعديل الكمية");
+    }
+  }
+}
