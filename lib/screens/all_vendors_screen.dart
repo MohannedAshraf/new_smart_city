@@ -20,31 +20,35 @@ class AllVendorsScreen extends StatefulWidget {
 
 class _AllVendorsScreenState extends State<AllVendorsScreen> {
   final ScrollController scrollController = ScrollController();
+
+  VendorMode currentMode = VendorMode.normal;
+  String searchValue = '';
+  List<String> filterValues = [];
   String url = '0';
   List<String> selectedCategories = [];
   Map<String, String> categories = {
-    "Mobile Devices": "الهواتف",
-    "Interior Design": "التصميم الداخلي",
-    "Beauty Salon": "مراكز التجميل",
-    "Sports Equipment": "الأدوات الرياضية",
-    "Auto Service": "خدمة السيارات",
-    "Florist": "زهور",
-    "Book Store": "كتب",
-    "Pet Store": "مستلزمات الحيوانات",
-    "Cosmetics": "منتجات التجميل",
-    "Home Services": "الخدمات المنزلية",
-    "Food Services": "الطعام",
-    "Gardening": "تنسيق الحدائق",
-    "Plumbing Services": "السباكة",
-    "Electronics": "الكترونيات",
-    "Hardware Tools": "أدوات الصيانة",
-    "Handmade Crafts": "أعمال يدوية",
-    "Cleaning Services": "خدمات التنظيف",
-    "IT Services": "خدمات الIT",
-    "Toys & Games": "دمى وألعاب",
-    "Fashion Retail": "متاجر الملابس",
-    "Event Planning": "تنظيم الفعاليات",
-    "Restaurant": "مطاعم",
+    "الهواتف": "Mobile Devices",
+    "التصميم الداخلي": "Interior Design",
+    "مراكز التجميل": "Beauty Salon",
+    "الأدوات الرياضية": "Sports Equipment",
+    "خدمة السيارات": "Auto Service",
+    "زهور": "Florist",
+    "كتب": "Book Store",
+    "مستلزمات الحيوانات": "Pet Store",
+    "منتجات التجميل": "Cosmetics",
+    "الخدمات المنزلية": "Home Services",
+    "الطعام": "Food Services",
+    "تنسيق الحدائق": "Gardening",
+    "السباكة": "Plumbing Services",
+    "الكترونيات": "Electronics",
+    "أدوات الصيانة": "Hardware Tools",
+    "أعمال يدوية": "Handmade Crafts",
+    "خدمات التنظيف": "Cleaning Services",
+    "خدمات الIT": "IT Services",
+    "دمى وألعاب": "Toys & Games",
+    "متاجر الملابس": "Fashion Retail",
+    "تنظيم الفعاليات": "Event Planning",
+    "مطاعم": "Restaurant",
   };
 
   List<Items> vendors = [];
@@ -52,6 +56,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
   int totalPages = 1000000;
   bool isLoading = false;
   bool isSearching = false;
+  bool isFiltering = false;
 
   @override
   void initState() {
@@ -367,7 +372,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                       spacing: 8,
                       runSpacing: 8,
                       children:
-                          categories.values.map((category) {
+                          categories.keys.map((category) {
                             return FilterChip(
                               selectedColor: MyColors.cardcolor,
                               disabledColor: MyColors.white,
@@ -411,7 +416,17 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                           ),
                         ),
                       ),
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        List<String> selectedValues =
+                            selectedCategories
+                                .map((key) => categories[key]!)
+                                .toList();
+
+                        setState(() {
+                          filterVendors(selectedValues);
+                        });
+                        Navigator.pop(context);
+                      },
                       child: const Text("Apply Filters"),
                     ),
                   ],
@@ -433,27 +448,57 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         isLoading = true;
       });
 
-      Future.delayed(const Duration(seconds: 3), () {
-        GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
-          setState(() {
-            vendors.addAll(fetchedItems.items);
-            totalPages = fetchedItems.totalPages;
-            isLoading = false;
-          });
-        });
+      pageNumber++;
+
+      Future.delayed(const Duration(seconds: 1), () {
+        switch (currentMode) {
+          case VendorMode.normal:
+            GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
+              setState(() {
+                vendors.addAll(fetchedItems.items);
+                totalPages = fetchedItems.totalPages;
+                isLoading = false;
+              });
+            });
+            break;
+
+          case VendorMode.search:
+            GetVendor().searchVendors(searchValue, pageNumber).then((
+              fetchedItems,
+            ) {
+              setState(() {
+                vendors.addAll(fetchedItems.items);
+                totalPages = fetchedItems.totalPages;
+                isLoading = false;
+              });
+            });
+            break;
+
+          case VendorMode.filter:
+            GetVendor().filterVendors(filterValues, pageNumber).then((
+              fetchedItems,
+            ) {
+              setState(() {
+                vendors.addAll(fetchedItems.items);
+                totalPages = fetchedItems.totalPages;
+                isLoading = false;
+              });
+            });
+            break;
+        }
       });
     }
   }
 
-  void searchVendors(String? searchValue) {
-    if (searchValue != null) {
+  void searchVendors(String? value) {
+    if (value != null) {
       setState(() {
+        currentMode = VendorMode.search;
+        searchValue = value;
         isLoading = true;
         pageNumber = 1;
         vendors.clear();
       });
-
-      pageNumber++;
 
       GetVendor().searchVendors(searchValue, pageNumber).then((fetchedItems) {
         setState(() {
@@ -463,6 +508,31 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
           isLoading = false;
         });
       });
+      // pageNumber++;
+    }
+  }
+
+  void filterVendors(List<String>? businessTypes) {
+    if (businessTypes != null) {
+      setState(() {
+        currentMode = VendorMode.filter;
+        filterValues = businessTypes;
+        isLoading = true;
+        pageNumber = 1;
+        vendors.clear();
+      });
+
+      GetVendor().filterVendors(businessTypes, pageNumber).then((fetchedItems) {
+        setState(() {
+          // vendors.clear();
+          vendors.addAll(fetchedItems.items);
+          totalPages = fetchedItems.totalPages;
+          isLoading = false;
+        });
+      });
+      //pageNumber++;
     }
   }
 }
+
+enum VendorMode { normal, search, filter }

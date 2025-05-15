@@ -71,9 +71,37 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?SearchValue=$encodedSearch&PageSize=3',
+          'https://service-provider.runasp.net/api/Vendors/for-mobile?pageNumer=$pageNumber&SearchValue=$encodedSearch&PageSize=3',
       token: token,
     );
+    AllVendor vendors = AllVendor.fromJason(data);
+
+    return vendors;
+  }
+
+  Future<AllVendor> filterVendors(
+    List<String> businessTypes,
+    int pageNumber,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    final url = Uri.https(
+      'service-provider.runasp.net',
+      '/api/Vendors/for-mobile',
+      {
+        'pageNumer': pageNumber.toString(),
+        'PageSize': ['3'],
+        'BusinessTypes': businessTypes,
+      },
+    );
+
+    print(url);
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    dynamic data = await Api().get(url: url.toString(), token: token);
     AllVendor vendors = AllVendor.fromJason(data);
 
     return vendors;
