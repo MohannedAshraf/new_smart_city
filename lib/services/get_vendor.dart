@@ -96,6 +96,7 @@ class GetVendor {
       },
     );
 
+    // ignore: avoid_print
     print(url);
     if (token == null) {
       throw Exception('لم يتم العثور على التوكن!');

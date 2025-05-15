@@ -234,8 +234,7 @@ class VendorProfile extends StatelessWidget {
                                                                 size: 20.0,
                                                                 rating:
                                                                     vendor
-                                                                        .rating ??
-                                                                    0,
+                                                                        .rating,
                                                                 color:
                                                                     Colors
                                                                         .orange,

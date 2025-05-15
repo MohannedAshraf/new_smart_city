@@ -307,8 +307,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                           ),
                                           child: StarRating(
                                             size: 20.0,
-                                            rating:
-                                                vendors[index].rating ?? 0.0,
+                                            rating: vendors[index].rating,
                                             color: Colors.orange,
                                             borderColor: Colors.grey,
                                             allowHalfRating: true,
