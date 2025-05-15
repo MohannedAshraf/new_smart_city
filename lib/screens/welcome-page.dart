@@ -19,10 +19,34 @@ class _SliderScreenState extends State<SliderScreen> {
   Timer? _autoSlideTimer;
 
   final List<Map<String, String>> pages = [
-    {'image': MyAssetsImage.burger, 'text': 'مرحباً بك في تطبيقنا!'},
-    {'image': MyAssetsImage.burger, 'text': 'احجز منزلك السياحي بسهولة'},
-    {'image': MyAssetsImage.burger, 'text': 'تصفح المنازل مع الصور والتفاصيل'},
-    {'image': MyAssetsImage.burger, 'text': 'ادفع بأمان داخل التطبيق'},
+    {
+      'image': MyAssetsImage.burger,
+      'text': 'أهلاً بك في Citio\nتطبيقك الذكي لحياة أسهل داخل مدينتك.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'بلّغ عن مشكلة\nصوّر أي مشكلة في المدينة، وسنرسلها فورًا للجهة المختصة.\nتابع الرد، قيّم الحل، وشاركها على وسائل التواصل!',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'خدمات حكومية بين يديك\nكل ما تحتاجه من معاملات وخدمات حكومية متاح الآن في مكان واحد وبسهولة.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'اكتشف مقدمي الخدمات والمنتجات\nاطّلع على جميع المحلات، الشركات، والخدمات في مدينتك واطلب منها مباشرة من خلال التطبيق.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'تواصل مع مجتمعك\nتابع آخر الأخبار، شارك رأيك، وكن جزءًا من الحياة الاجتماعية للمدينة.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text': 'جاهز تبدأ؟\nخلينا نغيّر شكل الحياة في المدينة سوا!',
+    },
   ];
 
   @override
