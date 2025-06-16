@@ -10,7 +10,7 @@ import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
 import 'screens/first_issue_screen.dart';
 import 'screens/service_order_screen.dart';
-import 'screens/about.dart';
+
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
 
@@ -57,7 +57,7 @@ class HomePageState extends State<HomePage> {
     const GovernmentScreen(),
     const IssueScreen(),
     const ServiceOrderScreen(),
-    const AboutUs(),
+
     const Notifications(),
     const Profile(),
   ];
@@ -190,17 +190,7 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.accessibility_outlined),
-              title: const Text('من نحن..؟'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AboutUs()),
-                );
-              },
-            ),
+
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('الملف الشخصي'),
