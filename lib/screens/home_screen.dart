@@ -3,6 +3,7 @@
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
+import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_products.dart';
 import 'package:citio/core/utils/assets_image.dart';
