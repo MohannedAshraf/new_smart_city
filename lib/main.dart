@@ -181,7 +181,7 @@ class HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.groups_outlined),
-              title: const Text('Social media'),
+              title: const Text('وسائل التواصل الاجتماعي'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -215,7 +215,7 @@ class HomePageState extends State<HomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.shopping_basket_outlined),
-              title: const Text('Vendors'),
+              title: const Text('البائعين'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
