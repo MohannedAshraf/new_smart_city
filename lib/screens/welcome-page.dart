@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderScreen extends StatefulWidget {
   const SliderScreen({super.key});
@@ -19,10 +20,34 @@ class _SliderScreenState extends State<SliderScreen> {
   Timer? _autoSlideTimer;
 
   final List<Map<String, String>> pages = [
-    {'image': MyAssetsImage.burger, 'text': 'مرحباً بك في تطبيقنا!'},
-    {'image': MyAssetsImage.burger, 'text': 'احجز منزلك السياحي بسهولة'},
-    {'image': MyAssetsImage.burger, 'text': 'تصفح المنازل مع الصور والتفاصيل'},
-    {'image': MyAssetsImage.burger, 'text': 'ادفع بأمان داخل التطبيق'},
+    {
+      'image': MyAssetsImage.burger,
+      'text': 'أهلاً بك في Citio\nتطبيقك الذكي لحياة أسهل داخل مدينتك.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'بلّغ عن مشكلة\nصوّر أي مشكلة في المدينة، وسنرسلها فورًا للجهة المختصة.\nتابع الرد، قيّم الحل، وشاركها على وسائل التواصل!',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'خدمات حكومية بين يديك\nكل ما تحتاجه من معاملات وخدمات حكومية متاح الآن في مكان واحد وبسهولة.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'اكتشف مقدمي الخدمات والمنتجات\nاطّلع على جميع المحلات، الشركات، والخدمات في مدينتك واطلب منها مباشرة من خلال التطبيق.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text':
+          'تواصل مع مجتمعك\nتابع آخر الأخبار، شارك رأيك، وكن جزءًا من الحياة الاجتماعية للمدينة.',
+    },
+    {
+      'image': MyAssetsImage.burger,
+      'text': 'جاهز تبدأ؟\nخلينا نغيّر شكل الحياة في المدينة سوا!',
+    },
   ];
 
   @override
@@ -39,7 +64,7 @@ class _SliderScreenState extends State<SliderScreen> {
           curve: Curves.easeInOut,
         );
       } else {
-        _controller.jumpToPage(0); // ترجع لأول صفحة
+        _controller.jumpToPage(0);
       }
     });
   }
@@ -51,22 +76,29 @@ class _SliderScreenState extends State<SliderScreen> {
     super.dispose();
   }
 
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('seen_onboarding', true);
+    Navigator.pushReplacement(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(builder: (context) => const StartPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          // زر "تخطي"
+          // زر تخطي
           Padding(
             padding: const EdgeInsets.only(top: 30, right: 20),
             child: Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const StartPage()),
-                  );
+                onPressed: () async {
+                  await _completeOnboarding();
                 },
                 child: const Text(
                   'تخطي',
@@ -125,16 +157,13 @@ class _SliderScreenState extends State<SliderScreen> {
             ),
           ),
           const SizedBox(height: 30),
-          // زر "التالي" أو "تم"
+          // زر التالي أو تم
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_currentIndex == pages.length - 1) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const StartPage()),
-                  );
+                  await _completeOnboarding();
                 } else {
                   _controller.nextPage(
                     duration: const Duration(milliseconds: 300),

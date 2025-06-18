@@ -3,14 +3,13 @@
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
-import 'package:citio/screens/product_details_view.dart';
+import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_products.dart';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/most_recent_products.dart';
 import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/vendor.dart';
-import 'package:citio/screens/all_services.dart';
 import 'package:citio/screens/all_vendors_screen.dart';
 import 'package:citio/screens/gov_services_datails.dart';
 
@@ -120,10 +119,10 @@ class HomeScreen extends StatelessWidget {
                 if (snapshot.hasData) {
                   List<MostRequestedProduct> products = snapshot.data!;
                   return BuildProductsBoxes(
-                    title: 'Products',
+                    title: 'المنتجات',
                     items: products,
                     titlefontSize: 12,
-                    destination: const AllServices(),
+                    destination: const ServiceOrderScreen(),
                     fit: BoxFit.cover,
                     height: 155,
                     maximumLines: 3,
@@ -146,7 +145,7 @@ class HomeScreen extends StatelessWidget {
                 if (snapshot.hasData) {
                   List<Vendor> vendors = snapshot.data!;
                   return BuildVendorssBoxes(
-                    title: 'Vendors',
+                    title: 'البائعين',
                     items: vendors,
                     titlefontSize: 12,
                     destination: const AllVendorsScreen(),
