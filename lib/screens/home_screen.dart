@@ -3,6 +3,7 @@
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
+import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/services/get_most_requested_products.dart';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
@@ -215,15 +216,12 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<MostRecentProduct> data = snapshot.data!;
-          List<Map<String, String>> products =
-              data
-                  .map((i) => {'url': _baseUrl + i.image!, 'title': i.name})
-                  .toList();
+          List<ImageCard> cards = generateCards(data);
 
           return Column(
             children: [
               CarouselSlider(
-                items: products.map((data) => ImageCard(data: data)).toList(),
+                items: cards,
                 options: CarouselOptions(
                   height: 150.0,
                   autoPlay: true,
@@ -236,7 +234,7 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  products.length,
+                  data.length,
                   (index) => Indicator(isActive: _currentIndex == index),
                 ),
               ),
@@ -251,10 +249,18 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
       },
     );
   }
+
+  List<ImageCard> generateCards(List<MostRecentProduct> data) {
+    List<ImageCard> cards = [];
+    for (MostRecentProduct p in data) {
+      cards.add(ImageCard(data: p));
+    }
+    return cards;
+  }
 }
 
 class ImageCard extends StatelessWidget {
-  final Map<String, String> data;
+  final MostRecentProduct data;
   const ImageCard({super.key, required this.data});
 
   @override
@@ -264,9 +270,7 @@ class ImageCard extends StatelessWidget {
           () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder:
-                  (context) =>
-                      ServiceDetailsScreen(serviceName: data['title']!),
+              builder: (context) => ProductDetailsView(productId: data.id),
             ),
           ),
       child: ClipRRect(
@@ -274,7 +278,7 @@ class ImageCard extends StatelessWidget {
         child: Stack(
           children: [
             Image.network(
-              data['url']!,
+              data.image!,
               fit: BoxFit.cover,
               width: double.infinity,
               errorBuilder: (
@@ -301,7 +305,7 @@ class ImageCard extends StatelessWidget {
                 child: StrokeText(
                   height: 10,
                   width: 10,
-                  text: data['title'],
+                  text: data.name,
                   textSize: 14,
                   textColor: MyColors.white,
                   strokeColor: MyColors.black,

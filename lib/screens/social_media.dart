@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, unused_element
 
+import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/core/widgets/socialmedia_tab_view.dart';
@@ -23,9 +24,9 @@ class _SocialMediaState extends State<SocialMedia> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Icon(
-          Icons.groups_2_outlined,
-          color: MyColors.themecolor,
+        title: const ImageIcon(
+          AssetImage(MyAssetsImage.logo),
+          color: Colors.red,
           size: 26,
         ),
         centerTitle: true,

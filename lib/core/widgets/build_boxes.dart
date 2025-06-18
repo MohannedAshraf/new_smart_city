@@ -7,6 +7,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/most_requested_products.dart';
 
 import 'package:citio/models/vendor.dart';
+import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/vendor_profile.dart';
 
 import 'package:flutter/gestures.dart';
@@ -256,9 +257,8 @@ class BuildProductsBoxes extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => ServiceDetailsScreen(
-                              serviceName: items[index].name,
-                            ),
+                            (context) =>
+                                ProductDetailsView(productId: items[index].id),
                       ),
                     ),
                 child: ServiceBox(
