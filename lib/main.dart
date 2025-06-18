@@ -6,20 +6,28 @@ import 'package:citio/screens/social_media.dart';
 import 'package:citio/screens/welcome-page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
 import 'screens/first_issue_screen.dart';
 import 'screens/service_order_screen.dart';
-
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
 
-void main() {
-  runApp(const CityApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
+
+  runApp(CityApp(seenOnboarding: seenOnboarding));
 }
 
 class CityApp extends StatelessWidget {
-  const CityApp({super.key});
+  final bool seenOnboarding;
+
+  const CityApp({super.key, required this.seenOnboarding});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +41,7 @@ class CityApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false,
-      home: const SliderScreen(),
+      home: seenOnboarding ? const StartPage() : const SliderScreen(),
       theme: ThemeData(
         appBarTheme: const AppBarTheme(backgroundColor: MyColors.white),
         scaffoldBackgroundColor: MyColors.white,
@@ -42,6 +50,7 @@ class CityApp extends StatelessWidget {
   }
 }
 
+// كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -57,7 +66,6 @@ class HomePageState extends State<HomePage> {
     const GovernmentScreen(),
     const IssueScreen(),
     const ServiceOrderScreen(),
-
     const Notifications(),
     const Profile(),
   ];
@@ -190,7 +198,6 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('الملف الشخصي'),
