@@ -21,7 +21,7 @@ class Reactions extends StatelessWidget {
       onPressed:
           () => showDialog<String>(
             context: context,
-            builder: (BuildContext context) => PopUpDialog(),
+            builder: (BuildContext context) => const PopUpDialog(),
           ),
       icon: reactionIcon,
       color: reactionIconColor,

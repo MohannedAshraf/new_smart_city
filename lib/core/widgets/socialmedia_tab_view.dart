@@ -45,7 +45,8 @@ class SocialmediaTabView extends StatelessWidget {
                       onPressed:
                           () => showDialog<String>(
                             context: context,
-                            builder: (BuildContext context) => PopUpDialog(),
+                            builder:
+                                (BuildContext context) => const PopUpDialog(),
                           ),
                       child: const Text(
                         'Show All',
