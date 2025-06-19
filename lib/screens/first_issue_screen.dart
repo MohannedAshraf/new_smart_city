@@ -1,11 +1,11 @@
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/core/widgets/new_tab_item.dart';
+import 'package:city/main.dart';
 import 'package:city/models/issue.dart';
 import 'package:city/screens/add_issue_screen.dart';
 import 'package:city/services/get_issues.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
 
 String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -51,7 +51,16 @@ class _IssueScreenState extends State<IssueScreen> {
         appBar: AppBar(
           toolbarHeight: 35,
           backgroundColor: MyColors.backgroundColor,
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: MyColors.themecolor),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+          ),
           title: const Padding(
             padding: EdgeInsets.all(12.0),
             child: Text(
@@ -90,7 +99,7 @@ class _IssueScreenState extends State<IssueScreen> {
                   ],
                 ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor:  MyColors.themecolor,
+          backgroundColor: MyColors.themecolor,
           onPressed: () {
             Navigator.push(
               context,
@@ -105,6 +114,7 @@ class _IssueScreenState extends State<IssueScreen> {
     );
   }
 }
+
 class RatedComplaintList extends StatelessWidget {
   final List<Values> issues;
   const RatedComplaintList({super.key, required this.issues});
@@ -132,21 +142,26 @@ class RatedComplaintList extends StatelessWidget {
                     width: 60,
                     height: 60,
                     color: Colors.grey[200],
-                    child: issue.image != null
-                        ? Image.network(
-                            _baseUrl + issue.image!,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(Icons.broken_image, size: 30);
-                            },
-                          )
-                        : const Icon(Icons.person, size: 30),
+                    child:
+                        issue.image != null
+                            ? Image.network(
+                              _baseUrl + issue.image!,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (
+                                context,
+                                child,
+                                loadingProgress,
+                              ) {
+                                if (loadingProgress == null) return child;
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(Icons.broken_image, size: 30);
+                              },
+                            )
+                            : const Icon(Icons.person, size: 30),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -192,59 +207,129 @@ class RatedComplaintList extends StatelessWidget {
                     const SizedBox(height: 6),
                     GestureDetector(
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            double rating = 0;
-                            final controller = TextEditingController();
-                            return AlertDialog(
-                              title: const Text('قيّم هذه الشكوى'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  RatingBar.builder(
-                                    initialRating: 0,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (r) {
-                                      rating = r;
-                                    },
-                                  ),
-                                  const SizedBox(height: 12),
-                                  TextField(
-                                    controller: controller,
-                                    decoration: const InputDecoration(
-                                      hintText: 'اكتب ملاحظاتك هنا...',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    maxLines: 3,
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    // هنا تقدر تبعت الريتنج والملاحظة للـ API لو عايز
-                                    print('Rating: $rating');
-                                    print('Note: ${controller.text}');
-                                  },
-                                  child: const Text('إرسال'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                     showDialog(
+  context: context,
+  builder: (context) {
+    double rating = 0;
+    final controller = TextEditingController();
+
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return AlertDialog(
+          backgroundColor: MyColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+         title: Stack(
+  children: [
+    Center(
+      child: Text(
+        'تقييمك..!',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: MyColors.fontcolor,
+        ),
+      ),
+    ),
+    Positioned(
+      left: 0,
+      child: IconButton(
+        icon: const Icon(
+          Icons.close,
+          color: Colors.red,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ),
+  ],
+),
+
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 12),
+              RatingBar.builder(
+                initialRating: 0,
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: false,
+                itemCount: 5,
+                itemBuilder: (context, _) => const Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (r) {
+                  setState(() => rating = r);
+                },
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'شاركنا تجربتك',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: MyColors.fontcolor,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: 'أخبرنا ما الذي تعتقده...؟',
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                maxLines: 3,
+              ),
+            ],
+          ),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          actions: [
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.themecolor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  // _sendRatingToApi(issue.id, rating, controller.text);
+                },
+                child: const Text(
+                  'إرسال',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8), // الجزء الأبيض تحت الزرار
+            const SizedBox(height: 8), // الجزء الأبيض تحت الزرار
+          
+          ],
+        );
+      },
+    );
+  },
+);
+
+
+
+
                       },
                       child: Column(
                         children: const [
-                           SizedBox(height: 16),
+                          SizedBox(height: 16),
                           Text(
                             'تقييم',
                             style: TextStyle(
