@@ -81,14 +81,6 @@ class ProductCard extends StatelessWidget {
                       maxLines: 1,
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  const Expanded(
-                    child: Text(
-                      "المالك",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -105,7 +97,7 @@ class ProductCard extends StatelessWidget {
                             ? '${description.substring(0, 13)}...'
                             : description)
                         : 'لا يوجد وصف',
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -136,7 +128,15 @@ class ProductCard extends StatelessWidget {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Text(price),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    price,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 10),
             Padding(

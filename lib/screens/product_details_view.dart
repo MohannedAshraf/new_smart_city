@@ -95,7 +95,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       ),
                     ),
                     Text(
-                      product.vendorFullName,
+                      product.vendorBusinessName,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
