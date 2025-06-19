@@ -230,19 +230,20 @@ class _LoginPageState extends State<MyloginPage> {
                             "نسيت كلمة المرور؟",
                             style: TextStyle(
                               decoration: TextDecoration.underline,
+                              fontSize: 20,
                             ),
                           ),
                         ),
                         const SizedBox(width: 90),
-                        Checkbox(
-                          value: _rememberMe,
-                          onChanged: (value) {
-                            setState(() {
-                              _rememberMe = value ?? false;
-                            });
-                          },
-                        ),
-                        const Text("تذكرني"),
+                        // Checkbox(
+                        //   value: _rememberMe,
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       _rememberMe = value ?? false;
+                        //     });
+                        //   },
+                        // ),
+                        // const Text("تذكرني"),
                       ],
                     ),
                     MyTextButton(

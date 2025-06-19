@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/search_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:citio/screens/search_result_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:citio/core/widgets/category_circle.dart';
 import 'package:citio/core/widgets/product_card.dart';
 import 'package:citio/helper/api_most_product.dart';
@@ -14,7 +16,6 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_model.dart';
 import 'package:citio/helper/api_service.dart';
 import 'package:citio/screens/subcategory_screen.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ServiceOrderScreen extends StatefulWidget {
   const ServiceOrderScreen({super.key});
@@ -29,8 +30,6 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   List<CategoryModel>? _categories;
   bool _isLoadingCategories = true;
   String? _error;
-  int _currentIndex = 0;
-  // لتمرير الصور في الـ CarouselSlider
   List<BannerModel>? _banners;
   bool _isLoadingBanners = true;
   String? _bannerError;
@@ -41,7 +40,6 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   void initState() {
     super.initState();
-
     _loadCategories();
     _loadBanners();
     _controller = TextEditingController();
@@ -109,9 +107,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
           height: 60,
         ),
       ),
-      // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
       appBar: AppBar(
-        // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: const Text("طلب الخدمات"),
@@ -128,159 +124,27 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 onSearch: _performSearch,
               ),
             ),
-            if (_isSearching) ...[
-              const Center(child: CircularProgressIndicator()),
-            ] else if (_searchError != null) ...[
-              Center(child: Text('❌ خطأ في البحث: $_searchError')),
-            ] else if (_searchResults != null) ...[
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _searchResults!.length,
-                    itemBuilder: (context, index) {
-                      final result = _searchResults![index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListTile(
-                          leading:
-                              result.imageUrl != null
-                                  ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      result.imageUrl!,
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                  : Icon(Icons.image_not_supported, size: 40),
-                          title: Text(
-                            result.nameAr ??
-                                result.nameEn ??
-                                result.businessName ??
-                                'بدون اسم',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            result.categoryNameAr ??
-                                result.categoryNameEn ??
-                                'بدون تصنيف',
-                          ),
-                          trailing: Icon(Icons.arrow_forward_ios, size: 16),
-                          onTap: () {
-                            print("فتح تفاصيل العنصر: ${result.id}");
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
 
             const SizedBox(height: 30),
             _buildCategories(),
             if (selectedCategoryIndex != null) _buildSubCategories(),
-            SizedBox(height: 70),
+
+            const SizedBox(height: 70),
+
             _isLoadingBanners
                 ? const Center(child: CircularProgressIndicator())
                 : _bannerError != null
                 ? Center(child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'))
-                : Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        print("go to product with discount");
-                      },
-                      child: CarouselSlider(
-                        items:
-                            _banners!.map((banner) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    Image.network(
-                                      "${ApiTopBanners.baseUrl}${banner.imageUrl}",
-                                      fit: BoxFit.fill,
-                                      width: double.infinity,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              const Icon(Icons.broken_image),
-                                    ),
-                                    Positioned(
-                                      bottom: 10,
-                                      left: 10,
-                                      child: Container(
-                                        color: Colors.black54,
-                                        padding: const EdgeInsets.all(8),
-                                        child: Text(
-                                          banner.description,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                        options: CarouselOptions(
-                          height: 190.0,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        _banners!.length,
-                        (index) => Container(
-                          width: 10.0,
-                          height: 10.0,
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                _currentIndex == index
-                                    ? const Color(0xFF3D6643)
-                                    : Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                : BannerSliderWidget(banners: _banners!),
 
-            const SizedBox(height: 10),
-
-            // Page Indicators
             const SizedBox(height: 30),
+
             const Text(
               "أفضل التقييمات",
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             MostRequestedProductsView(),
           ],
         ),
@@ -400,6 +264,88 @@ class MySearchBar extends StatelessWidget {
   }
 }
 
+class BannerSliderWidget extends StatefulWidget {
+  final List<BannerModel> banners;
+  const BannerSliderWidget({super.key, required this.banners});
+
+  @override
+  State<BannerSliderWidget> createState() => _BannerSliderWidgetState();
+}
+
+class _BannerSliderWidgetState extends State<BannerSliderWidget> {
+  int _currentIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CarouselSlider(
+          items:
+              widget.banners.map((banner) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        "${ApiTopBanners.baseUrl}${banner.imageUrl}",
+                        fit: BoxFit.fill,
+                        width: double.infinity,
+                        errorBuilder:
+                            (context, error, stackTrace) =>
+                                const Icon(Icons.broken_image),
+                      ),
+                      Positioned(
+                        bottom: 10,
+                        left: 10,
+                        child: Container(
+                          color: Colors.black54,
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            banner.description,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+          options: CarouselOptions(
+            height: 190.0,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            widget.banners.length,
+            (index) => Container(
+              width: 10.0,
+              height: 10.0,
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _currentIndex == index
+                        ? const Color(0xFF3D6643)
+                        : Colors.grey,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class MostRequestedProductsView extends StatefulWidget {
   const MostRequestedProductsView({super.key});
 
@@ -444,7 +390,7 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(10),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // 2 جمب بعض
+              crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               childAspectRatio: 0.7,
