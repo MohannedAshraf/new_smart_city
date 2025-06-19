@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field
+import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
@@ -284,30 +285,41 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
               widget.banners.map((banner) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.network(
-                        "${ApiTopBanners.baseUrl}${banner.imageUrl}",
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                        errorBuilder:
-                            (context, error, stackTrace) =>
-                                const Icon(Icons.broken_image),
-                      ),
-                      Positioned(
-                        bottom: 10,
-                        left: 10,
-                        child: Container(
-                          color: Colors.black54,
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            banner.description,
-                            style: const TextStyle(color: Colors.white),
+                  child: GestureDetector(
+                    onTap:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    ProductDetailsView(productId: banner.id),
                           ),
                         ),
-                      ),
-                    ],
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.network(
+                          "${ApiTopBanners.baseUrl}${banner.imageUrl}",
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  const Icon(Icons.broken_image),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          left: 10,
+                          child: Container(
+                            color: Colors.black54,
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              banner.description,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
