@@ -67,7 +67,7 @@ class HomePageState extends State<HomePage> {
               ? PreferredSize(
                 preferredSize: const Size.fromHeight(60),
                 child: AppBar(
-                  backgroundColor: const Color(0xFF3D6643),
+                  backgroundColor:MyColors.themecolor,
                   elevation: 0,
                   title: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -218,8 +218,8 @@ class HomePageState extends State<HomePage> {
         selectedLabelStyle: const TextStyle(fontSize: 16),
         unselectedLabelStyle: const TextStyle(fontSize: 14),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF3D6643),
-        selectedItemColor: const Color.fromARGB(172, 255, 255, 255),
+        backgroundColor:  MyColors.themecolor,
+        selectedItemColor: MyColors.cardcolor,
         unselectedItemColor: Colors.grey,
         currentIndex: currentIndex,
         onTap: (index) {

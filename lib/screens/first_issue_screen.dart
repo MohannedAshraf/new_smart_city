@@ -63,11 +63,20 @@ class _IssueScreenState extends State<IssueScreen> {
           ),
           title: const Padding(
             padding: EdgeInsets.all(12.0),
-            child: Text(
-              'المشاكل',
-              style: TextStyle(color: MyColors.themecolor, fontSize: 20),
+            child: Row(
+              mainAxisSize:
+                  MainAxisSize.min, // مهم عشان العناصر تكون جنب بعض بس
+              children: [
+                Icon(Icons.report_problem, color: MyColors.themecolor),
+                SizedBox(width: 8),
+                Text(
+                  'المشاكل',
+                  style: TextStyle(color: MyColors.themecolor, fontSize: 20),
+                ),
+              ],
             ),
           ),
+
           centerTitle: true,
           elevation: 0,
           bottom: TabBar(
@@ -99,6 +108,7 @@ class _IssueScreenState extends State<IssueScreen> {
                   ],
                 ),
         floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
           backgroundColor: MyColors.themecolor,
           onPressed: () {
             Navigator.push(
@@ -207,135 +217,151 @@ class RatedComplaintList extends StatelessWidget {
                     const SizedBox(height: 6),
                     GestureDetector(
                       onTap: () {
-                     showDialog(
-  context: context,
-  builder: (context) {
-    double rating = 0;
-    final controller = TextEditingController();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            double rating = 0;
+                            final controller = TextEditingController();
 
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return AlertDialog(
-          backgroundColor: MyColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
-         title: Stack(
-  children: [
-    Center(
-      child: Text(
-        'تقييمك..!',
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: MyColors.fontcolor,
-        ),
-      ),
-    ),
-    Positioned(
-      left: 0,
-      child: IconButton(
-        icon: const Icon(
-          Icons.close,
-          color: Colors.red,
-        ),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    ),
-  ],
-),
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return AlertDialog(
+                                  backgroundColor: MyColors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  contentPadding: const EdgeInsets.fromLTRB(
+                                    24,
+                                    24,
+                                    24,
+                                    16,
+                                  ),
+                                  title: Stack(
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          'تقييمك..!',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: MyColors.fontcolor,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 0,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
 
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 12),
-              RatingBar.builder(
-                initialRating: 0,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (r) {
-                  setState(() => rating = r);
-                },
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'شاركنا تجربتك',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: MyColors.fontcolor,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  hintText: 'أخبرنا ما الذي تعتقده...؟',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                maxLines: 3,
-              ),
-            ],
-          ),
-          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          actions: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: MyColors.themecolor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  // _sendRatingToApi(issue.id, rating, controller.text);
-                },
-                child: const Text(
-                  'إرسال',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8), // الجزء الأبيض تحت الزرار
-            const SizedBox(height: 8), // الجزء الأبيض تحت الزرار
-          
-          ],
-        );
-      },
-    );
-  },
-);
-
-
-
-
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 12),
+                                      RatingBar.builder(
+                                        initialRating: 0,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: false,
+                                        itemCount: 5,
+                                        itemBuilder:
+                                            (context, _) => const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                        onRatingUpdate: (r) {
+                                          setState(() => rating = r);
+                                        },
+                                      ),
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        'شاركنا تجربتك',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: MyColors.fontcolor,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      TextField(
+                                        controller: controller,
+                                        decoration: InputDecoration(
+                                          hintText: 'أخبرنا ما الذي تعتقده...؟',
+                                          hintStyle: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                        ),
+                                        maxLines: 3,
+                                      ),
+                                    ],
+                                  ),
+                                  actionsPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  actions: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: MyColors.themecolor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          // _sendRatingToApi(issue.id, rating, controller.text);
+                                        },
+                                        child: const Text(
+                                          'إرسال',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ), // الجزء الأبيض تحت الزرار
+                                    const SizedBox(
+                                      height: 8,
+                                    ), // الجزء الأبيض تحت الزرار
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        );
                       },
-                      child: Column(
+                      child: Row(
                         children: const [
-                          SizedBox(height: 16),
+                          Icon(Icons.star),
+                          SizedBox(height: 32),
                           Text(
                             'تقييم',
                             style: TextStyle(
                               color: MyColors.themecolor,
-                              fontSize: 16,
-                              decoration: TextDecoration.underline,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -449,6 +475,7 @@ class ComplaintList extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                      const SizedBox(height: 12),
                   ],
                 ),
               ],
