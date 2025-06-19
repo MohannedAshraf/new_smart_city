@@ -386,9 +386,9 @@ class BuildVendorssBoxes extends StatelessWidget {
                       ),
                     ),
                 child: ServiceBox(
-                  title: items[index].name,
+                  title: items[index].businessName,
                   width: width,
-                  details: '${items[index].businessName}\n${items[index].type}',
+                  details: '${items[index].name}\n${items[index].type}',
                   image: _baseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,

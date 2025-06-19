@@ -130,9 +130,45 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                 borderRadius: BorderRadius.circular(20),
                               ), // Rounded corners
                             ),
-                            onSubmitted: (value) {
-                              searchVendors(value);
-                              isSearching = true;
+                            onChanged: (value) {
+                              setState(() {
+                                searchValue = value.trim();
+                              });
+
+                              if (searchValue.isEmpty &&
+                                  selectedCategories.isEmpty) {
+                                setState(() {
+                                  currentMode = VendorMode.normal;
+                                  vendors.clear();
+                                  pageNumber = 1;
+                                });
+                                GetVendor().getAllVendors(pageNumber).then((
+                                  fetchedItems,
+                                ) {
+                                  setState(() {
+                                    vendors.addAll(fetchedItems.items);
+                                    totalPages = fetchedItems.totalPages;
+                                    isLoading = false;
+                                  });
+                                });
+                              } else if (searchValue.isEmpty &&
+                                  selectedCategories.isNotEmpty) {
+                                filterVendors(
+                                  selectedCategories
+                                      .map((key) => categories[key]!)
+                                      .toList(),
+                                );
+                              } else if (searchValue.isNotEmpty &&
+                                  selectedCategories.isEmpty) {
+                                searchVendors(searchValue);
+                              } else {
+                                searchAndFilterVendors(
+                                  searchValue,
+                                  selectedCategories
+                                      .map((key) => categories[key]!)
+                                      .toList(),
+                                );
+                              }
                             },
                           ),
                         ),
@@ -422,7 +458,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                 .toList();
 
                         setState(() {
-                          filterVendors(selectedValues);
+                          //filterVendors(selectedValues);
+                          if (searchValue.isNotEmpty) {
+                            searchAndFilterVendors(searchValue, selectedValues);
+                          } else {
+                            filterVendors(selectedValues);
+                          }
                         });
                         Navigator.pop(context);
                       },
@@ -484,6 +525,18 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
               });
             });
             break;
+
+          case VendorMode.searchfilter:
+            GetVendor()
+                .searchFilterVendors(filterValues, pageNumber, searchValue)
+                .then((fetchedItems) {
+                  setState(() {
+                    vendors.addAll(fetchedItems.items);
+                    totalPages = fetchedItems.totalPages;
+                    isLoading = false;
+                  });
+                });
+            break;
         }
       });
     }
@@ -491,23 +544,25 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
 
   void searchVendors(String? value) {
     if (value != null) {
+      final currentSearch = value;
+
       setState(() {
         currentMode = VendorMode.search;
-        searchValue = value;
+        searchValue = currentSearch;
         isLoading = true;
         pageNumber = 1;
         vendors.clear();
       });
 
-      GetVendor().searchVendors(searchValue, pageNumber).then((fetchedItems) {
-        setState(() {
-          // vendors.clear();
-          vendors.addAll(fetchedItems.items);
-          totalPages = fetchedItems.totalPages;
-          isLoading = false;
-        });
+      GetVendor().searchVendors(currentSearch, pageNumber).then((fetchedItems) {
+        if (currentSearch == searchValue && currentMode == VendorMode.search) {
+          setState(() {
+            vendors.addAll(fetchedItems.items);
+            totalPages = fetchedItems.totalPages;
+            isLoading = false;
+          });
+        }
       });
-      // pageNumber++;
     }
   }
 
@@ -532,6 +587,33 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
       //pageNumber++;
     }
   }
+
+  void searchAndFilterVendors(String value, List<String> businessTypes) {
+    final currentSearch = value;
+    final currentFilters = List<String>.from(businessTypes);
+
+    setState(() {
+      currentMode = VendorMode.searchfilter;
+      searchValue = currentSearch;
+      filterValues = currentFilters;
+      isLoading = true;
+      pageNumber = 1;
+      vendors.clear();
+    });
+
+    GetVendor()
+        .searchFilterVendors(currentFilters, pageNumber, currentSearch)
+        .then((fetchedItems) {
+          if (currentSearch == searchValue &&
+              currentFilters.toString() == filterValues.toString()) {
+            setState(() {
+              vendors.addAll(fetchedItems.items);
+              totalPages = fetchedItems.totalPages;
+              isLoading = false;
+            });
+          }
+        });
+  }
 }
 
-enum VendorMode { normal, search, filter }
+enum VendorMode { normal, search, filter, searchfilter }

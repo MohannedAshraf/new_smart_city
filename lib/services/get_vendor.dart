@@ -108,6 +108,38 @@ class GetVendor {
     return vendors;
   }
 
+  Future<AllVendor> searchFilterVendors(
+    List<String> businessTypes,
+    int pageNumber,
+    String searchValue,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+    final encodedSearch = Uri.encodeComponent(searchValue);
+
+    final url = Uri.https(
+      'service-provider.runasp.net',
+      '/api/Vendors/for-mobile',
+      {
+        'pageNumer': pageNumber.toString(),
+        'SearchValue': encodedSearch,
+        'PageSize': ['3'],
+        'BusinessTypes': businessTypes,
+      },
+    );
+
+    // ignore: avoid_print
+    print(url);
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    dynamic data = await Api().get(url: url.toString(), token: token);
+    AllVendor vendors = AllVendor.fromJason(data);
+
+    return vendors;
+  }
+
   Future<List<VendorSubcategory>> getVendorSubcategory(String vendorId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');

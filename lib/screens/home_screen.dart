@@ -278,7 +278,7 @@ class ImageCard extends StatelessWidget {
         child: Stack(
           children: [
             Image.network(
-              data.image!,
+              _baseUrl + data.image!,
               fit: BoxFit.cover,
               width: double.infinity,
               errorBuilder: (
