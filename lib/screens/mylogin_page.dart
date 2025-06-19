@@ -25,7 +25,7 @@ class _LoginPageState extends State<MyloginPage> {
   bool _validate = false;
   bool _isLoading = false;
   bool _obscurePassword = true;
-  bool _rememberMe = false;
+  // bool _rememberMe = false;
 
   Future<void> loginUser(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
