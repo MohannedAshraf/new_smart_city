@@ -45,30 +45,7 @@ class SocialmediaTabView extends StatelessWidget {
                       onPressed:
                           () => showDialog<String>(
                             context: context,
-                            builder:
-                                (BuildContext context) => AlertDialog(
-                                  title: const Text('سيتم تحويلك خارج  citio'),
-                                  content: const Text(
-                                    'هل أنت متأكد بأنك ترغب بالرحيل',
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed:
-                                          () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                      child: const Text('الغاء'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        launchUrl(
-                                          _url,
-                                          mode: LaunchMode.inAppWebView,
-                                        );
-                                      },
-                                      child: const Text('نعم'),
-                                    ),
-                                  ],
-                                ),
+                            builder: (BuildContext context) => PopUpDialog(),
                           ),
                       child: const Text(
                         'Show All',
@@ -332,6 +309,30 @@ class SocialmediaTabView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
       },
+    );
+  }
+}
+
+class PopUpDialog extends StatelessWidget {
+  const PopUpDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('سيتم تحويلك خارج  citio'),
+      content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, 'Cancel'),
+          child: const Text('الغاء'),
+        ),
+        TextButton(
+          onPressed: () {
+            launchUrl(_url, mode: LaunchMode.inAppWebView);
+          },
+          child: const Text('نعم'),
+        ),
+      ],
     );
   }
 }
