@@ -22,6 +22,7 @@ import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+// ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
 
 class HomeScreen extends StatelessWidget {
