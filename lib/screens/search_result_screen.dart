@@ -61,7 +61,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("نتائج البحث")),
+      appBar: AppBar(centerTitle: true, title: Text("نتائج البحث")),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Column(

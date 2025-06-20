@@ -5,7 +5,6 @@ import 'package:citio/helper/api_product_details.dart';
 import 'package:citio/models/product_details_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 class ProductDetailsView extends StatefulWidget {
