@@ -35,57 +35,70 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 45,
-                children: [
-                  const EmergencyButton(
-                    color: MyColors.themecolor,
-                    emicon: Icon(Icons.local_hospital, color: MyColors.oldLace),
-                    emname: 'الإسعاف',
-                    emergencyServiceId: '1',
-                  ),
-                  const EmergencyButton(
-                    color: MyColors.themecolor,
-                    emicon: Icon(Icons.fire_truck, color: MyColors.oldLace),
-                    emname: 'المطافئ',
-                    emergencyServiceId: '2',
-                  ),
-                  const EmergencyButton(
-                    color: MyColors.themecolor,
-                    emicon: Icon(Icons.local_police, color: MyColors.oldLace),
-                    emname: 'الشرطة',
-                    emergencyServiceId: '3',
-                  ),
-                  ////;,lkh
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () => print('Icon Button Pressed'),
-                        borderRadius: BorderRadius.circular(50),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: MyColors.themecolor,
+            Container(
+              color: MyColors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 45,
+                  children: [
+                    const EmergencyButton(
+                      color: MyColors.ambulanceShade,
+                      emicon: Icon(
+                        Icons.local_hospital,
+                        color: MyColors.ambulance,
+                      ),
+                      emname: 'الإسعاف',
+                      emergencyServiceId: '1',
+                    ),
+                    const EmergencyButton(
+                      color: MyColors.firefighterShade,
+                      emicon: Icon(
+                        Icons.fire_truck,
+                        color: MyColors.firefighter,
+                      ),
+                      emname: 'المطافئ',
+                      emergencyServiceId: '2',
+                    ),
+                    const EmergencyButton(
+                      color: MyColors.policeShade,
+                      emicon: Icon(Icons.local_police, color: MyColors.police),
+                      emname: 'الشرطة',
+                      emergencyServiceId: '3',
+                    ),
+                    ////;,lkh
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () => print('Icon Button Pressed'),
+                          borderRadius: BorderRadius.circular(50),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: MyColors.buttonGreenShade,
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: MyColors.buttonGreen,
+                            ),
                           ),
-                          child: const Icon(Icons.add, color: MyColors.oldLace),
                         ),
-                      ),
-                      const Text(
-                        'أضف شكوى',
-                        style: TextStyle(fontSize: 12, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ],
+                        const Text(
+                          'أضف شكوى',
+                          style: TextStyle(fontSize: 12, color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-
-            const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
+            /////السيرش هنا اهووو
+            // const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
+            const SizedBox(height: 20.0),
             const CarouselWithIndicators(),
             const SizedBox(height: 20.0),
             FutureBuilder<List<MostRequested>>(
@@ -175,6 +188,15 @@ class HomeScreen extends StatelessWidget {
 }
 
 //comment
+
+class CarouselWithIndicators extends StatefulWidget {
+  const CarouselWithIndicators({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CarouselWithIndicatorsState createState() => _CarouselWithIndicatorsState();
+}
+
 class MySearchBar extends StatelessWidget {
   const MySearchBar({super.key});
 
@@ -197,14 +219,6 @@ class MySearchBar extends StatelessWidget {
       ),
     );
   }
-}
-
-class CarouselWithIndicators extends StatefulWidget {
-  const CarouselWithIndicators({super.key});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _CarouselWithIndicatorsState createState() => _CarouselWithIndicatorsState();
 }
 
 class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
@@ -232,13 +246,13 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              Row(
+              /* Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   data.length,
                   (index) => Indicator(isActive: _currentIndex == index),
                 ),
-              ),
+              ),*/
             ],
           );
         } else {
@@ -389,7 +403,7 @@ class _StrokeTextState extends State<StrokeText> {
             foreground:
                 Paint()
                   ..style = PaintingStyle.stroke
-                  ..strokeWidth = widget.strokeWidth ?? 4
+                  ..strokeWidth = widget.strokeWidth ?? 3
                   ..color = widget.strokeColor ?? Colors.black,
           ),
         ),
