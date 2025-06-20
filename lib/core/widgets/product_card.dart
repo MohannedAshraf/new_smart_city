@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
             children: [
               SizedBox(
                 width: 182,
-                height: 140,
+                height: 130,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
@@ -105,8 +105,8 @@ class ProductCard extends StatelessWidget {
                           );
                         },
                         child: const Text(
-                          'عرض المزيد',
-                          style: TextStyle(fontSize: 12, color: Colors.blue),
+                          '...',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ),
                   ],
