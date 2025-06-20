@@ -71,7 +71,7 @@ class RatedComplaintList extends StatelessWidget {
                           issue.description ?? '',
                           style: const TextStyle(
                             fontSize: 14, 
-                            color: Colors.blue,
+                            color: Color.fromARGB(255, 0, 3, 5),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
