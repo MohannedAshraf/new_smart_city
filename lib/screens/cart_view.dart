@@ -72,8 +72,8 @@ class _CartViewState extends State<CartView> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(14.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(left: 10.0, bottom: 12, right: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,61 +85,171 @@ class _CartViewState extends State<CartView> {
               ),
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return OrderCard(
-                    ordername: item.nameEn,
-                    orderprice: item.price,
-                    quantity: item.quantity,
-                    orderpic:
-                        "https://service-provider.runasp.net${item.mainImageUrl}",
-                    productId: item.productId,
-                    onQuantityChanged: (newQty) async {
-                      await EditCartService.editCartItem(
-                        productId: item.productId,
-                        quantity: newQty,
-                      );
 
-                      setState(() {
-                        item.quantity = newQty; // ✅ تحديث مباشر
-                      });
-                    },
+            // ✅ المنتجات
+            ...items.map((item) {
+              return OrderCard(
+                ordername: item.nameEn,
+                orderprice: item.price,
+                quantity: item.quantity,
+                orderpic:
+                    "https://service-provider.runasp.net${item.mainImageUrl}",
+                productId: item.productId,
+                onQuantityChanged: (newQty) async {
+                  await EditCartService.editCartItem(
+                    productId: item.productId,
+                    quantity: newQty,
                   );
+                  setState(() {
+                    item.quantity = newQty;
+                  });
                 },
+                onDelete: () {},
+              );
+            }).toList(),
+
+            const SizedBox(height: 10),
+
+            // ✅ خانة كود الخصم
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+              decoration: BoxDecoration(
+                color: MyAppColors.background,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 7,
+                    spreadRadius: -8,
+                    offset: Offset(0, 6),
+                    color: MyAppColors.shadow,
+                  ),
+                  BoxShadow(
+                    blurRadius: 7,
+                    spreadRadius: -8,
+                    offset: Offset(0, -4),
+                    color: MyAppColors.shadow,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // تنفيذ التفعيل هنا
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'تفعيل',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'ادخل كود الخصم',
+                        hintStyle: const TextStyle(fontSize: 14),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const Divider(),
-            Row(
-              children: [
-                const Text("Subtotal"),
-                const Spacer(),
-                Text("LE ${subtotal.toStringAsFixed(2)}"),
-              ],
-            ),
-            const Row(
-              children: [Text("Tax and Fees"), Spacer(), Text("LE 3.00")],
-            ),
-            const Row(
-              children: [Text("Delivery Fee"), Spacer(), Text("LE 2.00")],
-            ),
-            const Divider(),
-            Row(
-              children: [
-                const Text("Order Total"),
-                const Spacer(),
-                Text("LE ${(subtotal + 3 + 2).toStringAsFixed(2)}"),
-              ],
-            ),
-            const SizedBox(height: 25),
+
+            const SizedBox(height: 10),
+
+            // ✅ الملخص
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 17),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: MyAppColors.background,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 7,
+                    spreadRadius: -8,
+                    offset: Offset(0, 6),
+                    color: MyAppColors.shadow,
+                  ),
+                  BoxShadow(
+                    blurRadius: 7,
+                    spreadRadius: -8,
+                    offset: Offset(0, -4),
+                    color: MyAppColors.shadow,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text("Subtotal"),
+                      const Spacer(),
+                      Text("LE ${subtotal.toStringAsFixed(2)}"),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  const Row(
+                    children: [Text("Tax and Fees"), Spacer(), Text("LE 3.00")],
+                  ),
+                  const SizedBox(height: 6),
+                  const Row(
+                    children: [Text("Delivery Fee"), Spacer(), Text("LE 2.00")],
+                  ),
+                  const Divider(),
+                  Row(
+                    children: [
+                      const Text(
+                        "Order Total",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "LE ${(subtotal + 3 + 2).toStringAsFixed(2)}",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // ✅ زر Checkout
+            Container(
               width: double.infinity,
               height: 55,
               decoration: BoxDecoration(
-                color: MyAppColors.red,
+                color: Colors.blueAccent,
                 borderRadius: BorderRadius.circular(4),
               ),
               child: TextButton(
@@ -162,6 +272,8 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
             ),
+
+            const SizedBox(height: 10),
           ],
         ),
       ),
