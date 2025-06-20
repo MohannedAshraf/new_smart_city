@@ -128,22 +128,45 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
          _selectedImage = null;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("تم إرسال الشكوى بنجاح "),
-            duration: const Duration(seconds: 5),
-            action: SnackBarAction(
-              label: 'مشاركة',
-              onPressed: () {
-                final shareText =
-                    "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
-                Share.share(shareText);
-              },
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            backgroundColor: Colors.green.shade600,
+    duration: const Duration(seconds: 5),
+    behavior: SnackBarBehavior.floating,
+    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    backgroundColor: Colors.green.shade600,
+    content: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Expanded(
+          child: Text(
+            "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
+            style: TextStyle(color: Colors.white),
+            overflow: TextOverflow.ellipsis,
           ),
+        ),
+        TextButton.icon(
+          onPressed: () {
+            final shareText =
+                "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
+            Share.share(shareText);
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.green.shade800, // درجة أغمق من الخلفية
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          icon: const Icon(Icons.share, size: 16, color: Colors.white),
+          label: const Text(
+            "مشاركة",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    ),
+  ),
         );
       } else {
         ScaffoldMessenger.of(
