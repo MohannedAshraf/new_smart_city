@@ -13,7 +13,8 @@ class MostRequestedProducts {
     }
 
     List<dynamic> data = await Api().get(
-      url: 'https://service-provider.runasp.net/api/Products/most-requested',
+      url:
+          'https://service-provider.runasp.net/api/Products/top5-most-requested',
       token: token,
     );
     List<MostRequestedProduct> products = [];
