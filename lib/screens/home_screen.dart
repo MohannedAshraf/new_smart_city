@@ -226,7 +226,6 @@ class ImageCard extends StatelessWidget {
                   horizontal: 10.0,
                   vertical: 5.0,
                 ),
-                // ignore: deprecated_member_use
                 color: Colors.black.withOpacity(0.15),
                 child: Text(
                   data['caption']!,

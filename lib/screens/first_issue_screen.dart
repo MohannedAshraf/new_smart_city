@@ -34,9 +34,10 @@ class _IssueScreenState extends State<IssueScreen> {
     setState(() {
       active = issues.where((e) => e.status == 'Active').toList();
       resolved = issues.where((e) => e.status == 'Resolved').toList();
-      inprogress = issues
-          .where((e) => e.status != 'Active' && e.status != 'Resolved')
-          .toList();
+      inprogress =
+          issues
+              .where((e) => e.status != 'Active' && e.status != 'Resolved')
+              .toList();
       isLoading = false;
     });
   }
@@ -46,9 +47,9 @@ class _IssueScreenState extends State<IssueScreen> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          toolbarHeight: 35,
-          backgroundColor: MyColors.backgroundColor,
+          backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: MyColors.themecolor),
@@ -59,50 +60,87 @@ class _IssueScreenState extends State<IssueScreen> {
               );
             },
           ),
-          title: const Padding(
-            padding: EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.report_problem, color: MyColors.themecolor),
-                SizedBox(width: 8),
-                Text(
-                  'المشاكل',
-                  style: TextStyle(color: MyColors.themecolor, fontSize: 20),
+          title: const Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.report_problem, color: MyColors.themecolor, size: 22),
+              SizedBox(width: 6),
+              Text(
+                'المشاكل',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          bottom: TabBar(
-            splashBorderRadius: const BorderRadius.all(Radius.circular(10)),
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-            indicatorSize: TabBarIndicatorSize.tab,
-            dividerColor: Colors.transparent,
-            indicator: const BoxDecoration(
-              color: MyColors.cardcolor,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            labelColor: MyColors.cardfontcolor,
-            unselectedLabelColor: Colors.black,
-            tabs: [
-              TabItem(title: 'المقبولة', count: resolved.length),
-              TabItem(title: 'نشطة', count: active.length),
-              TabItem(title: 'تحت المراجعة', count: inprogress.length),
+              ),
             ],
           ),
-        ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : TabBarView(
-                children: [
-             RatedComplaintList(issues: resolved),
-             ComplaintList(issues: active, type: 'active'),
-             ComplaintList(issues: inprogress, type: 'inprogress'),
 
-                ],
-              ),
+          centerTitle: true,
+          elevation: 0,
+        ),
+        body:
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                  children: [
+                    const Divider(
+                      height: 1,
+                      thickness: 0.6,
+                      color: Colors.black12,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 5,
+                      ),
+                      child: TabBar(
+                        indicator: const UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                            width: 2.5,
+                            color: MyColors.themecolor,
+                          ),
+                          insets: EdgeInsets.symmetric(horizontal: 16.0),
+                        ),
+                        labelColor: MyColors.themecolor,
+                        unselectedLabelColor: Colors.black,
+
+                        labelStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        unselectedLabelStyle: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+
+                        tabs: [
+                          TabItem(title: 'نشطة', count: active.length),
+                          TabItem(
+                            title: 'تحت المراجعة',
+                            count: inprogress.length,
+                          ),
+                          TabItem(title: 'المقبولة', count: resolved.length),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 1,
+                      thickness: 0.5,
+                      color: Colors.black12,
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          ComplaintList(issues: active, type: 'active'),
+                          ComplaintList(issues: inprogress, type: 'inprogress'),
+                          RatedComplaintList(issues: resolved),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
         floatingActionButton: FloatingActionButton(
           shape: const CircleBorder(),
           backgroundColor: MyColors.themecolor,

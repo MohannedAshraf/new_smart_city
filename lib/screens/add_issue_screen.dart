@@ -1,4 +1,3 @@
-// تم تعديل الكود ليتوافق مع تصميم الصورة المرفقة
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -124,49 +123,53 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       );
 
       if (response.isSuccess) {
-         _controller.clear();
-         _selectedImage = null;
+        _controller.clear();
+        _selectedImage = null;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-    duration: const Duration(seconds: 5),
-    behavior: SnackBarBehavior.floating,
-    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-    backgroundColor: Colors.green.shade600,
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Expanded(
-          child: Text(
-            "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
-            style: TextStyle(color: Colors.white),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        TextButton.icon(
-          onPressed: () {
-            final shareText =
-                "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
-            Share.share(shareText);
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.green.shade800, // درجة أغمق من الخلفية
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            duration: const Duration(seconds: 5),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            backgroundColor: Colors.green.shade600,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: Text(
+                    "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
+                    style: TextStyle(color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    final shareText =
+                        "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
+                    Share.share(shareText);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor:
+                        Colors.green.shade800,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  icon: const Icon(Icons.share, size: 16, color: Colors.white),
+                  label: const Text(
+                    "مشاركة",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
             ),
           ),
-          icon: const Icon(Icons.share, size: 16, color: Colors.white),
-          label: const Text(
-            "مشاركة",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
-    ),
-  ),
         );
       } else {
         ScaffoldMessenger.of(
@@ -186,7 +189,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
         leading: const BackButton(),
         title: const Text("شكوي جديدة "),
@@ -212,61 +217,58 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               child: Column(
                 children: [
                   TextField(
-  controller: _controller,
-  maxLines: 5,
-  maxLength: 500,
-  onChanged: (_) => setState(() {}), // 👈 مهم لتحديث العداد
-  decoration: const InputDecoration(
-    hintText: "وصف المشكلة..؟",
-    border: InputBorder.none,
-    counterText: "",
-  ),
-),
+                    controller: _controller,
+                    maxLines: 5,
+                    maxLength: 500,
+                    onChanged: (_) => setState(() {}),
+                    decoration: const InputDecoration(
+                      hintText: "وصف المشكلة..؟",
+                      border: InputBorder.none,
+                      counterText: "",
+                    ),
+                  ),
 
-// 👇 عداد الحروف
+                  const SizedBox(height: 10),
 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: _pickImage,
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "إضافة صورة",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
 
-const SizedBox(height: 10),
-
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    // 👇 زر اختيار الصورة بلون أسود
-    TextButton.icon(
-      onPressed: _pickImage,
-      icon: const Icon(Icons.camera_alt_outlined, color: Colors.black),
-      label: const Text(
-        "إضافة صورة",
-        style: TextStyle(color: Colors.black),
-      ),
-    ),
-
-    // 👇 زر الإرسال بلون أزرق والنص باللون الأبيض
-    ElevatedButton.icon(
-      onPressed: _isLoading ? null : _sendComplaint,
-      icon: const Icon(Icons.send, color: Colors.white),
-      label: const Text(
-        "إرسال",
-        style: TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue.shade300,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-      ),
-    ),
-  ],
-),
-Align(
-  alignment: Alignment.centerRight,
-  child: Text(
-    '${_controller.text.length}/500',
-    style: const TextStyle(fontSize: 12, color: Colors.grey),
-  ),
-),
-],
-                
+                      ElevatedButton.icon(
+                        onPressed: _isLoading ? null : _sendComplaint,
+                        icon: const Icon(Icons.send, color: Colors.white),
+                        label: const Text(
+                          "إرسال",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade300,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${_controller.text.length}/500',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
+                ],
               ),
             ),
             const Spacer(),
