@@ -4,12 +4,14 @@ class CategoryCircle extends StatelessWidget {
   final String name; // اسم الكاتيجوري من الـ API
   final String imageUrl; // رابط الصورة من الـ API
   final bool isSelected;
+  final double radius;
 
   const CategoryCircle({
     super.key,
     required this.name,
     required this.imageUrl,
     this.isSelected = false,
+    required this.radius,
   });
 
   @override
@@ -19,7 +21,7 @@ class CategoryCircle extends StatelessWidget {
       child: Column(
         children: [
           CircleAvatar(
-            radius: 30,
+            radius: radius,
             backgroundColor: const Color(0xFF3D6643), // اللون الثابت
             backgroundImage: NetworkImage(
               'https://service-provider.runasp.net$imageUrl', // تحميل الصورة من الـ URL

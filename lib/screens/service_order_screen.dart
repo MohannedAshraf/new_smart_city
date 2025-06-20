@@ -179,6 +179,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 name: _categories![index].nameAr,
                 imageUrl: _categories![index].imageUrl,
                 isSelected: selectedCategoryIndex == index,
+                radius: 30,
               ),
             );
           }),
@@ -221,6 +222,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   child: CategoryCircle(
                     name: subCategories[index].nameAr,
                     imageUrl: subCategories[index].imageUrl,
+                    radius: 25,
                   ),
                 );
               }),
