@@ -10,6 +10,7 @@ class SearchResultModel {
   final String? categoryNameAr;
   final String? imageUrl;
   final int? categoryId;
+  final double? price; // ✅ مضافة حديثًا
 
   SearchResultModel({
     this.categoryId,
@@ -23,6 +24,7 @@ class SearchResultModel {
     this.categoryNameEn,
     this.categoryNameAr,
     this.imageUrl,
+    this.price,
   });
 
   factory SearchResultModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,10 @@ class SearchResultModel {
               ? json['categoryId']
               : int.tryParse(json['categoryId']?.toString() ?? ''),
       imageUrl: json['imageUrl'],
+      price:
+          json['price'] != null
+              ? double.tryParse(json['price'].toString())
+              : null,
     );
   }
 }

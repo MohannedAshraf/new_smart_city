@@ -145,17 +145,59 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                 ),
                               ),
                             const SizedBox(height: 10),
-                            Text(
-                              result.nameAr ?? "بدون اسم",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+
+                            // 🟢 الاسم والسعر في نفس السطر
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    result.nameAr ?? "بدون اسم",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (result.type.toLowerCase() == "product")
+                                  Text(
+                                    result.price != null
+                                        ? "LE ${result.price!.toStringAsFixed(2)}"
+                                        : "", // ✅ السعر أو نص فاضي
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                              ],
                             ),
+
                             const SizedBox(height: 4),
-                            Text(
-                              result.categoryNameAr ?? "بدون تصنيف",
-                              style: TextStyle(color: Colors.grey[700]),
+
+                            // 🟣 التصنيف واسم البائع في نفس السطر
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    result.categoryNameAr ?? "بدون تصنيف",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey[700],
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (result.businessName != null &&
+                                    result.businessName!.isNotEmpty)
+                                  Text(
+                                    result.businessName!,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ],
                         ),
