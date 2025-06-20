@@ -33,17 +33,25 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج")),
-      floatingActionButton: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CartView()),
-          );
-        },
-        child: SvgPicture.asset(
-          "assets/icon/actionbutton.svg",
-          width: 80,
-          height: 60,
+      floatingActionButton: Container(
+        width: 70,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          },
+          icon: const Icon(
+            Icons.shopping_bag_sharp,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
       ),
       body: FutureBuilder<ProductDetails>(

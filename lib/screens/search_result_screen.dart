@@ -23,15 +23,23 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   String? _error;
   static const baseImageUrl = "https://service-provider.runasp.net";
 
+  late TextEditingController _controller;
+
   @override
   void initState() {
     super.initState();
-    _performSearch();
+    _controller = TextEditingController(text: widget.keyword);
+    _performSearch(widget.keyword);
   }
 
-  Future<void> _performSearch() async {
+  Future<void> _performSearch(String keyword) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
     try {
-      final results = await ApiSearch.search(widget.keyword);
+      final results = await ApiSearch.search(keyword);
       setState(() {
         _results = results;
         _isLoading = false;
@@ -45,19 +53,63 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("نتائج البحث")),
-      body:
-          _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : _error != null
-              ? Center(child: Text('❌ خطأ: $_error'))
-              : _results == null || _results!.isEmpty
-              ? Center(child: Text("لا توجد نتائج"))
-              : ListView.builder(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Column(
+          children: [
+            // ✅ شريط البحث
+            TextField(
+              controller: _controller,
+              onSubmitted: (value) {
+                if (value.trim().isNotEmpty) {
+                  _performSearch(value.trim());
+                }
+              },
+              decoration: InputDecoration(
+                hintText: 'ماذا تريد؟',
+                prefixIcon: InkWell(
+                  onTap: () {
+                    if (_controller.text.trim().isNotEmpty) {
+                      _performSearch(_controller.text.trim());
+                    }
+                  },
+                  child: const Icon(Icons.search),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                filled: true,
+                fillColor: Color(0xFFEFEFEF),
+              ),
+            ),
+            SizedBox(height: 20),
+
+            // ✅ محتوى نتائج البحث
+            if (_isLoading)
+              Center(child: CircularProgressIndicator())
+            else if (_error != null)
+              Center(child: Text('❌ خطأ: $_error'))
+            else if (_results == null || _results!.isEmpty)
+              Center(child: Text("لا توجد نتائج"))
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: _results!.length,
-                padding: const EdgeInsets.all(12),
                 itemBuilder: (context, index) {
                   final result = _results![index];
                   return InkWell(
@@ -101,8 +153,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             builder: (context) => VendorProfile(id: result.id),
                           ),
                         );
-                      } else {
-                        print("نوع غير معروف: ${result.type}");
                       }
                     },
                     child: Card(
@@ -145,8 +195,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                 ),
                               ),
                             const SizedBox(height: 10),
-
-                            // 🟢 الاسم والسعر في نفس السطر
                             Row(
                               children: [
                                 Expanded(
@@ -163,19 +211,15 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   Text(
                                     result.price != null
                                         ? "LE ${result.price!.toStringAsFixed(2)}"
-                                        : "", // ✅ السعر أو نص فاضي
+                                        : "",
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                               ],
                             ),
-
                             const SizedBox(height: 4),
-
-                            // 🟣 التصنيف واسم البائع في نفس السطر
                             Row(
                               children: [
                                 Expanded(
@@ -206,6 +250,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   );
                 },
               ),
+          ],
+        ),
+      ),
     );
   }
 }

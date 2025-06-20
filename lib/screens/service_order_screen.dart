@@ -3,7 +3,6 @@ import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/models/banner_model.dart';
@@ -95,19 +94,21 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CartView()),
-          );
-        },
-        child: SvgPicture.asset(
-          "assets/icon/actionbutton.svg",
-          width: 80,
-          height: 60,
+      floatingActionButton: Container(
+        width: 70,
+        height: 50,
+        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          },
+          icon: Icon(Icons.shopping_bag_sharp, color: Colors.white, size: 30),
         ),
       ),
+
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
