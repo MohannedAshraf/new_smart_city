@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyColors {
   static const Color cardcolor = Color.fromARGB(255, 141, 177, 146);
   static const Color themecolor = Color(0xFF3D6643);
+  static const Color emergencybuttonscolor = Color(0xCC3D6643);
   static const Color cardfontcolor = Colors.white;
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   // static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
@@ -27,6 +28,8 @@ class MyColors {
   static const Color pink = Color(0xffFFE4F2);
 
   static const Color newbackground = Color.fromARGB(255, 220, 226, 223);
+
+  static const Color dodgerBlue = Color(0xff1E90FF);
 }
 
 abstract class MyAppColors {

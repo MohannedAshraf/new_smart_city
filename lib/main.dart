@@ -1,4 +1,5 @@
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/generated/l10n.dart';
 import 'package:citio/screens/all_vendors_screen.dart';
 import 'package:citio/screens/on_boarding_page.dart';
@@ -78,47 +79,39 @@ class HomePageState extends State<HomePage> {
               ? PreferredSize(
                 preferredSize: const Size.fromHeight(60),
                 child: AppBar(
-                  backgroundColor: const Color(0xFF3D6643),
+                  automaticallyImplyLeading: false,
+                  centerTitle: true,
+                  backgroundColor: MyAppColors.specialbackground,
+                  //foregroundColor: MyAppColors.specialbackground,
+                  surfaceTintColor: MyAppColors.specialbackground,
                   elevation: 0,
-                  title: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'اامدينتنا',
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                  title: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Expanded(child: CustomSearchBar()),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Notifications(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.notifications_none_outlined,
+                                color: MyColors.gray,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'مرحباً بك .....',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Notifications(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               )
               : null,
@@ -242,9 +235,9 @@ class HomePageState extends State<HomePage> {
         selectedLabelStyle: const TextStyle(fontSize: 16),
         unselectedLabelStyle: const TextStyle(fontSize: 14),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF3D6643),
-        selectedItemColor: const Color.fromARGB(172, 255, 255, 255),
-        unselectedItemColor: Colors.grey,
+        backgroundColor: MyAppColors.specialbackground,
+        selectedItemColor: MyColors.dodgerBlue,
+        unselectedItemColor: MyColors.gray,
         currentIndex: currentIndex,
         onTap: (index) {
           setState(() {
