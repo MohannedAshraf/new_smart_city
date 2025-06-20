@@ -1,6 +1,6 @@
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+//import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -46,112 +46,104 @@ class ProductCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 182,
-              height: 140,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-                child: Image.network(
-                  image,
-                  fit: BoxFit.fitHeight,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                      fit: BoxFit.fitHeight,
-                    );
-                  },
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5.0, right: 5, left: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 182,
+                height: 140,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.fitHeight,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.network(
+                        'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                        fit: BoxFit.fitHeight,
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      productName,
+              const SizedBox(height: 5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Text(
+                  productName,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      description.isNotEmpty ? description : 'لا يوجد وصف',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 2, // عرض سطرين فقط
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.start, // لضمان محاذاة العناصر بداية السطر
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    description.isNotEmpty
-                        ? (description.length > 13
-                            ? '${description.substring(0, 13)}...'
-                            : description)
-                        : 'لا يوجد وصف',
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  if (description.length > 13)
-                    InkWell(
-                      onTap: () {
-                        // ignore: avoid_print
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    ProductDetailsView(productId: productId),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'عرض المزيد',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.blue,
-                        ), // يمكنك تغيير اللون حسب الحاجة
+                    if (description.length >
+                        60) // شرط تقريبي لطول نص يحتاج لأكثر من سطرين
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      ProductDetailsView(productId: productId),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'عرض المزيد',
+                          style: TextStyle(fontSize: 12, color: Colors.blue),
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    price,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  children: [
+                    Text("$rating"),
+                    const Icon(Icons.star, color: Colors.amber),
+
+                    const Spacer(),
+                    Text(
+                      price,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(right: 60),
-              child: RatingBarIndicator(
-                rating: rating,
-                itemBuilder:
-                    (context, index) =>
-                        const Icon(Icons.star, color: Colors.amber),
-                itemCount: 5,
-                itemSize: 20.0,
-                direction: Axis.horizontal,
-              ),
-            ),
-          ],
+              // const SizedBox(height: 10),
+              // Padding(
+              //   padding: const EdgeInsets.only(right: 60),
+              //   child: RatingBarIndicator(
+              //     rating: rating,
+              //     itemBuilder:
+              //         (context, index) =>
+              //             const Icon(Icons.star, color: Colors.amber),
+              //     itemCount: 5,
+              //     itemSize: 20.0,
+              //     direction: Axis.horizontal,
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );

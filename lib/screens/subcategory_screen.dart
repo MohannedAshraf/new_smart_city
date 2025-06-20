@@ -155,6 +155,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               name: category.nameAr,
               imageUrl: category.imageUrl,
               isSelected: selectedCategoryIndex == index,
+              radius: 30,
             ),
           );
         }),
@@ -184,6 +185,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   name: subCategory.nameAr,
                   imageUrl: subCategory.imageUrl,
                   isSelected: selectedSubCategoryIndex == index,
+                  radius: 25,
                 ),
               );
             }),
