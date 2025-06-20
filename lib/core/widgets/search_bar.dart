@@ -13,6 +13,10 @@ class CustomSearchBar extends StatelessWidget {
         decoration: InputDecoration(
           //hintTextDirection: textDirectionToAxisDirection(textDirection),
           hintText: 'ماذا تريد ',
+          alignLabelWithHint: true,
+          contentPadding: EdgeInsets.zero,
+          isDense: true,
+          hintStyle: const TextStyle(height: 1.0, color: MyColors.gray),
           prefixIcon: const Icon(Icons.search, color: MyColors.gray),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: MyColors.whiteSmoke),
