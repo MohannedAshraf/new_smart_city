@@ -157,6 +157,7 @@ class _NotificationsScreenState extends State<Notifications> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+              backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -175,7 +176,7 @@ class _NotificationsScreenState extends State<Notifications> {
                 _filteredNotifications.isEmpty
                     ? const Center(child: Text("لا توجد إشعارات حاليًا"))
                     : ListView.builder(
-                      itemCount: _filteredNotifications.length, // <--- هنا
+                      itemCount: _filteredNotifications.length, 
                       itemBuilder: (context, index) {
                         final item = _filteredNotifications[index];
                         return NotificationCard(

@@ -23,7 +23,7 @@ class NotificationItem {
 
 class NotificationCard extends StatelessWidget {
   final NotificationItem notification;
-  final VoidCallback onTap; // 👈 جديدة عشان لما يضغط يتعلَّم كمقروء
+  final VoidCallback onTap; 
 
   const NotificationCard({
     Key? key,
@@ -34,12 +34,12 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // 👈 تنفيذ الحدث
+      onTap: onTap, 
       child: Card(
         color:
             notification.isRead
                 ? Colors.white
-                : const Color(0xFFF1F6FF), // لون مختلف للي مش مقروء
+                : const Color(0xFFF1F6FF),
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
@@ -50,7 +50,7 @@ class NotificationCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // الأيقونة
+              
               Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class NotificationCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // العنوان + نقطة لو مش مقروء
+                  
                     Row(
                       children: [
                         Expanded(
