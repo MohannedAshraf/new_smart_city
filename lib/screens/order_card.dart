@@ -34,13 +34,13 @@ class OrderCard extends StatelessWidget {
           color: MyAppColors.background,
           boxShadow: const [
             BoxShadow(
-              blurRadius: 5,
+              blurRadius: 4,
               spreadRadius: -8,
               offset: Offset(0, 6),
               color: MyAppColors.shadow,
             ),
             BoxShadow(
-              blurRadius: 5,
+              blurRadius: 4,
               spreadRadius: -8,
               offset: Offset(0, -4),
               color: MyAppColors.shadow,
@@ -119,7 +119,7 @@ class OrderCard extends StatelessWidget {
                 const SizedBox(width: 3),
                 IconButton(
                   onPressed: onDelete,
-                  icon: const Icon(Icons.delete, color: Colors.red),
+                  icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                 ),
               ],
             ),

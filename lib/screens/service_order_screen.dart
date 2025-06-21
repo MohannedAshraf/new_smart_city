@@ -2,8 +2,6 @@
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_svg/svg.dart';
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/models/banner_model.dart';
@@ -95,17 +93,18 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CartView()),
-          );
-        },
-        child: SvgPicture.asset(
-          "assets/icon/actionbutton.svg",
-          width: 80,
-          height: 60,
+      floatingActionButton: Container(
+        width: 70,
+        height: 50,
+        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          },
+          icon: Icon(Icons.shopping_bag_sharp, color: Colors.white, size: 30),
         ),
       ),
       appBar: AppBar(
@@ -114,40 +113,39 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
         title: const Text("طلب الخدمات"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: MySearchBar(
-                controller: _controller,
-                onSearch: _performSearch,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: MySearchBar(
+                  controller: _controller,
+                  onSearch: _performSearch,
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
+              _buildCategories(),
+              if (selectedCategoryIndex != null) _buildSubCategories(),
+              const SizedBox(height: 30),
+              _isLoadingBanners
+                  ? const Center(child: CircularProgressIndicator())
+                  : _bannerError != null
+                  ? Center(
+                    child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
+                  )
+                  : BannerSliderWidget(banners: _banners!),
+              const SizedBox(height: 20),
+              const Text(
+                "أفضل التقييمات",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
 
-            const SizedBox(height: 30),
-            _buildCategories(),
-            if (selectedCategoryIndex != null) _buildSubCategories(),
-
-            const SizedBox(height: 70),
-
-            _isLoadingBanners
-                ? const Center(child: CircularProgressIndicator())
-                : _bannerError != null
-                ? Center(child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'))
-                : BannerSliderWidget(banners: _banners!),
-
-            const SizedBox(height: 30),
-
-            const Text(
-              "أفضل التقييمات",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 30),
-            MostRequestedProductsView(),
-          ],
+              MostRequestedProductsView(),
+            ],
+          ),
         ),
       ),
     );
@@ -347,10 +345,7 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
               margin: const EdgeInsets.symmetric(horizontal: 4.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    _currentIndex == index
-                        ? const Color(0xFF3D6643)
-                        : Colors.grey,
+                color: _currentIndex == index ? Colors.blueAccent : Colors.grey,
               ),
             ),
           ),
