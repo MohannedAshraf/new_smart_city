@@ -92,17 +92,25 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CartView()),
-          );
-        },
-        child: SvgPicture.asset(
-          "assets/icon/actionbutton.svg",
-          width: 80,
-          height: 60,
+      floatingActionButton: Container(
+        width: 70,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartView()),
+            );
+          },
+          icon: const Icon(
+            Icons.shopping_bag_sharp,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
       ),
       // backgroundColor: const Color.fromARGB(255, 220, 226, 223),

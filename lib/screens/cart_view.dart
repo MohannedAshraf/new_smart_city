@@ -105,7 +105,7 @@ class _CartViewState extends State<CartView> {
                   },
                   onDelete: () {},
                 );
-              }).toList(),
+              }),
 
               const SizedBox(height: 20),
 
@@ -246,7 +246,7 @@ class _CartViewState extends State<CartView> {
                           "المجموع  ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 20,
                           ),
                         ),
                         const Spacer(),
@@ -254,7 +254,7 @@ class _CartViewState extends State<CartView> {
                           "LE ${(subtotal + 3 + 2).toStringAsFixed(2)}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 20,
                           ),
                         ),
                       ],
