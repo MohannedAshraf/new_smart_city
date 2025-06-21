@@ -81,7 +81,7 @@ class ComplaintList extends StatelessWidget {
         final issue = issues[index];
 
         return SizedBox(
-          height: 140,
+          height: 150, // زودنا شوية عشان الارتفاع
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
@@ -90,7 +90,7 @@ class ComplaintList extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 8),
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16), // خففنا البادينج بدل 24
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -139,7 +139,7 @@ class ComplaintList extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
+                        const Spacer(), // 🧠 ده المفتاح لمنع الضغط الزايد
                         Text(
                           (type == 'inprogress')
                               ? 'تحت المراجعة'
@@ -155,12 +155,9 @@ class ComplaintList extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [buildTrailingWidget()],
-                    ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: buildTrailingWidget(),
                   ),
                 ],
               ),
