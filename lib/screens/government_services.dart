@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,6 @@ class GovernmentServices extends StatefulWidget {
 class _GovernmentServicesState extends State<GovernmentServices> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
@@ -55,7 +56,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: MyColors.whiteSmoke,
                               ),
-                              margin: EdgeInsets.all(8),
+                              margin: const EdgeInsets.all(8),
                               //
                               child: IconButton(
                                 onPressed: () {},
@@ -71,7 +72,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                       ],
                     ),
                   ),
-                  Row(children: [
+                  const Row(children: [
                       
                     ],
                   ),
