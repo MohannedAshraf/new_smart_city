@@ -224,7 +224,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     ),
 
                     /// ✅ زر Add to Cart بحالة متغيرة
-                    Container(
+                    SizedBox(
                       width: 250,
                       child: ElevatedButton.icon(
                         onPressed: () async {

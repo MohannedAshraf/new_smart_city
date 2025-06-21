@@ -121,21 +121,43 @@ class OrderCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 3),
 
-                /// ✅ زر الحذف
+                /// ✅ زر الحذف مع رسالة تأكيد
                 IconButton(
                   onPressed: () async {
-                    try {
-                      await DeleteFromCartService.deleteProductFromCart(
-                        productId,
-                      );
-                      onDelete(); // حدث الواجهة بعد الحذف
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("فشل الحذف: $e"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: const Text('تأكيد الحذف'),
+                            content: Text('هل تود حذف "$ordername"؟'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text('إلغاء'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: const Text('موافق'),
+                              ),
+                            ],
+                          ),
+                    );
+
+                    if (confirm == true) {
+                      try {
+                        await DeleteFromCartService.deleteProductFromCart(
+                          productId,
+                        );
+                        onDelete(); // حدث الواجهة بعد الحذف
+                      } catch (e) {
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("فشل الحذف: $e"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
                     }
                   },
                   icon: const Icon(Icons.delete, color: Colors.red, size: 20),
