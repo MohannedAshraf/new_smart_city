@@ -1,4 +1,3 @@
-import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/cart_model.dart';
 import 'package:flutter/material.dart';
 

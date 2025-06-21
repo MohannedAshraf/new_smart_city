@@ -71,6 +71,9 @@ class _CartViewState extends State<CartView> {
           "العربة ",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(icon: const Icon(Icons.refresh), onPressed: loadCart),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 10.0, bottom: 12, right: 12),
@@ -103,7 +106,7 @@ class _CartViewState extends State<CartView> {
                       item.quantity = newQty;
                     });
                   },
-                  onDelete: () {},
+                  onDelete: loadCart, // ✅ هنا أضفنا الريفريش
                 );
               }),
 
@@ -212,7 +215,6 @@ class _CartViewState extends State<CartView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Row(
-                      // mainAxisAlignment: MainAxisAlignment.,
                       children: [
                         Text(
                           "ملخص  الطلب",

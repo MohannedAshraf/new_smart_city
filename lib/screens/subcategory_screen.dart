@@ -8,7 +8,6 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_under_sub_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final int selectedCategoryIndex;

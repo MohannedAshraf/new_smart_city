@@ -1,4 +1,5 @@
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/helper/api_delete_product_frome_cart.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {
@@ -27,7 +28,7 @@ class OrderCard extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 5), // ✅ تم تصغير المارجن
+        margin: const EdgeInsets.only(bottom: 5),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -50,7 +51,7 @@ class OrderCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ✅ الصورة
+            /// ✅ صورة المنتج
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
@@ -69,7 +70,8 @@ class OrderCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            // ✅ الاسم والسعر تحت بعض
+
+            /// ✅ اسم المنتج والسعر
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +87,7 @@ class OrderCard extends StatelessWidget {
                   Text(
                     'LE ${orderprice.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      fontSize: 15, // ✅ تم تكبير خط السعر
+                      fontSize: 15,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
                     ),
@@ -94,7 +96,8 @@ class OrderCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            // ✅ العداد وزر الحذف في نفس السطر
+
+            /// ✅ العداد وزر الحذف
             Row(
               children: [
                 _buildCircleButton(
@@ -117,8 +120,24 @@ class OrderCard extends StatelessWidget {
                   },
                 ),
                 const SizedBox(width: 3),
+
+                /// ✅ زر الحذف
                 IconButton(
-                  onPressed: onDelete,
+                  onPressed: () async {
+                    try {
+                      await DeleteFromCartService.deleteProductFromCart(
+                        productId,
+                      );
+                      onDelete(); // حدث الواجهة بعد الحذف
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("فشل الحذف: $e"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
                   icon: const Icon(Icons.delete, color: Colors.red, size: 20),
                 ),
               ],
