@@ -7,6 +7,8 @@ class NotificationItem {
   final String title;
   final String description;
   final String timeAgo;
+  final String category;
+  bool isRead;
 
   NotificationItem({
     required this.icon,
@@ -14,76 +16,100 @@ class NotificationItem {
     required this.title,
     required this.description,
     required this.timeAgo,
+    required this.category,
+    this.isRead = false,
   });
 }
 
 class NotificationCard extends StatelessWidget {
   final NotificationItem notification;
+  final VoidCallback onTap; // 👈 جديدة عشان لما يضغط يتعلَّم كمقروء
 
-  const NotificationCard({Key? key, required this.notification}) : super(key: key);
+  const NotificationCard({
+    Key? key,
+    required this.notification,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      elevation: 0.5, // Subtle shadow for card separation
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Icon with colored background
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                color: notification.iconBackgroundColor,
-                borderRadius: BorderRadius.circular(8.0),
+    return GestureDetector(
+      onTap: onTap, // 👈 تنفيذ الحدث
+      child: Card(
+        color:
+            notification.isRead
+                ? Colors.white
+                : const Color(0xFFF1F6FF), // لون مختلف للي مش مقروء
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 0.5,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // الأيقونة
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: notification.iconBackgroundColor,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Icon(notification.icon, color: MyColors.themecolor),
               ),
-              child: Icon(
-                notification.icon,
-                color: MyColors.themecolor, // Use your custom theme color for the icon
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // العنوان + نقطة لو مش مقروء
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            notification.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        if (!notification.isRead)
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      notification.description,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey.shade600,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      notification.timeAgo,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Title
-                  Text(
-                    notification.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                  // Description
-                  Text(
-                    notification.description,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey.shade600,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8.0),
-                  // Time Ago
-                  Text(
-                    notification.timeAgo,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
