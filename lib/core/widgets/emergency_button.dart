@@ -106,6 +106,7 @@ class EmergencyButton extends StatelessWidget {
               child: emicon,
             ),
           ),
+          const SizedBox(height: 10),
           Text(
             emname,
             style: const TextStyle(fontSize: 12, color: Colors.black),

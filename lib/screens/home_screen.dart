@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               color: MyColors.white,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 45,
@@ -86,6 +86,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
                         const Text(
                           'أضف شكوى',
                           style: TextStyle(fontSize: 12, color: Colors.black),
