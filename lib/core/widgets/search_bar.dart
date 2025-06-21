@@ -2,17 +2,25 @@ import 'package:citio/core/utils/variables.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({super.key});
+  const CustomSearchBar({
+    super.key,
+    required this.borderRadius,
+    required this.hintText,
+    required this.height,
+  });
+  final double borderRadius;
+  final String hintText;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: height,
       width: 200,
       child: TextField(
         decoration: InputDecoration(
           //hintTextDirection: textDirectionToAxisDirection(textDirection),
-          hintText: 'ماذا تريد ',
+          hintText: hintText,
           alignLabelWithHint: true,
           contentPadding: EdgeInsets.zero,
           isDense: true,
@@ -20,10 +28,10 @@ class CustomSearchBar extends StatelessWidget {
           prefixIcon: const Icon(Icons.search, color: MyColors.gray),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: MyColors.whiteSmoke),
-            borderRadius: BorderRadius.circular(25.0),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25.0),
+            borderRadius: BorderRadius.circular(borderRadius),
             borderSide: const BorderSide(color: MyColors.whiteSmoke),
           ),
           filled: true,
