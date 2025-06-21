@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:city/core/utils/mycolors.dart';
 import 'package:city/models/issue.dart';
+import 'package:city/models/feedback_model.dart';
+import 'package:city/helper/api_rating_issue.dart';
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -18,7 +20,7 @@ class RatedComplaintList extends StatelessWidget {
         final issue = issues[index];
 
         return SizedBox(
-          height: 140, 
+          height: 140,
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
@@ -59,7 +61,7 @@ class RatedComplaintList extends StatelessWidget {
                         Text(
                           issue.title,
                           style: const TextStyle(
-                            fontSize: 14, 
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -70,7 +72,7 @@ class RatedComplaintList extends StatelessWidget {
                         Text(
                           issue.description ?? '',
                           style: const TextStyle(
-                            fontSize: 14, 
+                            fontSize: 14,
                             color: Color.fromARGB(255, 0, 3, 5),
                           ),
                           maxLines: 2,
@@ -166,7 +168,7 @@ class RatedComplaintList extends StatelessWidget {
                                       "إرسال",
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       final comment =
                                           commentController.text.trim();
 
@@ -174,47 +176,63 @@ class RatedComplaintList extends StatelessWidget {
                                         ScaffoldMessenger.of(
                                           context,
                                         ).showSnackBar(
-                                          SnackBar(
-                                            content: const Text(
+                                          const SnackBar(
+                                            content: Text(
                                               "من فضلك اختر تقييم قبل الإرسال ⭐",
                                             ),
                                             backgroundColor: Colors.red,
-                                            duration: const Duration(
-                                              seconds: 3,
-                                            ),
-                                            behavior: SnackBarBehavior.floating,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
                                           ),
                                         );
                                         return;
                                       }
 
-                                      print(
-                                        "Rating: $selectedRating, Comment: $comment",
-                                      );
+                                      try {
+                                        final feedbackService =
+                                            FeedbackApiService();
+                                        final response = await feedbackService
+                                            .sendFeedback(
+                                              comment: comment,
+                                              rateValue: selectedRating.toInt(),
+                                            );
 
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: const Text(
-                                            "تم إرسال تقييمك بنجاح ✅",
-                                          ),
-                                          backgroundColor: Colors.green,
-                                          duration: const Duration(seconds: 3),
-                                          behavior: SnackBarBehavior.floating,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
+                                        if (response.isSuccess) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "تم إرسال تقييمك بنجاح ✅",
+                                              ),
+                                              backgroundColor: Colors.green,
                                             ),
+                                          );
+                                          Navigator.of(context).pop();
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                response.message.isNotEmpty
+                                                    ? response.message
+                                                    : "فشل في إرسال التقييم",
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "حدث خطأ أثناء الإرسال: $e",
+                                            ),
+                                            backgroundColor: Colors.red,
                                           ),
-                                        ),
-                                      );
-
-                                      Navigator.of(context).pop();
+                                        );
+                                      }
                                     },
                                   ),
                                 ],
