@@ -7,6 +7,8 @@ import 'package:citio/models/issue.dart';
 import 'package:citio/screens/add_issue_screen.dart';
 import 'package:citio/services/get_issues.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
@@ -30,6 +32,24 @@ class _IssueScreenState extends State<IssueScreen> {
   Future<void> loadIssues() async {
     final data = await GetIssues().getIssues();
     final issues = data.values;
+
+issues.sort((a, b) {
+    try {
+      final fixedA = a.date.replaceAllMapped(
+        RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+        (match) => '${match[1]}, ${match[2]}',
+      );
+      final fixedB = b.date.replaceAllMapped(
+        RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+        (match) => '${match[1]}, ${match[2]}',
+      );
+      final dateA = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedA);
+      final dateB = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedB);
+      return dateB.compareTo(dateA);
+    } catch (e) {
+      return 0;
+    }
+  });
 
     setState(() {
       active = issues.where((e) => e.status == 'Active').toList();

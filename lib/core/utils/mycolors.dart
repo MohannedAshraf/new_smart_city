@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class MyColors {
   static const Color cardcolor = Color.fromARGB(255, 141, 177, 146);
-  static const Color themecolor = Color(0xFF3D6643);
+  static const Color themecolor = Color.fromARGB(255, 49, 48, 138);
   static const Color emergencybuttonscolor = Color(0xCC3D6643);
   static const Color cardfontcolor = Colors.white;
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
