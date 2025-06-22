@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings
 
-String _baseUrl = 'https://graduation.amiralsayed.me';
-
 class SocialmediaUser {
   final String userName;
   final String name;
@@ -11,7 +9,7 @@ class SocialmediaUser {
     return SocialmediaUser(
       userName: '@' + jsonData['userName'],
       name: jsonData['localUserName'],
-      avatar: _baseUrl + jsonData['avatarUrl'],
+      avatar: jsonData['avatarUrl'],
     );
   }
 }

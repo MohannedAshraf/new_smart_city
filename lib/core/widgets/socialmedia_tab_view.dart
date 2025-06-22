@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/core/widgets/reactions.dart';
 import 'package:citio/models/socialmedia_post.dart';
@@ -87,8 +87,11 @@ class SocialmediaTabView extends StatelessWidget {
                                       CircleAvatar(
                                         radius: 20,
                                         backgroundImage: NetworkImage(
-                                          user.avatar ??
-                                              'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
+                                          (user.avatar != null &&
+                                                  user.avatar!.isNotEmpty)
+                                              ? Urls.socialmediaBaseUrl +
+                                                  user.avatar!
+                                              : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
                                         ),
                                         /*_user.avatar != null
                                       ? NetworkImage(_user.avatar!)
