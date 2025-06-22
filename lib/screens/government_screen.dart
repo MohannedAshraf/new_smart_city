@@ -1,8 +1,9 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
+import 'package:citio/core/widgets/tab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
-import 'package:citio/core/widgets/tab_item.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 final Uri _url = Uri.parse('https://dribbble.com/shots/popular/mobile');

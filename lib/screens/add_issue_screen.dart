@@ -1,16 +1,17 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
-
 import 'dart:io';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
 import 'package:citio/models/add_issue_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewComplaintCenterPage extends StatefulWidget {
   const NewComplaintCenterPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NewComplaintCenterPageState createState() => _NewComplaintCenterPageState();
 }
 
@@ -20,29 +21,89 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   bool _isLoading = false;
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.blue),
+                title: const Text('الكاميرا'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.camera,
+                  );
+                  if (pickedFile != null) {
+                    setState(() => _selectedImage = File(pickedFile.path));
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo, color: Colors.green),
+                title: const Text('اختيار من المعرض'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (pickedFile != null) {
+                    setState(() => _selectedImage = File(pickedFile.path));
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-    }
   }
 
+  // ignore: unused_element
   void _removeImage() {
-    setState(() {
-      _selectedImage = null;
-    });
+    setState(() => _selectedImage = null);
   }
 
   void _sendComplaint() async {
     final description = _controller.text.trim();
-
     if (description.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("من فضلك اكتب وصف الشكوى")));
+      return;
+    }
+
+    final status = await Permission.location.status;
+    if (!status.isGranted) {
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: const Text("صلاحية الموقع مطلوبة"),
+              content: const Text(
+                "يجب السماح للتطبيق بالوصول إلى الموقع لإرسال الشكوى.",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    final newStatus = await Permission.location.request();
+                    if (newStatus.isGranted) _sendComplaint();
+                  },
+                  child: const Text("سماح بالموقع"),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("إلغاء"),
+                ),
+              ],
+            ),
+      );
       return;
     }
 
@@ -65,20 +126,64 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       );
 
       if (response.isSuccess) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("تم إرسال الشكوى بنجاح")));
-        setState(() {
-          _controller.clear();
-          _selectedImage = null;
-        });
+        _controller.clear();
+        _selectedImage = null;
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: const Duration(seconds: 5),
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            backgroundColor: Colors.green.shade600,
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: Text(
+                    "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
+                    style: TextStyle(color: Colors.white),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    final shareText =
+                        "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
+                    // ignore: deprecated_member_use
+                    Share.share(shareText);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.green.shade800,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  icon: const Icon(Icons.share, size: 16, color: Colors.white),
+                  label: const Text(
+                    "مشاركة",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(
+          // ignore: use_build_context_synchronously
           context,
         ).showSnackBar(const SnackBar(content: Text("فشل في إرسال الشكوى")));
       }
     } catch (e) {
       ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء الإرسال: $e")));
     } finally {
@@ -90,92 +195,95 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         centerTitle: true,
-        title: const Text(
-          "شكوي  جديده ",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        leading: const BackButton(),
+        title: const Text("شكوي جديدة "),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            width: screenWidth * 0.9,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.grey.shade100,
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (_selectedImage != null)
-                  Stack(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Container(
+              width: screenWidth,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _controller,
+                    maxLines: 5,
+                    maxLength: 500,
+                    onChanged: (_) => setState(() {}),
+                    decoration: const InputDecoration(
+                      hintText: "وصف المشكلة..؟",
+                      border: InputBorder.none,
+                      counterText: "",
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.file(
-                          _selectedImage!,
-                          height: 80,
-                          width: 80,
-                          fit: BoxFit.cover,
+                      TextButton.icon(
+                        onPressed: _pickImage,
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          "إضافة صورة",
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _removeImage,
-                          child: const CircleAvatar(
-                            radius: 12,
-                            backgroundColor: Colors.red,
-                            child: Icon(
-                              Icons.close,
-                              size: 14,
-                              color: Colors.white,
-                            ),
+
+                      ElevatedButton.icon(
+                        onPressed: _isLoading ? null : _sendComplaint,
+                        icon: const Icon(Icons.send, color: Colors.white),
+                        label: const Text(
+                          "إرسال",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade300,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
                           ),
                         ),
                       ),
                     ],
                   ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _controller,
-                        maxLines: null,
-                        decoration: const InputDecoration(
-                          hintText: 'اكتب الشكوى هنا...',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                        ),
-                      ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${_controller.text.length}/500',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                    IconButton(
-                      onPressed: _pickImage,
-                      icon: const Icon(Icons.image, color: Colors.blue),
-                    ),
-                    _isLoading
-                        ? const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : IconButton(
-                          onPressed: _sendComplaint,
-                          icon: const Icon(Icons.send, color: Colors.blue),
-                        ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
+            const Spacer(),
+            if (_isLoading)
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),
+          ],
         ),
       ),
     );
