@@ -9,7 +9,6 @@ import 'package:citio/services/get_issues.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
 
@@ -33,23 +32,23 @@ class _IssueScreenState extends State<IssueScreen> {
     final data = await GetIssues().getIssues();
     final issues = data.values;
 
-issues.sort((a, b) {
-    try {
-      final fixedA = a.date.replaceAllMapped(
-        RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
-        (match) => '${match[1]}, ${match[2]}',
-      );
-      final fixedB = b.date.replaceAllMapped(
-        RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
-        (match) => '${match[1]}, ${match[2]}',
-      );
-      final dateA = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedA);
-      final dateB = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedB);
-      return dateB.compareTo(dateA);
-    } catch (e) {
-      return 0;
-    }
-  });
+    issues.sort((a, b) {
+      try {
+        final fixedA = a.date.replaceAllMapped(
+          RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+          (match) => '${match[1]}, ${match[2]}',
+        );
+        final fixedB = b.date.replaceAllMapped(
+          RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+          (match) => '${match[1]}, ${match[2]}',
+        );
+        final dateA = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedA);
+        final dateB = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedB);
+        return dateB.compareTo(dateA);
+      } catch (e) {
+        return 0;
+      }
+    });
 
     setState(() {
       active = issues.where((e) => e.status == 'Active').toList();
@@ -170,7 +169,9 @@ issues.sort((a, b) {
               MaterialPageRoute(
                 builder: (context) => const NewComplaintCenterPage(),
               ),
-            );
+            ).then((_) {
+              loadIssues(); // ✅ إعادة التحميل بعد الرجوع
+            });
           },
           child: const Icon(Icons.add, size: 20, color: Colors.white),
         ),

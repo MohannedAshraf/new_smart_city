@@ -128,6 +128,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       if (response.isSuccess) {
         _controller.clear();
         _selectedImage = null;
+        
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
