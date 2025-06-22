@@ -70,10 +70,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               ),
                               margin: const EdgeInsets.all(8),
                               child: IconButton(
-                                onPressed: () {
-                                  // مثال: لما تضغط زر الفلتر
-                                  print('فلتر تم الضغط عليه');
-                                },
+                                onPressed: () {},
                                 icon: const Icon(
                                   Icons.filter_alt,
                                   color: MyColors.gray,
