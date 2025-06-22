@@ -19,7 +19,8 @@ class ComplaintList extends StatelessWidget {
       );
 
       final dateFormat = DateFormat("MMMM d, yyyy h:mm a", "en_US");
-      final dateTime = dateFormat.parse(fixedDateString);
+      final dateTime = dateFormat.parse(fixedDateString, true);
+
       final now = DateTime.now();
       final difference = now.difference(dateTime);
       if (difference.inSeconds < 60) {
@@ -107,11 +108,14 @@ class ComplaintList extends StatelessWidget {
                                   (context, error, stackTrace) =>
                                       const Icon(Icons.broken_image, size: 40),
                             )
-                            : Container(
+                            : Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
                               width: 80,
                               height: 80,
-                              color: Colors.grey[200],
-                              child: const Icon(Icons.image, size: 32),
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      const Icon(Icons.broken_image, size: 40),
                             ),
                   ),
                   const SizedBox(width: 16),

@@ -3,6 +3,7 @@
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
+import 'package:citio/screens/add_issue_screen.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_products.dart';
@@ -71,7 +72,15 @@ class HomeScreen extends StatelessWidget {
                     Column(
                       children: [
                         InkWell(
-                          onTap: () => print('Icon Button Pressed'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => const NewComplaintCenterPage(),
+                              ),
+                            );
+                          },
                           borderRadius: BorderRadius.circular(50),
                           child: Container(
                             width: 40,
@@ -86,6 +95,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 10),
                         const Text(
                           'أضف شكوى',

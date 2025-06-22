@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, unnecessary_import, deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:flutter/cupertino.dart';
