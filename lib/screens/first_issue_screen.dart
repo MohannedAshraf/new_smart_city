@@ -141,7 +141,7 @@ issues.sort((a, b) {
                             title: 'تحت المراجعة',
                             count: inprogress.length,
                           ),
-                          TabItem(title: 'المقبولة', count: resolved.length),
+                          TabItem(title: 'المقبسولة', count: resolved.length),
                         ],
                       ),
                     ),

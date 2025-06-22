@@ -8,27 +8,35 @@ class TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final badgeSize = MediaQuery.of(context).size.width * 0.045;
+
     return Tab(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 4,
         children: [
-          Text(title, overflow: TextOverflow.ellipsis),
-          count > 0
-              ? Container(
-                margin: const EdgeInsets.only(left: 4),
-                constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  shape: BoxShape.circle,
+          Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 14),
+          ),
+          if (count > 0)
+            Container(
+              width: badgeSize,
+              height: badgeSize,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                count > 9 ? "9+" : count.toString(),
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: badgeSize * 0.5,
                 ),
-                child: Center(
-                  child: Text(
-                    count > 9 ? "9+" : count.toString(),
-                    style: const TextStyle(color: Colors.black54, fontSize: 10),
-                  ),
-                ),
-              )
-              : const SizedBox.shrink(),
+              ),
+            ),
         ],
       ),
     );
