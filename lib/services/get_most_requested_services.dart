@@ -6,10 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MostRequestedServices {
   Future<List<MostRequested>> getMostRequestedServices() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
     // ignore: missing_required_param
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
     List<dynamic> data = await Api().get(
       url:
           'https://government-services.runasp.net/api/Dashboard/MostRequestedServices',
+      token: token,
     );
     List<MostRequested> requestsList = [];
     for (int i = 0; i < data.length; i++) {

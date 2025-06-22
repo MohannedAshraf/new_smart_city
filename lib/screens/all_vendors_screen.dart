@@ -489,55 +489,55 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
 
       pageNumber++;
 
-      Future.delayed(const Duration(seconds: 1), () {
-        switch (currentMode) {
-          case VendorMode.normal:
-            GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
-              setState(() {
-                vendors.addAll(fetchedItems.items);
-                totalPages = fetchedItems.totalPages;
-                isLoading = false;
-              });
+      //  Future.delayed(const Duration(seconds: 0), () {
+      switch (currentMode) {
+        case VendorMode.normal:
+          GetVendor().getAllVendors(pageNumber).then((fetchedItems) {
+            setState(() {
+              vendors.addAll(fetchedItems.items);
+              totalPages = fetchedItems.totalPages;
+              isLoading = false;
             });
-            break;
+          });
+          break;
 
-          case VendorMode.search:
-            GetVendor().searchVendors(searchValue, pageNumber).then((
-              fetchedItems,
-            ) {
-              setState(() {
-                vendors.addAll(fetchedItems.items);
-                totalPages = fetchedItems.totalPages;
-                isLoading = false;
-              });
+        case VendorMode.search:
+          GetVendor().searchVendors(searchValue, pageNumber).then((
+            fetchedItems,
+          ) {
+            setState(() {
+              vendors.addAll(fetchedItems.items);
+              totalPages = fetchedItems.totalPages;
+              isLoading = false;
             });
-            break;
+          });
+          break;
 
-          case VendorMode.filter:
-            GetVendor().filterVendors(filterValues, pageNumber).then((
-              fetchedItems,
-            ) {
-              setState(() {
-                vendors.addAll(fetchedItems.items);
-                totalPages = fetchedItems.totalPages;
-                isLoading = false;
-              });
+        case VendorMode.filter:
+          GetVendor().filterVendors(filterValues, pageNumber).then((
+            fetchedItems,
+          ) {
+            setState(() {
+              vendors.addAll(fetchedItems.items);
+              totalPages = fetchedItems.totalPages;
+              isLoading = false;
             });
-            break;
+          });
+          break;
 
-          case VendorMode.searchfilter:
-            GetVendor()
-                .searchFilterVendors(filterValues, pageNumber, searchValue)
-                .then((fetchedItems) {
-                  setState(() {
-                    vendors.addAll(fetchedItems.items);
-                    totalPages = fetchedItems.totalPages;
-                    isLoading = false;
-                  });
+        case VendorMode.searchfilter:
+          GetVendor()
+              .searchFilterVendors(filterValues, pageNumber, searchValue)
+              .then((fetchedItems) {
+                setState(() {
+                  vendors.addAll(fetchedItems.items);
+                  totalPages = fetchedItems.totalPages;
+                  isLoading = false;
                 });
-            break;
-        }
-      });
+              });
+          break;
+      }
+      //});
     }
   }
 

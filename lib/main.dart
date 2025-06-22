@@ -80,7 +80,7 @@ class HomePageState extends State<HomePage> {
               ? PreferredSize(
                 preferredSize: const Size.fromHeight(60),
                 child: AppBar(
-                  automaticallyImplyLeading: false,
+                  //automaticallyImplyLeading: true,
                   centerTitle: true,
                   backgroundColor: MyAppColors.specialbackground,
                   //foregroundColor: MyAppColors.specialbackground,
