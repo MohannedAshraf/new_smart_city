@@ -237,7 +237,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     backgroundColor: MyColors.white,
-                                    radius: 14,
+                                    radius: 13,
                                     child: Icon(
                                       Icons.format_list_numbered,
                                       color: MyColors.dodgerBlue,
@@ -262,17 +262,29 @@ class GovernmentServiceDetails extends StatelessWidget {
                               ),
                             ),
 
-                            stepsItem('textt1', 'title1', '1'),
-
-                            stepsItem('textt2', 'title2', '2'),
+                            stepsItem(
+                              'أكمل النموذج الإلكتروني باستخدام بياناتك الشخصية.',
+                              'تقديم الطلب',
+                              '1',
+                            ),
 
                             stepsItem(
-                              'textt3  enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure',
-                              'title3',
+                              'قدّم نسخًا رقمية من جميع المستندات المطلوبة.',
+                              ' تحميل المستندات',
+                              '2',
+                            ),
+
+                            stepsItem(
+                              'أكمل عملية الدفع من خلال بوابة إلكترونية آمنة.',
+                              'دفع الرسوم',
                               '3',
                             ),
 
-                            stepsItem('textt3 ', 'title4', '4'),
+                            stepsItem(
+                              'استلم الشهادة يدويًا أو بالبريد خلال مدة التنفيذ.',
+                              'title4',
+                              '4',
+                            ),
                           ],
                         ),
                       ),

@@ -251,7 +251,8 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 0,
                     mainAxisSpacing: 0,
-                    childAspectRatio: 0.60869,
+                    childAspectRatio: 158 / 250,
+                    //childAspectRatio: 0.60869,
                   ),
                   itemCount: serviceList.length,
                   itemBuilder: (context, index) {
@@ -337,8 +338,8 @@ class ServiceCard extends StatelessWidget {
     return GestureDetector(
       onTap: ontab,
       child: Container(
-        width: 158,
-        height: 230,
+        width: double.infinity,
+        //height: 230,
         margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
 
         decoration: BoxDecoration(
@@ -359,17 +360,12 @@ class ServiceCard extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    color: color,
-                    width: 158,
-                    height: 130,
-                    child: Center(
-                      child: Icon(icon, size: 40, color: fontColor),
-                    ),
-                  ),
-                ],
+              child: Container(
+                color: color,
+
+                width: double.infinity,
+                height: 130,
+                child: Center(child: Icon(icon, size: 40, color: fontColor)),
               ),
             ),
             Row(
