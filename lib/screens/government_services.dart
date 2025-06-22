@@ -1,13 +1,7 @@
-import 'dart:developer';
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
-import 'package:flutter/foundation.dart';
+import 'package:citio/screens/government_service_details.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/widgets/search_bar.dart';
 
 class GovernmentServices extends StatefulWidget {
   const GovernmentServices({super.key});
@@ -174,7 +168,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
           automaticallyImplyLeading: true,
           title: const Text(
             'الخدمات الحكومية',
-            style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -237,7 +231,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               setState(() {
                                 selectedIndex = index;
                               });
-                              print('مكان الfunction التانية يا لولو');
+                              //'مكان الfunction التانية يا لولو'
                             },
                           );
                         }),
@@ -261,6 +255,13 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                   itemBuilder: (context, index) {
                     final service = serviceList[index];
                     return ServiceCard(
+                      ontab:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GovernmentServiceDetails(),
+                            ),
+                          ),
                       icon: service['icon'],
                       color: service['color'],
                       fontColor: service['fontColor'],
@@ -318,6 +319,7 @@ class ServiceCard extends StatelessWidget {
   final String category;
   final String serviceName;
   final String details;
+  final VoidCallback ontab;
   const ServiceCard({
     super.key,
     required this.icon,
@@ -326,103 +328,109 @@ class ServiceCard extends StatelessWidget {
     required this.serviceName,
     required this.fontColor,
     required this.details,
+    required this.ontab,
   });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 158,
-      height: 230,
-      margin: EdgeInsets.fromLTRB(6, 4, 6, 4),
+    return GestureDetector(
+      onTap: ontab,
+      child: Container(
+        width: 158,
+        height: 230,
+        margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
 
-      decoration: BoxDecoration(
-        color: MyColors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: const [
-          BoxShadow(
-            color: MyColors.whiteSmoke,
-            blurRadius: 4.0,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: const [
+            BoxShadow(
+              color: MyColors.whiteSmoke,
+              blurRadius: 4.0,
+              offset: Offset(0, 2),
             ),
-            child: Row(
-              children: [
-                Container(
-                  color: color,
-                  width: 158,
-                  height: 130,
-                  child: Center(child: Icon(icon, size: 40, color: fontColor)),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(category, style: TextStyle(color: fontColor)),
-                ),
+          ],
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    maxLines: 1,
-                    serviceName,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              child: Row(
+                children: [
+                  Container(
+                    color: color,
+                    width: 158,
+                    height: 130,
+                    child: Center(
+                      child: Icon(icon, size: 40, color: fontColor),
                     ),
-                    textAlign: TextAlign.start,
-                    //maxLines: 2,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(category, style: TextStyle(color: fontColor)),
                   ),
                 ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    maxLines: 2,
-                    details,
-                    style: const TextStyle(
-                      color: Color.fromARGB(221, 59, 58, 58),
-                      fontSize: 12.0,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      maxLines: 1,
+                      serviceName,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
+                      //maxLines: 2,
                     ),
-                    textAlign: TextAlign.start,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      maxLines: 2,
+                      details,
+                      style: const TextStyle(
+                        color: Color.fromARGB(221, 59, 58, 58),
+                        fontSize: 12.0,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
