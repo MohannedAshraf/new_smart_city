@@ -124,25 +124,26 @@ class HomePageState extends State<HomePage> {
               : null,
       body: pages[currentIndex],
       drawer: Drawer(
+        backgroundColor: MyColors.offWhite,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
-              decoration: BoxDecoration(color: Color(0xFF3D6643)),
+              decoration: BoxDecoration(color: MyAppColors.specialbackground),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'مدينتنا',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: MyColors.black,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'مرحباً بكم!',
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: MyColors.black, fontSize: 16),
                   ),
                 ],
               ),

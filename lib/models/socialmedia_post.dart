@@ -1,7 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
-
-String _baseUrl = 'https://graduation.amiralsayed.me';
+import 'package:citio/core/utils/variables.dart';
 
 class SocialmediaPost {
   List<Data> data;
@@ -67,7 +66,7 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> jsonData) {
     return Media(
       type: jsonData['type'],
-      url: _baseUrl + jsonData['url'],
+      url: Urls.socialmediaBaseUrl + jsonData['url'],
       sId: jsonData['_id'],
     );
   }
