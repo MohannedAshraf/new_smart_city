@@ -11,7 +11,6 @@ class NewComplaintCenterPage extends StatefulWidget {
   const NewComplaintCenterPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _NewComplaintCenterPageState createState() => _NewComplaintCenterPageState();
 }
 
@@ -63,7 +62,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     );
   }
 
-  // ignore: unused_element
   void _removeImage() {
     setState(() => _selectedImage = null);
   }
@@ -80,7 +78,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     final status = await Permission.location.status;
     if (!status.isGranted) {
       showDialog(
-        // ignore: use_build_context_synchronously
         context: context,
         builder:
             (context) => AlertDialog(
@@ -129,7 +126,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         _controller.clear();
         _selectedImage = null;
         
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 5),
@@ -153,7 +149,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   onPressed: () {
                     final shareText =
                         "لقد قمت بتقديم شكوى في تطبيق المدينة: ${_controller.text.trim()}";
-                    // ignore: deprecated_member_use
                     Share.share(shareText);
                   },
                   style: TextButton.styleFrom(
@@ -178,13 +173,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         );
       } else {
         ScaffoldMessenger.of(
-          // ignore: use_build_context_synchronously
           context,
         ).showSnackBar(const SnackBar(content: Text("فشل في إرسال الشكوى")));
       }
     } catch (e) {
       ScaffoldMessenger.of(
-        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء الإرسال: $e")));
     } finally {

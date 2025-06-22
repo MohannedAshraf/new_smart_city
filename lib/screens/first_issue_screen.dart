@@ -170,7 +170,7 @@ class _IssueScreenState extends State<IssueScreen> {
                 builder: (context) => const NewComplaintCenterPage(),
               ),
             ).then((_) {
-              loadIssues(); // ✅ إعادة التحميل بعد الرجوع
+              loadIssues(); 
             });
           },
           child: const Icon(Icons.add, size: 20, color: Colors.white),
