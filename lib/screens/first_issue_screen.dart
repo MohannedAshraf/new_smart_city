@@ -22,6 +22,8 @@ class _IssueScreenState extends State<IssueScreen> {
   List<Values> inprogress = [];
   bool isLoading = true;
 
+  DateTime? lastBackPressTime;
+
   @override
   void initState() {
     super.initState();
@@ -61,119 +63,142 @@ class _IssueScreenState extends State<IssueScreen> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+    if (lastBackPressTime == null ||
+        now.difference(lastBackPressTime!) > const Duration(seconds: 2)) {
+      lastBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('اضغط مرة أخرى للخروج'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true; 
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
           backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: MyColors.themecolor),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: MyColors.themecolor),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              },
+            ),
+            title: const Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.report_problem,
+                  color: MyColors.themecolor,
+                  size: 22,
+                ),
+                SizedBox(width: 6),
+                Text(
+                  'المشاكل',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            centerTitle: true,
+            elevation: 0,
+          ),
+          body:
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
+                    children: [
+                      const Divider(
+                        height: 1,
+                        thickness: 0.6,
+                        color: Colors.black12,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 5,
+                        ),
+                        child: TabBar(
+                          indicator: const UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                              width: 2.5,
+                              color: MyColors.themecolor,
+                            ),
+                            insets: EdgeInsets.symmetric(horizontal: 16.0),
+                          ),
+                          labelColor: MyColors.themecolor,
+                          unselectedLabelColor: Colors.black,
+                          labelStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                          unselectedLabelStyle: const TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                          ),
+                          tabs: [
+                            TabItem(title: 'نشطة', count: active.length),
+                            TabItem(
+                              title: 'تحت المراجعة',
+                              count: inprogress.length,
+                            ),
+                            TabItem(title: 'المقبسولة', count: resolved.length),
+                          ],
+                        ),
+                      ),
+                      const Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: Colors.black12,
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            ComplaintList(issues: active, type: 'active'),
+                            ComplaintList(
+                              issues: inprogress,
+                              type: 'inprogress',
+                            ),
+                            RatedComplaintList(issues: resolved),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+          floatingActionButton: FloatingActionButton(
+            shape: const CircleBorder(),
+            backgroundColor: MyColors.themecolor,
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
+                MaterialPageRoute(
+                  builder: (context) => const NewComplaintCenterPage(),
+                ),
+              ).then((_) {
+                loadIssues();
+              });
             },
+            child: const Icon(Icons.add, size: 20, color: Colors.white),
           ),
-          title: const Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.report_problem, color: MyColors.themecolor, size: 22),
-              SizedBox(width: 6),
-              Text(
-                'المشاكل',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-
-          centerTitle: true,
-          elevation: 0,
-        ),
-        body:
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Column(
-                  children: [
-                    const Divider(
-                      height: 1,
-                      thickness: 0.6,
-                      color: Colors.black12,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 5,
-                      ),
-                      child: TabBar(
-                        indicator: const UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                            width: 2.5,
-                            color: MyColors.themecolor,
-                          ),
-                          insets: EdgeInsets.symmetric(horizontal: 16.0),
-                        ),
-                        labelColor: MyColors.themecolor,
-                        unselectedLabelColor: Colors.black,
-
-                        labelStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                        unselectedLabelStyle: const TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
-                        ),
-
-                        tabs: [
-                          TabItem(title: 'نشطة', count: active.length),
-                          TabItem(
-                            title: 'تحت المراجعة',
-                            count: inprogress.length,
-                          ),
-                          TabItem(title: 'المقبسولة', count: resolved.length),
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      height: 1,
-                      thickness: 0.5,
-                      color: Colors.black12,
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          ComplaintList(issues: active, type: 'active'),
-                          ComplaintList(issues: inprogress, type: 'inprogress'),
-                          RatedComplaintList(issues: resolved),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-        floatingActionButton: FloatingActionButton(
-          shape: const CircleBorder(),
-          backgroundColor: MyColors.themecolor,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const NewComplaintCenterPage(),
-              ),
-            ).then((_) {
-              loadIssues(); 
-            });
-          },
-          child: const Icon(Icons.add, size: 20, color: Colors.white),
         ),
       ),
     );
