@@ -1,15 +1,14 @@
 // ignore_for_file: unused_element, avoid_unnecessary_containers
 
 import 'package:citio/core/utils/assets_image.dart';
-import 'package:citio/core/utils/mycolors.dart';
+
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/category_tab_view.dart';
 import 'package:citio/models/vendor.dart';
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
-
-String _baseUrl = 'https://service-provider.runasp.net';
 
 class VendorProfile extends StatelessWidget {
   final String id;
@@ -44,7 +43,8 @@ class VendorProfile extends StatelessWidget {
                                 child:
                                     vendor.coverImage != null
                                         ? Image.network(
-                                          _baseUrl + vendor.coverImage!,
+                                          Urls.serviceProviderbaseUrl +
+                                              vendor.coverImage!,
                                           width: double.infinity,
                                           height: 220,
                                           fit: BoxFit.cover,
@@ -106,8 +106,13 @@ class VendorProfile extends StatelessWidget {
                                                   child: CircleAvatar(
                                                     radius: 40,
                                                     backgroundImage: NetworkImage(
-                                                      vendor.image ??
-                                                          'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
+                                                      (vendor.image != null &&
+                                                              vendor
+                                                                  .image!
+                                                                  .isNotEmpty)
+                                                          ? Urls.serviceProviderbaseUrl +
+                                                              vendor.image!
+                                                          : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
                                                     ),
                                                     /*_user.avatar != null
                                                           ? NetworkImage(_user.avatar!)

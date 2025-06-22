@@ -1,7 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
+import 'package:citio/screens/government_service_details.dart';
 import 'package:flutter/material.dart';
 
 class GovernmentServices extends StatefulWidget {
@@ -11,18 +10,165 @@ class GovernmentServices extends StatefulWidget {
 }
 
 class _GovernmentServicesState extends State<GovernmentServices> {
+  int selectedIndex = 0;
+  final Map<String, Map<String, dynamic>> govTabStyles = {
+    'قانوني': {
+      'color': Colors.deepPurple.withOpacity(.1),
+      'icon': Icons.gavel,
+      'fontcolor': Colors.deepPurple,
+    },
+    'الخدمات العامة': {
+      'color': Colors.teal.withOpacity(.1),
+      'icon': Icons.account_balance,
+      'fontcolor': Colors.teal,
+    },
+    'الصحة': {
+      'color': Colors.redAccent.withOpacity(.1),
+      'icon': Icons.local_hospital,
+      'fontcolor': Colors.redAccent,
+    },
+    'التراخيص': {
+      'color': Colors.indigo.withOpacity(.1),
+      'icon': Icons.description,
+      'fontcolor': Colors.indigo,
+    },
+  };
+  final List<Map<String, dynamic>> serviceList = [
+    {
+      'icon': Icons.local_hospital,
+      'color': Colors.redAccent.withOpacity(.1),
+      'fontColor': Colors.red,
+      'category': 'صحة',
+      'serviceName': 'حجز موعد تطعيم',
+      'details': 'خدمة لحجز مواعيد التطعيم للأطفال في المراكز الصحية.',
+    },
+    {
+      'icon': Icons.gavel,
+      'color': Colors.deepPurple.withOpacity(.1),
+      'fontColor': Colors.deepPurple,
+      'category': 'قانوني',
+      'serviceName': 'توثيق عقد زواج',
+      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
+    },
+    {
+      'icon': Icons.account_balance,
+      'color': Colors.teal.withOpacity(.1),
+      'fontColor': Colors.teal,
+      'category': 'الخدمات العامة',
+      'serviceName': 'طلب بطاقة تموين',
+      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
+    },
+    {
+      'icon': Icons.description,
+      'color': Colors.indigo.withOpacity(.1),
+      'fontColor': Colors.indigo,
+      'category': 'التراخيص',
+      'serviceName': 'تجديد رخصة قيادة',
+      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
+    },
+    {
+      'icon': Icons.local_hospital,
+      'color': Colors.redAccent.withOpacity(.1),
+      'fontColor': Colors.red,
+      'category': 'صحة',
+      'serviceName': 'حجز موعد تطعيم',
+      'details': 'خدمة لحجز مواعيد التطعيم للأطفال في المراكز الصحية.',
+    },
+    {
+      'icon': Icons.gavel,
+      'color': Colors.deepPurple.withOpacity(.1),
+      'fontColor': Colors.deepPurple,
+      'category': 'قانوني',
+      'serviceName': 'توثيق عقد زواج',
+      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
+    },
+    {
+      'icon': Icons.account_balance,
+      'color': Colors.teal.withOpacity(.1),
+      'fontColor': Colors.teal,
+      'category': 'الخدمات العامة',
+      'serviceName': 'طلب بطاقة تموين',
+      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
+    },
+    {
+      'icon': Icons.description,
+      'color': Colors.indigo.withOpacity(.1),
+      'fontColor': Colors.indigo,
+      'category': 'التراخيص',
+      'serviceName': 'تجديد رخصة قيادة',
+      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
+    },
+    {
+      'icon': Icons.gavel,
+      'color': Colors.deepPurple.withOpacity(.1),
+      'fontColor': Colors.deepPurple,
+      'category': 'قانوني',
+      'serviceName': 'توثيق عقد زواج',
+      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
+    },
+    {
+      'icon': Icons.account_balance,
+      'color': Colors.teal.withOpacity(.1),
+      'fontColor': Colors.teal,
+      'category': 'الخدمات العامة',
+      'serviceName': 'طلب بطاقة تموين',
+      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
+    },
+    {
+      'icon': Icons.description,
+      'color': Colors.indigo.withOpacity(.1),
+      'fontColor': Colors.indigo,
+      'category': 'التراخيص',
+      'serviceName': 'تجديد رخصة قيادة',
+      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
+    },
+    {
+      'icon': Icons.gavel,
+      'color': Colors.deepPurple.withOpacity(.1),
+      'fontColor': Colors.deepPurple,
+      'category': 'قانوني',
+      'serviceName': 'توثيق عقد زواج',
+      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
+    },
+    {
+      'icon': Icons.account_balance,
+      'color': Colors.teal.withOpacity(.1),
+      'fontColor': Colors.teal,
+      'category': 'الخدمات العامة',
+      'serviceName': 'طلب بطاقة تموين',
+      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
+    },
+    {
+      'icon': Icons.description,
+      'color': Colors.indigo.withOpacity(.1),
+      'fontColor': Colors.indigo,
+      'category': 'التراخيص',
+      'serviceName': 'تجديد رخصة قيادة',
+      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
+    },
+  ];
+
+  final List<String> tabs = [
+    'الكل',
+    'قانوني',
+    'الخدمات العامة',
+    'الصحة',
+    'التراخيص',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: MyAppColors.specialbackground,
+          backgroundColor: MyColors.white,
+          surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: const Text(
             'الخدمات الحكومية',
-            style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
@@ -32,18 +178,19 @@ class _GovernmentServicesState extends State<GovernmentServices> {
         child: Column(
           children: [
             Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
               color: MyColors.white,
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 19, 10),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 19, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Expanded(
                           child: CustomSearchBar(
-                            height: 55,
+                            height: 45,
                             borderRadius: 5,
                             hintText: 'للبحث عن خدمة حكومية',
                           ),
@@ -57,7 +204,6 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 color: MyColors.whiteSmoke,
                               ),
                               margin: const EdgeInsets.all(8),
-                              //
                               child: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(
@@ -66,15 +212,219 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 7),
+                            // const SizedBox(height: 0),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const Row(children: [
-                      
-                    ],
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                      child: Row(
+                        children: List.generate(tabs.length, (index) {
+                          return GovTabItem(
+                            title: tabs[index],
+                            isSelected: selectedIndex == index,
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = index;
+                              });
+                              //'مكان الfunction التانية يا لولو'
+                            },
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    mainAxisSpacing: 0,
+                    childAspectRatio: 0.60869,
+                  ),
+                  itemCount: serviceList.length,
+                  itemBuilder: (context, index) {
+                    final service = serviceList[index];
+                    return ServiceCard(
+                      ontab:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GovernmentServiceDetails(),
+                            ),
+                          ),
+                      icon: service['icon'],
+                      color: service['color'],
+                      fontColor: service['fontColor'],
+                      category: service['category'],
+                      serviceName: service['serviceName'],
+                      details: service['details'],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GovTabItem extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+  final bool isSelected;
+
+  const GovTabItem({
+    super.key,
+    required this.title,
+    this.onTap,
+    this.isSelected = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? MyColors.dodgerBlue : MyColors.whiteSmoke,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(color: isSelected ? MyColors.white : MyColors.black),
+        ),
+      ),
+    );
+  }
+}
+
+class ServiceCard extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final Color fontColor;
+  final String category;
+  final String serviceName;
+  final String details;
+  final VoidCallback ontab;
+  const ServiceCard({
+    super.key,
+    required this.icon,
+    required this.color,
+    required this.category,
+    required this.serviceName,
+    required this.fontColor,
+    required this.details,
+    required this.ontab,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: ontab,
+      child: Container(
+        width: 158,
+        height: 230,
+        margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+
+        decoration: BoxDecoration(
+          color: MyColors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: const [
+            BoxShadow(
+              color: MyColors.whiteSmoke,
+              blurRadius: 4.0,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    color: color,
+                    width: 158,
+                    height: 130,
+                    child: Center(
+                      child: Icon(icon, size: 40, color: fontColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(category, style: TextStyle(color: fontColor)),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      maxLines: 1,
+                      serviceName,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.start,
+                      //maxLines: 2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      maxLines: 2,
+                      details,
+                      style: const TextStyle(
+                        color: Color.fromARGB(221, 59, 58, 58),
+                        fontSize: 12.0,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                 ],
               ),

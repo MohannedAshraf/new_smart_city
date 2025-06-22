@@ -33,3 +33,9 @@ abstract class MyColors {
   static const Color homecolor = Color.fromARGB(255, 233, 189, 212);
   static const Color pink = Color(0xffFFE4F2);
 }
+
+abstract class Urls {
+  static const String socialmediaBaseUrl = 'https://graduation.amiralsayed.me';
+  static const String serviceProviderbaseUrl =
+      'https://service-provider.runasp.net';
+}

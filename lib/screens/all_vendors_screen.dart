@@ -1,15 +1,14 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:citio/core/utils/assets_image.dart';
-import 'package:citio/core/utils/mycolors.dart';
+
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/all_vendors.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:citio/screens/vendor_profile.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
-String _baseUrl = 'https://service-provider.runasp.net';
 
 class AllVendorsScreen extends StatefulWidget {
   const AllVendorsScreen({super.key});
@@ -221,7 +220,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                       child:
                                           vendors[index].coverImage != null
                                               ? Image.network(
-                                                _baseUrl +
+                                                Urls.serviceProviderbaseUrl +
                                                     vendors[index].coverImage!,
                                                 // vendors[index].coverImage,
                                                 width: double.infinity,
@@ -270,7 +269,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                                   vendors[index].profileImage !=
                                                           null
                                                       ? NetworkImage(
-                                                        _baseUrl +
+                                                        Urls.serviceProviderbaseUrl +
                                                             vendors[index]
                                                                 .profileImage!,
                                                         // vendors[index].profileImage,
