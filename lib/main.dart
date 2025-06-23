@@ -45,8 +45,8 @@ class CityApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: seenOnboarding ? const StartPage() : const SliderScreen(),
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(backgroundColor: MyColors.white),
-        scaffoldBackgroundColor: MyColors.white,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
       ),
     );
   }

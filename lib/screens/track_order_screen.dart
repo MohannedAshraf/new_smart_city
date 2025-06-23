@@ -17,9 +17,9 @@ class TrackOrderView extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("تتبع الطلب", style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
-        elevation: 1,
+        // elevation: 1,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),

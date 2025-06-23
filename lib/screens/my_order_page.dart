@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -65,8 +67,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       appBar: AppBar(
         title: const Text('طلباتي', style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 1,
+        // backgroundColor: Colors.white,
+        //elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
