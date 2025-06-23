@@ -219,7 +219,6 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
       child: SizedBox(
@@ -229,18 +228,18 @@ class CustomTextField extends StatelessWidget {
             fillColor: MyColors.white,
 
             hintText: hintText,
-            hintStyle: TextStyle(color: MyColors.grey, fontSize: 12),
+            hintStyle: const TextStyle(color: MyColors.grey, fontSize: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: MyColors.gray),
+              borderSide: const BorderSide(color: MyColors.gray),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Colors.blue),
+              borderSide: const BorderSide(color: MyColors.dodgerBlue),
             ),
           ),
         ),
@@ -308,11 +307,11 @@ class _DateTextFieldState extends State<DateTextField> {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: MyColors.gray),
+              borderSide: const BorderSide(color: MyColors.gray),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(color: Colors.blue),
+              borderSide: const BorderSide(color: MyColors.dodgerBlue),
             ),
           ),
         ),
