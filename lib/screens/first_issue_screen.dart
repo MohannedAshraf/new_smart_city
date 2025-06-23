@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/complaint_list.dart';
 import 'package:citio/core/widgets/rated_complaint_list.dart';
@@ -76,7 +78,7 @@ class _IssueScreenState extends State<IssueScreen> {
       );
       return false;
     }
-    return true; 
+    return true;
   }
 
   @override
@@ -161,7 +163,7 @@ class _IssueScreenState extends State<IssueScreen> {
                               title: 'تحت المراجعة',
                               count: inprogress.length,
                             ),
-                            TabItem(title: 'المقبسولة', count: resolved.length),
+                            TabItem(title: 'المقبولة', count: resolved.length),
                           ],
                         ),
                       ),

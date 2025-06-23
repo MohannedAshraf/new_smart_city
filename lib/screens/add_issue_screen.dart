@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
+
 import 'dart:io';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
@@ -125,7 +127,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       if (response.isSuccess) {
         _controller.clear();
         _selectedImage = null;
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             duration: const Duration(seconds: 5),

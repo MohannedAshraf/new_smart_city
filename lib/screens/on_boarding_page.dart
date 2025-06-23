@@ -2,7 +2,6 @@ import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/auth_helper.dart';
 import 'package:citio/main.dart';
-import 'package:citio/screens/home_screen.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 

@@ -2,7 +2,6 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/generated/l10n.dart';
 import 'package:citio/screens/all_vendors_screen.dart';
-import 'package:citio/screens/government_services.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:citio/screens/social_media.dart';
 import 'package:citio/screens/welcome-page.dart';

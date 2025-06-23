@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api, annotate_overrides
+
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class ApplyService extends StatefulWidget {
@@ -14,7 +15,6 @@ class _ApplyService extends State<ApplyService> {
   bool isChecked = false;
   bool isButtonPressed = false;
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
@@ -35,11 +35,11 @@ class _ApplyService extends State<ApplyService> {
           padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             children: [
-              Row(
+              const Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: ServiceContainer(
                         icon: Icons.person,
                         title: 'المعلومات الشخصية',
@@ -49,11 +49,11 @@ class _ApplyService extends State<ApplyService> {
                   ),
                 ],
               ),
-              Row(
+              const Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: ServiceContainer(
                         icon: Icons.location_on,
                         title: 'بيانات العنوان',
@@ -63,11 +63,11 @@ class _ApplyService extends State<ApplyService> {
                   ),
                 ],
               ),
-              Row(
+              const Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: ServiceContainer(
                         icon: Icons.file_upload,
                         title: ' الوثائق المطلوبة',
