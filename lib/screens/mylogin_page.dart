@@ -1,14 +1,10 @@
-// ignore_for_file: avoid_print, unused_element
-
-import 'dart:convert';
 import 'package:citio/core/widgets/custom_button.dart';
+import 'package:citio/helper/api_login.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyloginPage extends StatefulWidget {
   const MyloginPage({super.key});
@@ -25,7 +21,6 @@ class _LoginPageState extends State<MyloginPage> {
   bool _validate = false;
   bool _isLoading = false;
   bool _obscurePassword = true;
-  // bool _rememberMe = false;
 
   Future<void> loginUser(BuildContext context) async {
     if (!_formKey.currentState!.validate()) {
@@ -35,62 +30,26 @@ class _LoginPageState extends State<MyloginPage> {
 
     setState(() => _isLoading = true);
 
-    final url = Uri.parse(
-      "https://cms-central-ffb6acaub5afeecj.uaenorth-01.azurewebsites.net/api/auth/login",
-    );
     try {
-      final response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "email": emailController.text.trim(),
-          "password": passwordController.text.trim(),
-        }),
+      final result = await ApiLoginHelper.login(
+        email: emailController.text,
+        password: passwordController.text,
       );
 
-      print("🔹 Response Code: ${response.statusCode}");
-      print("🔹 Response Body: ${response.body}");
-
       setState(() => _isLoading = false);
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        final String? token = responseData["value"]?["token"];
-
-        if (token != null) {
-          final SharedPreferences sharedPreferences =
-              await SharedPreferences.getInstance();
-          await sharedPreferences.setString('token', token);
-          print("✅ Token Saved: $token");
-
-          if (context.mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
-          }
-        } else {
-          throw Exception("التوكن غير موجود في الاستجابة!");
-        }
-      } else {
-        final responseData = jsonDecode(response.body);
-        String errorMessage =
-            responseData["message"] ?? "حدث خطأ أثناء تسجيل الدخول";
-
-        if (context.mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(errorMessage)));
-        }
+      if (result != null && context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
       }
-    } catch (error) {
+    } catch (e) {
       setState(() => _isLoading = false);
-
-      print("❌ Error: $error");
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("فشل الاتصال بالخادم، حاول مرة أخرى!")),
+          SnackBar(content: Text(e.toString().replaceAll("Exception: ", ""))),
         );
       }
     }
@@ -212,7 +171,6 @@ class _LoginPageState extends State<MyloginPage> {
                         return null;
                       },
                     ),
-
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,15 +193,6 @@ class _LoginPageState extends State<MyloginPage> {
                           ),
                         ),
                         const SizedBox(width: 90),
-                        // Checkbox(
-                        //   value: _rememberMe,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       _rememberMe = value ?? false;
-                        //     });
-                        //   },
-                        // ),
-                        // const Text("تذكرني"),
                       ],
                     ),
                     MyTextButton(
@@ -262,7 +211,6 @@ class _LoginPageState extends State<MyloginPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           TextButton(
                             onPressed: () {
                               Navigator.push(

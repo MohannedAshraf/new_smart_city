@@ -1,7 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/helper/auth_helper.dart';
+import 'package:citio/main.dart';
+import 'package:citio/screens/home_screen.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +17,21 @@ class _StartPageState extends State<StartPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MyloginPage()),
-      );
-    });
+    checkTokenAndNavigate();
+  }
+
+  Future<void> checkTokenAndNavigate() async {
+    await Future.delayed(const Duration(seconds: 2));
+    final success = await AuthHelper.refreshTokenIfNeeded();
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => success ? const HomePage() : const MyloginPage(),
+      ),
+    );
   }
 
   @override

@@ -71,9 +71,6 @@ class _CartViewState extends State<CartView> {
           "العربة ",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: loadCart),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 10.0, bottom: 12, right: 12),
