@@ -2,6 +2,7 @@ import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class ApplyService extends StatefulWidget {
   const ApplyService({super.key});
@@ -71,13 +72,10 @@ class _ApplyService extends State<ApplyService> {
                         icon: Icons.file_upload,
                         title: ' الوثائق المطلوبة',
                         content: [
-                          // Row(
-                          //   children: [
-                          //     Expanded(
-                          //       child: CustomTextField(labelText: 'labelText'),
-                          //     ),
-                          //   ],
-                          // ),
+                          CustomTextField(hintText: 'labelText'),
+                          CustomTextField(hintText: 'labelText'),
+                          CustomTextField(hintText: 'labelText'),
+                          DateTextField(),
                         ],
                       ),
                     ),
@@ -216,30 +214,106 @@ class _ApplyService extends State<ApplyService> {
 }
 
 class CustomTextField extends StatelessWidget {
-  final String labelText;
-  const CustomTextField({super.key, required this.labelText});
+  final String hintText;
+  const CustomTextField({super.key, required this.hintText});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Padding(
-      padding: const EdgeInsets.fromLTRB(19, 8, 19, 12),
-      child: TextField(
-        decoration: InputDecoration(
-          fillColor: MyColors.white,
-          labelText: labelText,
-          labelStyle: TextStyle(color: MyColors.grey, fontSize: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide.none, // بدون إطار خارجي (اختياري)
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      child: SizedBox(
+        height: 45,
+        child: TextField(
+          decoration: InputDecoration(
+            fillColor: MyColors.white,
+
+            hintText: hintText,
+            hintStyle: TextStyle(color: MyColors.grey, fontSize: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: MyColors.gray),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.blue),
+            ),
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+      ),
+    );
+  }
+}
+
+class DateTextField extends StatefulWidget {
+  const DateTextField({super.key});
+
+  @override
+  State<DateTextField> createState() => _DateTextFieldState();
+}
+
+class _DateTextFieldState extends State<DateTextField> {
+  final TextEditingController _controller = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: MyColors.dodgerBlue,
+              onPrimary: MyColors.white,
+              onSurface: MyColors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(foregroundColor: MyColors.dodgerBlue),
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: Colors.blue), // لون عند التركيز
+          child: child!,
+        );
+      },
+
+      locale: const Locale('en', 'US'), // لو عايزة التاريخ إنجليزي
+    );
+    if (picked != null) {
+      setState(() {
+        _controller.text = DateFormat('MM/dd/yy').format(picked);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      child: SizedBox(
+        height: 45,
+        child: TextField(
+          controller: _controller,
+          readOnly: true,
+          onTap: () => _selectDate(context),
+          decoration: InputDecoration(
+            suffixIcon: const Icon(Icons.calendar_today),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: MyColors.gray),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(color: Colors.blue),
+            ),
           ),
         ),
       ),
