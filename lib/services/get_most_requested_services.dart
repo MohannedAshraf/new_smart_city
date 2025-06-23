@@ -1,7 +1,10 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
+import 'package:citio/models/all_services_categories.dart';
 import 'package:citio/models/most_requested_services.dart';
 
 import 'package:citio/models/available_services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MostRequestedServices {
@@ -13,8 +16,7 @@ class MostRequestedServices {
       throw Exception('لم يتم العثور على التوكن!');
     }
     List<dynamic> data = await Api().get(
-      url:
-          'https://government-services.runasp.net/api/Dashboard/MostRequestedServices',
+      url: '${Urls.governmentbaseUrl}/api/Dashboard/MostRequestedServices',
       token: token,
     );
     List<MostRequested> requestsList = [];
@@ -34,7 +36,7 @@ class MostRequestedServices {
 
     // ignore: missing_required_param
     List<dynamic> data = await Api().get(
-      url: 'https://government-services.runasp.net/api/Services/Available',
+      url: '${Urls.governmentbaseUrl}/api/Services/Available',
       token: token,
       // token: token
     );
@@ -43,5 +45,94 @@ class MostRequestedServices {
       requestsList.add(AvailableServices.fromJason(data[i]));
     }
     return requestsList;
+  }
+
+  Future<List<AvailableServices>> filterServices(String category) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url:
+          '${Urls.governmentbaseUrl}/api/Services/Available?serviceCategory=$category',
+      token: token,
+      // token: token
+    );
+    List<AvailableServices> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(AvailableServices.fromJason(data[i]));
+    }
+    return requestsList;
+  }
+
+  Future<List<AvailableServices>> searchServices(String keyWord) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url:
+          '${Urls.governmentbaseUrl}/api/Services/Available?ServiceName=$keyWord',
+      token: token,
+      // token: token
+    );
+    List<AvailableServices> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(AvailableServices.fromJason(data[i]));
+    }
+    return requestsList;
+  }
+
+  Future<List<AvailableServices>> searchFilteredServices(
+    String keyWord,
+    String category,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url:
+          '${Urls.governmentbaseUrl}/api/Services/Available?ServiceName=$keyWord&serviceCategory=$category',
+      token: token,
+      // token: token
+    );
+    List<AvailableServices> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(AvailableServices.fromJason(data[i]));
+    }
+    return requestsList;
+  }
+
+  Future<List<AllServicesCategories>> getAllCategories() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Services/Category',
+      token: token,
+    );
+    List<AllServicesCategories> categories = [];
+    for (int i = 0; i < data.length; i++) {
+      categories.add(AllServicesCategories.fromJason(data[i]));
+    }
+    return categories;
   }
 }

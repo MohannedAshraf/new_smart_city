@@ -40,6 +40,10 @@ abstract class Urls {
   static const String socialmediaBaseUrl = 'https://graduation.amiralsayed.me';
   static const String serviceProviderbaseUrl =
       'https://service-provider.runasp.net';
+  static const String governmentbaseUrl =
+      'https://government-services.runasp.net';
+
+  static const issueBaseUrl = 'https://cms-reporting.runasp.net';
 }
 
 abstract class Styles {

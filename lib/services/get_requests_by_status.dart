@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +13,7 @@ class RequestsByStatus {
     }
 
     List<dynamic> data = await Api().get(
-      url: 'https://government-services.runasp.net/api/Requests?Status=$status',
+      url: '${Urls.governmentbaseUrl}/api/Requests?Status=$status',
       token: token,
     );
     List<Request> requestsList = [];

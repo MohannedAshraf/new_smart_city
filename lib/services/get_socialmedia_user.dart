@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/socialmedia_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class GetSocialmediaUser {
     print('Token used in getSocialMediaUser: $token'); // هنا الطباعة ✅
 
     dynamic data = await Api().get(
-      url: 'https://graduation.amiralsayed.me/api/users/$id',
+      url: '${Urls.socialmediaBaseUrl}/api/users/$id',
       token: token,
     );
 

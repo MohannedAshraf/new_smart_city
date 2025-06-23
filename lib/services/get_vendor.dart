@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/all_vendors.dart';
 
@@ -15,7 +16,7 @@ class GetVendor {
     }
 
     List<dynamic> data = await Api().get(
-      url: 'https://service-provider.runasp.net/api/Vendors/top-5-vendors',
+      url: '${Urls.serviceProviderbaseUrl}/api/Vendors/top-5-vendors',
       token: token,
     );
     List<Vendor> vendorList = [];
@@ -35,7 +36,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?pageNumer=$pageNumber&PageSize=3',
+          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&PageSize=3',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);
@@ -52,7 +53,7 @@ class GetVendor {
     }
 
     dynamic data = await Api().get(
-      url: 'https://service-provider.runasp.net/api/Vendors/$id',
+      url: '${Urls.serviceProviderbaseUrl}/api/Vendors/$id',
       token: token,
     );
     Vendor vendor = Vendor.fromJason(data);
@@ -71,7 +72,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/Vendors/for-mobile?pageNumer=$pageNumber&SearchValue=$encodedSearch&PageSize=3',
+          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&SearchValue=$encodedSearch&PageSize=3',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);
@@ -150,7 +151,7 @@ class GetVendor {
 
     List<dynamic> data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/SubCategory/$vendorId/SubCategories',
+          '${Urls.serviceProviderbaseUrl}/api/SubCategory/$vendorId/SubCategories',
       token: token,
     );
     List<VendorSubcategory> categoryList = [];
@@ -173,7 +174,7 @@ class GetVendor {
 
     List<dynamic> data = await Api().get(
       url:
-          'https://service-provider.runasp.net/api/SubCategory/$vendorId/$categoryId/Products',
+          '${Urls.serviceProviderbaseUrl}/api/SubCategory/$vendorId/$categoryId/Products',
       token: token,
     );
     List<VendorSubcategoryProducts> categoryProductsList = [];

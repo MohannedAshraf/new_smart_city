@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/socialmedia_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,7 @@ class GetPost {
     print('Token used in getTenPosts: $token'); // هنا الطباعة ✅
 
     dynamic data = await Api().get(
-      url: 'https://graduation.amiralsayed.me/api/posts/?scope=user&limit=10',
+      url: '${Urls.socialmediaBaseUrl}/api/posts/?scope=user&limit=10',
       token: token,
     );
 

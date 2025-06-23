@@ -7,10 +7,12 @@ class CustomSearchBar extends StatelessWidget {
     required this.borderRadius,
     required this.hintText,
     required this.height,
+    this.onSubmitted,
   });
   final double borderRadius;
   final String hintText;
   final double height;
+  final void Function(dynamic)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,9 @@ class CustomSearchBar extends StatelessWidget {
       height: height,
       width: 200,
       child: TextField(
+        onSubmitted: (value) {
+          onSubmitted;
+        },
         decoration: InputDecoration(
           //hintTextDirection: textDirectionToAxisDirection(textDirection),
           hintText: hintText,

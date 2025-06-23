@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 
 import 'package:citio/models/most_requested_products.dart';
@@ -13,8 +14,7 @@ class MostRequestedProducts {
     }
 
     List<dynamic> data = await Api().get(
-      url:
-          'https://service-provider.runasp.net/api/Products/top5-most-requested',
+      url: '${Urls.serviceProviderbaseUrl}/api/Products/top5-most-requested',
       token: token,
     );
     List<MostRequestedProduct> products = [];
