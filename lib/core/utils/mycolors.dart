@@ -20,6 +20,7 @@ class MyColors {
   static const Color white = Color(0xffFFFFFF);
   static const Color forground = Color.fromARGB(255, 248, 183, 183);
   static const Color gray = Color(0xff6E6A7C);
+  static const Color fadedGrey = Color(0x1A6E6A7C);
   static const Color black = Color(0xff24252C);
   // ignore: use_full_hex_values_for_flutter_colors
   static const Color gray2 = Color(0xff00000040);
