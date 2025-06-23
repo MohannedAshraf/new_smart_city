@@ -39,3 +39,33 @@ abstract class Urls {
   static const String serviceProviderbaseUrl =
       'https://service-provider.runasp.net';
 }
+
+abstract class Styles {
+  static const Map<String, Map<String, dynamic>> govTabStyles = {
+    'السجل المدني': {
+      'color': Color(0x1A607D8B),
+      'icon': Icons.badge,
+      'fontColor': Colors.blueGrey,
+    },
+    'النقل': {
+      'color': Color(0x1AFF9800),
+      'icon': Icons.directions_bus,
+      'fontColor': Colors.orange,
+    },
+    'الصحة': {
+      'color': Color(0x1AFF5252),
+      'icon': Icons.local_hospital,
+      'fontColor': Colors.redAccent,
+    },
+    'المالية': {
+      'color': Color(0x1A4CAF50),
+      'icon': Icons.attach_money,
+      'fontColor': Colors.green,
+    },
+    'التجارة': {
+      'color': Color(0x1A673AB7),
+      'icon': Icons.shopping_cart,
+      'fontColor': Colors.deepPurple,
+    },
+  };
+}

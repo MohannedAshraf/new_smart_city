@@ -4,6 +4,7 @@ import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
 import 'package:citio/screens/add_issue_screen.dart';
+import 'package:citio/screens/government_services.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_products.dart';
@@ -13,7 +14,6 @@ import 'package:citio/models/most_recent_products.dart';
 import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/vendor.dart';
 import 'package:citio/screens/all_vendors_screen.dart';
-import 'package:citio/screens/gov_services_datails.dart';
 
 import 'package:citio/services/get_most_recent_products.dart';
 
@@ -121,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                     title: 'الخدمات الحكومية',
                     items: services,
 
-                    destination: const GovServicesDatails(),
+                    destination: const GovernmentServices(),
                     fit: BoxFit.contain,
                     height: 165,
 

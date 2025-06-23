@@ -14,25 +14,30 @@ class GovernmentServices extends StatefulWidget {
 class _GovernmentServicesState extends State<GovernmentServices> {
   int selectedIndex = 0;
   final Map<String, Map<String, dynamic>> govTabStyles = {
-    'قانوني': {
-      'color': Colors.deepPurple.withOpacity(.1),
-      'icon': Icons.gavel,
-      'fontcolor': Colors.deepPurple,
+    'السجل المدني': {
+      'color': Color(0x1A607D8B),
+      'icon': Icons.badge,
+      'fontColor': Colors.blueGrey,
     },
-    'الخدمات العامة': {
-      'color': Colors.teal.withOpacity(.1),
-      'icon': Icons.account_balance,
-      'fontcolor': Colors.teal,
+    'النقل': {
+      'color': Colors.orange.withOpacity(0.1),
+      'icon': Icons.directions_bus,
+      'fontColor': Colors.orange,
     },
     'الصحة': {
-      'color': Colors.redAccent.withOpacity(.1),
+      'color': Colors.redAccent.withOpacity(0.1),
       'icon': Icons.local_hospital,
-      'fontcolor': Colors.redAccent,
+      'fontColor': Colors.redAccent,
     },
-    'التراخيص': {
-      'color': Colors.indigo.withOpacity(.1),
-      'icon': Icons.description,
-      'fontcolor': Colors.indigo,
+    'المالية': {
+      'color': Colors.green.withOpacity(0.1),
+      'icon': Icons.attach_money,
+      'fontColor': Colors.green,
+    },
+    'التجارة': {
+      'color': Colors.deepPurple.withOpacity(0.1),
+      'icon': Icons.shopping_cart,
+      'fontColor': Colors.deepPurple,
     },
   };
   final List<Map<String, dynamic>> serviceList = [
@@ -45,26 +50,19 @@ class _GovernmentServicesState extends State<GovernmentServices> {
       'details': 'خدمة لحجز مواعيد التطعيم للأطفال في المراكز الصحية.',
     },
     {
-      'icon': Icons.gavel,
-      'color': Colors.deepPurple.withOpacity(.1),
-      'fontColor': Colors.deepPurple,
-      'category': 'قانوني',
+      'icon': Icons.badge,
+      'color': Colors.blueGrey.withOpacity(0.1),
+      'fontColor': Colors.blueGrey,
+      'category': 'السجل المدني',
       'serviceName': 'توثيق عقد زواج',
       'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
     },
-    {
-      'icon': Icons.account_balance,
-      'color': Colors.teal.withOpacity(.1),
-      'fontColor': Colors.teal,
-      'category': 'الخدمات العامة',
-      'serviceName': 'طلب بطاقة تموين',
-      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
-    },
+
     {
       'icon': Icons.description,
-      'color': Colors.indigo.withOpacity(.1),
-      'fontColor': Colors.indigo,
-      'category': 'التراخيص',
+      'color': Colors.orange.withOpacity(0.1),
+      'fontColor': Colors.orange,
+      'category': 'النقل',
       'serviceName': 'تجديد رخصة قيادة',
       'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
     },
@@ -77,85 +75,30 @@ class _GovernmentServicesState extends State<GovernmentServices> {
       'details': 'خدمة لحجز مواعيد التطعيم للأطفال في المراكز الصحية.',
     },
     {
-      'icon': Icons.gavel,
-      'color': Colors.deepPurple.withOpacity(.1),
-      'fontColor': Colors.deepPurple,
-      'category': 'قانوني',
+      'icon': Icons.attach_money,
+      'color': Colors.green.withOpacity(0.1),
+      'fontColor': Colors.green,
+      'category': 'المالية',
       'serviceName': 'توثيق عقد زواج',
       'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
     },
     {
       'icon': Icons.account_balance,
-      'color': Colors.teal.withOpacity(.1),
-      'fontColor': Colors.teal,
-      'category': 'الخدمات العامة',
-      'serviceName': 'طلب بطاقة تموين',
-      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
-    },
-    {
-      'icon': Icons.description,
-      'color': Colors.indigo.withOpacity(.1),
-      'fontColor': Colors.indigo,
-      'category': 'التراخيص',
-      'serviceName': 'تجديد رخصة قيادة',
-      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
-    },
-    {
-      'icon': Icons.gavel,
-      'color': Colors.deepPurple.withOpacity(.1),
+      'color': Colors.deepPurple.withOpacity(0.1),
       'fontColor': Colors.deepPurple,
-      'category': 'قانوني',
-      'serviceName': 'توثيق عقد زواج',
-      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
-    },
-    {
-      'icon': Icons.account_balance,
-      'color': Colors.teal.withOpacity(.1),
-      'fontColor': Colors.teal,
-      'category': 'الخدمات العامة',
+      'category': ' التجارة',
       'serviceName': 'طلب بطاقة تموين',
       'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
-    },
-    {
-      'icon': Icons.description,
-      'color': Colors.indigo.withOpacity(.1),
-      'fontColor': Colors.indigo,
-      'category': 'التراخيص',
-      'serviceName': 'تجديد رخصة قيادة',
-      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
-    },
-    {
-      'icon': Icons.gavel,
-      'color': Colors.deepPurple.withOpacity(.1),
-      'fontColor': Colors.deepPurple,
-      'category': 'قانوني',
-      'serviceName': 'توثيق عقد زواج',
-      'details': 'خدمة التوثيق الإلكتروني لعقود الزواج المدنية.',
-    },
-    {
-      'icon': Icons.account_balance,
-      'color': Colors.teal.withOpacity(.1),
-      'fontColor': Colors.teal,
-      'category': 'الخدمات العامة',
-      'serviceName': 'طلب بطاقة تموين',
-      'details': 'خدمة إصدار أو تجديد بطاقة التموين عبر الإنترنت.',
-    },
-    {
-      'icon': Icons.description,
-      'color': Colors.indigo.withOpacity(.1),
-      'fontColor': Colors.indigo,
-      'category': 'التراخيص',
-      'serviceName': 'تجديد رخصة قيادة',
-      'details': 'خدمة إلكترونية لتجديد رخص القيادة للمواطنين والمقيمين.',
     },
   ];
 
   final List<String> tabs = [
     'الكل',
-    'قانوني',
-    'الخدمات العامة',
+    'السجل المدني',
+    'النقل ',
     'الصحة',
-    'التراخيص',
+    'المالية',
+    'التجارة',
   ];
 
   @override

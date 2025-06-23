@@ -1,6 +1,8 @@
 // ignore_for_file: unused_import, unnecessary_import, deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/widgets/service_container.dart';
+import 'package:citio/screens/apply_service.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -292,6 +294,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                   ),
                 ],
               ),
+
               Row(
                 children: [
                   Expanded(
@@ -406,7 +409,12 @@ class GovernmentServiceDetails extends StatelessWidget {
             width: double.infinity,
             height: 50,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ApplyService()),
+                );
+              },
               icon: const Icon(
                 Icons.description,
                 size: 20,

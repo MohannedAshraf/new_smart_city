@@ -1,9 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/most_requested_services.dart';
 
 import 'package:citio/core/utils/assets_image.dart';
-import 'package:citio/core/utils/mycolors.dart';
+
 import 'package:citio/models/most_requested_products.dart';
 
 import 'package:citio/models/vendor.dart';
@@ -133,13 +134,21 @@ class BuildBoxes extends StatelessWidget {
                       ),
                     ),
                 child: ServiceBox(
+                  icon:
+                      Styles.govTabStyles[items[index].category]?['icon'] ??
+                      Icons.broken_image_rounded,
+                  iconColor:
+                      Styles.govTabStyles[items[index]
+                          .category]?['fontColor'] ??
+                      MyColors.black,
+                  backgroundColor:
+                      Styles.govTabStyles[items[index].category]?['color'] ??
+                      MyColors.whiteSmoke,
                   title: items[index].serviceName,
                   width: width,
                   details:
                       'يستغرق استخراجه ${items[index].time} بتكلفة  ${items[index].fee} جنيهًا فقط لا غير',
-                  image:
-                      iconsGov[items[index].serviceName] ??
-                      'https://cdn-icons-png.flaticon.com/128/13434/13434972.png',
+
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -410,25 +419,31 @@ class ServiceBox extends StatelessWidget {
   final String title;
   final String details;
   final double width;
-  final String image;
+  final String? image;
   final double imageHeight;
   final double imageWidth;
   final BoxFit? fit;
   final EdgeInsetsGeometry imagePadding;
   final double? titlefontSize;
   final int? maximumlines;
+  final IconData? icon;
+  final Color? iconColor;
+  final Color? backgroundColor;
   const ServiceBox({
     super.key,
     required this.title,
     required this.width,
     required this.details,
-    required this.image,
+    this.image,
     required this.imageHeight,
     required this.imageWidth,
     required this.imagePadding,
     this.fit,
     this.titlefontSize,
     this.maximumlines,
+    this.icon,
+    this.iconColor,
+    this.backgroundColor,
   });
 
   @override
@@ -458,27 +473,43 @@ class ServiceBox extends StatelessWidget {
               padding: imagePadding,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.network(
-                    width: imageWidth,
-                    height: imageHeight,
-                    image,
-                    fit: fit,
-                    errorBuilder: (
-                      BuildContext context,
-                      Object error,
-                      StackTrace? stackTrace,
-                    ) {
-                      return SizedBox(
-                        height: imageHeight,
-                        width: imageWidth,
-                        child: const Image(
-                          image: AssetImage(MyAssetsImage.brokenImage),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                children:
+                    icon != null
+                        ? [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+
+                            width: imageWidth,
+                            height: imageHeight,
+                            child: Center(
+                              child: Icon(icon, size: 20, color: iconColor),
+                            ),
+                          ),
+                        ]
+                        : [
+                          Image.network(
+                            width: imageWidth,
+                            height: imageHeight,
+                            image!,
+                            fit: fit,
+                            errorBuilder: (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                            ) {
+                              return SizedBox(
+                                height: imageHeight,
+                                width: imageWidth,
+                                child: const Image(
+                                  image: AssetImage(MyAssetsImage.brokenImage),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
               ),
             ),
           ),

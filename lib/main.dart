@@ -234,19 +234,6 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('new gov services'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GovernmentServices(),
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),
