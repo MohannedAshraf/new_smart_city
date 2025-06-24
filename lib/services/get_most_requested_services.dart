@@ -1,6 +1,7 @@
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/all_services_categories.dart';
+import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/models/most_requested_services.dart';
 
 import 'package:citio/models/available_services.dart';
@@ -134,5 +135,23 @@ class MostRequestedServices {
       categories.add(AllServicesCategories.fromJason(data[i]));
     }
     return categories;
+  }
+
+  Future<ServiceDetails> getServiceDetails(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    dynamic data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Services/$id/Details',
+      token: token,
+    );
+    ServiceDetails service = ServiceDetails.fromJason(data);
+
+    return service;
   }
 }

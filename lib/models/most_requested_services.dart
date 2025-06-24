@@ -1,4 +1,5 @@
 class MostRequested {
+  final int id;
   final String serviceName;
   final String fee;
   final String time;
@@ -6,6 +7,7 @@ class MostRequested {
   final String category;
 
   MostRequested({
+    required this.id,
     required this.serviceName,
     required this.fee,
     required this.time,
@@ -15,6 +17,7 @@ class MostRequested {
 
   factory MostRequested.fromJason(jsonData) {
     return MostRequested(
+      id: jsonData['id'],
       serviceName: jsonData['serviceName'],
       fee: jsonData['fee'].toString(),
       time: jsonData['processingTime'],

@@ -4,6 +4,7 @@ import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/models/all_services_categories.dart';
 import 'package:citio/models/available_services.dart';
+import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,14 @@ class GovernmentServices extends StatefulWidget {
 class _GovernmentServicesState extends State<GovernmentServices> {
   int selectedIndex = 0;
 
-  final List<String> tabs = ['الكل'];
+  List<String> tabs = ['الكل'];
   List<AllServicesCategories> tabsList = [];
   List<AvailableServices> availableServices = [];
   bool tabsAreLoading = true;
   bool servicesLoading = true;
   String filter = '';
   int currenttab = 0;
+  late ServiceDetails serviceDetails;
 
   @override
   void initState() {
@@ -254,15 +256,17 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                           itemBuilder: (context, index) {
                             final service = availableServices[index];
                             return ServiceCard(
-                              ontab:
-                                  () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              GovernmentServiceDetails(),
-                                    ),
+                              ontab: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => GovernmentServiceDetails(
+                                          id: service.id,
+                                        ),
                                   ),
+                                );
+                              },
                               icon:
                                   Styles.govTabStyles[service
                                       .category]?['icon'] ??
@@ -330,6 +334,14 @@ class _GovernmentServicesState extends State<GovernmentServices> {
       });
     });
   }
+
+  // void getServiceDetails(int id) {
+  //   MostRequestedServices().getServiceDetails(id).then((fetchedService) {
+  //     setState(() {
+  //       serviceDetails = fetchedService;
+  //     });
+  //   });
+  // }
 }
 
 class GovTabItem extends StatelessWidget {

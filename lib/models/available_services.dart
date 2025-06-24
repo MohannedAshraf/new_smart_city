@@ -1,4 +1,5 @@
 class AvailableServices {
+  final int id;
   final String serviceName;
   final String fee;
   final String time;
@@ -7,6 +8,7 @@ class AvailableServices {
   final String description;
 
   AvailableServices({
+    required this.id,
     required this.serviceName,
     required this.fee,
     required this.time,
@@ -17,6 +19,7 @@ class AvailableServices {
 
   factory AvailableServices.fromJason(jsonData) {
     return AvailableServices(
+      id: jsonData['id'],
       serviceName: jsonData['serviceName'],
       fee: jsonData['fee'].toString(),
       time: jsonData['processingTime'],
