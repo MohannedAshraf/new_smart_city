@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_field, deprecated_member_use
+// ignore_for_file: avoid_print, unused_field, deprecated_member_use, duplicate_ignore
 
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
