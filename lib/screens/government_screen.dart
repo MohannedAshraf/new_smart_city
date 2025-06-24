@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';

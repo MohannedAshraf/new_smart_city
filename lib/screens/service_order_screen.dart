@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field, deprecated_member_use
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/search_model.dart';
