@@ -263,22 +263,33 @@ class MySearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      onSubmitted: (_) => onSearch(),
-      decoration: InputDecoration(
-        hintText: 'ماذا تريد',
-        prefixIcon: InkWell(onTap: onSearch, child: const Icon(Icons.search)),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(20.0),
+    return SizedBox(
+      height: 42, // تقليل ارتفاع السيرش بار
+      child: TextField(
+        controller: controller,
+        onSubmitted: (_) => onSearch(),
+        style: const TextStyle(fontSize: 14), // تصغير حجم الخط
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 16,
+          ),
+          hintText: 'ماذا تريد ',
+          prefixIcon: InkWell(
+            onTap: onSearch,
+            child: const Icon(Icons.search, size: 20),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey), // بوردر غامق
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black87),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          filled: true,
+          fillColor: Colors.white,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        filled: true,
-        fillColor: MyColors.newbackground,
       ),
     );
   }
