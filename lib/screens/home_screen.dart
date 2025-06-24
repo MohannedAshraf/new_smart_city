@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_field
+// ignore_for_file: avoid_print, unused_field, deprecated_member_use
 
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
@@ -26,172 +26,196 @@ import 'package:carousel_slider/carousel_slider.dart';
 // ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  DateTime? lastBackPressTime;
+
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+    if (lastBackPressTime == null ||
+        now.difference(lastBackPressTime!) > const Duration(seconds: 2)) {
+      lastBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('اضغط مرة أخرى للخروج'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.offWhite,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: MyColors.white,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 45,
-                  children: [
-                    const EmergencyButton(
-                      color: MyColors.ambulanceShade,
-                      emicon: Icon(
-                        Icons.local_hospital,
-                        color: MyColors.ambulance,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: MyColors.offWhite,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: MyColors.white,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 45,
+                    children: [
+                      const EmergencyButton(
+                        color: MyColors.ambulanceShade,
+                        emicon: Icon(
+                          Icons.local_hospital,
+                          color: MyColors.ambulance,
+                        ),
+                        emname: 'الإسعاف',
+                        emergencyServiceId: '1',
                       ),
-                      emname: 'الإسعاف',
-                      emergencyServiceId: '1',
-                    ),
-                    const EmergencyButton(
-                      color: MyColors.firefighterShade,
-                      emicon: Icon(
-                        Icons.fire_truck,
-                        color: MyColors.firefighter,
+                      const EmergencyButton(
+                        color: MyColors.firefighterShade,
+                        emicon: Icon(
+                          Icons.fire_truck,
+                          color: MyColors.firefighter,
+                        ),
+                        emname: 'المطافئ',
+                        emergencyServiceId: '2',
                       ),
-                      emname: 'المطافئ',
-                      emergencyServiceId: '2',
-                    ),
-                    const EmergencyButton(
-                      color: MyColors.policeShade,
-                      emicon: Icon(Icons.local_police, color: MyColors.police),
-                      emname: 'الشرطة',
-                      emergencyServiceId: '3',
-                    ),
-                    ////;,lkh
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => const NewComplaintCenterPage(),
+                      const EmergencyButton(
+                        color: MyColors.policeShade,
+                        emicon: Icon(
+                          Icons.local_police,
+                          color: MyColors.police,
+                        ),
+                        emname: 'الشرطة',
+                        emergencyServiceId: '3',
+                      ),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          const NewComplaintCenterPage(),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(50),
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: MyColors.buttonGreenShade,
                               ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(50),
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: MyColors.buttonGreenShade,
-                            ),
-                            child: const Icon(
-                              Icons.add,
-                              color: MyColors.buttonGreen,
+                              child: const Icon(
+                                Icons.add,
+                                color: MyColors.buttonGreen,
+                              ),
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 10),
-                        const Text(
-                          'أضف شكوى',
-                          style: TextStyle(fontSize: 12, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 10),
+                          const Text(
+                            'أضف شكوى',
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            /////السيرش هنا اهووو
-            // const Padding(padding: EdgeInsets.all(16.0), child: MySearchBar()),
-            const SizedBox(height: 20.0),
-            const CarouselWithIndicators(),
-            const SizedBox(height: 20.0),
-            FutureBuilder<List<MostRequested>>(
-              future: MostRequestedServices().getMostRequestedServices(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<MostRequested> services = snapshot.data!;
-                  return BuildBoxes(
-                    title: 'الخدمات الحكومية',
-                    items: services,
-
-                    destination: const GovernmentServices(),
-                    fit: BoxFit.contain,
-                    height: 165,
-
-                    imageHeight: 50,
-                    imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
-                    imageWidth: 50,
-                    width: 160,
-                    maximumlines: 3,
-                  );
-                } else {
-                  return const SizedBox(
-                    height: 140,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-              },
-            ),
-            FutureBuilder<List<MostRequestedProduct>>(
-              future: MostRequestedProducts().getMostRequestedProduct(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<MostRequestedProduct> products = snapshot.data!;
-                  return BuildProductsBoxes(
-                    title: 'المنتجات',
-                    items: products,
-                    titlefontSize: 12,
-                    destination: const ServiceOrderScreen(),
-                    fit: BoxFit.cover,
-                    height: 155,
-                    maximumLines: 3,
-                    imageHeight: 70,
-                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    imageWidth: 190,
-                    width: 190,
-                  );
-                } else {
-                  return const SizedBox(
-                    height: 150,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-              },
-            ),
-            FutureBuilder<List<Vendor>>(
-              future: GetVendor().getVendor(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Vendor> vendors = snapshot.data!;
-                  return BuildVendorssBoxes(
-                    title: 'البائعين',
-                    items: vendors,
-                    titlefontSize: 12,
-                    destination: const AllVendorsScreen(),
-                    fit: BoxFit.cover,
-                    height: 150,
-                    maximumLines: 3,
-                    imageHeight: 70,
-                    imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                    imageWidth: 180,
-                    width: 180,
-                  );
-                } else {
-                  return const SizedBox(
-                    height: 160,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-              },
-            ),
-          ],
+              const SizedBox(height: 20.0),
+              const CarouselWithIndicators(),
+              const SizedBox(height: 20.0),
+              FutureBuilder<List<MostRequested>>(
+                future: MostRequestedServices().getMostRequestedServices(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<MostRequested> services = snapshot.data!;
+                    return BuildBoxes(
+                      title: 'الخدمات الحكومية',
+                      items: services,
+                      destination: const GovernmentServices(),
+                      fit: BoxFit.contain,
+                      height: 165,
+                      imageHeight: 50,
+                      imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
+                      imageWidth: 50,
+                      width: 160,
+                      maximumlines: 3,
+                    );
+                  } else {
+                    return const SizedBox(
+                      height: 140,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder<List<MostRequestedProduct>>(
+                future: MostRequestedProducts().getMostRequestedProduct(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<MostRequestedProduct> products = snapshot.data!;
+                    return BuildProductsBoxes(
+                      title: 'المنتجات',
+                      items: products,
+                      titlefontSize: 12,
+                      destination: const ServiceOrderScreen(),
+                      fit: BoxFit.cover,
+                      height: 155,
+                      maximumLines: 3,
+                      imageHeight: 70,
+                      imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      imageWidth: 190,
+                      width: 190,
+                    );
+                  } else {
+                    return const SizedBox(
+                      height: 150,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder<List<Vendor>>(
+                future: GetVendor().getVendor(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Vendor> vendors = snapshot.data!;
+                    return BuildVendorssBoxes(
+                      title: 'البائعين',
+                      items: vendors,
+                      titlefontSize: 12,
+                      destination: const AllVendorsScreen(),
+                      fit: BoxFit.cover,
+                      height: 150,
+                      maximumLines: 3,
+                      imageHeight: 70,
+                      imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                      imageWidth: 180,
+                      width: 180,
+                    );
+                  } else {
+                    return const SizedBox(
+                      height: 160,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
