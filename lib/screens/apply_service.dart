@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, annotate_overrides
+// ignore_for_file: library_private_types_in_public_api, annotate_overrides, unused_field, avoid_print
 
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
@@ -80,7 +80,7 @@ class _ApplyService extends State<ApplyService> {
                           const CustomTextField(hintText: 'labelText'),
                           const CustomTextField(hintText: 'labelText'),
                           const DateTextField(),
-                          Container(
+                          const SizedBox(
                             height: 120,
                             child: CustomTextField(
                               hintText: 'scrollable وطويلة شوية للعنوان',
@@ -88,7 +88,7 @@ class _ApplyService extends State<ApplyService> {
                               expands: true,
                             ),
                           ),
-                          CustomDropDown(
+                          const CustomDropDown(
                             hintText: r'اختر منطقتك/حيك',
                             items: [
                               'الحي الأول',
@@ -446,8 +446,8 @@ class _CustomDropDownState extends State<CustomDropDown> {
             widget.items.map((item) {
               return DropdownMenuItem(
                 value: item,
-                child: Text(item),
                 enabled: true,
+                child: Text(item),
               );
             }).toList(),
         onChanged: (value) {
@@ -482,7 +482,7 @@ class CustomUploadBox extends StatelessWidget {
         strokeWidth: 1,
         borderType: BorderType.RRect,
         radius: const Radius.circular(15),
-        dashPattern: [6, 4],
+        dashPattern: const [6, 4],
         child: GestureDetector(
           onTap: onTap,
 

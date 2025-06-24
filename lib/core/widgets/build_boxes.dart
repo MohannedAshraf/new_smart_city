@@ -8,7 +8,6 @@ import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/models/most_requested_products.dart';
 
 import 'package:citio/models/vendor.dart';
-import 'package:citio/screens/government_screen.dart';
 import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/vendor_profile.dart';
