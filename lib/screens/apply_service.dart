@@ -2,8 +2,10 @@
 
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 class ApplyService extends StatefulWidget {
   const ApplyService({super.key});
@@ -12,6 +14,8 @@ class ApplyService extends StatefulWidget {
 }
 
 class _ApplyService extends State<ApplyService> {
+  FilePickerResult? result;
+
   bool isChecked = false;
   bool isButtonPressed = false;
   Widget build(BuildContext context) {
@@ -63,19 +67,58 @@ class _ApplyService extends State<ApplyService> {
                   ),
                 ],
               ),
-              const Row(
+              Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: ServiceContainer(
                         icon: Icons.file_upload,
                         title: ' الوثائق المطلوبة',
                         content: [
-                          CustomTextField(hintText: 'labelText'),
-                          CustomTextField(hintText: 'labelText'),
-                          CustomTextField(hintText: 'labelText'),
-                          DateTextField(),
+                          const CustomTextField(hintText: 'labelText'),
+                          const CustomTextField(hintText: 'labelText'),
+                          const CustomTextField(hintText: 'labelText'),
+                          const DateTextField(),
+                          Container(
+                            height: 120,
+                            child: CustomTextField(
+                              hintText: 'scrollable وطويلة شوية للعنوان',
+                              maxLines: 5,
+                              expands: true,
+                            ),
+                          ),
+                          CustomDropDown(
+                            hintText: r'اختر منطقتك/حيك',
+                            items: [
+                              'الحي الأول',
+                              'الحي التالت',
+                              'حي الزهور',
+                              'الحي الجديد',
+                              'الحي الأجدد منه',
+                              'حي مساكن السلام',
+                              'الحي الأخير',
+                            ],
+                          ),
+
+                          CustomUploadBox(
+                            title: 'Tap to upload ID document',
+                            subTitle: 'PDF, JPG, PNG (Max 5MB)',
+                            onTap: () async {
+                              result = await FilePicker.platform.pickFiles(
+                                allowMultiple: true,
+                              );
+                              if (result == null) {
+                                print("No file selected");
+                              } else {
+                                print("تم تحميل");
+                                setState(() {});
+                                for (var element in result!.files) {
+                                  print(element.name);
+                                }
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -215,7 +258,19 @@ class _ApplyService extends State<ApplyService> {
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  const CustomTextField({super.key, required this.hintText});
+  final void Function(String)? onChanged;
+  final int minLines;
+  final int maxLines;
+  final bool expands;
+
+  const CustomTextField({
+    super.key,
+    required this.hintText,
+    this.onChanged,
+    this.minLines = 1,
+    this.maxLines = 5,
+    this.expands = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -223,12 +278,20 @@ class CustomTextField extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
       child: SizedBox(
         height: 45,
-        child: TextField(
-          decoration: InputDecoration(
-            fillColor: MyColors.white,
 
+        child: TextField(
+          textAlignVertical: TextAlignVertical.top,
+          onChanged: onChanged,
+          minLines: expands ? null : minLines,
+          maxLines: expands ? null : maxLines,
+          expands: expands,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+            fillColor: MyColors.white,
+            filled: true,
             hintText: hintText,
-            hintStyle: const TextStyle(color: MyColors.grey, fontSize: 12),
+
+            hintStyle: const TextStyle(color: MyColors.grey, fontSize: 16),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,
@@ -300,6 +363,11 @@ class _DateTextFieldState extends State<DateTextField> {
           readOnly: true,
           onTap: () => _selectDate(context),
           decoration: InputDecoration(
+            hintText: 'mm/dd/yy',
+            hintStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
             suffixIcon: const Icon(Icons.calendar_today),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
@@ -312,6 +380,139 @@ class _DateTextFieldState extends State<DateTextField> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: const BorderSide(color: MyColors.dodgerBlue),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDropDown extends StatefulWidget {
+  final String hintText;
+  final List<String> items;
+  final String? selectedValue;
+  final void Function(String?)? onChanged;
+
+  const CustomDropDown({
+    super.key,
+    required this.hintText,
+    required this.items,
+    this.selectedValue,
+    this.onChanged,
+  });
+  @override
+  _CustomDropDownState createState() => _CustomDropDownState();
+}
+
+class _CustomDropDownState extends State<CustomDropDown> {
+  String? _selectedValue;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      child: DropdownButtonFormField<String>(
+        menuMaxHeight: 250,
+        borderRadius: BorderRadius.circular(15),
+        focusColor: MyColors.fadedGrey,
+
+        iconEnabledColor: MyColors.white,
+        isExpanded: true,
+        dropdownColor: MyColors.white,
+        value: widget.selectedValue,
+        // onChanged: widget.onChanged,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          hintText: widget.hintText,
+          hintStyle: const TextStyle(color: MyColors.black, fontSize: 12),
+          suffixIcon: const Icon(Icons.arrow_drop_down),
+          fillColor: MyColors.white,
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: MyColors.gray),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: MyColors.dodgerBlue),
+          ),
+        ),
+        // icon: const Icon(Icons.keyboard_arrow_down),
+        items:
+            widget.items.map((item) {
+              return DropdownMenuItem(
+                value: item,
+                child: Text(item),
+                enabled: true,
+              );
+            }).toList(),
+        onChanged: (value) {
+          setState(() {
+            _selectedValue = value;
+          });
+          widget.onChanged; //الفانكشن التانية يا لولوووو
+        },
+      ),
+    );
+  }
+}
+
+class CustomUploadBox extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  final VoidCallback? onTap;
+
+  const CustomUploadBox({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      child: DottedBorder(
+        color: MyColors.gray, // غيريه حسب الثيم
+        strokeWidth: 1,
+        borderType: BorderType.RRect,
+        radius: const Radius.circular(15),
+        dashPattern: [6, 4],
+        child: GestureDetector(
+          onTap: onTap,
+
+          // borderRadius: BorderRadius.circular(15),
+          child: Container(
+            height: 120,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.cloud_upload_outlined,
+                  color: MyColors.grey,
+                  size: 36,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  subTitle,
+                  style: const TextStyle(fontSize: 12, color: MyColors.grey),
+                ),
+              ],
             ),
           ),
         ),

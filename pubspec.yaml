@@ -43,6 +43,8 @@ dependencies:
   permission_handler: ^12.0.0
   share_plus: ^11.0.0
   intl: ^0.19.0
+  dotted_border: ^2.0.0
+  file_picker: ^10.2.0
   
   
 
