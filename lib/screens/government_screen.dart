@@ -1,6 +1,7 @@
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
 import 'package:citio/main.dart';
+import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
 
@@ -36,7 +37,22 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
       length: 4,
       child: Scaffold(
         backgroundColor: MyColors.offWhite,
-
+        floatingActionButton: FloatingActionButton(
+          splashColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              30,
+            ), // 0 عشان يبقى مربع بزوايا حادة
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GovernmentServices()),
+            );
+          },
+          backgroundColor: MyColors.dodgerBlue,
+          child: const Icon(Icons.add, color: MyColors.white, size: 30),
+        ),
         appBar: AppBar(
           //flexibleSpace: Container(height: 0),
           toolbarHeight: 70,
@@ -51,12 +67,14 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           ),
           centerTitle: true,
 
-          bottom: const PreferredSize(
+          bottom: PreferredSize(
             preferredSize: Size.fromHeight(40),
             child: Column(
               children: [
                 Divider(color: MyColors.whiteSmoke, thickness: 2, height: 3),
                 TabBar(
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
