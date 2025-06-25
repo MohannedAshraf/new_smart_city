@@ -1,7 +1,8 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:citio/screens/order_details_screen.dart';
+// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use, unused_local_variable
+import 'package:citio/helper/api_myorder.dart';
+import 'package:citio/models/myoeder_model.dart';
 import 'package:flutter/material.dart';
+import 'package:citio/screens/order_details_screen.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -12,63 +13,37 @@ class MyOrdersPage extends StatefulWidget {
 
 class _MyOrdersPageState extends State<MyOrdersPage> {
   int selectedIndex = 0;
+  List<OrderItem> orders = [];
+  bool isLoading = true;
 
   final List<String> categories = ['الكل', 'المعلقة', 'قيد التقدم', 'المكتملة'];
 
-  final List<Order> allOrders = [
-    Order(
-      orderId: "#ORD-2024-001",
-      title: "Burger Palace",
-      date: "Dec 15, 2024",
-      itemCount: 3,
-      price: 250,
-      imageUrl: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
-      status: "المكتملة",
-    ),
-    Order(
-      orderId: "#ORD-2024-002",
-      title: "Coffee Corner",
-      date: "Dec 16, 2024",
-      itemCount: 2,
-      price: 125,
-      imageUrl: "https://cdn-icons-png.flaticon.com/512/924/924514.png",
-      status: "قيد التقدم",
-    ),
-    Order(
-      orderId: "#ORD-2024-003",
-      title: "Fresh Market",
-      date: "Dec 17, 2024",
-      itemCount: 1,
-      price: 65,
-      imageUrl: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png",
-      status: "المعلقة",
-    ),
-    Order(
-      orderId: "#ORD-2024-004",
-      title: "Pizza House",
-      date: "Dec 14, 2024",
-      itemCount: 2,
-      price: 290,
-      imageUrl: "https://cdn-icons-png.flaticon.com/512/3132/3132693.png",
-      status: "ملغي",
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchOrders();
+  }
+
+  Future<void> fetchOrders() async {
+    try {
+      final status = selectedIndex == 0 ? null : categories[selectedIndex];
+      final result = await OrdersApiHelper.fetchOrders(status: status);
+      setState(() {
+        orders = result;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error: $e");
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredOrders =
-        selectedIndex == 0
-            ? allOrders
-            : allOrders
-                .where((order) => order.status == categories[selectedIndex])
-                .toList();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('طلباتي', style: TextStyle(color: Colors.black)),
         centerTitle: true,
-        // backgroundColor: Colors.white,
-        //elevation: 1,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
@@ -86,70 +61,91 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, index) {
                 final isSelected = selectedIndex == index;
-                return ChoiceChip(
-                  label: Text(categories[index]),
-                  selected: isSelected,
-                  onSelected: (_) {
-                    setState(() => selectedIndex = index);
+                return GestureDetector(
+                  onTap: () async {
+                    setState(() {
+                      selectedIndex = index;
+                      isLoading = true;
+                    });
+                    await fetchOrders();
                   },
-                  selectedColor: Colors.blue,
-                  backgroundColor: Colors.grey.shade200,
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontSize: 13,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue : Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      categories[index],
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontSize: 13,
+                      ),
+                    ),
                   ),
                 );
               },
             ),
           ),
           const SizedBox(height: 12),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: filteredOrders.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (_) =>
-                                OrderDetailsView(order: filteredOrders[index]),
-                      ),
-                    );
-                  },
-                  child: buildOrderCard(filteredOrders[index]),
-                );
-              },
-            ),
-          ),
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Expanded(
+                child:
+                    orders.isEmpty
+                        ? const Center(child: Text("لا يوجد طلبات"))
+                        : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: orders.length,
+                          itemBuilder: (context, index) {
+                            final order = orders[index];
+
+                            // تخزين الـ orderId و vendorId (جاهزين للاستخدام)
+                            final orderId = order.orderId;
+                            final vendorId = order.vendorId;
+
+                            return GestureDetector(
+                              onTap: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder:
+                                //         (_) => OrderDetailsView(order: order),
+                                //   ),
+                                // );
+                              },
+                              child: buildOrderCard(order),
+                            );
+                          },
+                        ),
+              ),
         ],
       ),
     );
   }
 
-  Widget buildOrderCard(Order order) {
+  Widget buildOrderCard(OrderItem order) {
     Color badgeColor;
-    switch (order.status) {
-      case "المكتملة":
+    switch (order.orderStatus) {
+      case "complete":
         badgeColor = Colors.green;
         break;
-      case "المعلقة":
+      case "pending":
         badgeColor = Colors.amber;
         break;
-      case "قيد التقدم":
+      case "in progress ":
         badgeColor = Colors.blue;
         break;
-      case "ملغي":
+      case "canceled":
         badgeColor = Colors.red;
         break;
       default:
         badgeColor = Colors.grey;
     }
+
+    // استخراج التاريخ فقط
+    final orderDate = order.orderDate.toLocal().toString().split(' ')[0];
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -164,9 +160,9 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
-              order.imageUrl,
-              width: 55,
-              height: 55,
+              "https://service-provider.runasp.net${order.vendorImageUrl}",
+              width: 70, // تكبير الصورة
+              height: 70,
               fit: BoxFit.cover,
             ),
           ),
@@ -176,12 +172,12 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  order.orderId,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  "رقم الطلب: #${order.orderId}",
+                  style: const TextStyle(fontSize: 12, color: Colors.black),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  order.title,
+                  order.vendorName,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -189,22 +185,23 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "${order.date}\n${order.itemCount} عنصر • ${order.price.toStringAsFixed(0)} جنيه",
-                  style: const TextStyle(fontSize: 13, color: Colors.black87),
+                  " $orderDate\n ${order.totalItems} • ${order.totalAmount.toStringAsFixed(0)} جنيه",
+                  style: const TextStyle(fontSize: 13),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: badgeColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: badgeColor, width: 1.2),
             ),
             child: Text(
-              order.status,
+              order.orderStatus,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 color: badgeColor,
                 fontWeight: FontWeight.bold,
               ),
@@ -214,24 +211,4 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       ),
     );
   }
-}
-
-class Order {
-  final String orderId;
-  final String title;
-  final String date;
-  final int itemCount;
-  final double price;
-  final String imageUrl;
-  final String status;
-
-  Order({
-    required this.orderId,
-    required this.title,
-    required this.date,
-    required this.itemCount,
-    required this.price,
-    required this.imageUrl,
-    required this.status,
-  });
 }
