@@ -252,9 +252,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20), // 👈 هنا بتتحكم في ال radius
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
       margin: const EdgeInsets.fromLTRB(20, 10, 20, 8),
