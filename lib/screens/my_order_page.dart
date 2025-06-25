@@ -1,8 +1,9 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use, unused_local_variable
+// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+
 import 'package:citio/helper/api_myorder.dart';
-import 'package:citio/models/myoeder_model.dart';
-import 'package:flutter/material.dart';
+import 'package:citio/models/myorder_model.dart';
 import 'package:citio/screens/order_details_screen.dart';
+import 'package:flutter/material.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -13,10 +14,11 @@ class MyOrdersPage extends StatefulWidget {
 
 class _MyOrdersPageState extends State<MyOrdersPage> {
   int selectedIndex = 0;
-  List<OrderItem> orders = [];
+  List<OrderItem> allOrders = []; // كل الطلبات
+  List<OrderItem> filteredOrders = []; // الطلبات المفلترة
   bool isLoading = true;
 
-  final List<String> categories = ['الكل', 'المعلقة', 'قيد التقدم', 'المكتملة'];
+  final List<String> categories = ['All', 'Pending', 'Processing', 'Delivered'];
 
   @override
   void initState() {
@@ -26,16 +28,31 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
   Future<void> fetchOrders() async {
     try {
-      final status = selectedIndex == 0 ? null : categories[selectedIndex];
-      final result = await OrdersApiHelper.fetchOrders(status: status);
+      final result = await OrdersApiHelper.fetchOrders(); // بدون فلترة
       setState(() {
-        orders = result;
+        allOrders = result;
+        filteredOrders = filterOrders(result);
         isLoading = false;
       });
     } catch (e) {
       print("Error: $e");
       setState(() => isLoading = false);
     }
+  }
+
+  List<OrderItem> filterOrders(List<OrderItem> orders) {
+    final selectedStatus = categories[selectedIndex].toLowerCase();
+    if (selectedStatus == 'all') return orders;
+    return orders
+        .where((o) => o.orderStatus.toLowerCase() == selectedStatus)
+        .toList();
+  }
+
+  void onCategorySelected(int index) {
+    setState(() {
+      selectedIndex = index;
+      filteredOrders = filterOrders(allOrders);
+    });
   }
 
   @override
@@ -62,13 +79,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               itemBuilder: (context, index) {
                 final isSelected = selectedIndex == index;
                 return GestureDetector(
-                  onTap: () async {
-                    setState(() {
-                      selectedIndex = index;
-                      isLoading = true;
-                    });
-                    await fetchOrders();
-                  },
+                  onTap: () => onCategorySelected(index),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
@@ -93,27 +104,25 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               ? const Center(child: CircularProgressIndicator())
               : Expanded(
                 child:
-                    orders.isEmpty
+                    filteredOrders.isEmpty
                         ? const Center(child: Text("لا يوجد طلبات"))
                         : ListView.builder(
                           padding: const EdgeInsets.all(16),
-                          itemCount: orders.length,
+                          itemCount: filteredOrders.length,
                           itemBuilder: (context, index) {
-                            final order = orders[index];
-
-                            // تخزين الـ orderId و vendorId (جاهزين للاستخدام)
-                            final orderId = order.orderId;
-                            final vendorId = order.vendorId;
-
+                            final order = filteredOrders[index];
                             return GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder:
-                                //         (_) => OrderDetailsView(order: order),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => OrderDetailsView(
+                                          orderId: order.orderId,
+                                          vendorId: order.vendorId,
+                                        ),
+                                  ),
+                                );
                               },
                               child: buildOrderCard(order),
                             );
@@ -127,24 +136,20 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
   Widget buildOrderCard(OrderItem order) {
     Color badgeColor;
-    switch (order.orderStatus) {
-      case "complete":
-        badgeColor = Colors.green;
-        break;
+    switch (order.orderStatus.toLowerCase()) {
       case "pending":
         badgeColor = Colors.amber;
         break;
-      case "in progress ":
+      case "processing":
         badgeColor = Colors.blue;
         break;
-      case "canceled":
-        badgeColor = Colors.red;
+      case "delivered":
+        badgeColor = Colors.green;
         break;
       default:
         badgeColor = Colors.grey;
     }
 
-    // استخراج التاريخ فقط
     final orderDate = order.orderDate.toLocal().toString().split(' ')[0];
 
     return Container(
@@ -161,7 +166,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
               "https://service-provider.runasp.net${order.vendorImageUrl}",
-              width: 70, // تكبير الصورة
+              width: 70,
               height: 70,
               fit: BoxFit.cover,
             ),
@@ -173,7 +178,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               children: [
                 Text(
                   "رقم الطلب: #${order.orderId}",
-                  style: const TextStyle(fontSize: 12, color: Colors.black),
+                  style: const TextStyle(fontSize: 12),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -185,7 +190,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  " $orderDate\n ${order.totalItems} • ${order.totalAmount.toStringAsFixed(0)} جنيه",
+                  "$orderDate\n${order.totalItems} منتج • ${order.totalAmount.toStringAsFixed(0)} جنيه",
                   style: const TextStyle(fontSize: 13),
                 ),
               ],

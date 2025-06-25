@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable
 
 import 'package:citio/core/utils/assets_image.dart';
 
@@ -6,7 +6,6 @@ import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/all_vendors.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating/flutter_rating.dart';
 import 'package:citio/screens/vendor_profile.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 

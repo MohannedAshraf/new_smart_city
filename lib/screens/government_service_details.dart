@@ -44,7 +44,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color:
-                          Styles.govTabStyles[service!.category]?['color'] ??
+                          Styles.govTabStyles[service.category]?['color'] ??
                           MyColors.fadedGrey,
                       borderRadius: BorderRadius.circular(20),
                     ),

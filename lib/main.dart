@@ -214,28 +214,6 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('الملف الشخصي'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.receipt_long_outlined),
-              title: const Text('طلباتي'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyOrdersPage()),
-                );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.shopping_basket_outlined),
               title: const Text('البائعين'),
               onTap: () {
@@ -250,7 +228,31 @@ class HomePageState extends State<HomePage> {
             ),
 
             ListTile(
+              leading: const Icon(Icons.receipt_long_outlined),
+              title: const Text('طلباتي'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyOrdersPage()),
+                );
+              },
+            ),
+
+            ListTile(
               leading: const Icon(Icons.person),
+              title: const Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.logout),
               title: const Text('تسجيل الخروج'),
               onTap: () {
                 Navigator.pop(context);
