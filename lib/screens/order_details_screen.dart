@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print
 
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/models/order_details_model.dart';

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/generated/l10n.dart';
@@ -21,10 +23,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/notification_helper.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await NotificationHelper.initialize(); 
+  await NotificationHelper.initialize();
   await Firebase.initializeApp();
   await FCMService().initFCM();
   final prefs = await SharedPreferences.getInstance();

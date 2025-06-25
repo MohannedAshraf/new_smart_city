@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, unused_element, unused_import
+
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
 import 'package:citio/main.dart';
@@ -47,7 +49,9 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => GovernmentServices()),
+              MaterialPageRoute(
+                builder: (context) => const GovernmentServices(),
+              ),
             );
           },
           backgroundColor: MyColors.dodgerBlue,
@@ -68,14 +72,18 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           centerTitle: true,
 
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
+            preferredSize: const Size.fromHeight(40),
             child: Column(
               children: [
-                Divider(color: MyColors.whiteSmoke, thickness: 2, height: 3),
+                const Divider(
+                  color: MyColors.whiteSmoke,
+                  thickness: 2,
+                  height: 3,
+                ),
                 TabBar(
                   splashFactory: NoSplash.splashFactory,
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
                   dividerColor: MyColors.white,
@@ -83,10 +91,10 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   labelColor: MyColors.inProgress,
                   unselectedLabelColor: MyColors.gray,
                   tabs: [
-                    TabItem(title: 'الجميع'),
-                    TabItem(title: 'تم حلها'),
-                    TabItem(title: 'تحت المراجعة'),
-                    TabItem(title: 'المرفوضة'),
+                    const TabItem(title: 'الجميع'),
+                    const TabItem(title: 'تم حلها'),
+                    const TabItem(title: 'تحت المراجعة'),
+                    const TabItem(title: 'المرفوضة'),
                   ],
                 ),
               ],

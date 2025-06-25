@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, unused_import
+
 import 'package:citio/helper/api_login.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/register_page.dart';
