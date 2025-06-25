@@ -24,17 +24,27 @@ class ApiLoginHelper {
         final loginResponse = LoginResponse.fromJson(data);
 
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        // ✅ نحتفظ بنفس اسم التوكن القديم
         await prefs.setString('token', loginResponse.token ?? "");
         await prefs.setString('refreshToken', loginResponse.refreshToken ?? "");
 
+        // ✅ طباعة التوكن في التيرمينال
+        print("✅ Token: ${loginResponse.token}");
+        print("🔁 Refresh Token: ${loginResponse.refreshToken}");
+
         return loginResponse;
       } else {
+        // ✅ نطبع رسالة الخطأ من السيرفر نفسه إن وجدت
         final error = jsonDecode(response.body);
-        throw Exception(error["message"] ?? "حدث خطأ غير متوقع");
+        final errorMessage = error["message"] ?? "بيانات الدخول غير صحيحة";
+        throw Exception(errorMessage);
       }
     } catch (e) {
-      throw Exception("فشل الاتصال بالخادم، حاول مرة أخرى");
+      // ✅ فقط نطبع الرسالة العامة لو مفيش رسالة واضحة
+      throw Exception(
+        e.toString().contains("SocketException")
+            ? "فشل الاتصال بالخادم، تأكد من الاتصال بالإنترنت"
+            : e.toString().replaceAll("Exception: ", ""),
+      );
     }
   }
 }
