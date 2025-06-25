@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 abstract class MyColors {
+  static const Color fadedInProgress = Color(0x1A007FFF);
+  static const Color inProgress = Color(0xFF007FFF);
+  static const Color rejected = Color(0xFFEE4B2B);
+  static const Color fadedRejected = Color(0x1AEE4B2B);
+  static const Color fadedAccepted = Color(0x1A009E60);
+  static const Color accepted = Color(0xFF009E60);
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   static const Color ambulance = Color(0xFFE53935);
   static const Color ambulanceShade = Color(0x4DE53935);
@@ -72,6 +78,23 @@ abstract class Styles {
       'color': Color(0x1A673AB7),
       'icon': Icons.shopping_cart,
       'fontColor': Colors.deepPurple,
+    },
+  };
+  static const Map<String, Map<String, dynamic>> requestsStyle = {
+    'Completed': {
+      'color': MyColors.fadedAccepted,
+      'icon': Icons.check,
+      'fontColor': MyColors.accepted,
+    },
+    'Pending': {
+      'color': MyColors.fadedInProgress,
+      'icon': Icons.hourglass_empty,
+      'fontColor': MyColors.inProgress,
+    },
+    'Rejected': {
+      'color': MyColors.fadedRejected,
+      'icon': Icons.cancel,
+      'fontColor': MyColors.rejected,
     },
   };
 }
