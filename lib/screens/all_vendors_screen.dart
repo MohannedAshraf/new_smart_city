@@ -73,6 +73,8 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.white,
@@ -225,166 +227,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     behavior: HitTestBehavior.opaque,
                     child: Column(
                       children: [
-                        Card(
-                          color: MyColors.white,
-                          shadowColor: MyColors.whiteSmoke,
-                          margin: const EdgeInsets.fromLTRB(20, 10, 20, 8),
-                          child: SizedBox(
-                            // width: double.infinity,
-                            //height: 200,
-                            child: Column(
-                              children: [
-                                Stack(
-                                  clipBehavior: Clip.none,
-                                  //alignment: Alignment.topRight,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(13),
-                                        topRight: Radius.circular(13),
-                                      ),
-                                      child:
-                                          vendors[index].coverImage != null
-                                              ? Image.network(
-                                                Urls.serviceProviderbaseUrl +
-                                                    vendors[index].coverImage!,
-                                                // vendors[index].coverImage,
-                                                width: double.infinity,
-                                                height: 120,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (
-                                                  BuildContext context,
-                                                  Object error,
-                                                  StackTrace? stackTrace,
-                                                ) {
-                                                  return const SizedBox(
-                                                    height: 100,
-                                                    width: double.infinity,
-                                                    child: Image(
-                                                      image: AssetImage(
-                                                        MyAssetsImage
-                                                            .brokenImage,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                              : Image.asset(
-                                                width: double.infinity,
-                                                height: 100,
-                                                MyAssetsImage.brokenImage,
-                                              ),
-                                    ),
-                                    Positioned(
-                                      top: 79,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              0,
-                                              8,
-                                              20,
-                                              20,
-                                            ),
-                                            child: CircleAvatar(
-                                              radius: 32,
-
-                                              backgroundImage:
-                                                  vendors[index].profileImage !=
-                                                          null
-                                                      ? NetworkImage(
-                                                        Urls.serviceProviderbaseUrl +
-                                                            vendors[index]
-                                                                .profileImage!,
-                                                        // vendors[index].profileImage,
-                                                      )
-                                                      : const AssetImage(
-                                                        MyAssetsImage
-                                                            .brokenImage,
-                                                      ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        0,
-                                        40,
-                                        20,
-                                        0,
-                                      ),
-                                      child: Text(
-                                        vendors[index].businessName,
-                                        style: const TextStyle(
-                                          color: MyColors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              10,
-                                              5,
-                                              20,
-                                              0,
-                                            ),
-                                            child: Text(
-                                              vendors[index].type,
-                                              style: const TextStyle(
-                                                color: MyColors.gray,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              10,
-                                              10,
-                                              20,
-                                              15,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.star,
-                                                  color: MyColors.star,
-                                                ),
-                                                const SizedBox(width: 6),
-                                                Text(
-                                                  vendors[index].rating
-                                                      .toStringAsFixed(2),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                //SizedBox(height: 20),
-                              ],
-                            ),
-                          ),
-                        ),
+                        vendorCard(index),
                         if (index == vendors.length - 1 && isLoading)
                           const Padding(
                             padding: EdgeInsets.all(10),
@@ -399,6 +242,138 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                 },
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card vendorCard(int index) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20), // 👈 هنا بتتحكم في ال radius
+      ),
+      color: MyColors.white,
+      shadowColor: MyColors.whiteSmoke,
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 8),
+      child: SizedBox(
+        width: screenWidth * .9,
+        height: screenHeight * 0.37,
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              //alignment: Alignment.topRight,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child:
+                      vendors[index].coverImage != null
+                          ? Image.network(
+                            Urls.serviceProviderbaseUrl +
+                                vendors[index].coverImage!,
+                            // vendors[index].coverImage,
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                            fit: BoxFit.cover,
+                            errorBuilder: (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                            ) {
+                              return SizedBox(
+                                height: screenHeight * 0.165,
+                                width: double.infinity,
+                                child: const Image(
+                                  image: AssetImage(MyAssetsImage.brokenImage),
+                                ),
+                              );
+                            },
+                          )
+                          : Image.asset(
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                            MyAssetsImage.brokenImage,
+                          ),
+                ),
+                Positioned(
+                  top: screenHeight * 0.11,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 20, 20),
+                        child: CircleAvatar(
+                          radius: 32,
+
+                          backgroundImage:
+                              vendors[index].profileImage != null
+                                  ? NetworkImage(
+                                    Urls.serviceProviderbaseUrl +
+                                        vendors[index].profileImage!,
+                                    // vendors[index].profileImage,
+                                  )
+                                  : const AssetImage(MyAssetsImage.brokenImage),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 40, 20, 0),
+                  child: Text(
+                    vendors[index].businessName,
+                    style: const TextStyle(
+                      color: MyColors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 5, 20, 0),
+                        child: Text(
+                          vendors[index].type,
+                          style: const TextStyle(
+                            color: MyColors.gray,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 20, 15),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star, color: MyColors.star),
+                            const SizedBox(width: 6),
+                            Text(vendors[index].rating.toStringAsFixed(2)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            //SizedBox(height: 20),
           ],
         ),
       ),

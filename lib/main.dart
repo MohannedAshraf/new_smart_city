@@ -10,7 +10,7 @@ import 'package:citio/screens/welcome-page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
 import 'screens/first_issue_screen.dart';
@@ -24,7 +24,16 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
 
-  runApp(CityApp(seenOnboarding: seenOnboarding));
+  runApp(
+    ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return CityApp(seenOnboarding: seenOnboarding);
+      },
+    ),
+  );
 }
 
 class CityApp extends StatelessWidget {
