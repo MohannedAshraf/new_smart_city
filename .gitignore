@@ -38,6 +38,7 @@ migrate_working_dir/
 **/generated_plugin_registrant.cc
 **/GeneratedPluginRegistrant.swift
 
+android/app/google-services.json
 
 # Symbolication related
 app.*.symbols

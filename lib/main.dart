@@ -16,10 +16,17 @@ import 'screens/first_issue_screen.dart';
 import 'screens/service_order_screen.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
+import 'services/fcm_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'services/notification_helper.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+    await NotificationHelper.initialize(); 
+  await Firebase.initializeApp();
+  await FCMService().initFCM();
   final prefs = await SharedPreferences.getInstance();
   final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
 

@@ -4,6 +4,9 @@ import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:citio/helper/fcm_api.dart';
+import 'package:citio/services/fcm_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyloginPage extends StatefulWidget {
   const MyloginPage({super.key});
@@ -37,6 +40,9 @@ class _LoginPageState extends State<MyloginPage> {
       setState(() => _isLoading = false);
 
       if (result != null && context.mounted) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', result.token!);
+        await FCMService().initFCM();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
