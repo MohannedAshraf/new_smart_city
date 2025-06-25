@@ -22,4 +22,23 @@ class RequestsByStatus {
     }
     return requestsList;
   }
+
+  Future<List<Request>> getAllRequests() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    List<dynamic> data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Requests/Member',
+      token: token,
+    );
+    List<Request> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(Request.fromJason(data[i]));
+    }
+    return requestsList;
+  }
 }

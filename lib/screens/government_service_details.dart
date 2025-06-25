@@ -43,7 +43,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.indigo.withOpacity(.1),
+                      color:
+                          Styles.govTabStyles[service!.category]?['color'] ??
+                          MyColors.fadedGrey,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -212,87 +214,86 @@ class GovernmentServiceDetails extends StatelessWidget {
                       ],
                     ),
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: MyColors.white,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              // width: MediaQuery.of(context).size.width - 30,
-                              //height: 200,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      10,
-                                      16,
-                                      16,
-                                      12,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: MyColors.white,
-                                          radius: 13,
-                                          child: Icon(
-                                            Icons.format_list_numbered,
-                                            color: MyColors.dodgerBlue,
-                                            size: 28,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Expanded(
-                                          child: Text(
-                                            'كيف تقدم طلبًا؟',
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //             color: MyColors.white,
+                    //             borderRadius: BorderRadius.circular(20),
+                    //           ),
+                    //           // width: MediaQuery.of(context).size.width - 30,
+                    //           //height: 200,
+                    //           child: Column(
+                    //             children: [
+                    //               Padding(
+                    //                 padding: const EdgeInsets.fromLTRB(
+                    //                   10,
+                    //                   16,
+                    //                   16,
+                    //                   12,
+                    //                 ),
+                    //                 child: Row(
+                    //                   children: [
+                    //                     CircleAvatar(
+                    //                       backgroundColor: MyColors.white,
+                    //                       radius: 13,
+                    //                       child: Icon(
+                    //                         Icons.format_list_numbered,
+                    //                         color: MyColors.dodgerBlue,
+                    //                         size: 28,
+                    //                       ),
+                    //                     ),
+                    //                     SizedBox(width: 8),
+                    //                     Expanded(
+                    //                       child: Text(
+                    //                         'كيف تقدم طلبًا؟',
 
-                                            style: const TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textAlign: TextAlign.start,
-                                            //maxLines: 2,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                    //                         style: const TextStyle(
+                    //                           color: Colors.black87,
+                    //                           fontSize: 18,
+                    //                           fontWeight: FontWeight.bold,
+                    //                         ),
+                    //                         textAlign: TextAlign.start,
+                    //                         //maxLines: 2,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //               ),
 
-                                  stepsItem(
-                                    'أكمل النموذج الإلكتروني باستخدام بياناتك الشخصية.',
-                                    'تقديم الطلب',
-                                    '1',
-                                  ),
+                    //               stepsItem(
+                    //                 'أكمل النموذج الإلكتروني باستخدام بياناتك الشخصية.',
+                    //                 'تقديم الطلب',
+                    //                 '1',
+                    //               ),
 
-                                  stepsItem(
-                                    'قدّم نسخًا رقمية من جميع المستندات المطلوبة.',
-                                    ' تحميل المستندات',
-                                    '2',
-                                  ),
+                    //               stepsItem(
+                    //                 'قدّم نسخًا رقمية من جميع المستندات المطلوبة.',
+                    //                 ' تحميل المستندات',
+                    //                 '2',
+                    //               ),
 
-                                  stepsItem(
-                                    'أكمل عملية الدفع من خلال بوابة إلكترونية آمنة.',
-                                    'دفع الرسوم',
-                                    '3',
-                                  ),
+                    //               stepsItem(
+                    //                 'أكمل عملية الدفع من خلال بوابة إلكترونية آمنة.',
+                    //                 'دفع الرسوم',
+                    //                 '3',
+                    //               ),
 
-                                  stepsItem(
-                                    'استلم الشهادة يدويًا أو بالبريد خلال مدة التنفيذ.',
-                                    'title4',
-                                    '4',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
+                    //               stepsItem(
+                    //                 'استلم الشهادة يدويًا أو بالبريد خلال مدة التنفيذ.',
+                    //                 'title4',
+                    //                 '4',
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Row(
                       children: [
                         Expanded(

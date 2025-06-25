@@ -1,13 +1,9 @@
-// ignore_for_file: deprecated_member_use
-
-import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
+import 'package:citio/main.dart';
+import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-final Uri _url = Uri.parse('https://dribbble.com/shots/popular/mobile');
 
 class GovernmentScreen extends StatefulWidget {
   const GovernmentScreen({super.key});
@@ -38,78 +34,73 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          floatingActionButton: GestureDetector(
-            onTap:
-                () => showDialog<String>(
-                  context: context,
-                  builder:
-                      (BuildContext context) => AlertDialog(
-                        title: const Text('سيتم تحويلك خارج تطبيق citio'),
-                        content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'Cancel'),
-                            child: const Text('الغاء'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              launchUrl(_url, mode: LaunchMode.inAppWebView);
-                            },
-                            child: const Text('نعم'),
-                          ),
-                        ],
-                      ),
-                ),
-            child: const CircleAvatar(
-              radius: 55,
-              backgroundColor: MyColors.themecolor,
-              child: CircleAvatar(
-                backgroundImage: AssetImage(MyAssetsImage.logo),
-                radius: 50,
-              ),
+      length: 4,
+      child: Scaffold(
+        backgroundColor: MyColors.offWhite,
+        floatingActionButton: FloatingActionButton(
+          splashColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              30,
+            ), // 0 عشان يبقى مربع بزوايا حادة
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GovernmentServices()),
+            );
+          },
+          backgroundColor: MyColors.dodgerBlue,
+          child: const Icon(Icons.add, color: MyColors.white, size: 30),
+        ),
+        appBar: AppBar(
+          //flexibleSpace: Container(height: 0),
+          toolbarHeight: 70,
+          backgroundColor: MyColors.white,
+
+          title: const Padding(
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+            child: Text(
+              'طلباتي',
+              style: TextStyle(color: MyColors.black, fontSize: 20),
             ),
           ),
-          appBar: AppBar(
-            toolbarHeight: 30,
-            backgroundColor: MyColors.backgroundColor,
-            automaticallyImplyLeading: false,
-            title: const Padding(
-              padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-              child: Text(
-                'Citio',
-                style: TextStyle(color: MyColors.themecolor, fontSize: 20),
-              ),
-            ),
-            centerTitle: true,
-            bottom: const TabBar(
-              splashBorderRadius: BorderRadius.all(Radius.circular(10)),
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent,
-              indicator: BoxDecoration(
-                color: MyColors.cardcolor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              labelColor: MyColors.cardfontcolor,
-              unselectedLabelColor: Colors.black,
-              tabs: [
-                TabItem(title: 'تم حلها'),
-                TabItem(title: 'تحت المراجعة'),
-                TabItem(title: 'المرفوضة'),
+          centerTitle: true,
+
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(40),
+            child: Column(
+              children: [
+                Divider(color: MyColors.whiteSmoke, thickness: 2, height: 3),
+                TabBar(
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  isScrollable: true,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  dividerColor: MyColors.white,
+                  indicatorColor: MyColors.inProgress,
+                  labelColor: MyColors.inProgress,
+                  unselectedLabelColor: MyColors.gray,
+                  tabs: [
+                    TabItem(title: 'الجميع'),
+                    TabItem(title: 'تم حلها'),
+                    TabItem(title: 'تحت المراجعة'),
+                    TabItem(title: 'المرفوضة'),
+                  ],
+                ),
               ],
             ),
           ),
-          body: const TabBarView(
-            children: [
-              TabBarViewItem(title: 'Completed'),
-              TabBarViewItem(title: 'Pending'),
-              TabBarViewItem(title: 'Rejected'),
-            ],
-          ),
+        ),
+
+        body: const TabBarView(
+          children: [
+            TabBarViewItem(title: 'الجميع'),
+            TabBarViewItem(title: 'Completed'),
+            TabBarViewItem(title: 'Pending'),
+            TabBarViewItem(title: 'Rejected'),
+          ],
         ),
       ),
     );

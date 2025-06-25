@@ -23,7 +23,7 @@ class Vendor {
       businessName: jsonData['businessName'],
       type: jsonData['businessType'],
       image: jsonData['profilePictureUrl'],
-      coverImage: jsonData['coverPictureUrl'],
+      coverImage: jsonData['coverImageUrl'],
       id: jsonData['id'],
       rating:
           jsonData['rating'] != null

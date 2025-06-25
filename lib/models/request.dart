@@ -25,12 +25,32 @@ class Request {
       requestId: jsonData['requestId'],
       serviceId: jsonData['serviceId'],
       serviceName: jsonData['serviceName'],
-      requestDate: DateFormat.yMMMMd(
-        'en_US',
-      ).add_jm().format(DateTime.parse(jsonData['requestDate'])),
+      requestDate:
+          jsonData['requestDate'] != null &&
+                  jsonData['requestDate'].toString().isNotEmpty
+              ? getTimeAgo(jsonData['requestDate'])
+              : 'التاريخ غير متوفر',
       requestStatus: jsonData['requestStatus'],
       //responseStatus: jsonData['responseStatus'],
       responseText: jsonData['responseText'],
     );
+  }
+}
+
+String getTimeAgo(String dateString) {
+  final date = DateTime.parse(dateString);
+  final now = DateTime.now();
+  final diff = now.difference(date);
+
+  if (diff.inSeconds < 60) {
+    return 'منذ ${diff.inSeconds} ثانية';
+  } else if (diff.inMinutes < 60) {
+    return 'منذ ${diff.inMinutes} دقيقة';
+  } else if (diff.inHours < 24) {
+    return 'منذ ${diff.inHours} ساعة';
+  } else if (diff.inDays < 7) {
+    return 'منذ ${diff.inDays} يوم';
+  } else {
+    return DateFormat.yMMMMd('ar_EG').format(date);
   }
 }
