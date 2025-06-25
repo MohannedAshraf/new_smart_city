@@ -80,7 +80,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                       categories[index],
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black,
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -107,13 +107,16 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
                             return GestureDetector(
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder:
-                                //         (_) => OrderDetailsView(order: order),
-                                //   ),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (_) => OrderDetailsView(
+                                          orderId: order.orderId,
+                                          vendorId: order.vendorId,
+                                        ),
+                                  ),
+                                );
                               },
                               child: buildOrderCard(order),
                             );
@@ -132,7 +135,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         badgeColor = Colors.green;
         break;
       case "pending":
-        badgeColor = Colors.amber;
+        badgeColor = Colors.amberAccent;
         break;
       case "in progress ":
         badgeColor = Colors.blue;
@@ -141,7 +144,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         badgeColor = Colors.red;
         break;
       default:
-        badgeColor = Colors.grey;
+        badgeColor = Colors.amberAccent;
     }
 
     // استخراج التاريخ فقط

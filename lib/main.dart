@@ -206,17 +206,7 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('الملف الشخصي'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
-                );
-              },
-            ),
+
             ListTile(
               leading: const Icon(Icons.receipt_long_outlined),
               title: const Text('طلباتي'),
@@ -238,6 +228,17 @@ class HomePageState extends State<HomePage> {
                   MaterialPageRoute(
                     builder: (context) => const AllVendorsScreen(),
                   ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
                 );
               },
             ),
