@@ -229,7 +229,7 @@ class _CustomCardState extends State<CustomCard> {
                                     children: [
                                       SizedBox(
                                         height: 30,
-                                        width: 110,
+                                        width: 90,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -245,13 +245,16 @@ class _CustomCardState extends State<CustomCard> {
                                                 WidgetStateProperty.all(
                                                   MyColors.inProgress,
                                                 ),
+                                            padding: WidgetStateProperty.all(
+                                              EdgeInsets.zero,
+                                            ),
                                           ),
                                           child: const Text(
                                             'اعادة الطلب',
                                             maxLines: 1,
                                             style: TextStyle(
                                               color: MyColors.white,
-                                              fontSize: 12,
+                                              fontSize: 13,
                                             ),
                                           ),
                                         ),
