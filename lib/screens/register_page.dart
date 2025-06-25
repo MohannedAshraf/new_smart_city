@@ -1,8 +1,9 @@
-import 'package:citio/core/utils/mycolors.dart';
+// ignore_for_file: unused_field
+
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,244 +12,273 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-bool _obscurePassword = true;
-final TextEditingController emailController = TextEditingController();
-final TextEditingController passwordController = TextEditingController();
-final TextEditingController nameController = TextEditingController();
-final TextEditingController phoneController = TextEditingController();
-
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController buildingController = TextEditingController();
+  final TextEditingController floorController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late bool _obscurePassword = true;
+
+  OutlineInputBorder myBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MyloginPage()),
-            );
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text(
-          "إنشاء حساب",
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(
-                child: SvgPicture.asset(
-                  "assets/icon/citio.svg",
-                  width: 200,
-                  height: 120,
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Form(
+          key: _formKey,
+          child: Container(
+            width: 400,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade300,
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 6),
                 ),
-              ),
-              //  const SizedBox(height: 30),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      // ignore: deprecated_member_use
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 5,
-                      blurRadius: 5,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+            child: Column(
+              children: [
+                // اللوجو
+                Column(
                   children: [
+                    SvgPicture.asset("assets/icon/citio.svg", height: 100),
+
                     const Text(
-                      " الإسم بالكامل",
+                      "إنشاء حساب",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: "ادخل  الإسم",
-                        border: myBorder(),
-                        enabledBorder: myBorder(),
-                        focusedBorder: myBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'يرجى إدخال اسم صحيح';
-                        }
-                        final nameRegex = RegExp(
-                          r'^[\p{L}]+(?: [\p{L}]+)*$',
-                          unicode: true,
-                        );
-                        if (!nameRegex.hasMatch(value.trim())) {
-                          return 'يرجى إدخال اسم مكون من حروف فقط';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 4),
                     const Text(
-                      " رقم الهاتف ",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      "انضم إلى Citio لإدارة خدمات مدينتك",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: "ادخل  رقم الهاتف",
-                        border: myBorder(),
-                        enabledBorder: myBorder(),
-                        focusedBorder: myBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'يرجى إدخال رقم الهاتف';
-                        }
-                        final phoneRegex = RegExp(
-                          r'^(010|011|012|015)[0-9]{8}$',
-                        );
-                        if (!phoneRegex.hasMatch(value)) {
-                          return 'يرجى إدخال رقم هاتف مصري صالح مكون من 11 رقمًا';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "البريد الإلكتروني",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: "ادخل  البريد الإلكتروني",
-                        border: myBorder(),
-                        enabledBorder: myBorder(),
-                        focusedBorder: myBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'يرجى إدخال البريد الإلكتروني';
-                        }
-                        final emailRegex = RegExp(
-                          r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                        );
-                        if (!emailRegex.hasMatch(value)) {
-                          return 'يرجى إدخال بريد إلكتروني صالح';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "كلمة المرور",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        hintText: "ادخل  كلمة المرور",
-                        border: myBorder(),
-                        enabledBorder: myBorder(),
-                        focusedBorder: myBorder(),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'يرجى إدخال كلمة المرور';
-                        }
-                        if (value.length < 6) {
-                          return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Container(
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: MyColors.gray,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const VerificationScreen(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "أنشئ  الحساب  ",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 18),
+
+                // الاسم الكامل
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: "الاسم الكامل",
+                    prefixIcon: const Icon(Icons.person, color: Colors.grey),
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                  ),
+                  validator:
+                      (value) => value!.isEmpty ? "يرجى إدخال الاسم" : null,
+                ),
+                const SizedBox(height: 15),
+
+                // رقم الهاتف
+                TextFormField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    hintText: "رقم الهاتف",
+                    prefixIcon: const Icon(Icons.phone, color: Colors.grey),
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                  ),
+                  validator:
+                      (value) =>
+                          value!.isEmpty ? "يرجى إدخال رقم الهاتف" : null,
+                ),
+                const SizedBox(height: 15),
+
+                // البريد الإلكتروني
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    hintText: "البريد الإلكتروني",
+                    prefixIcon: const Icon(Icons.email, color: Colors.grey),
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                  ),
+                  validator:
+                      (value) =>
+                          value!.isEmpty
+                              ? "يرجى إدخال البريد الإلكتروني"
+                              : null,
+                ),
+                const SizedBox(height: 15),
+                //كلمة السر
+                TextFormField(
+                  controller: passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: "كلمة المرور",
+                    prefixIcon: const Icon(Icons.lock, color: Colors.grey),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'يرجى إدخال كلمة المرور';
+                    }
+                    if (value.length < 6) {
+                      return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+
+                // العنوان
+                TextFormField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    hintText: "العنوان",
+                    prefixIcon: const Icon(
+                      Icons.location_on,
+                      color: Colors.grey,
+                    ),
+                    border: myBorder(),
+                    enabledBorder: myBorder(),
+                    focusedBorder: myBorder(),
+                  ),
+                  validator:
+                      (value) => value!.isEmpty ? "يرجى إدخال العنوان" : null,
+                ),
+                const SizedBox(height: 15),
+
+                // المبنى والدور
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: buildingController,
+                        decoration: InputDecoration(
+                          hintText: "رقم المبنى",
+                          prefixIcon: const Icon(
+                            Icons.apartment,
+                            color: Colors.grey,
+                          ),
+                          border: myBorder(),
+                          enabledBorder: myBorder(),
+                          focusedBorder: myBorder(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextFormField(
+                        controller: floorController,
+                        decoration: InputDecoration(
+                          hintText: "الدور",
+                          prefixIcon: const Icon(
+                            Icons.stairs,
+                            color: Colors.grey,
+                          ),
+                          border: myBorder(),
+                          enabledBorder: myBorder(),
+                          focusedBorder: myBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // زر إنشاء الحساب
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const VerificationScreen(),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text(
+                      "أنشئ الحساب",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // لديك حساب؟
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("هل لديك حساب؟"),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyloginPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "تسجيل الدخول",
+                        style: TextStyle(
+                          //decoration: TextDecoration.underline,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
-
-OutlineInputBorder myBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
-    borderSide: const BorderSide(
-      color: Colors.grey, // لون البوردر أسود ثابت
-    ),
-  );
 }

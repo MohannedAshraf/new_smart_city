@@ -1,9 +1,13 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'edit_profile.dart';
 
 class Profile extends StatefulWidget {
@@ -14,54 +18,35 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  File? _imageFile;
-  bool _isLoading = true;
-  final ImagePicker _picker = ImagePicker();
+  File? _profileImageFile;
 
   @override
   void initState() {
     super.initState();
-    _loadImage();
+    _loadProfileImage();
   }
 
-  Future<void> _loadImage() async {
+  Future<void> _loadProfileImage() async {
     final prefs = await SharedPreferences.getInstance();
-    final imagePath = prefs.getString('profile_image');
-    if (imagePath != null) {
-      _imageFile = File(imagePath);
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _saveImage(String path) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profile_image', path);
-  }
-
-  Future<void> _pickImage() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery,
-      );
-
-      if (pickedFile != null) {
+    final base64Image = prefs.getString('profile_image');
+    if (base64Image != null) {
+      try {
+        final imageBytes = base64Decode(base64Image);
+        final tempDir = Directory.systemTemp;
+        final tempFile = await File(
+          '${tempDir.path}/temp_profile.jpg',
+        ).writeAsBytes(imageBytes);
         setState(() {
-          _imageFile = File(pickedFile.path);
+          _profileImageFile = tempFile;
         });
-        await _saveImage(pickedFile.path);
+      } catch (e) {
+        print('خطأ في تحميل الصورة: $e');
       }
-    } catch (e) {
-      // ممكن تطبع الايرور هنا لو عايز
     }
   }
 
-  Future<void> _deleteProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('profile_image');
+  Future<void> _deleteProfile(BuildContext context) async {
     Navigator.pushReplacement(
-      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (_) => const MyloginPage()),
     );
@@ -69,174 +54,203 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     return Scaffold(
-      appBar: AppBar(title: const Text('الملف الشخصي'), centerTitle: true),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                CircleAvatar(
-                  backgroundColor: const Color.fromARGB(255, 211, 158, 139),
-                  radius: 60,
-                  backgroundImage:
-                      _imageFile != null
-                          ? FileImage(_imageFile!)
-                          : const AssetImage(MyAssetsImage.logo)
-                              as ImageProvider,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 3,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    radius: 15,
-                    child: Center(
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: const Icon(
-                          Icons.camera_alt,
-                          size: 15,
-                          color: Colors.white,
+      backgroundColor: const Color(0xFFF5F5F5),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
+            child: Container(
+              width: 400,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 3,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      radius: 55,
+                      backgroundImage:
+                          _profileImageFile != null
+                              ? FileImage(_profileImageFile!)
+                              : const AssetImage(MyAssetsImage.logo)
+                                  as ImageProvider,
+                    ),
+                  ),
+                  const SizedBox(height: 13),
+
+                  const Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'mohanned ashraf',
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        onPressed: _pickImage,
+                        SizedBox(height: 4),
+                        Text(
+                          'مستخدم',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  _profileItem(
+                    icon: Icons.phone,
+                    color: Colors.blue,
+                    label: 'رقم  الهاتف ',
+                    value: '01094605294',
+                  ),
+                  _divider(),
+                  _profileItem(
+                    icon: Icons.email,
+                    color: Colors.green,
+                    label: 'البريد الإكتروني ',
+                    value: 'moahanned.ashraf@gmail.com',
+                  ),
+                  _divider(),
+                  _profileItem(
+                    icon: Icons.location_on,
+                    color: Colors.purple,
+                    label: 'العنوان',
+                    value: '20 الزقازيق - الشرقيه',
+                  ),
+                  _divider(),
+                  _profileItem(
+                    icon: Icons.apartment,
+                    color: Colors.orange,
+                    label: 'Building',
+                    value: 'A-15',
+                  ),
+                  _divider(),
+                  _profileItem(
+                    icon: Icons.stairs,
+                    color: Colors.teal,
+                    label: 'الدور',
+                    value: 'الثاني ',
+                  ),
+                  const SizedBox(height: 30),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                      label: const Text(
+                        "تعديل البيانات ",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EditProfile(),
+                          ),
+                        );
+
+                        if (result == true) {
+                          await _loadProfileImage(); // تحديث الصورة بعد التعديل مباشرة
+                        }
+                      },
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'أحمد محمود',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 3,
-              child: const Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    ProfileItem(
-                      icon: Icons.phone,
-                      title: 'رقم التليفون',
-                      value: '0123456789',
+                  const SizedBox(height: 10),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      label: const Text(
+                        "حذف  الحساب",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: const BorderSide(color: Colors.red),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () => _deleteProfile(context),
                     ),
-                    Divider(),
-                    ProfileItem(
-                      icon: Icons.email,
-                      title: 'البريد الإلكتروني',
-                      value: 'ahmed@email.com',
-                    ),
-                    Divider(),
-                    ProfileItem(
-                      icon: Icons.location_on,
-                      title: 'العنوان',
-                      value: 'الزقازيق - الشرقية',
-                    ),
-                    Divider(),
-                    ProfileItem(
-                      icon: Icons.home,
-                      title: 'رقم المبنى',
-                      value: '15',
-                    ),
-                    Divider(),
-                    ProfileItem(
-                      icon: Icons.apartment,
-                      title: 'رقم الدور',
-                      value: '3',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.blue,
-              ),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const EditProfile()),
-                  );
-                },
-                child: const Text(
-                  'تعديل البيانات',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.red,
-              ),
-              child: TextButton(
-                onPressed: _deleteProfile,
-                child: const Text(
-                  'مسح الحساب',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
-}
 
-class ProfileItem extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String value;
-
-  const ProfileItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.value,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 24, color: Colors.blue),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(value),
-            ],
+  Widget _profileItem({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: color.withOpacity(0.1),
+            child: Icon(icon, color: color),
           ),
-        ),
-      ],
+          const SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _divider() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Divider(height: 1, color: Colors.grey),
     );
   }
 }
