@@ -10,301 +10,225 @@ import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 
-class VendorProfile extends StatelessWidget {
+class VendorProfile extends StatefulWidget {
   final String id;
   const VendorProfile({super.key, required this.id});
 
   @override
+  _VendorProfileState createState() => _VendorProfileState();
+}
+
+class _VendorProfileState extends State<VendorProfile> {
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<VendorSubcategory>>(
-      future: GetVendor().getVendorSubcategory(id),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<VendorSubcategory> sub = snapshot.data!;
-          return DefaultTabController(
-            length: sub.length,
-            child: Scaffold(
-              body: Column(
-                children: [
-                  FutureBuilder<Vendor>(
-                    future: GetVendor().getVendorById(id),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        Vendor vendor = snapshot.data!;
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                            ClipRRect(
-                              // borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                // Adjust radius as needed
-                                // Optional: Add background color
-                                child:
-                                    vendor.coverImage != null
-                                        ? Image.network(
-                                          Urls.serviceProviderbaseUrl +
-                                              vendor.coverImage!,
-                                          width: double.infinity,
-                                          height: 220,
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (
-                                            BuildContext context,
-                                            Object error,
-                                            StackTrace? stackTrace,
-                                          ) {
-                                            return const SizedBox(
-                                              height: 220,
-                                              width: double.infinity,
-                                              child: Image(
-                                                image: AssetImage(
-                                                  MyAssetsImage.brokenImage,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        )
-                                        : Image.asset(
-                                          width: double.infinity,
-                                          height: 220,
-                                          MyAssetsImage.brokenImage,
-                                        ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 50,
-                              child: Padding(
-                                padding: const EdgeInsets.all(9.0),
-                                child: Card(
-                                  color: MyColors.white,
-                                  child: Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      7,
-                                      12,
-                                      12,
-                                      7,
-                                    ),
-                                    width: 320,
-                                    height: 190,
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Column(
-                                              children: [
-                                                Card(
-                                                  elevation: 5,
-                                                  shadowColor:
-                                                      MyColors.whiteSmoke,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          40,
-                                                        ),
-                                                  ),
-                                                  color: Colors.transparent,
-                                                  child: CircleAvatar(
-                                                    radius: 40,
-                                                    backgroundImage: NetworkImage(
-                                                      (vendor.image != null &&
-                                                              vendor
-                                                                  .image!
-                                                                  .isNotEmpty)
-                                                          ? Urls.serviceProviderbaseUrl +
-                                                              vendor.image!
-                                                          : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
-                                                    ),
-                                                    /*_user.avatar != null
-                                                          ? NetworkImage(_user.avatar!)
-                                                          : null,*/
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.fromLTRB(
-                                                                    2,
-                                                                    12,
-                                                                    12,
-                                                                    0,
-                                                                  ),
-                                                              child: Text(
-                                                                vendor
-                                                                    .businessName,
-                                                                style: const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color:
-                                                                      MyColors
-                                                                          .black,
-                                                                ),
-                                                                maxLines: 2,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets.fromLTRB(
-                                                                    2,
-                                                                    12,
-                                                                    12,
-                                                                    0,
-                                                                  ),
-                                                              child: Text(
-                                                                'تقييم 5.0',
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: MyColors.white,
+        // foregroundColor: MyColors.white,
+        surfaceTintColor: MyColors.white,
+        title: const Padding(
+          padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+          child: Text(
+            'تفاصيل الخدمة',
+            style: TextStyle(color: MyColors.black, fontSize: 20),
+          ),
+        ),
+        centerTitle: true,
+      ),
+      backgroundColor: MyColors.offWhite,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        child: FutureBuilder<List<VendorSubcategory>>(
+          future: GetVendor().getVendorSubcategory(widget.id),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<VendorSubcategory> sub = snapshot.data!;
+              return DefaultTabController(
+                length: sub.length,
+                child: Column(
+                  children: [
+                    FutureBuilder<Vendor>(
+                      future: GetVendor().getVendorById(widget.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Vendor vendor = snapshot.data!;
+                          return vendorCard(vendor);
+                        } else {
+                          return const SizedBox(
+                            height: 280,
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    Container(
+                      color: MyColors.white,
+                      child: TabBar(
+                        splashFactory: NoSplash.splashFactory,
+                        overlayColor: WidgetStateProperty.all(Colors.white),
+                        isScrollable: true,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        dividerColor: MyColors.white,
+                        indicatorColor: MyColors.inProgress,
+                        labelColor: MyColors.inProgress,
 
-                                                                  color:
-                                                                      Colors
-                                                                          .orangeAccent,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.fromLTRB(
-                                                                    2,
-                                                                    15,
-                                                                    12,
-                                                                    0,
-                                                                  ),
-                                                              child: Text(
-                                                                vendor.type,
-                                                                style: const TextStyle(
-                                                                  fontSize: 12,
+                        tabs: sub.map((i) => Tab(text: i.name)).toList(),
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children:
+                            sub.map((i) {
+                              return CategoryTabView(
+                                categoryId: i.id,
+                                vendorId: widget.id,
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ),
+    );
+  }
 
-                                                                  color:
-                                                                      MyColors
-                                                                          .gray,
-                                                                ),
-                                                                //maxLines: 2,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets.fromLTRB(
-                                                                    2,
-                                                                    15,
-                                                                    4,
-                                                                    0,
-                                                                  ),
-                                                              child: StarRating(
-                                                                size: 20.0,
-                                                                rating:
-                                                                    vendor
-                                                                        .rating,
-                                                                color:
-                                                                    Colors
-                                                                        .orange,
-                                                                borderColor:
-                                                                    Colors.grey,
-                                                                allowHalfRating:
-                                                                    true,
-                                                                starCount: 5,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const Row(children: []),
-                                      ],
-                                    ),
-                                  ),
+  Card vendorCard(Vendor vendor) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      color: MyColors.white,
+      shadowColor: MyColors.whiteSmoke,
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 8),
+      child: SizedBox(
+        width: screenWidth * .9,
+        height: screenHeight * 0.37,
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              //alignment: Alignment.topRight,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child:
+                      vendor.coverImage != null
+                          ? Image.network(
+                            Urls.serviceProviderbaseUrl + vendor.coverImage!,
+                            // vendors[index].coverImage,
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                            fit: BoxFit.cover,
+                            errorBuilder: (
+                              BuildContext context,
+                              Object error,
+                              StackTrace? stackTrace,
+                            ) {
+                              return SizedBox(
+                                height: screenHeight * 0.165,
+                                width: double.infinity,
+                                child: const Image(
+                                  image: AssetImage(MyAssetsImage.brokenImage),
                                 ),
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const SizedBox(
-                          height: 280,
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  TabBar(
-                    isScrollable: true,
-                    indicatorColor: MyColors.black,
-                    labelColor: MyColors.black,
-                    unselectedLabelColor: MyColors.gray,
+                              );
+                            },
+                          )
+                          : Image.asset(
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                            MyAssetsImage.brokenImage,
+                          ),
+                ),
+                Positioned(
+                  top: screenHeight * 0.11,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 8, 20, 20),
+                        child: CircleAvatar(
+                          radius: 32,
 
-                    tabs: sub.map((i) => Tab(text: i.name)).toList(),
+                          backgroundImage:
+                              vendor.image != null
+                                  ? NetworkImage(
+                                    Urls.serviceProviderbaseUrl + vendor.image!,
+                                    // vendors[index].profileImage,
+                                  )
+                                  : const AssetImage(MyAssetsImage.brokenImage),
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children:
-                          sub.map((i) {
-                            return CategoryTabView(
-                              categoryId: i.id,
-                              vendorId: id,
-                            );
-                          }).toList(),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 40, 20, 0),
+                  child: Text(
+                    vendor.businessName,
+                    style: const TextStyle(
+                      color: MyColors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 5, 20, 0),
+                        child: Text(
+                          vendor.type,
+                          style: const TextStyle(
+                            color: MyColors.gray,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 20, 15),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star, color: MyColors.star),
+                            const SizedBox(width: 6),
+                            Text(vendor.rating.toStringAsFixed(2)),
+                            const SizedBox(width: 6),
+                            Text(
+                              '(${vendor.rating.toString()})',
+                              style: TextStyle(color: MyColors.gray),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            //SizedBox(height: 20),
+          ],
+        ),
+      ),
     );
   }
 }

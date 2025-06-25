@@ -1,5 +1,3 @@
-// ignore_for_file: unused_element, library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
-
 import 'dart:io';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
@@ -66,6 +64,19 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
 
   void _removeImage() {
     setState(() => _selectedImage = null);
+  }
+
+  void _previewImage(File imageFile) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => Dialog(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.file(imageFile, fit: BoxFit.contain),
+            ),
+          ),
+    );
   }
 
   void _sendComplaint() async {
@@ -190,6 +201,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -229,8 +241,52 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                       counterText: "",
                     ),
                   ),
-
                   const SizedBox(height: 10),
+
+                  if (_selectedImage != null)
+                    Align(
+                      alignment: Alignment.centerLeft, // ⬅️ تحط الصورة عالشمال
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onTap: () => _previewImage(_selectedImage!),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.file(
+                                  _selectedImage!,
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 4,
+                              right: 4,
+                              child: GestureDetector(
+                                onTap: _removeImage,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromARGB(184, 255, 2, 2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,7 +302,6 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
-
                       ElevatedButton.icon(
                         onPressed: _isLoading ? null : _sendComplaint,
                         icon: const Icon(Icons.send, color: Colors.white),

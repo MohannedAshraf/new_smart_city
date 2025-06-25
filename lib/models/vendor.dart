@@ -8,6 +8,7 @@ class Vendor {
   final String? coverImage;
   final String id;
   final double rating;
+  final int? numOfReviews;
   Vendor({
     required this.name,
     required this.businessName,
@@ -16,6 +17,7 @@ class Vendor {
     this.coverImage,
     required this.id,
     required this.rating,
+    this.numOfReviews,
   });
   factory Vendor.fromJason(jsonData) {
     return Vendor(
@@ -29,6 +31,7 @@ class Vendor {
           jsonData['rating'] != null
               ? double.tryParse(jsonData['rating'].toString()) ?? 0.0
               : 0.0,
+      numOfReviews: jsonData['numOfReviews'],
     );
   }
 }
