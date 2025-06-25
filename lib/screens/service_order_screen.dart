@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field, deprecated_member_use
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/search_model.dart';
@@ -35,6 +34,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   List<SearchResultModel>? _searchResults;
   bool _isSearching = false;
   String? _searchError;
+  DateTime? lastBackPressTime;
 
   @override
   void initState() {
@@ -42,6 +42,22 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     _loadCategories();
     _loadBanners();
     _controller = TextEditingController();
+  }
+
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+    if (lastBackPressTime == null ||
+        now.difference(lastBackPressTime!) > const Duration(seconds: 2)) {
+      lastBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('اضغط مرة أخرى للخروج'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    return true;
   }
 
   void _performSearch() {
@@ -92,59 +108,61 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        width: 70,
-        height: 50,
-        decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-        child: IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CartView()),
-            );
-          },
-          icon: Icon(Icons.shopping_bag_sharp, color: Colors.white, size: 30),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        floatingActionButton: Container(
+          width: 70,
+          height: 50,
+          decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+          child: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartView()),
+              );
+            },
+            icon: Icon(Icons.shopping_bag_sharp, color: Colors.white, size: 30),
+          ),
         ),
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: const Text("طلب الخدمات"),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: MySearchBar(
-                  controller: _controller,
-                  onSearch: _performSearch,
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: const Text("طلب الخدمات"),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: MySearchBar(
+                    controller: _controller,
+                    onSearch: _performSearch,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              _buildCategories(),
-              if (selectedCategoryIndex != null) _buildSubCategories(),
-              const SizedBox(height: 30),
-              _isLoadingBanners
-                  ? const Center(child: CircularProgressIndicator())
-                  : _bannerError != null
-                  ? Center(
-                    child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
-                  )
-                  : BannerSliderWidget(banners: _banners!),
-              const SizedBox(height: 20),
-              const Text(
-                "أفضل التقييمات",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-
-              MostRequestedProductsView(),
-            ],
+                const SizedBox(height: 20),
+                _buildCategories(),
+                if (selectedCategoryIndex != null) _buildSubCategories(),
+                const SizedBox(height: 30),
+                _isLoadingBanners
+                    ? const Center(child: CircularProgressIndicator())
+                    : _bannerError != null
+                    ? Center(
+                      child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
+                    )
+                    : BannerSliderWidget(banners: _banners!),
+                const SizedBox(height: 20),
+                const Text(
+                  "أفضل التقييمات",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                MostRequestedProductsView(),
+              ],
+            ),
           ),
         ),
       ),
@@ -244,22 +262,33 @@ class MySearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      onSubmitted: (_) => onSearch(),
-      decoration: InputDecoration(
-        hintText: 'ماذا تريد',
-        prefixIcon: InkWell(onTap: onSearch, child: const Icon(Icons.search)),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(20.0),
+    return SizedBox(
+      height: 42, // تقليل ارتفاع السيرش بار
+      child: TextField(
+        controller: controller,
+        onSubmitted: (_) => onSearch(),
+        style: const TextStyle(fontSize: 14), // تصغير حجم الخط
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 16,
+          ),
+          hintText: 'ماذا تريد ',
+          prefixIcon: InkWell(
+            onTap: onSearch,
+            child: const Icon(Icons.search, size: 20),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey), // بوردر غامق
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black87),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          filled: true,
+          fillColor: Colors.white,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        filled: true,
-        fillColor: MyColors.newbackground,
       ),
     );
   }
@@ -334,22 +363,22 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
             },
           ),
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            widget.banners.length,
-            (index) => Container(
-              width: 10.0,
-              height: 10.0,
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _currentIndex == index ? Colors.blueAccent : Colors.grey,
-              ),
-            ),
-          ),
-        ),
+        // const SizedBox(height: 10),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: List.generate(
+        //     widget.banners.length,
+        //     (index) => Container(
+        //       width: 10.0,
+        //       height: 10.0,
+        //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+        //       decoration: BoxDecoration(
+        //         shape: BoxShape.circle,
+        //         color: _currentIndex == index ? Colors.blueAccent : Colors.grey,
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

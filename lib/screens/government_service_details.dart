@@ -30,7 +30,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                 surfaceTintColor: MyColors.white,
                 automaticallyImplyLeading: true,
                 title: Text(
-                  service?.serviceName ?? 'خطأ',
+                  service.serviceName,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 centerTitle: true,
@@ -49,10 +49,10 @@ class GovernmentServiceDetails extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      service?.category ?? '',
+                      service.category ?? '',
                       style: TextStyle(
                         color:
-                            Styles.govTabStyles[service!
+                            Styles.govTabStyles[service
                                 .category]?['fontColor'] ??
                             MyColors.black,
                       ),
@@ -76,7 +76,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                               decoration: BoxDecoration(
                                 color:
-                                    Styles.govTabStyles[service!
+                                    Styles.govTabStyles[service
                                         .category]?['color'] ??
                                     MyColors.whiteSmoke,
                                 borderRadius: BorderRadius.circular(20),
@@ -85,12 +85,12 @@ class GovernmentServiceDetails extends StatelessWidget {
                               height: 200,
                               child: Center(
                                 child: Icon(
-                                  Styles.govTabStyles[service!
+                                  Styles.govTabStyles[service
                                           .category]?['icon'] ??
                                       Icons.broken_image_rounded,
                                   size: 90,
                                   color:
-                                      Styles.govTabStyles[service!
+                                      Styles.govTabStyles[service
                                           .category]?['fontColor'] ??
                                       MyColors.black,
                                 ),
@@ -163,7 +163,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            service?.description ?? '',
+                                            service.description ?? '',
                                             style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.black87,
@@ -191,9 +191,8 @@ class GovernmentServiceDetails extends StatelessWidget {
                               icon: Icons.assignment,
                               title: 'الوثائق المطلوبة',
                               content:
-                                  service != null &&
-                                          service!.requirements!.isNotEmpty
-                                      ? service!.requirements!
+                                  service.requirements!.isNotEmpty
+                                      ? service.requirements!
                                           .map(
                                             (r) => RequirmentItem(
                                               text: r.fileName,
@@ -578,7 +577,12 @@ class StepsItem extends StatelessWidget {
   final String num;
   final String title;
   final String text;
-  const StepsItem({required this.text, required this.title, required this.num});
+  const StepsItem({
+    super.key,
+    required this.text,
+    required this.title,
+    required this.num,
+  });
 
   @override
   Widget build(BuildContext context) {

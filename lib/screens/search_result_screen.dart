@@ -67,33 +67,41 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         child: Column(
           children: [
             // ✅ شريط البحث
-            TextField(
-              controller: _controller,
-              onSubmitted: (value) {
-                if (value.trim().isNotEmpty) {
-                  _performSearch(value.trim());
-                }
-              },
-              decoration: InputDecoration(
-                hintText: 'ماذا تريد؟',
-                prefixIcon: InkWell(
-                  onTap: () {
-                    if (_controller.text.trim().isNotEmpty) {
-                      _performSearch(_controller.text.trim());
-                    }
-                  },
-                  child: const Icon(Icons.search),
+            SizedBox(
+              height: 42,
+              child: TextField(
+                controller: _controller,
+                onSubmitted: (value) {
+                  if (value.trim().isNotEmpty) {
+                    _performSearch(value.trim());
+                  }
+                },
+                style: const TextStyle(fontSize: 14),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 16,
+                  ),
+                  hintText: 'ماذا تريد؟',
+                  prefixIcon: InkWell(
+                    onTap: () {
+                      if (_controller.text.trim().isNotEmpty) {
+                        _performSearch(_controller.text.trim());
+                      }
+                    },
+                    child: const Icon(Icons.search, size: 20),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black87),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                filled: true,
-                fillColor: Color(0xFFEFEFEF),
               ),
             ),
             SizedBox(height: 20),
