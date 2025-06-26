@@ -2,6 +2,7 @@
 
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
+import 'package:citio/main.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
@@ -57,6 +58,17 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           child: const Icon(Icons.add, color: MyColors.white, size: 30),
         ),
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: MyColors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HomePage(initialIndex: 0),
+                ),
+              );
+            },
+          ),
           //flexibleSpace: Container(height: 0),
           toolbarHeight: 70,
           backgroundColor: MyColors.white,
