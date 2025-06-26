@@ -16,7 +16,7 @@ class GetPost {
     print('Token used in getTenPosts: $token'); // هنا الطباعة ✅
 
     dynamic data = await Api().get(
-      url: '${Urls.socialmediaBaseUrl}/api/posts/?scope=user&limit=10',
+      url: '${Urls.socialmediaBaseUrl}/api/posts/?limit=10',
       token: token,
     );
 

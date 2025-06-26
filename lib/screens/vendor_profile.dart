@@ -21,6 +21,7 @@ class VendorProfile extends StatefulWidget {
 class _VendorProfileState extends State<VendorProfile> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.white,
@@ -64,16 +65,19 @@ class _VendorProfileState extends State<VendorProfile> {
                     const SizedBox(height: 15),
                     Container(
                       color: MyColors.white,
-                      child: TabBar(
-                        splashFactory: NoSplash.splashFactory,
-                        overlayColor: WidgetStateProperty.all(Colors.white),
-                        isScrollable: true,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        dividerColor: MyColors.white,
-                        indicatorColor: MyColors.inProgress,
-                        labelColor: MyColors.inProgress,
+                      child: Transform.translate(
+                        offset: Offset(screenWidth * .12, 0),
+                        child: TabBar(
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: WidgetStateProperty.all(Colors.white),
+                          isScrollable: true,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          dividerColor: MyColors.white,
+                          indicatorColor: MyColors.inProgress,
+                          labelColor: MyColors.inProgress,
 
-                        tabs: sub.map((i) => Tab(text: i.name)).toList(),
+                          tabs: sub.map((i) => Tab(text: i.name)).toList(),
+                        ),
                       ),
                     ),
                     Expanded(
