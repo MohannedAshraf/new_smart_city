@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/complaint_list.dart';
 import 'package:citio/core/widgets/rated_complaint_list.dart';
@@ -72,6 +70,7 @@ class _IssueScreenState extends State<IssueScreen> {
     } catch (e) {
       setState(() => isLoading = false);
       if (context.mounted) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("🚨 حدثت مشكلة في السيرفر. هيتم حلها في أقرب وقت."),
@@ -102,6 +101,7 @@ class _IssueScreenState extends State<IssueScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
+      // ignore: deprecated_member_use
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
