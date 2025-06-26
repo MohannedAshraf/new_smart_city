@@ -65,14 +65,20 @@ class CityApp extends StatelessWidget {
 
 // كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int initialIndex;
+  const HomePage({super.key, this.initialIndex = 0});
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+  late int currentIndex;
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   final List<Widget> pages = [
     const HomeScreen(),
