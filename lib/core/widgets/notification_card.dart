@@ -1,38 +1,60 @@
-import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/models/notification_model.dart';
 import 'package:flutter/material.dart';
+import 'package:citio/core/utils/mycolors.dart';
 
-class NotificationItem {
-  final IconData icon;
-  final Color iconBackgroundColor;
-  final String title;
-  final String description;
-  final String timeAgo;
-  final String category;
-  bool isRead;
-
-  NotificationItem({
-    required this.icon,
-    required this.iconBackgroundColor,
-    required this.title,
-    required this.description,
-    required this.timeAgo,
-    required this.category,
-    this.isRead = false,
-  });
-}
 
 class NotificationCard extends StatelessWidget {
-  final NotificationItem notification;
+  final NotificationModel notification;
   final VoidCallback onTap;
-
   const NotificationCard({
     super.key,
     required this.notification,
     required this.onTap,
   });
+IconData _getIcon(String category) {
+  switch (category.toLowerCase()) {
+    case 'alert':
+      return Icons.warning_amber_rounded;
+    case 'offer':
+      return Icons.local_offer_outlined;
+    case 'update':
+      return Icons.campaign;
+    default:
+      return Icons.notifications;
+  }
+}
+
+Color _getIconBackgroundColor(String category) {
+  switch (category.toLowerCase()) {
+    case 'alert':
+      return Colors.amber.shade100;
+    case 'offer':
+      return Colors.pink.shade100;
+    case 'update':
+      return Colors.lightBlue.shade100;
+    default:
+      return Colors.grey.shade200;
+  }
+}
+
+  String _formatTimeAgo(DateTime dateTime) {
+    final difference = DateTime.now().difference(dateTime);
+
+    if (difference.inMinutes < 60) {
+      return 'منذ ${difference.inMinutes} دقيقة';
+    } else if (difference.inHours < 24) {
+      return 'منذ ${difference.inHours} ساعة';
+    } else {
+      return 'منذ ${difference.inDays} يوم';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final icon = _getIcon(notification.category);
+    final iconBgColor = _getIconBackgroundColor(notification.category);
+    final timeAgo = _formatTimeAgo(notification.createdAt);
+
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -50,10 +72,10 @@ class NotificationCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
-                  color: notification.iconBackgroundColor,
+                  color: iconBgColor,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Icon(notification.icon, color: MyColors.themecolor),
+                child: Icon(icon, color: MyColors.themecolor),
               ),
               const SizedBox(width: 16.0),
               Expanded(
@@ -84,7 +106,7 @@ class NotificationCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4.0),
                     Text(
-                      notification.description,
+                      notification.body,
                       style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.grey.shade600,
@@ -94,7 +116,7 @@ class NotificationCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      notification.timeAgo,
+                      timeAgo,
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.grey.shade500,
