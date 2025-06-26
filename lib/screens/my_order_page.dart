@@ -169,6 +169,14 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
               width: 70,
               height: 70,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.network(
+                  'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                  width: 70,
+                  height: 70,
+                  fit: BoxFit.cover,
+                );
+              },
             ),
           ),
           const SizedBox(width: 12),
