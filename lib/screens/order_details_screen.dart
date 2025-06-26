@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, avoid_print
+// ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures
 
 import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';

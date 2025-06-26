@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:citio/models/myorder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
