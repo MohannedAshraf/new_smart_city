@@ -35,31 +35,36 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            width: 400,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 6),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Form(
+              key: _formKey,
+              child: Container(
+                width: 400,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 10,
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // اللوجو
-                Column(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+                    // اللوجو
                     SvgPicture.asset("assets/icon/citio.svg", height: 100),
-
                     const Text(
                       "إنشاء حساب",
                       style: TextStyle(
@@ -72,209 +77,212 @@ class _RegisterPageState extends State<RegisterPage> {
                       "انضم إلى Citio لإدارة خدمات مدينتك",
                       style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 18),
+                    const SizedBox(height: 18),
 
-                // الاسم الكامل
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: "الاسم الكامل",
-                    prefixIcon: const Icon(Icons.person, color: Colors.grey),
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator:
-                      (value) => value!.isEmpty ? "يرجى إدخال الاسم" : null,
-                ),
-                const SizedBox(height: 15),
-
-                // رقم الهاتف
-                TextFormField(
-                  controller: phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: "رقم الهاتف",
-                    prefixIcon: const Icon(Icons.phone, color: Colors.grey),
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator:
-                      (value) =>
-                          value!.isEmpty ? "يرجى إدخال رقم الهاتف" : null,
-                ),
-                const SizedBox(height: 15),
-
-                // البريد الإلكتروني
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: "البريد الإلكتروني",
-                    prefixIcon: const Icon(Icons.email, color: Colors.grey),
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator:
-                      (value) =>
-                          value!.isEmpty
-                              ? "يرجى إدخال البريد الإلكتروني"
-                              : null,
-                ),
-                const SizedBox(height: 15),
-                //كلمة السر
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    hintText: "كلمة المرور",
-                    prefixIcon: const Icon(Icons.lock, color: Colors.grey),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.grey,
+                    // الاسم الكامل
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText: "الاسم الكامل",
+                        prefixIcon: const Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
+                      validator:
+                          (value) => value!.isEmpty ? "يرجى إدخال الاسم" : null,
                     ),
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'يرجى إدخال كلمة المرور';
-                    }
-                    if (value.length < 6) {
-                      return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
-                // العنوان
-                TextFormField(
-                  controller: addressController,
-                  decoration: InputDecoration(
-                    hintText: "العنوان",
-                    prefixIcon: const Icon(
-                      Icons.location_on,
-                      color: Colors.grey,
+                    // رقم الهاتف
+                    TextFormField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: "رقم الهاتف",
+                        prefixIcon: const Icon(Icons.phone, color: Colors.grey),
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
+                      ),
+                      validator:
+                          (value) =>
+                              value!.isEmpty ? "يرجى إدخال رقم الهاتف" : null,
                     ),
-                    border: myBorder(),
-                    enabledBorder: myBorder(),
-                    focusedBorder: myBorder(),
-                  ),
-                  validator:
-                      (value) => value!.isEmpty ? "يرجى إدخال العنوان" : null,
-                ),
-                const SizedBox(height: 15),
+                    const SizedBox(height: 15),
 
-                // المبنى والدور
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: buildingController,
-                        decoration: InputDecoration(
-                          hintText: "رقم المبنى",
-                          prefixIcon: const Icon(
-                            Icons.apartment,
+                    // البريد الإلكتروني
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: "البريد الإلكتروني",
+                        prefixIcon: const Icon(Icons.email, color: Colors.grey),
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
+                      ),
+                      validator:
+                          (value) =>
+                              value!.isEmpty
+                                  ? "يرجى إدخال البريد الإلكتروني"
+                                  : null,
+                    ),
+                    const SizedBox(height: 15),
+
+                    // كلمة السر
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        hintText: "كلمة المرور",
+                        prefixIcon: const Icon(Icons.lock, color: Colors.grey),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: Colors.grey,
                           ),
-                          border: myBorder(),
-                          enabledBorder: myBorder(),
-                          focusedBorder: myBorder(),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                         ),
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextFormField(
-                        controller: floorController,
-                        decoration: InputDecoration(
-                          hintText: "الدور",
-                          prefixIcon: const Icon(
-                            Icons.stairs,
-                            color: Colors.grey,
-                          ),
-                          border: myBorder(),
-                          enabledBorder: myBorder(),
-                          focusedBorder: myBorder(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // زر إنشاء الحساب
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const VerificationScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      "أنشئ الحساب",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // لديك حساب؟
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("هل لديك حساب؟"),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyloginPage(),
-                          ),
-                        );
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'يرجى إدخال كلمة المرور';
+                        }
+                        if (value.length < 6) {
+                          return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                        }
+                        return null;
                       },
-                      child: const Text(
-                        "تسجيل الدخول",
-                        style: TextStyle(
-                          //decoration: TextDecoration.underline,
-                          color: Colors.blueAccent,
+                    ),
+                    const SizedBox(height: 15),
+
+                    // العنوان
+                    TextFormField(
+                      controller: addressController,
+                      decoration: InputDecoration(
+                        hintText: "العنوان",
+                        prefixIcon: const Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                        ),
+                        border: myBorder(),
+                        enabledBorder: myBorder(),
+                        focusedBorder: myBorder(),
+                      ),
+                      validator:
+                          (value) =>
+                              value!.isEmpty ? "يرجى إدخال العنوان" : null,
+                    ),
+                    const SizedBox(height: 15),
+
+                    // المبنى والدور
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: buildingController,
+                            decoration: InputDecoration(
+                              hintText: "رقم المبنى",
+                              prefixIcon: const Icon(
+                                Icons.apartment,
+                                color: Colors.grey,
+                              ),
+                              border: myBorder(),
+                              enabledBorder: myBorder(),
+                              focusedBorder: myBorder(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            controller: floorController,
+                            decoration: InputDecoration(
+                              hintText: "الدور",
+                              prefixIcon: const Icon(
+                                Icons.stairs,
+                                color: Colors.grey,
+                              ),
+                              border: myBorder(),
+                              enabledBorder: myBorder(),
+                              focusedBorder: myBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // زر إنشاء الحساب
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => const VerificationScreen(),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text(
+                          "أنشئ الحساب",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+
+                    // لديك حساب؟
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("هل لديك حساب؟"),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyloginPage(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "تسجيل الدخول",
+                            style: TextStyle(color: Colors.blueAccent),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
