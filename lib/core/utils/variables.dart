@@ -44,6 +44,9 @@ abstract class MyColors {
 }
 
 abstract class Urls {
+  static const String notificationBaseUrl =
+      'https://notification-service.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io';
+
   static const String socialmediaBaseUrl = 'https://graduation.amiralsayed.me';
   static const String serviceProviderbaseUrl =
       'https://service-provider.runasp.net';

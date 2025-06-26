@@ -10,6 +10,7 @@ import 'package:citio/models/most_requested_products.dart';
 
 import 'package:citio/models/vendor.dart';
 import 'package:citio/screens/government_service_details.dart';
+import 'package:citio/screens/government_services.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/vendor_profile.dart';
 
@@ -68,7 +69,7 @@ class BuildBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          padding: const EdgeInsets.fromLTRB(8, 10, 15, 10),
           child: Row(
             children: [
               Column(
@@ -102,9 +103,7 @@ class BuildBoxes extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder:
-                                            (_) =>
-                                                const HomePage(initialIndex: 1),
+                                        builder: (_) => GovernmentServices(),
                                       ),
                                     );
                                   },

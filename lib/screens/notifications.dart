@@ -1,6 +1,9 @@
-import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
+import '../models/notification_model.dart';
+import '../services/get_notification.dart';
+import '../services/notification_local_storage.dart';
+import '../core/utils/mycolors.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -10,81 +13,89 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<Notifications> {
+  final GetNotifications _getNotificationsService = GetNotifications();
+
+  List<NotificationModel> _notifications = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+
   String _selectedFilter = 'الكل';
 
-  final List<NotificationItem> _notifications = [
-    NotificationItem(
-      icon: Icons.campaign,
-      iconBackgroundColor: Colors.lightBlue.shade100,
-      title: 'اجتماع مجلس المدينة غدًا',
-      description:
-          'انضم إلينا لاجتماع مجلس المدينة الشهري لمناقشة مشاريع البنية التحتية والمبادرات المجتمعية.',
-      timeAgo: 'منذ ساعتين',
-      category: 'updates',
-    ),
-    NotificationItem(
-      icon: Icons.warning_amber,
-      iconBackgroundColor: Colors.amber.shade100,
-      title: 'تحذير من إغلاق الطريق - شارع الرئيسي',
-      description:
-          'تم حل مشكلة الحفرة التي أبلغت عنها في شارع الرئيسي. شكرًا لمساهمتك!',
-      timeAgo: 'منذ 5 ساعات',
-      category: 'alerts',
-    ),
-    NotificationItem(
-      icon: Icons.card_giftcard,
-      iconBackgroundColor: Colors.lightGreen.shade100,
-      title: 'عرض خاص: خصم 20% على مواقف السيارات',
-      description:
-          'احصل على خصم 20% على موقفك التالي في وسط المدينة. العرض ساري حتى نهاية الشهر.',
-      timeAgo: 'منذ يوم',
-      category: 'offers',
-    ),
-    NotificationItem(
-      icon: Icons.apartment,
-      iconBackgroundColor: Colors.blue.shade100,
-      title: 'افتتاح الحديقة الجديدة هذا الأسبوع',
-      description:
-          'اكتملت تجديدات حديقة سنترال! انضم إلينا للافتتاح الكبير مع موسيقى حية وشاحنات طعام.',
-      timeAgo: 'منذ يومين',
-      category: 'updates',
-    ),
-    NotificationItem(
-      icon: Icons.check_circle_outline,
-      iconBackgroundColor: Colors.deepPurple.shade100,
-      title: 'تم حل المشكلة - إصلاح عمود الإنارة',
-      description:
-          'تم إصلاح عمود الإنارة المعطل في شارع أوك من قبل فريق الصيانة بنجاح.',
-      timeAgo: 'منذ 3 أيام',
-      category: 'alerts',
-    ),
-    NotificationItem(
-      icon: Icons.local_offer,
-      iconBackgroundColor: Colors.pink.shade100,
-      title: 'عرض جديد لسكان المدينة',
-      description:
-          'استمتع بعرض خاص لسكان المدينة على بعض الخدمات البلدية هذا الأسبوع فقط!',
-      timeAgo: 'منذ أسبوع',
-      category: 'offers',
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
 
-  List<NotificationItem> get _filteredNotifications {
+  /// ✅ ترجمة التسمية إلى قيمة `category` المناسبة
+  String? _getCategoryKey(String label) {
+    switch (label) {
+      case 'التحديثات':
+        return 'Update';
+      case 'العروض':
+        return 'Offer';
+      case 'التنبيهات':
+        return 'Alert';
+      default:
+        return null;
+    }
+  }
+
+  Future<void> _loadNotifications({String? category}) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final notifications =
+          await _getNotificationsService.getNotifications(category: category);
+
+      final readIds = await NotificationLocalStorage.getReadIds();
+      for (var notification in notifications) {
+        notification.isRead = readIds.contains(notification.id);
+      }
+
+      setState(() {
+        _notifications = notifications;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  List<NotificationModel> get _filteredNotifications {
     if (_selectedFilter == 'الكل') return _notifications;
-    if (_selectedFilter == 'التحديثات') {
-      return _notifications.where((n) => n.category == 'updates').toList();
-    } else if (_selectedFilter == 'العروض') {
-      return _notifications.where((n) => n.category == 'offers').toList();
-    } else if (_selectedFilter == 'التنبيهات') {
-      return _notifications.where((n) => n.category == 'alerts').toList();
-    } else {
-      return _notifications;
+
+    final categoryKey = _getCategoryKey(_selectedFilter);
+    return _notifications.where((n) => n.category == categoryKey).toList();
+  }
+
+  Future<void> _markAllAsRead() async {
+    final allIds = _notifications.map((n) => n.id).toList();
+    await NotificationLocalStorage.markAllAsRead(allIds);
+    setState(() {
+      for (var n in _notifications) {
+        n.isRead = true;
+      }
+    });
+  }
+
+  Future<void> _markAsRead(NotificationModel notification) async {
+    if (!notification.isRead) {
+      await NotificationLocalStorage.markAsRead(notification.id);
+      setState(() {
+        notification.isRead = true;
+      });
     }
   }
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -96,7 +107,6 @@ class _NotificationsScreenState extends State<Notifications> {
               border: Border.all(color: Colors.grey.shade300),
               boxShadow: [
                 BoxShadow(
-                  // ignore: deprecated_member_use
                   color: Colors.grey.withOpacity(0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
@@ -107,38 +117,36 @@ class _NotificationsScreenState extends State<Notifications> {
               child: DropdownButton<String>(
                 value: _selectedFilter,
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.black54),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedFilter = newValue!;
-                  });
+                onChanged: (String? newValue) async {
+                  if (newValue != null) {
+                    setState(() {
+                      _selectedFilter = newValue;
+                    });
+                    await _loadNotifications(
+                      category: _getCategoryKey(newValue),
+                    );
+                  }
                 },
-                items:
-                    ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
-                        .map(
-                          (value) => DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
+                items: ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
+                    .map(
+                      (value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                        )
-                        .toList(),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),
           TextButton(
-            onPressed: () {
-              setState(() {
-                for (var n in _notifications) {
-                  n.isRead = true;
-                }
-              });
-            },
+            onPressed: _markAllAsRead,
             child: Text(
               'تحديد الكل كمقروء',
               style: TextStyle(
@@ -152,50 +160,49 @@ class _NotificationsScreenState extends State<Notifications> {
     );
   }
 
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_errorMessage != null) {
+      return Center(child: Text('حدث خطأ: $_errorMessage'));
+    }
+
+    if (_filteredNotifications.isEmpty) {
+      return const Center(child: Text('لا توجد إشعارات حاليًا'));
+    }
+
+    return ListView.builder(
+      itemCount: _filteredNotifications.length,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemBuilder: (context, index) {
+        final notification = _filteredNotifications[index];
+        return NotificationCard(
+          notification: notification,
+          onTap: () => _markAsRead(notification),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         title: const Text('الإشعارات'),
         centerTitle: true,
-        actions: [
-          IconButton(icon: const Icon(Icons.settings), onPressed: () {}),
-        ],
+        backgroundColor: Colors.white,
+        leading: const BackButton(color: Colors.black),
+        elevation: 0,
       ),
       body: Column(
         children: [
           _buildHeader(),
-          Expanded(
-            child:
-                _filteredNotifications.isEmpty
-                    ? const Center(child: Text("لا توجد إشعارات حاليًا"))
-                    : ListView.builder(
-                      itemCount: _filteredNotifications.length,
-                      itemBuilder: (context, index) {
-                        final item = _filteredNotifications[index];
-                        return NotificationCard(
-                          notification: item,
-                          onTap: () {
-                            setState(() {
-                              item.isRead = true;
-                            });
-                          },
-                        );
-                      },
-                    ),
-          ),
+          Expanded(child: _buildBody()),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: MyColors.themecolor,
-        child: const Icon(Icons.filter_list),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/issue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:citio/core/utils/variables.dart';
 
 class GetIssues {
   Future<Issue> getIssues() async {

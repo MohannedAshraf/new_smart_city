@@ -47,10 +47,11 @@ class Data {
               : null,
       shareCount: jasonData['shareCount'],
       saveCount: jasonData['saveCount'],
-      date: DateFormat.MMMMd(
-        'en_US',
-      ).format(DateTime.parse(jasonData['createdAt'])),
-
+      date:
+          jasonData['createdAt'] != null &&
+                  jasonData['createdAt'].toString().isNotEmpty
+              ? getTimeAgo(jasonData['createdAt'])
+              : 'التاريخ غير متوفر',
       userId: jasonData['author'],
     );
   }
@@ -100,5 +101,23 @@ class ImpressionsCount {
       hate: jsonData['hate'],
       total: jsonData['total'],
     );
+  }
+}
+
+String getTimeAgo(String dateString) {
+  final date = DateTime.parse(dateString);
+  final now = DateTime.now();
+  final diff = now.difference(date);
+
+  if (diff.inSeconds < 60) {
+    return 'منذ ${diff.inSeconds} ثانية';
+  } else if (diff.inMinutes < 60) {
+    return 'منذ ${diff.inMinutes} دقيقة';
+  } else if (diff.inHours < 24) {
+    return 'منذ ${diff.inHours} ساعة';
+  } else if (diff.inDays < 7) {
+    return 'منذ ${diff.inDays} يوم';
+  } else {
+    return DateFormat.yMMMMd('ar_EG').format(date);
   }
 }

@@ -35,6 +35,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -91,22 +92,25 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   thickness: 2,
                   height: 3,
                 ),
-                TabBar(
-                  splashFactory: NoSplash.splashFactory,
-                  overlayColor: WidgetStateProperty.all(Colors.transparent),
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  dividerColor: MyColors.white,
-                  indicatorColor: MyColors.inProgress,
-                  labelColor: MyColors.inProgress,
-                  unselectedLabelColor: MyColors.gray,
-                  tabs: const [
-                    TabItem(title: 'الجميع'),
-                    TabItem(title: 'تم حلها'),
-                    TabItem(title: 'تحت المراجعة'),
-                    TabItem(title: 'المرفوضة'),
-                  ],
+                Transform.translate(
+                  offset: Offset(screenWidth * .12, 0),
+                  child: TabBar(
+                    splashFactory: NoSplash.splashFactory,
+                    overlayColor: WidgetStateProperty.all(Colors.transparent),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    dividerColor: MyColors.white,
+                    indicatorColor: MyColors.inProgress,
+                    labelColor: MyColors.inProgress,
+                    unselectedLabelColor: MyColors.gray,
+                    tabs: const [
+                      TabItem(title: 'الجميع'),
+                      TabItem(title: 'تم حلها'),
+                      TabItem(title: 'تحت المراجعة'),
+                      TabItem(title: 'المرفوضة'),
+                    ],
+                  ),
                 ),
               ],
             ),
