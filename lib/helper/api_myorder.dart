@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:citio/models/myoeder_model.dart';
+import 'package:citio/models/myorder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,10 +9,13 @@ class OrdersApiHelper {
     final token = prefs.getString('token');
     if (token == null) throw Exception('Token not found');
 
-    final queryParams = status != null ? '?Statuses=$status' : '';
+    final queryParams =
+        (status != null && status.isNotEmpty) ? '?Statuses=$status' : '';
     final url = Uri.parse(
       'https://service-provider.runasp.net/api/Orders/users$queryParams',
     );
+
+    print("🧪 Calling URL: $url");
 
     final response = await http.get(
       url,

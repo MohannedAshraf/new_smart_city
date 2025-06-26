@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/models/request.dart';
@@ -177,7 +179,7 @@ class _CustomCardState extends State<CustomCard> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                widget.request?.requestStatus ?? '',
+                                widget.request.requestStatus ?? '',
                                 style: TextStyle(
                                   color:
                                       Styles.requestsStyle[widget
@@ -236,7 +238,8 @@ class _CustomCardState extends State<CustomCard> {
                                               context,
                                               MaterialPageRoute(
                                                 builder:
-                                                    (context) => ApplyService(),
+                                                    (context) =>
+                                                        const ApplyService(),
                                               ),
                                             );
                                           },

@@ -1,6 +1,7 @@
+// ignore_for_file: unused_element
+
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
-import 'package:citio/main.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
@@ -47,7 +48,9 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => GovernmentServices()),
+              MaterialPageRoute(
+                builder: (context) => const GovernmentServices(),
+              ),
             );
           },
           backgroundColor: MyColors.dodgerBlue,
@@ -68,21 +71,25 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
           centerTitle: true,
 
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
+            preferredSize: const Size.fromHeight(40),
             child: Column(
               children: [
-                Divider(color: MyColors.whiteSmoke, thickness: 2, height: 3),
+                const Divider(
+                  color: MyColors.whiteSmoke,
+                  thickness: 2,
+                  height: 3,
+                ),
                 TabBar(
                   splashFactory: NoSplash.splashFactory,
                   overlayColor: WidgetStateProperty.all(Colors.transparent),
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
                   dividerColor: MyColors.white,
                   indicatorColor: MyColors.inProgress,
                   labelColor: MyColors.inProgress,
                   unselectedLabelColor: MyColors.gray,
-                  tabs: [
+                  tabs: const [
                     TabItem(title: 'الجميع'),
                     TabItem(title: 'تم حلها'),
                     TabItem(title: 'تحت المراجعة'),

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/helper/fcm_api.dart';
@@ -78,7 +80,6 @@ class FCMService {
   void _handleOpenedApp() {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('📬 App opened via notification');
-      // TODO: Navigate based on message.data if needed
     });
   }
 
@@ -86,7 +87,6 @@ class FCMService {
     RemoteMessage? initialMessage = await _messaging.getInitialMessage();
     if (initialMessage != null) {
       print('🚀 App launched via notification (terminated)');
-      // TODO: Navigate based on initialMessage.data
     }
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/main.dart';
 import 'package:citio/models/most_requested_services.dart';
 
 import 'package:citio/core/utils/assets_image.dart';
@@ -101,7 +102,9 @@ class BuildBoxes extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => destination,
+                                        builder:
+                                            (_) =>
+                                                const HomePage(initialIndex: 1),
                                       ),
                                     );
                                   },
@@ -238,7 +241,9 @@ class BuildProductsBoxes extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => destination,
+                                        builder:
+                                            (_) =>
+                                                const HomePage(initialIndex: 3),
                                       ),
                                     );
                                   },

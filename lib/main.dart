@@ -65,14 +65,20 @@ class CityApp extends StatelessWidget {
 
 // كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int initialIndex;
+  const HomePage({super.key, this.initialIndex = 0});
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+  late int currentIndex;
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   final List<Widget> pages = [
     const HomeScreen(),
@@ -214,28 +220,6 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('الملف الشخصي'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.receipt_long_outlined),
-              title: const Text('طلباتي'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyOrdersPage()),
-                );
-              },
-            ),
-            ListTile(
               leading: const Icon(Icons.shopping_basket_outlined),
               title: const Text('البائعين'),
               onTap: () {
@@ -250,7 +234,31 @@ class HomePageState extends State<HomePage> {
             ),
 
             ListTile(
+              leading: const Icon(Icons.receipt_long_outlined),
+              title: const Text('طلباتي'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyOrdersPage()),
+                );
+              },
+            ),
+
+            ListTile(
               leading: const Icon(Icons.person),
+              title: const Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.logout),
               title: const Text('تسجيل الخروج'),
               onTap: () {
                 Navigator.pop(context);
