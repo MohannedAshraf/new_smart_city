@@ -23,7 +23,6 @@ class _IssueScreenState extends State<IssueScreen> {
   List<Values> resolved = [];
   List<Values> inprogress = [];
   bool isLoading = true;
-
   DateTime? lastBackPressTime;
 
   @override
@@ -33,36 +32,54 @@ class _IssueScreenState extends State<IssueScreen> {
   }
 
   Future<void> loadIssues() async {
-    final data = await GetIssues().getIssues();
-    final issues = data.values;
+    try {
+      final data = await GetIssues().getIssues();
+      final issues = data.values;
 
-    issues.sort((a, b) {
-      try {
-        final fixedA = a.date.replaceAllMapped(
-          RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
-          (match) => '${match[1]}, ${match[2]}',
+      issues.sort((a, b) {
+        try {
+          final fixedA = a.date.replaceAllMapped(
+            RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+            (match) => '${match[1]}, ${match[2]}',
+          );
+          final fixedB = b.date.replaceAllMapped(
+            RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
+            (match) => '${match[1]}, ${match[2]}',
+          );
+          final dateA = DateFormat(
+            "MMMM d, yyyy h:mm a",
+            "en_US",
+          ).parse(fixedA);
+          final dateB = DateFormat(
+            "MMMM d, yyyy h:mm a",
+            "en_US",
+          ).parse(fixedB);
+          return dateB.compareTo(dateA);
+        } catch (e) {
+          return 0;
+        }
+      });
+
+      setState(() {
+        active = issues.where((e) => e.status == 'Active').toList();
+        resolved = issues.where((e) => e.status == 'Resolved').toList();
+        inprogress =
+            issues
+                .where((e) => e.status != 'Active' && e.status != 'Resolved')
+                .toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("🚨 حدثت مشكلة في السيرفر. هيتم حلها في أقرب وقت."),
+            backgroundColor: Colors.red,
+          ),
         );
-        final fixedB = b.date.replaceAllMapped(
-          RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
-          (match) => '${match[1]}, ${match[2]}',
-        );
-        final dateA = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedA);
-        final dateB = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedB);
-        return dateB.compareTo(dateA);
-      } catch (e) {
-        return 0;
       }
-    });
-
-    setState(() {
-      active = issues.where((e) => e.status == 'Active').toList();
-      resolved = issues.where((e) => e.status == 'Resolved').toList();
-      inprogress =
-          issues
-              .where((e) => e.status != 'Active' && e.status != 'Resolved')
-              .toList();
-      isLoading = false;
-    });
+    }
   }
 
   Future<bool> _onWillPop() async {
@@ -140,23 +157,17 @@ class _IssueScreenState extends State<IssueScreen> {
                           vertical: 5,
                         ),
                         child: TabBar(
-                          indicator: const UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                              width: 2.5,
-                              color: MyColors.themecolor,
-                            ),
-                            insets: EdgeInsets.symmetric(horizontal: 16.0),
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: WidgetStateProperty.all(
+                            Colors.transparent,
                           ),
-                          labelColor: MyColors.themecolor,
-                          unselectedLabelColor: Colors.black,
-                          labelStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          unselectedLabelStyle: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
-                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          isScrollable: false,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          dividerColor: MyColors.white,
+                          indicatorColor: MyColors.inProgress,
+                          labelColor: MyColors.inProgress,
+                          unselectedLabelColor: MyColors.gray,
                           tabs: [
                             TabItem(title: 'نشطة', count: active.length),
                             TabItem(
