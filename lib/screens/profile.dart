@@ -61,142 +61,125 @@ class _ProfileState extends State<Profile> {
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
-            child: Container(
-              width: 400,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 3,
-                    offset: const Offset(0, 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    radius: 55,
+                    backgroundImage:
+                        _profileImageFile != null
+                            ? FileImage(_profileImageFile!)
+                            : const AssetImage(MyAssetsImage.logo)
+                                as ImageProvider,
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundImage:
-                          _profileImageFile != null
-                              ? FileImage(_profileImageFile!)
-                              : const AssetImage(MyAssetsImage.logo)
-                                  as ImageProvider,
-                    ),
-                  ),
-                  const SizedBox(height: 13),
+                ),
+                const SizedBox(height: 13),
 
-                  const Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'mohanned ashraf',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'مستخدم',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  _profileItem(
-                    icon: Icons.phone,
-                    color: Colors.blue,
-                    label: 'رقم  الهاتف ',
-                    value: '01094605294',
-                  ),
-                  _divider(),
-                  _profileItem(
-                    icon: Icons.email,
-                    color: Colors.green,
-                    label: 'البريد الإكتروني ',
-                    value: 'moahanned.ashraf@gmail.com',
-                  ),
-                  _divider(),
-                  _profileItem(
-                    icon: Icons.location_on,
-                    color: Colors.purple,
-                    label: 'العنوان',
-                    value: '20 الزقازيق - الشرقيه',
-                  ),
-                  _divider(),
-                  _profileItem(
-                    icon: Icons.apartment,
-                    color: Colors.orange,
-                    label: 'Building',
-                    value: 'A-15',
-                  ),
-                  _divider(),
-                  _profileItem(
-                    icon: Icons.stairs,
-                    color: Colors.teal,
-                    label: 'الدور',
-                    value: 'الثاني ',
-                  ),
-                  const SizedBox(height: 30),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      label: const Text(
-                        "تعديل البيانات ",
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                const Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'mohanned ashraf',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const EditProfile(),
-                          ),
-                        );
-
-                        if (result == true) {
-                          await _loadProfileImage(); // تحديث الصورة بعد التعديل مباشرة
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      label: const Text(
-                        "حذف  الحساب",
-                        style: TextStyle(color: Colors.red),
+                      SizedBox(height: 4),
+                      Text(
+                        'مستخدم',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: const BorderSide(color: Colors.red),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () => _deleteProfile(context),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+
+                _profileItem(
+                  icon: Icons.phone,
+                  color: Colors.blue,
+                  label: 'رقم  الهاتف ',
+                  value: '01094605294',
+                ),
+                _divider(),
+                _profileItem(
+                  icon: Icons.email,
+                  color: Colors.green,
+                  label: 'البريد الإكتروني ',
+                  value: 'moahanned.ashraf@gmail.com',
+                ),
+                _divider(),
+                _profileItem(
+                  icon: Icons.location_on,
+                  color: Colors.purple,
+                  label: 'العنوان',
+                  value: '20 الزقازيق - الشرقيه',
+                ),
+                _divider(),
+                _profileItem(
+                  icon: Icons.apartment,
+                  color: Colors.orange,
+                  label: 'Building',
+                  value: 'A-15',
+                ),
+                _divider(),
+                _profileItem(
+                  icon: Icons.stairs,
+                  color: Colors.teal,
+                  label: 'الدور',
+                  value: 'الثاني ',
+                ),
+                const SizedBox(height: 30),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.edit, color: Colors.white),
+                    label: const Text(
+                      "تعديل البيانات ",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const EditProfile()),
+                      );
+
+                      if (result == true) {
+                        await _loadProfileImage(); // تحديث الصورة بعد التعديل مباشرة
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    label: const Text(
+                      "حذف  الحساب",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      side: const BorderSide(color: Colors.red),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () => _deleteProfile(context),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
