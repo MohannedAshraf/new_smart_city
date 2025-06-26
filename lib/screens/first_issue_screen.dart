@@ -122,12 +122,12 @@ class _IssueScreenState extends State<IssueScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.report_problem,
-                  color: MyColors.themecolor,
-                  size: 22,
-                ),
-                SizedBox(width: 6),
+                // Icon(
+                //   Icons.report_problem,
+                //   color: MyColors.themecolor,
+                //   size: 22,
+                // ),
+                // SizedBox(width: 6),
                 Text(
                   'المشاكل',
                   style: TextStyle(
