@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/helper/fcm_api.dart';
-import 'package:citio/services/notification_helper.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('🔄 Background Message Received: ${message.messageId}');
@@ -11,7 +14,40 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final title = message.data['title'] ?? 'إشعار في الخلفية';
   final body = message.data['body'] ?? 'وصلتك رسالة أثناء عدم استخدام التطبيق';
 
-  await NotificationHelper.showNotification(title: title, body: body);
+  await _showNotification(title: title, body: body);
+}
+
+Future<void> initializeNotifications() async {
+  const androidSettings = AndroidInitializationSettings(
+    '@drawable/notification_icon',
+  );
+
+  const initSettings = InitializationSettings(android: androidSettings);
+
+  await flutterLocalNotificationsPlugin.initialize(initSettings);
+}
+
+Future<void> _showNotification({
+  required String title,
+  required String body,
+}) async {
+  const androidDetails = AndroidNotificationDetails(
+    'default_channel',
+    'Default Channel',
+    channelDescription: 'القناة الافتراضية للإشعارات',
+    importance: Importance.max,
+    priority: Priority.high,
+    icon: '@drawable/notification_icon',
+  );
+
+  const notificationDetails = NotificationDetails(android: androidDetails);
+
+  await flutterLocalNotificationsPlugin.show(
+    DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    title,
+    body,
+    notificationDetails,
+  );
 }
 
 class FCMService {
@@ -66,14 +102,12 @@ class FCMService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('📩 Foreground Message: ${message.notification?.title}');
 
-      NotificationHelper.showNotification(
-        title:
-            message.notification?.title ??
-            message.data['title'] ??
-            'بدون عنوان',
-        body:
-            message.notification?.body ?? message.data['body'] ?? 'بدون محتوى',
-      );
+      final title =
+          message.notification?.title ?? message.data['title'] ?? 'بدون عنوان';
+      final body =
+          message.notification?.body ?? message.data['body'] ?? 'بدون محتوى';
+
+      _showNotification(title: title, body: body);
     });
   }
 
