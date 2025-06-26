@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/complaint_list.dart';
 import 'package:citio/core/widgets/rated_complaint_list.dart';
