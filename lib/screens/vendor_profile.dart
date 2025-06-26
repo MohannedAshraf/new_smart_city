@@ -37,7 +37,7 @@ class _VendorProfileState extends State<VendorProfile> {
       ),
       backgroundColor: MyColors.offWhite,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
         child: FutureBuilder<List<VendorSubcategory>>(
           future: GetVendor().getVendorSubcategory(widget.id),
           builder: (context, snapshot) {
@@ -61,7 +61,7 @@ class _VendorProfileState extends State<VendorProfile> {
                         }
                       },
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 15),
                     Container(
                       color: MyColors.white,
                       child: TabBar(
@@ -106,7 +106,7 @@ class _VendorProfileState extends State<VendorProfile> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: const EdgeInsets.fromLTRB(20, 10, 20, 8),
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 3),
       child: SizedBox(
         width: screenWidth * .9,
         height: screenHeight * 0.37,
@@ -214,7 +214,7 @@ class _VendorProfileState extends State<VendorProfile> {
                             Text(vendor.rating.toStringAsFixed(2)),
                             const SizedBox(width: 6),
                             Text(
-                              '(${vendor.rating.toString()})',
+                              '(${vendor.rating.toString()} تقييما)',
                               style: TextStyle(color: MyColors.gray),
                             ),
                           ],

@@ -21,21 +21,24 @@ class CategoryTabView extends StatelessWidget {
     return FutureBuilder<List<VendorSubcategoryProducts>>(
       future: GetVendor().getVendorSubcategoryProducts(vendorId, categoryId),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<VendorSubcategoryProducts> products = snapshot.data!;
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              // ignore: avoid_unnecessary_containers
-              return Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData) {
+          if (snapshot.data!.isNotEmpty) {
+            List<VendorSubcategoryProducts> products = snapshot.data!;
+            return ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: productCard(products, index),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          } else {
+            return emptyCategory();
+          }
         } else {
           return emptyCategory();
         }
@@ -46,38 +49,36 @@ class CategoryTabView extends StatelessWidget {
   Center emptyCategory() {
     return const Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // علشان تتوسّط الشاشة
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundColor: MyColors.white,
             radius: 45,
-            child: Icon(Icons.inventory, color: MyColors.fadedGrey, size: 20),
+            child: Icon(
+              Icons.inventory,
+              color: MyColors.fadedGrey,
+              size: 40, // خليه أكبر شوية
+            ),
           ),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Expanded(
-                  child: Text(
-                    'الخدمات غير متوفرة',
-                    style: TextStyle(fontSize: 16, color: MyAppColors.black),
-                  ),
-                ),
-              ),
-            ],
+          SizedBox(height: 20), // مسافة بين الصورة والنص
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'الخدمات غير متوفرة',
+              style: TextStyle(fontSize: 16, color: MyAppColors.black),
+              textAlign: TextAlign.center,
+            ),
           ),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Expanded(
-                  child: Text(
-                    'الخدمات في هذه الفئة غير متوفرة حاليا',
-                    style: TextStyle(fontSize: 16, color: MyAppColors.gray),
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ],
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'الخدمات في هذه الفئة غير متوفرة حاليا',
+              style: TextStyle(fontSize: 16, color: MyAppColors.gray),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),
