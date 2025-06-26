@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, avoid_print
+// ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures
 
 import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
@@ -56,7 +56,7 @@ class OrderDetailsView extends StatelessWidget {
                 _buildOrderedItems(order.items, orderInfo.orderStatus),
                 const SizedBox(height: 16),
                 _buildDeliveryDetails(order),
-                const SizedBox(height: 220),
+                const SizedBox(height: 200),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -211,6 +211,14 @@ class OrderDetailsView extends StatelessWidget {
                   width: 55,
                   height: 55,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                      width: 55,
+                      height: 55,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 12),
@@ -250,7 +258,6 @@ class OrderDetailsView extends StatelessWidget {
                           try {
                             final prefs = await SharedPreferences.getInstance();
                             final token = prefs.getString('token');
-
                             if (token == null)
                               throw Exception("Token not found");
 

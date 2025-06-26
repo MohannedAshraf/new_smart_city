@@ -6,6 +6,8 @@ class MyColors {
   static const Color emergencybuttonscolor = Color(0xCC3D6643);
   static const Color cardfontcolor = Colors.white;
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
+   static const Color inProgress = Color(0xFF007FFF);
+  static const Color rejected = Color(0xFFEE4B2B);
   // static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   static const Color oldLace = Color(0xffFFFAFA);
   static const Color whiteSmoke = Color(0xffF5F5F5);
