@@ -49,7 +49,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         context,
       ).showSnackBar(const SnackBar(content: Text("✅ تم الدفع بنجاح")));
 
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const MyOrdersPage()),
       );
@@ -162,7 +162,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                     content: Text("✅ تم إرسال الطلب"),
                                   ),
                                 );
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => const MyOrdersPage(),
