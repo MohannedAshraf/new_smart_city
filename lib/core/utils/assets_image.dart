@@ -8,4 +8,10 @@ class MyAssetsImage {
   static const String sandwitch = "${baseimagepass}sandwitch.jpg";
   static const String city = "${baseimagepass}citio.png";
   static const String brokenImage = "${baseimagepass}broken-image.png";
+  static const String citio11 = "${baseimagepass}citio11.png";
+  static const String citio12 = "${baseimagepass}citio12.png";
+  static const String citio13 = "${baseimagepass}citio13.png";
+  static const String citio14 = "${baseimagepass}citio14.png";
+  static const String citio15 = "${baseimagepass}citio15.png";
+  static const String citio16 = "${baseimagepass}citio16.png";
 }

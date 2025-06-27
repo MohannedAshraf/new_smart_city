@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';
@@ -10,7 +10,6 @@ class SliderScreen extends StatefulWidget {
   const SliderScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SliderScreenState createState() => _SliderScreenState();
 }
 
@@ -21,31 +20,31 @@ class _SliderScreenState extends State<SliderScreen> {
 
   final List<Map<String, String>> pages = [
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio11,
       'text': 'أهلاً بك في Citio\nتطبيقك الذكي لحياة أسهل داخل مدينتك.',
     },
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio12,
       'text':
           'بلّغ عن مشكلة\nصوّر أي مشكلة في المدينة، وسنرسلها فورًا للجهة المختصة.\nتابع الرد، قيّم الحل، وشاركها على وسائل التواصل!',
     },
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio13,
       'text':
           'خدمات حكومية بين يديك\nكل ما تحتاجه من معاملات وخدمات حكومية متاح الآن في مكان واحد وبسهولة.',
     },
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio14,
       'text':
           'اكتشف مقدمي الخدمات والمنتجات\nاطّلع على جميع المحلات، الشركات، والخدمات في مدينتك واطلب منها مباشرة من خلال التطبيق.',
     },
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio15,
       'text':
           'تواصل مع مجتمعك\nتابع آخر الأخبار، شارك رأيك، وكن جزءًا من الحياة الاجتماعية للمدينة.',
     },
     {
-      'image': MyAssetsImage.burger,
+      'image': MyAssetsImage.citio16,
       'text': 'جاهز تبدأ؟\nخلينا نغيّر شكل الحياة في المدينة سوا!',
     },
   ];
@@ -80,7 +79,6 @@ class _SliderScreenState extends State<SliderScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('seen_onboarding', true);
     Navigator.pushReplacement(
-      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (context) => const StartPage()),
     );
@@ -122,17 +120,31 @@ class _SliderScreenState extends State<SliderScreen> {
               },
               itemBuilder: (context, index) {
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(pages[index]['image']!, height: 300),
-                    const SizedBox(height: 20),
-                    Text(
-                      pages[index]['text']!,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      flex: 6,
+                      child: Image.asset(
+                        pages[index]['image']!,
+                        width: double.infinity,
+                        fit:
+                            BoxFit
+                                .cover, // تقدر تخليه contain لو عايز تحافظ على الأبعاد الأصلية
                       ),
-                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          pages[index]['text']!,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -145,7 +157,8 @@ class _SliderScreenState extends State<SliderScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               pages.length,
-              (index) => Container(
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 width: _currentIndex == index ? 12 : 8,
                 height: _currentIndex == index ? 12 : 8,
