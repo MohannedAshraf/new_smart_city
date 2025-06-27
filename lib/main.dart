@@ -20,9 +20,13 @@ import 'services/fcm_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/notification_helper.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      'pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg'; // ✅ ضيف مفتاح stripe بتاعك هنا
+  await Stripe.instance.applySettings();
   await NotificationHelper.initialize();
   await Firebase.initializeApp();
   await FCMService().initFCM();

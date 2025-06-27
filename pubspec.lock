@@ -411,6 +411,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.2.1"
+  flutter_staggered_grid_view:
+    dependency: transitive
+    description:
+      name: flutter_staggered_grid_view
+      sha256: "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
+  flutter_stripe:
+    dependency: "direct main"
+    description:
+      name: flutter_stripe
+      sha256: a474b283f4b07e8973687514bf48762e618073b0d6b7acc45cea9a60466d4f8c
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.5.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -437,6 +453,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.8.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c2e2d632dd9b8a2b7751117abcfc2b4888ecfe181bd9fca7170d9ef02e595fe2
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.4"
   galleryimage:
     dependency: "direct main"
     description:
@@ -541,6 +565,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
+  infinite_scroll_pagination:
+    dependency: "direct main"
+    description:
+      name: infinite_scroll_pagination
+      sha256: "9b8f95362928a1de835658835194b435c40f2bfc386f6545c1fd706203df0cd4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   intl:
     dependency: "direct main"
     description:
@@ -898,6 +930,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  sliver_tools:
+    dependency: transitive
+    description:
+      name: sliver_tools
+      sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.12"
   source_span:
     dependency: transitive
     description:
@@ -978,6 +1018,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  stripe_android:
+    dependency: transitive
+    description:
+      name: stripe_android
+      sha256: a666352e0c20753ecd8feebb5944882bf597167be4f020641266515a495bd55f
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.5.0"
+  stripe_ios:
+    dependency: transitive
+    description:
+      name: stripe_ios
+      sha256: "0f7afed3ac61e544e7525da9b692b23d93e762d56f6c9aa7f77fc6d9a686a65d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.5.0"
+  stripe_platform_interface:
+    dependency: transitive
+    description:
+      name: stripe_platform_interface
+      sha256: "23c10f3875da07f85a6196fcb676e64c767ad2d04ec73ba4e941ac797a4ee4d3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.5.0"
   synchronized:
     dependency: transitive
     description:

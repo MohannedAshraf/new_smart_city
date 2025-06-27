@@ -1,5 +1,12 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously, unused_import
+
 import 'package:citio/models/cart_model.dart';
+
+import 'package:citio/helper/api_make_order.dart';
+import 'package:citio/models/make_order_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckoutView extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -12,6 +19,87 @@ class CheckoutView extends StatefulWidget {
 
 class _CheckoutViewState extends State<CheckoutView> {
   String selectedPayment = 'card';
+  CardFieldInputDetails? _cardDetails;
+  String? paymentMethodId;
+  bool isLoading = false;
+  bool showCardField = false;
+
+  Future<void> handleCardPayment() async {
+    if (_cardDetails == null || !_cardDetails!.complete) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('من فضلك ادخل بيانات البطاقة كاملة')),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final paymentMethod = await Stripe.instance.createPaymentMethod(
+        params: const PaymentMethodParams.card(
+          paymentMethodData: PaymentMethodData(),
+        ),
+      );
+
+      paymentMethodId = paymentMethod.id;
+      print("✅ paymentMethodId: $paymentMethodId");
+
+      await sendOrder();
+    } catch (e) {
+      print("❌ Stripe Error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("حدث خطأ: $e")));
+    }
+
+    setState(() => isLoading = false);
+  }
+
+  Future<void> sendOrder() async {
+    double subtotal = widget.cartItems.fold(
+      0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
+
+    final products =
+        widget.cartItems
+            .map(
+              (e) => Makeorder(
+                productId: e.productId,
+                nameEn: e.nameEn,
+                nameAr: e.nameAr,
+                price: e.price,
+                quantity: e.quantity,
+              ),
+            )
+            .toList();
+
+    final vendorGroup = VendorGroup(
+      businessName: "Vendor Group Name",
+      totalPrice: subtotal,
+      itemCount: widget.cartItems.length,
+      items: products,
+    );
+
+    final now = DateTime.now().toIso8601String();
+
+    final model = MakeOrderModel(
+      paymentMethodId: paymentMethodId ?? "",
+      id: 0,
+      totalAmount: subtotal + 2.99 + 2.30,
+      orderDate: now,
+      status: "Pending",
+      products: products,
+      vendorGroups: [vendorGroup],
+      payment: Payment(
+        amount: subtotal + 2.99 + 2.30,
+        status: "Pending",
+        transactionDate: now,
+      ),
+    );
+
+    await ApiMakeOrder.sendOrder(model);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,30 +125,14 @@ class _CheckoutViewState extends State<CheckoutView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🟢 Delivery Address
+            // 🟢 العنوان
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, 6),
-                    //color: MyAppColors.shadow,
-                  ),
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, -4),
-                    //  color: MyAppColors.shadow,
-                  ),
-                ],
               ),
-
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Icon(Icons.location_on_outlined),
                   const SizedBox(width: 8),
@@ -87,7 +159,6 @@ class _CheckoutViewState extends State<CheckoutView> {
 
             const SizedBox(height: 10),
 
-            // 🟣 Order Items
             const Text(
               "العناصر المطلوبه ",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -95,24 +166,9 @@ class _CheckoutViewState extends State<CheckoutView> {
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, 6),
-                    //color: MyAppColors.shadow,
-                  ),
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, -4),
-                    //  color: MyAppColors.shadow,
-                  ),
-                ],
               ),
               child: Column(
                 children:
@@ -144,10 +200,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   const SizedBox(height: 4),
                                   Text(
                                     "X: ${item.quantity}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                    ),
+                                    style: const TextStyle(fontSize: 15),
                                   ),
                                 ],
                               ),
@@ -165,9 +218,8 @@ class _CheckoutViewState extends State<CheckoutView> {
               ),
             ),
 
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
 
-            // 🟡 Payment Method
             const Text(
               "طريقة الدفع",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -178,52 +230,54 @@ class _CheckoutViewState extends State<CheckoutView> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, 6),
-                    //color: MyAppColors.shadow,
-                  ),
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, -4),
-                    //  color: MyAppColors.shadow,
-                  ),
-                ],
               ),
               child: Column(
                 children: [
                   RadioListTile<String>(
                     value: 'card',
                     groupValue: selectedPayment,
-                    onChanged:
-                        (value) => setState(() => selectedPayment = value!),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPayment = value!;
+                      });
+                    },
                     title: const Text("بطاقة الإتمان/الخصم"),
-                    secondary: const Icon(
-                      Icons.credit_card,
-                      color: Colors.blueAccent,
-                    ),
+                    secondary: const Icon(Icons.credit_card),
                   ),
                   RadioListTile<String>(
                     value: 'cash',
                     groupValue: selectedPayment,
-                    onChanged:
-                        (value) => setState(() => selectedPayment = value!),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPayment = value!;
+                      });
+                    },
                     title: const Text("الدفع عند الإستلام"),
-                    secondary: const Icon(
-                      Icons.money,
-                      color: Colors.blueAccent,
-                    ),
+                    secondary: const Icon(Icons.money),
                   ),
                 ],
               ),
             ),
 
+            if (showCardField)
+              Column(
+                children: [
+                  const SizedBox(height: 10),
+                  const Text(
+                    "ادخل بيانات البطاقة",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  const SizedBox(height: 10),
+                  CardField(
+                    onCardChanged: (card) {
+                      _cardDetails = card;
+                    },
+                  ),
+                ],
+              ),
+
             const SizedBox(height: 20),
 
-            // 🔵 Order Summary
             const Text(
               " ملخص  الطلب ",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -234,95 +288,57 @@ class _CheckoutViewState extends State<CheckoutView> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, 6),
-                    //  color: MyAppColors.shadow,
-                  ),
-                  BoxShadow(
-                    blurRadius: 4,
-                    spreadRadius: -8,
-                    offset: Offset(0, -4),
-                    //color: MyAppColors.shadow,
-                  ),
-                ],
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      const Text("المجموع الفرعي"),
-                      const Spacer(),
-                      Text("LE ${subtotal.toStringAsFixed(2)}"),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Text(" الضريبة"),
-                      const Spacer(),
-                      Text("LE ${deliveryFee.toStringAsFixed(2)}"),
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Text("التوصيل"),
-                      const Spacer(),
-                      Text("LE ${tax.toStringAsFixed(2)}"),
-                    ],
-                  ),
+                  rowText("المجموع الفرعي", subtotal),
+                  rowText("الضريبة", deliveryFee),
+                  rowText("التوصيل", tax),
                   const Divider(height: 20),
-                  Row(
-                    children: [
-                      const Text(
-                        "المجموع",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        "LE ${total.toStringAsFixed(2)}",
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
+                  rowText("المجموع", total, bold: true),
                 ],
               ),
             ),
 
             const SizedBox(height: 20),
 
-            // 🔘 Confirm Button
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
+                onPressed:
+                    isLoading
+                        ? null
+                        : () async {
+                          if (selectedPayment == 'card') {
+                            setState(() {
+                              showCardField = true;
+                            });
+                            if (_cardDetails != null &&
+                                _cardDetails!.complete) {
+                              await handleCardPayment();
+                            }
+                          } else {
+                            await sendOrder();
+                          }
+                        },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () {
-                  // تنفيذ الطلب
-                },
-                child: const Text(
-                  "تأكيد الطلب",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child:
+                    isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                          "تأكيد الطلب",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
               ),
             ),
 
@@ -330,6 +346,22 @@ class _CheckoutViewState extends State<CheckoutView> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget rowText(String title, double value, {bool bold = false}) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: bold ? const TextStyle(fontWeight: FontWeight.bold) : null,
+        ),
+        const Spacer(),
+        Text(
+          "LE ${value.toStringAsFixed(2)}",
+          style: bold ? const TextStyle(fontWeight: FontWeight.bold) : null,
+        ),
+      ],
     );
   }
 }
