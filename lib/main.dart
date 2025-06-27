@@ -83,7 +83,7 @@ class HomePageState extends State<HomePage> {
   final List<Widget> pages = [
     const HomeScreen(),
     const GovernmentScreen(),
-    const IssueScreen(),
+    const SocialMedia(),
     const ServiceOrderScreen(),
     const Notifications(),
     const Profile(),
@@ -304,9 +304,9 @@ class HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              currentIndex == 2 ? Icons.report : Icons.report_outlined,
+              currentIndex == 2 ? Icons.language : Icons.language_outlined,
             ),
-            label: 'المشاكل',
+            label: 'المجتمع',
           ),
           BottomNavigationBarItem(
             icon: Icon(

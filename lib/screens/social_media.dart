@@ -4,6 +4,8 @@ import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/core/widgets/socialmedia_tab_view.dart';
+import 'package:citio/main.dart';
+import 'package:citio/screens/notifications.dart';
 
 import 'package:flutter/material.dart';
 
@@ -21,18 +23,57 @@ class _SocialMediaState extends State<SocialMedia> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenheight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: MyColors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const ImageIcon(
-          AssetImage(MyAssetsImage.logo),
-          color: Colors.red,
-          size: 26,
+        backgroundColor: MyColors.white,
+
+        surfaceTintColor: MyColors.white,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: MyColors.black),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const HomePage(initialIndex: 0),
+              ),
+            );
+          },
+        ),
+        flexibleSpace: Container(height: 0),
+        toolbarHeight: 50,
+
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+          child: Row(
+            children: [
+              SizedBox(width: screenWidth * .13),
+              Column(
+                children: [
+                  const Text(
+                    'آخر المشاركات',
+                    style: TextStyle(color: MyColors.black, fontSize: 20),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.refresh, color: MyColors.gray),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         centerTitle: true,
-        //  excludeHeaderSemantics: true,
-        backgroundColor: MyColors.white,
-        surfaceTintColor: MyColors.white,
       ),
       body: const SocialmediaTabView(),
     );

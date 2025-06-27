@@ -22,6 +22,8 @@ class Data {
   final int? saveCount;
   final String? date;
   final String? userId;
+  final bool adminPost;
+  final List<String>? tags;
 
   Data({
     this.caption,
@@ -31,6 +33,8 @@ class Data {
     this.shareCount,
     this.date,
     this.userId,
+    required this.adminPost,
+    this.tags,
   });
   factory Data.fromJason(Map<String, dynamic> jasonData) {
     return Data(
@@ -53,6 +57,11 @@ class Data {
               ? getTimeAgo(jasonData['createdAt'])
               : 'التاريخ غير متوفر',
       userId: jasonData['author'],
+      adminPost: jasonData['adminPost'],
+      tags:
+          jasonData['tags'] != null
+              ? List<String>.from(jasonData['tags'] as List)
+              : null,
     );
   }
 }

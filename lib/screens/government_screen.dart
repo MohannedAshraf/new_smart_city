@@ -43,9 +43,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              30,
-            ), // 0 عشان يبقى مربع بزوايا حادة
+            borderRadius: BorderRadius.circular(30),
           ),
           onPressed: () {
             Navigator.push(
