@@ -58,7 +58,6 @@ dependencies:
   flutter_rating: ^2.0.2
   search_app_bar_page:
   get:
-
   fluentui_system_icons:
   flutter:
     sdk: flutter
