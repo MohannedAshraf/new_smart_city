@@ -82,21 +82,8 @@ class _LoginPageState extends State<MyloginPage> {
                   _validate
                       ? AutovalidateMode.always
                       : AutovalidateMode.disabled,
-              child: Container(
-                width: 400,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade300,
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

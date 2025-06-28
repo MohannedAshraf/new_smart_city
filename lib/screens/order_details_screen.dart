@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/models/order_details_moel.dart';
+import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
@@ -56,12 +57,18 @@ class OrderDetailsView extends StatelessWidget {
                 _buildOrderedItems(order.items, orderInfo.orderStatus),
                 const SizedBox(height: 16),
                 _buildDeliveryDetails(order),
-                const SizedBox(height: 200),
+                const SizedBox(height: 150),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // لوجيك تتبع الطلب
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => TrackOrderView(orderId: orderId),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
