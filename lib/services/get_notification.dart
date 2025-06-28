@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/notification_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';

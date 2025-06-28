@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, use_build_context_synchronously
+// ignore_for_file: file_names, use_build_context_synchronously, library_private_types_in_public_api
 
 import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';

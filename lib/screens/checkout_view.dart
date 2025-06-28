@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print, use_build_context_synchronously, deprecated_member_use
 
 import 'package:citio/models/cart_model.dart';
 import 'package:citio/helper/api_make_order.dart';

@@ -1,15 +1,15 @@
 // ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures
 
-import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/models/order_details_moel.dart';
 import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class OrderDetailsView extends StatelessWidget {
+class OrderDetailsView extends StatefulWidget {
   final int orderId;
   final String vendorId;
 
@@ -18,6 +18,13 @@ class OrderDetailsView extends StatelessWidget {
     required this.orderId,
     required this.vendorId,
   });
+
+  @override
+  State<OrderDetailsView> createState() => _OrderDetailsViewState();
+}
+
+class _OrderDetailsViewState extends State<OrderDetailsView> {
+  final Map<int, double> tempRatedProducts = {};
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +39,8 @@ class OrderDetailsView extends StatelessWidget {
       ),
       body: FutureBuilder<VendorOrderDetailsResponse>(
         future: OrderDetailsApiHelper.fetchOrderDetails(
-          orderId: orderId,
-          vendorId: vendorId,
+          orderId: widget.orderId,
+          vendorId: widget.vendorId,
         ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +52,7 @@ class OrderDetailsView extends StatelessWidget {
           }
 
           final order = snapshot.data!;
-          final orderInfo = order.vendorOrder;
+          final orderInfo = order.vendorOrderDto;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -54,7 +61,10 @@ class OrderDetailsView extends StatelessWidget {
               children: [
                 _buildHeader(orderInfo),
                 const SizedBox(height: 16),
-                _buildOrderedItems(order.items, orderInfo.orderStatus),
+                _buildOrderedItems(
+                  order.vendorOrderItemResponse,
+                  orderInfo.orderStatus,
+                ),
                 const SizedBox(height: 16),
                 _buildDeliveryDetails(order),
                 const SizedBox(height: 150),
@@ -66,7 +76,8 @@ class OrderDetailsView extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) => TrackOrderView(orderId: orderId),
+                              (context) =>
+                                  TrackOrderView(orderId: widget.orderId),
                         ),
                       );
                     },
@@ -201,107 +212,100 @@ class OrderDetailsView extends StatelessWidget {
   }
 
   Widget _buildItemRow(OrderItem item, String orderStatus) {
-    double userRating = 0;
-    bool hasRated = false;
-
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  'https://service-provider.runasp.net${item.productImageUrl}',
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(
+              'https://service-provider.runasp.net${item.productImageUrl}',
+              width: 55,
+              height: 55,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.network(
+                  'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
                   width: 55,
                   height: 55,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                      width: 55,
-                      height: 55,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.nameAr,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "الكمية: ${item.quantity}",
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    if (orderStatus.toLowerCase() == "delivered" &&
-                        !hasRated) ...[
-                      const SizedBox(height: 4),
-                      RatingBar.builder(
-                        initialRating: userRating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemSize: 20,
-                        itemCount: 5,
-                        unratedColor: Colors.grey.shade300,
-                        itemBuilder:
-                            (context, _) =>
-                                const Icon(Icons.star, color: Colors.amber),
-                        onRatingUpdate: (rating) async {
-                          setState(() {
-                            userRating = rating;
-                            hasRated = true;
-                          });
-
-                          try {
-                            final prefs = await SharedPreferences.getInstance();
-                            final token = prefs.getString('token');
-                            if (token == null)
-                              throw Exception("Token not found");
-
-                            final url = Uri.parse(
-                              "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
-                            );
-
-                            final response = await http.post(
-                              url,
-                              headers: {
-                                'Authorization': 'Bearer $token',
-                                'Content-Type': 'application/json',
-                              },
-                              body: jsonEncode({
-                                "rating": rating,
-                                "comment": "",
-                              }),
-                            );
-
-                            print("⭐ تم إرسال التقييم: ${response.statusCode}");
-                          } catch (e) {
-                            print("❌ خطأ أثناء إرسال التقييم: $e");
-                          }
-                        },
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Text(
-                "${item.price.toStringAsFixed(0)} جنيه",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
+                );
+              },
+            ),
           ),
-        );
-      },
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.nameAr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "الكمية: ${item.quantity}",
+                  style: const TextStyle(fontSize: 12),
+                ),
+                const SizedBox(height: 4),
+                if (orderStatus.toLowerCase() == "delivered" &&
+                    !tempRatedProducts.containsKey(item.productId)) ...[
+                  RatingBar.builder(
+                    initialRating: 0,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemSize: 20,
+                    itemCount: 5,
+                    unratedColor: Colors.grey.shade300,
+                    itemBuilder:
+                        (context, _) =>
+                            const Icon(Icons.star, color: Colors.amber),
+                    onRatingUpdate: (rating) async {
+                      setState(() {
+                        tempRatedProducts[item.productId] = rating;
+                      });
+
+                      try {
+                        final prefs = await SharedPreferences.getInstance();
+                        final token = prefs.getString('token');
+                        if (token == null) throw Exception("Token not found");
+
+                        final url = Uri.parse(
+                          "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
+                        );
+                        final response = await http.post(
+                          url,
+                          headers: {
+                            'Authorization': 'Bearer $token',
+                            'Content-Type': 'application/json',
+                          },
+                          body: jsonEncode({"rating": rating, "comment": ""}),
+                        );
+
+                        print("⭐ تم إرسال التقييم: ${response.statusCode}");
+                      } catch (e) {
+                        print("❌ خطأ أثناء إرسال التقييم: $e");
+                      }
+                    },
+                  ),
+                ],
+                if (tempRatedProducts.containsKey(item.productId)) ...[
+                  Text(
+                    "تم التقييم بـ ${tempRatedProducts[item.productId]!.toStringAsFixed(1)} نجوم",
+                    style: const TextStyle(fontSize: 12, color: Colors.green),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Text(
+            "${item.price.toStringAsFixed(0)} جنيه",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
     );
   }
 

@@ -12,7 +12,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
-import 'screens/first_issue_screen.dart';
 import 'screens/service_order_screen.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';

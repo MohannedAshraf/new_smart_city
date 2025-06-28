@@ -179,7 +179,7 @@ class _CustomCardState extends State<CustomCard> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                widget.request.requestStatus ?? '',
+                                widget.request.requestStatus,
                                 style: TextStyle(
                                   color:
                                       Styles.requestsStyle[widget

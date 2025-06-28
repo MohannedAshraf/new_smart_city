@@ -1,9 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import '../models/notification_model.dart';
 import '../services/get_notification.dart';
 import '../services/notification_local_storage.dart';
-import '../core/utils/mycolors.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -47,8 +48,9 @@ class _NotificationsScreenState extends State<Notifications> {
       _errorMessage = null;
     });
     try {
-      final notifications =
-          await _getNotificationsService.getNotifications(category: category);
+      final notifications = await _getNotificationsService.getNotifications(
+        category: category,
+      );
 
       final readIds = await NotificationLocalStorage.getReadIds();
       for (var notification in notifications) {
@@ -127,21 +129,22 @@ class _NotificationsScreenState extends State<Notifications> {
                     );
                   }
                 },
-                items: ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                items:
+                    ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList(),
               ),
             ),
           ),
@@ -188,7 +191,6 @@ class _NotificationsScreenState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -198,12 +200,7 @@ class _NotificationsScreenState extends State<Notifications> {
         leading: const BackButton(color: Colors.black),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          _buildHeader(),
-          Expanded(child: _buildBody()),
-        ],
-      ),
+      body: Column(children: [_buildHeader(), Expanded(child: _buildBody())]),
     );
   }
 }

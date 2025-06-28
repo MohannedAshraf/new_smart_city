@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, library_private_types_in_public_api, sort_child_properties_last
 
 import 'package:citio/core/utils/variables.dart';
 
@@ -65,7 +65,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                 );
                               },
 
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   ' مشاهدة الجميع',
                                   style: TextStyle(
@@ -205,7 +205,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                           ),
                                         ],
                                       )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                 ],
                               ),
                               Row(

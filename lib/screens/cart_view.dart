@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_cart.dart';
+import 'package:citio/helper/api_discount.dart';
 import 'package:citio/helper/api_edit_cart.dart';
 import 'package:citio/models/cart_model.dart';
 import 'package:citio/screens/checkout_view.dart';
@@ -17,6 +20,8 @@ class _CartViewState extends State<CartView> {
   late CartModel? cart;
   bool isLoading = true;
   String? error;
+  final TextEditingController discountController = TextEditingController();
+  double discountValue = 0.0;
 
   @override
   void initState() {
@@ -44,6 +49,31 @@ class _CartViewState extends State<CartView> {
     }
   }
 
+  Future<void> applyDiscount() async {
+    final code = discountController.text.trim();
+    if (code.isEmpty) return;
+
+    try {
+      final discount = await ApiDiscount.getDiscount(code);
+      if (discount != null && discount.isSuccess) {
+        setState(() {
+          discountValue = discount.value;
+        });
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("تم تفعيل الخصم بنجاح")));
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("كود الخصم غير صالح")));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("حدث خطأ: $e")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -63,6 +93,7 @@ class _CartViewState extends State<CartView> {
       0,
       (sum, item) => sum + (item.price * item.quantity),
     );
+    double total = subtotal + 3 + 2 - discountValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +116,6 @@ class _CartViewState extends State<CartView> {
               ),
               const SizedBox(height: 10),
 
-              // ✅ المنتجات
               ...items.map((item) {
                 return OrderCard(
                   ordername: item.nameEn,
@@ -103,7 +133,7 @@ class _CartViewState extends State<CartView> {
                       item.quantity = newQty;
                     });
                   },
-                  onDelete: loadCart, // ✅ هنا أضفنا الريفريش
+                  onDelete: loadCart,
                 );
               }),
 
@@ -136,9 +166,7 @@ class _CartViewState extends State<CartView> {
                 child: Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        // تنفيذ التفعيل هنا
-                      },
+                      onPressed: applyDiscount,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         padding: const EdgeInsets.symmetric(
@@ -157,6 +185,7 @@ class _CartViewState extends State<CartView> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        controller: discountController,
                         decoration: InputDecoration(
                           hintText: 'ادخل كود الخصم',
                           hintStyle: const TextStyle(fontSize: 14),
@@ -238,6 +267,15 @@ class _CartViewState extends State<CartView> {
                     const Row(
                       children: [Text("التوصيل"), Spacer(), Text("LE 2.00")],
                     ),
+                    const SizedBox(height: 6),
+                    if (discountValue > 0)
+                      Row(
+                        children: [
+                          const Text("قيمة الخصم"),
+                          const Spacer(),
+                          Text("- LE ${discountValue.toStringAsFixed(2)}"),
+                        ],
+                      ),
                     const Divider(),
                     Row(
                       children: [
@@ -250,7 +288,7 @@ class _CartViewState extends State<CartView> {
                         ),
                         const Spacer(),
                         Text(
-                          "LE ${(subtotal + 3 + 2).toStringAsFixed(2)}",
+                          "LE ${total.toStringAsFixed(2)}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

@@ -1,11 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, unused_element
+// ignore_for_file: library_private_types_in_public_api, unused_element, unused_local_variable
 
-import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/variables.dart';
 
 import 'package:citio/core/widgets/socialmedia_tab_view.dart';
 import 'package:citio/main.dart';
-import 'package:citio/screens/notifications.dart';
 
 import 'package:flutter/material.dart';
 
@@ -51,9 +49,9 @@ class _SocialMediaState extends State<SocialMedia> {
           child: Row(
             children: [
               SizedBox(width: screenWidth * .13),
-              Column(
+              const Column(
                 children: [
-                  const Text(
+                  Text(
                     'آخر المشاركات',
                     style: TextStyle(color: MyColors.black, fontSize: 20),
                   ),

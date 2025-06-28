@@ -320,8 +320,9 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) =>
-                                    ProductDetailsView(productId: banner.id),
+                                (context) => ProductDetailsView(
+                                  productId: banner.productId,
+                                ),
                           ),
                         ),
                     child: Stack(
