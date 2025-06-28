@@ -18,7 +18,7 @@ class BannerModel {
       discountCode: json['discountCode'],
       description: json['description'],
       imageUrl: json['imageUrl'],
-      discountPercentage: json['discountPercentage'],
+      discountPercentage: (json['discountPercentage'] as num).toInt(),
       productId: json['product']['id'],
     );
   }
