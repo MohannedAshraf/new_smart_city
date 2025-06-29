@@ -15,20 +15,32 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsScreenState extends State<Notifications> {
   final GetNotifications _getNotificationsService = GetNotifications();
+  final ScrollController _scrollController = ScrollController();
 
   List<NotificationModel> _notifications = [];
-  bool _isLoading = true;
+  bool _isLoading = false;
   String? _errorMessage;
-
   String _selectedFilter = 'الكل';
+
+  int _pageNumber = 1;
+  final int _pageSize = 10;
+  bool _hasMore = true;
 
   @override
   void initState() {
     super.initState();
     _loadNotifications();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 100 &&
+          !_isLoading &&
+          _hasMore) {
+        _loadNotifications();
+      }
+    });
   }
 
-  /// ✅ ترجمة التسمية إلى قيمة `category` المناسبة
   String? _getCategoryKey(String label) {
     switch (label) {
       case 'التحديثات':
@@ -42,24 +54,34 @@ class _NotificationsScreenState extends State<Notifications> {
     }
   }
 
-  Future<void> _loadNotifications({String? category}) async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
+  Future<void> _loadNotifications({bool reset = false}) async {
+    if (_isLoading) return;
+
+    setState(() => _isLoading = true);
+
+    if (reset) {
+      _pageNumber = 1;
+      _notifications.clear();
+      _hasMore = true;
+    }
+
     try {
-      final notifications = await _getNotificationsService.getNotifications(
-        category: category,
+      final fetched = await _getNotificationsService.getNotifications(
+        category: _getCategoryKey(_selectedFilter),
+        pageNumber: _pageNumber,
+        pageSize: _pageSize,
       );
 
       final readIds = await NotificationLocalStorage.getReadIds();
-      for (var notification in notifications) {
+      for (var notification in fetched) {
         notification.isRead = readIds.contains(notification.id);
       }
 
       setState(() {
-        _notifications = notifications;
+        _notifications.addAll(fetched);
         _isLoading = false;
+        _pageNumber++;
+        if (fetched.length < _pageSize) _hasMore = false;
       });
     } catch (e) {
       setState(() {
@@ -67,13 +89,6 @@ class _NotificationsScreenState extends State<Notifications> {
         _isLoading = false;
       });
     }
-  }
-
-  List<NotificationModel> get _filteredNotifications {
-    if (_selectedFilter == 'الكل') return _notifications;
-
-    final categoryKey = _getCategoryKey(_selectedFilter);
-    return _notifications.where((n) => n.category == categoryKey).toList();
   }
 
   Future<void> _markAllAsRead() async {
@@ -121,30 +136,25 @@ class _NotificationsScreenState extends State<Notifications> {
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.black54),
                 onChanged: (String? newValue) async {
                   if (newValue != null) {
-                    setState(() {
-                      _selectedFilter = newValue;
-                    });
-                    await _loadNotifications(
-                      category: _getCategoryKey(newValue),
-                    );
+                    setState(() => _selectedFilter = newValue);
+                    await _loadNotifications(reset: true);
                   }
                 },
-                items:
-                    ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
-                        .map(
-                          (value) => DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
+                items: ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
+                    .map(
+                      (value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                        )
-                        .toList(),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),
@@ -164,7 +174,7 @@ class _NotificationsScreenState extends State<Notifications> {
   }
 
   Widget _buildBody() {
-    if (_isLoading) {
+    if (_isLoading && _notifications.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -172,21 +182,35 @@ class _NotificationsScreenState extends State<Notifications> {
       return Center(child: Text('حدث خطأ: $_errorMessage'));
     }
 
-    if (_filteredNotifications.isEmpty) {
+    if (_notifications.isEmpty) {
       return const Center(child: Text('لا توجد إشعارات حاليًا'));
     }
 
     return ListView.builder(
-      itemCount: _filteredNotifications.length,
+      controller: _scrollController,
+      itemCount: _notifications.length + (_hasMore ? 1 : 0),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemBuilder: (context, index) {
-        final notification = _filteredNotifications[index];
-        return NotificationCard(
-          notification: notification,
-          onTap: () => _markAsRead(notification),
-        );
+        if (index < _notifications.length) {
+          final notification = _notifications[index];
+          return NotificationCard(
+            notification: notification,
+            onTapMarkAsRead: () => _markAsRead(notification),
+          );
+        } else {
+          return const Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -200,7 +224,12 @@ class _NotificationsScreenState extends State<Notifications> {
         leading: const BackButton(color: Colors.black),
         elevation: 0,
       ),
-      body: Column(children: [_buildHeader(), Expanded(child: _buildBody())]),
+      body: Column(
+        children: [
+          _buildHeader(),
+          Expanded(child: _buildBody()),
+        ],
+      ),
     );
   }
 }
