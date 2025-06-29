@@ -320,7 +320,8 @@ class ImageCard extends StatelessWidget {
           () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProductDetailsView(productId: data.id),
+              builder:
+                  (context) => ProductDetailsView(productId: data.product.id),
             ),
           ),
       child: ClipRRect(
