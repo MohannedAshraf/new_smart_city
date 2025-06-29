@@ -22,4 +22,28 @@ plugins {
     id "org.jetbrains.kotlin.android" version "2.1.0" apply false
 }
 
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    // ✅ إجبار استخدام النسخة الآمنة من bcprov
+    components {
+        withModule("org.bouncycastle:bcprov-jdk15to18") {
+            allVariants {
+                withDependencies { deps ->
+                    deps.each { dep ->
+                        if (dep.version == "1.79") {
+                            dep.version {
+                                prefer "1.68"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 include ":app"

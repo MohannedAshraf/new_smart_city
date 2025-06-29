@@ -3,7 +3,6 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
-
 }
 
 android {
@@ -14,7 +13,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-                coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -22,11 +21,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.city"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -34,9 +30,10 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            shrinkResources false
+            minifyEnabled false // مؤقتًا، خليه false لحد ما تتأكد إن كل حاجة شغالة
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug // مؤقتًا للتجربة
         }
     }
 }
@@ -44,10 +41,18 @@ android {
 flutter {
     source = "../.."
 }
-    apply plugin: 'com.google.gms.google-services'
+
+apply plugin: 'com.google.gms.google-services'
 
 dependencies {
     implementation 'com.google.firebase:firebase-messaging'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-}
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 
+    // ✅ نحذف أي محاولة لتحميل bcprov 1.79
+    configurations.all {
+        exclude group: 'org.bouncycastle', module: 'bcprov-jdk15to18'
+    }
+
+    // ✅ ونثبت النسخة المضمونة اللي شغالة
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.68'
+}

@@ -15,6 +15,16 @@ allprojects {
         google()
         mavenCentral()
     }
+
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (it.requested.group == 'org.bouncycastle' &&
+                it.requested.name == 'bcprov-jdk15to18') {
+                it.useVersion '1.68'
+                it.because("Fixing D8 dexing crash caused by bcprov 1.79")
+            }
+        }
+    }
 }
 
 rootProject.buildDir = "../build"
@@ -27,4 +37,12 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (it.requested.group == 'org.bouncycastle' &&
+            it.requested.name == 'bcprov-jdk15to18') {
+            it.useVersion '1.68'
+        }
+    }
 }

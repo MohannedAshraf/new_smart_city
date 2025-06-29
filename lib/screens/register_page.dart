@@ -1,7 +1,6 @@
-// ignore_for_file: unused_field
-
+// ignore_for_file: unused_field, use_build_context_synchronously
+import 'package:citio/helper/api_register.dart';
 import 'package:citio/screens/mylogin_page.dart';
-import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -22,13 +21,48 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late bool _obscurePassword = true;
+  bool _obscurePassword = true;
+  bool _isLoading = false;
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
+  }
+
+  Future<void> registerUser() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await ApiRegisterHelper.registerUser(
+        fullName: nameController.text.trim(),
+        phoneNumber: phoneController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+        address: addressController.text.trim(),
+        buildingNumber: buildingController.text.trim(),
+        floorNumber: floorController.text.trim(),
+      );
+
+      setState(() => _isLoading = false);
+
+      if (response.isSuccess) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyloginPage()),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("فشل في إنشاء الحساب")));
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 
   @override
@@ -49,7 +83,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // اللوجو
                     SvgPicture.asset("assets/icon/citio.svg", height: 100),
                     const Text(
                       "إنشاء حساب",
@@ -65,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 18),
 
-                    // الاسم الكامل
+                    // Full Name
                     TextFormField(
                       controller: nameController,
                       decoration: InputDecoration(
@@ -83,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    // رقم الهاتف
+                    // Phone
                     TextFormField(
                       controller: phoneController,
                       keyboardType: TextInputType.phone,
@@ -100,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    // البريد الإلكتروني
+                    // Email
                     TextFormField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -118,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    // كلمة السر
+                    // Password
                     TextFormField(
                       controller: passwordController,
                       obscureText: _obscurePassword,
@@ -154,7 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    // العنوان
+                    // Address
                     TextFormField(
                       controller: addressController,
                       decoration: InputDecoration(
@@ -173,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 15),
 
-                    // المبنى والدور
+                    // Building + Floor
                     Row(
                       children: [
                         Expanded(
@@ -211,7 +244,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    // زر إنشاء الحساب
+                    // Register Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -224,18 +257,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => const VerificationScreen(),
-                              ),
-                            );
+                            registerUser();
                           }
                         },
-                        child: const Text(
-                          "أنشئ الحساب",
-                          style: TextStyle(
+                        child: Text(
+                          _isLoading ? "جاري التسجيل..." : "أنشئ الحساب",
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -245,7 +272,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // لديك حساب؟
+                    // Already have account?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

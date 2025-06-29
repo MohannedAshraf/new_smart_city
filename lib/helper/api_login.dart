@@ -11,7 +11,7 @@ class ApiLoginHelper {
     required String password,
   }) async {
     final url = Uri.parse(
-      "https://cms-central-ffb6acaub5afeecj.uaenorth-01.azurewebsites.net/api/auth/login",
+      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Auth/login",
     );
 
     try {
@@ -29,19 +29,16 @@ class ApiLoginHelper {
         await prefs.setString('token', loginResponse.token ?? "");
         await prefs.setString('refreshToken', loginResponse.refreshToken ?? "");
 
-        // ✅ طباعة التوكن في التيرمينال
         print("✅ Token: ${loginResponse.token}");
         print("🔁 Refresh Token: ${loginResponse.refreshToken}");
 
         return loginResponse;
       } else {
-        // ✅ نطبع رسالة الخطأ من السيرفر نفسه إن وجدت
         final error = jsonDecode(response.body);
         final errorMessage = error["message"] ?? "بيانات الدخول غير صحيحة";
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // ✅ فقط نطبع الرسالة العامة لو مفيش رسالة واضحة
       throw Exception(
         e.toString().contains("SocketException")
             ? "فشل الاتصال بالخادم، تأكد من الاتصال بالإنترنت"
