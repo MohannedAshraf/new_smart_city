@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
 import 'screens/service_order_screen.dart';
+import 'screens/first_issue_screen.dart';
 import 'screens/notifications.dart';
 import 'screens/profile.dart';
 import 'services/fcm_service.dart';
@@ -195,10 +196,11 @@ class HomePageState extends State<HomePage> {
               leading: const Icon(Icons.report),
               title: const Text('المشاكل'),
               onTap: () {
-                setState(() {
-                  currentIndex = 2;
-                });
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const IssueScreen()),
+                );
               },
             ),
             ListTile(
