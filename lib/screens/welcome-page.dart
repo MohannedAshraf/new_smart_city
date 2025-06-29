@@ -59,7 +59,7 @@ class _SliderScreenState extends State<SliderScreen> {
     _autoSlideTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_currentIndex < pages.length - 1) {
         _controller.nextPage(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       } else {

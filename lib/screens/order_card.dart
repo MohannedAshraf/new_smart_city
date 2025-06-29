@@ -1,5 +1,5 @@
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/helper/api_delete_product_frome_cart.dart';
+import 'package:citio/helper/api_delete_product_from_cart.dart';
 import 'package:flutter/material.dart';
 
 class OrderCard extends StatelessWidget {

@@ -1,0 +1,32 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:citio/models/profile_model.dart';
+
+class ApiProfileHelper {
+  static Future<ProfileModel?> fetchProfile() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) throw Exception("التوكن غير موجود");
+
+    final url = Uri.parse(
+      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Account",
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return ProfileModel.fromJson(data);
+    } else {
+      throw Exception("فشل في تحميل البيانات");
+    }
+  }
+}
