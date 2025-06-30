@@ -2,6 +2,7 @@
 
 import 'package:citio/core/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ ضروري
 import '../models/notification_model.dart';
 import '../services/get_notification.dart';
 import '../services/notification_local_storage.dart';
@@ -112,50 +113,49 @@ class _NotificationsScreenState extends State<Notifications> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h), // ✅
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h), // ✅
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r), // ✅
               border: Border.all(color: Colors.grey.shade300),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+                  blurRadius: 4.r, // ✅
+                  offset: Offset(0, 2.h),
                 ),
               ],
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
                 value: _selectedFilter,
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.black54),
+                icon: Icon(Icons.arrow_drop_down, color: Colors.black54, size: 22.sp), // ✅
                 onChanged: (String? newValue) async {
                   if (newValue != null) {
                     setState(() => _selectedFilter = newValue);
                     await _loadNotifications(reset: true);
                   }
                 },
-                items:
-                    ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
-                        .map(
-                          (value) => DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
+                items: ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
+                    .map(
+                      (value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            fontSize: 14.sp, // ✅
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                        )
-                        .toList(),
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),
@@ -166,6 +166,7 @@ class _NotificationsScreenState extends State<Notifications> {
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.w600,
+                fontSize: 14.sp, // ✅
               ),
             ),
           ),
@@ -180,17 +181,17 @@ class _NotificationsScreenState extends State<Notifications> {
     }
 
     if (_errorMessage != null) {
-      return Center(child: Text('حدث خطأ: $_errorMessage'));
+      return Center(child: Text('حدث خطأ: $_errorMessage', style: TextStyle(fontSize: 14.sp))); // ✅
     }
 
     if (_notifications.isEmpty) {
-      return const Center(child: Text('لا توجد إشعارات حاليًا'));
+      return Center(child: Text('لا توجد إشعارات حاليًا', style: TextStyle(fontSize: 14.sp))); // ✅
     }
 
     return ListView.builder(
       controller: _scrollController,
       itemCount: _notifications.length + (_hasMore ? 1 : 0),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h), // ✅
       itemBuilder: (context, index) {
         if (index < _notifications.length) {
           final notification = _notifications[index];
@@ -199,9 +200,9 @@ class _NotificationsScreenState extends State<Notifications> {
             onTapMarkAsRead: () => _markAsRead(notification),
           );
         } else {
-          return const Padding(
-            padding: EdgeInsets.all(16),
-            child: Center(child: CircularProgressIndicator()),
+          return Padding(
+            padding: EdgeInsets.all(16.w), // ✅
+            child: const Center(child: CircularProgressIndicator()),
           );
         }
       },
@@ -219,13 +220,16 @@ class _NotificationsScreenState extends State<Notifications> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('الإشعارات'),
+        title: Text('الإشعارات', style: TextStyle(fontSize: 18.sp)), // ✅
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: const BackButton(color: Colors.black),
         elevation: 0,
       ),
-      body: Column(children: [_buildHeader(), Expanded(child: _buildBody())]),
+      body: Column(children: [
+        _buildHeader(),
+        Expanded(child: _buildBody())
+      ]),
     );
   }
 }

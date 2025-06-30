@@ -3,6 +3,7 @@ import 'package:citio/helper/api_rating_issue.dart';
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -13,83 +14,82 @@ class RatedComplaintList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h), // ✅
       itemCount: issues.length,
       itemBuilder: (context, index) {
         final issue = issues[index];
 
         return SizedBox(
-          height: 140,
+          height: 140.h, // ✅
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r), // ✅
             ),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: EdgeInsets.symmetric(vertical: 8.h), // ✅
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.w), // ✅
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child:
-                        issue.image != null
-                            ? Image.network(
-                              _baseUrl + issue.image!,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                            )
-                            : Image.network(
-                              'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                            ),
+                    borderRadius: BorderRadius.circular(8.r), // ✅
+                    child: issue.image != null
+                        ? Image.network(
+                            _baseUrl + issue.image!,
+                            width: 80.w,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 40.sp),
+                          )
+                        : Image.network(
+                            'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                            width: 80.w,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 40.sp),
+                          ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w), // ✅
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           issue.title,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp, // ✅
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h), // ✅
                         Text(
                           issue.description ?? '',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 0, 3, 5),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: const Color.fromARGB(255, 0, 3, 5),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
-                        const Text(
+                        SizedBox(height: 6.h), // ✅
+                        Text(
                           'تم حلها',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: 14.sp, // ✅
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-
+                  SizedBox(width: 8.w), // ✅
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
@@ -100,156 +100,149 @@ class RatedComplaintList extends StatelessWidget {
 
                         showDialog(
                           context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
+                          builder: (context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r), // ✅
+                            ),
+                            title: Text(
+                              "تقييم المشكلة",
+                              style: TextStyle(fontSize: 16.sp), // ✅
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "من فضلك قيّم الخدمة التي قُدمت لك:",
+                                  style: TextStyle(fontSize: 14.sp), // ✅
                                 ),
-                                title: const Text("تقييم المشكلة"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      "من فضلك قيّم الخدمة التي قُدمت لك:",
-                                    ),
-                                    const SizedBox(height: 12),
-                                    RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: false,
-                                      itemCount: 5,
-                                      itemSize: 30,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0,
-                                      ),
-                                      itemBuilder:
-                                          (context, _) => const Icon(
-                                            Icons.star,
-                                            color: MyColors.themecolor,
-                                          ),
-                                      onRatingUpdate: (rating) {
-                                        selectedRating = rating;
-                                      },
-                                    ),
-                                    const SizedBox(height: 16),
-                                    TextField(
-                                      controller: commentController,
-                                      maxLines: 3,
-                                      decoration: InputDecoration(
-                                        hintText: "اكتب تعليقك هنا...",
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        contentPadding: const EdgeInsets.all(
-                                          12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                SizedBox(height: 12.h), // ✅
+                                RatingBar.builder(
+                                  initialRating: 0,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: false,
+                                  itemCount: 5,
+                                  itemSize: 30.sp, // ✅
+                                  itemPadding: EdgeInsets.symmetric(
+                                    horizontal: 4.w,
+                                  ),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: MyColors.themecolor,
+                                    size: 24.sp,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    selectedRating = rating;
+                                  },
                                 ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text("إلغاء"),
-                                    onPressed:
-                                        () => Navigator.of(context).pop(),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: MyColors.themecolor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
+                                SizedBox(height: 16.h), // ✅
+                                TextField(
+                                  controller: commentController,
+                                  maxLines: 3,
+                                  decoration: InputDecoration(
+                                    hintText: "اكتب تعليقك هنا...",
+                                    hintStyle: TextStyle(fontSize: 14.sp),
+                                    border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(12.r), // ✅
                                     ),
-                                    child: const Text(
-                                      "إرسال",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () async {
-                                      final comment =
-                                          commentController.text.trim();
-
-                                      if (selectedRating == 0.0) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              "من فضلك اختر تقييم قبل الإرسال ⭐",
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                        return;
-                                      }
-
-                                      try {
-                                        final feedbackService =
-                                            FeedbackApiService();
-                                        final response = await feedbackService
-                                            .sendFeedback(
-                                              comment: comment,
-                                              rateValue: selectedRating.toInt(),
-                                            );
-
-                                        if (response.isSuccess) {
-                                          ScaffoldMessenger.of(
-                                            // ignore: use_build_context_synchronously
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "تم إرسال تقييمك بنجاح ✅",
-                                              ),
-                                              backgroundColor: Colors.green,
-                                            ),
-                                          );
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.of(context).pop();
-                                        } else {
-                                          ScaffoldMessenger.of(
-                                            // ignore: use_build_context_synchronously
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                response.message.isNotEmpty
-                                                    ? response.message
-                                                    : "فشل في إرسال التقييم",
-                                              ),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(
-                                          // ignore: use_build_context_synchronously
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "حدث خطأ أثناء الإرسال: $e",
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    },
+                                    contentPadding:
+                                        EdgeInsets.all(12.w), // ✅
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("إلغاء", style: TextStyle(fontSize: 14.sp)),
+                                onPressed: () => Navigator.of(context).pop(),
                               ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: MyColors.themecolor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  "إرسال",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  final comment = commentController.text.trim();
+
+                                  if (selectedRating == 0.0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "من فضلك اختر تقييم قبل الإرسال ⭐",
+                                          style: TextStyle(fontSize: 14.sp),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  try {
+                                    final feedbackService = FeedbackApiService();
+                                    final response = await feedbackService.sendFeedback(
+                                      comment: comment,
+                                      rateValue: selectedRating.toInt(),
+                                    );
+
+                                    if (response.isSuccess) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "تم إرسال تقييمك بنجاح ✅",
+                                            style: TextStyle(fontSize: 14.sp),
+                                          ),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            response.message.isNotEmpty
+                                                ? response.message
+                                                : "فشل في إرسال التقييم",
+                                            style: TextStyle(fontSize: 14.sp),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "حدث خطأ أثناء الإرسال: $e",
+                                          style: TextStyle(fontSize: 14.sp),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         );
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.star, size: 20, color: Colors.grey),
-                          SizedBox(width: 4),
+                          Icon(Icons.star, size: 20.sp, color: Colors.grey), // ✅
+                          SizedBox(width: 4.w), // ✅
                           Text(
                             "Rate",
-                            style: TextStyle(fontSize: 13, color: Colors.grey),
+                            style: TextStyle(fontSize: 13.sp, color: Colors.grey), // ✅
                           ),
                         ],
                       ),
