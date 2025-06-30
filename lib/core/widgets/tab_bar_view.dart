@@ -96,9 +96,7 @@ class _CustomCardState extends State<CustomCard> {
                   ],
         ),
         child: GestureDetector(
-          onTap: () {
-            // Add your tap action here
-          },
+          onTap: () {},
           child: Container(
             padding: const EdgeInsets.all(7),
             child: Row(

@@ -87,6 +87,14 @@ class _ApplyService extends State<ApplyService> {
                           }).toList(),
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    child: ServiceContainer(
+                      icon: Icons.location_on,
+                      title: 'بيانات العنوان',
+                      content: [SizedBox()],
+                    ),
+                  ),
 
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
