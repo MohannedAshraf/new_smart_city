@@ -21,11 +21,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/notification_helper.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Stripe.publishableKey =
-      'pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg'; // ✅ ضيف مفتاح stripe بتاعك هنا
+      'pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg';
   await Stripe.instance.applySettings();
   await NotificationHelper.initialize();
   await Firebase.initializeApp();
@@ -34,7 +36,7 @@ void main() async {
   final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  runApp((CityApp(seenOnboarding: seenOnboarding)));
+  runApp(CityApp(seenOnboarding: seenOnboarding));
 }
 
 class CityApp extends StatelessWidget {
@@ -44,28 +46,36 @@ class CityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('ar'),
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      debugShowCheckedModeBanner: false,
-      home: seenOnboarding ? const StartPage() : const SliderScreen(),
-      theme: ThemeData(
-        hoverColor: Colors.transparent,
-        splashFactory: NoSplash.splashFactory,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
-        scaffoldBackgroundColor: Colors.white,
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(400, 800), // مقاس التصميم الأساسي (زي Pixel 3)
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          locale: const Locale('ar'),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          home: seenOnboarding ? const StartPage() : const SliderScreen(),
+          theme: ThemeData(
+            hoverColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+            scaffoldBackgroundColor: Colors.white,
+          ),
+        );
+      },
     );
   }
 }
+
 
 // كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
