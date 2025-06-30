@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHelper {
   static const String _refreshUrl =
-      'https://cms-central-ffb6acaub5afeecj.uaenorth-01.azurewebsites.net/api/Account/refreshToken';
+      'https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io//api/Account/refreshToken';
 
   static Future<bool> refreshTokenIfNeeded() async {
     final prefs = await SharedPreferences.getInstance();

@@ -1,8 +1,10 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/helper/api_edit_profile.dart';
+import 'package:citio/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,23 +18,34 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController(text: 'mohanned ashraf');
-  final phoneController = TextEditingController(text: '01094605294');
-  final emailController = TextEditingController(
-    text: 'mohanned.ashraf@gmail.com',
-  );
-  final addressController = TextEditingController(
-    text: '20 الزقازيق - الشرقيه',
-  );
-  final buildingController = TextEditingController(text: '15');
-  final floorController = TextEditingController(text: 'الرابع');
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final buildingController = TextEditingController();
+  final floorController = TextEditingController();
 
   File? _imageFile;
+  String? savedImageUrl;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
     _loadImageFromPrefs();
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    final prefs = await SharedPreferences.getInstance();
+    nameController.text = prefs.getString('fullName') ?? '';
+    phoneController.text = prefs.getString('phoneNumber') ?? '';
+    emailController.text = prefs.getString('email') ?? '';
+    addressController.text = prefs.getString('address') ?? '';
+    buildingController.text = prefs.getString('buildingNumber') ?? '';
+    floorController.text = prefs.getString('floorNumber') ?? '';
+    savedImageUrl = prefs.getString('imageUrl');
+    setState(() {});
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -123,18 +136,7 @@ class _EditProfileState extends State<EditProfile> {
         decoration: InputDecoration(
           hintText: hint,
           prefixIcon: Icon(icon),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade400),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade600),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
@@ -158,8 +160,15 @@ class _EditProfileState extends State<EditProfile> {
                     backgroundImage:
                         _imageFile != null
                             ? FileImage(_imageFile!)
-                            : const AssetImage(MyAssetsImage.logo)
-                                as ImageProvider,
+                            : (savedImageUrl != null &&
+                                    savedImageUrl!.isNotEmpty
+                                ? NetworkImage(
+                                  "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
+                                  "${savedImageUrl!.startsWith('/') ? '' : '/'}${savedImageUrl!}",
+                                )
+                                : const NetworkImage(
+                                  'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                                )),
                   ),
                   Positioned(
                     bottom: 0,
@@ -224,24 +233,56 @@ class _EditProfileState extends State<EditProfile> {
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      Navigator.pop(context, true);
-                    }
-                  },
-                  child: const Text(
-                    "حفظ التعديلات",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
+                child:
+                    _isSaving
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() => _isSaving = true);
+
+                              final success =
+                                  await ApiUpdateProfile.updateProfile(
+                                    fullName: nameController.text.trim(),
+                                    email: emailController.text.trim(),
+                                    phoneNumber: phoneController.text.trim(),
+                                    address: addressController.text.trim(),
+                                    buildingNumber:
+                                        buildingController.text.trim(),
+                                    floorNumber: floorController.text.trim(),
+                                    imageFile: _imageFile,
+                                  );
+
+                              setState(() => _isSaving = false);
+
+                              if (success == true) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const Profile(),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('فشل التحديث، حاول مرة أخرى'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: const Text(
+                            "حفظ التعديلات",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
               ),
               const SizedBox(height: 10),
             ],

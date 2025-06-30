@@ -43,6 +43,7 @@ class _LoginPageState extends State<MyloginPage> {
       if (result != null && context.mounted) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', result.token!);
+        print('✅Token ${result.token!}');
         await FCMService().initFCM();
         Navigator.pushReplacement(
           context,
