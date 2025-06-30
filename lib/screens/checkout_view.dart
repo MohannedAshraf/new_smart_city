@@ -6,6 +6,7 @@ import 'package:citio/models/make_order_model.dart';
 import 'package:citio/screens/my_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:citio/helper/api_cash_payment.dart'; // أضفه مع باقي الـ imports
 
 class CheckoutView extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -106,7 +107,11 @@ class _CheckoutViewState extends State<CheckoutView> {
       ),
     );
 
-    await ApiMakeOrder.sendOrder(model);
+    if (selectedPayment == 'cash') {
+      await ApiCashPaymentHelper.sendCashOrder(model);
+    } else {
+      await ApiMakeOrder.sendOrder(model);
+    }
   }
 
   @override
@@ -156,20 +161,31 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   showCardForm = true;
                                 });
                               } else {
-                                await sendOrder();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("✅ تم إرسال الطلب"),
-                                  ),
-                                );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const MyOrdersPage(),
-                                  ),
-                                );
+                                setState(() => isLoading = true);
+                                try {
+                                  await sendOrder();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("✅ تم إرسال الطلب"),
+                                    ),
+                                  );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const MyOrdersPage(),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("❌ فشل إرسال الطلب: $e"),
+                                    ),
+                                  );
+                                }
+                                setState(() => isLoading = false);
                               }
                             },
+
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
