@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 import 'package:citio/helper/api_profile.dart';
+import 'package:citio/main.dart';
 import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/edit_profile.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -47,20 +49,38 @@ class _ProfileState extends State<Profile> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    print("🖼️ imageUrl => ${user?.imageUrl}");
-    print("🖼️ full URL => $baseUrl${user?.imageUrl}");
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomePage()),
+            );
+          },
+        ),
+        backgroundColor: const Color(0xFFF5F5F5),
+        elevation: 0,
+        title: const Text(
+          "الملف الشخصي",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: CircleAvatar(
-                  radius: 55,
+                  radius: 55.r,
                   backgroundImage:
                       (user?.imageUrl != null &&
                               user!.imageUrl!.trim().isNotEmpty)
@@ -73,26 +93,26 @@ class _ProfileState extends State<Profile> {
                           ),
                 ),
               ),
-              const SizedBox(height: 13),
+              SizedBox(height: 13.h),
               Center(
                 child: Column(
                   children: [
                     Text(
                       user?.fullName ?? "بدون اسم",
-                      style: const TextStyle(
-                        fontSize: 26,
+                      style: TextStyle(
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
+                    SizedBox(height: 4.h),
+                    Text(
                       'مستخدم',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _profileItem(
                 icon: Icons.phone,
                 color: Colors.blue,
@@ -127,26 +147,28 @@ class _ProfileState extends State<Profile> {
                 label: 'الدور',
                 value: user?.floorNumber ?? "-",
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.edit, color: Colors.white),
-                  label: const Text(
+                  label: Text(
                     "تعديل البيانات",
-                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    style: TextStyle(color: Colors.white, fontSize: 15.sp),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onPressed: () async {
                     final result = await Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const EditProfile()),
+                      MaterialPageRoute(
+                        builder: (_) => EditProfile(user: user!),
+                      ),
                     );
                     if (result == true) {
                       _loadProfileData();
@@ -154,20 +176,20 @@ class _ProfileState extends State<Profile> {
                   },
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.logout, color: Colors.red),
-                  label: const Text(
+                  label: Text(
                     "تسجيل الخروج",
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.red, fontSize: 14.sp),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
                     side: const BorderSide(color: Colors.red),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onPressed: () => _deleteProfile(context),
@@ -187,31 +209,31 @@ class _ProfileState extends State<Profile> {
     required Color color,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: color.withOpacity(0.1),
             child: Icon(icon, color: color),
           ),
-          const SizedBox(width: 15),
+          SizedBox(width: 15.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: TextStyle(
+                    fontSize: 12.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -224,9 +246,9 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget _divider() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 4),
-      child: Divider(height: 1, color: Colors.grey),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: const Divider(height: 1, color: Colors.grey),
     );
   }
 }
