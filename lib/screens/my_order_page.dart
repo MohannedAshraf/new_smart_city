@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
 import 'package:citio/helper/api_myorder.dart';
+import 'package:citio/main.dart';
 import 'package:citio/models/myorder_model.dart';
 import 'package:citio/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -57,79 +58,97 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('طلباتي', style: TextStyle(color: Colors.black)),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage(initialIndex: 0)),
+          (route) => false,
+        );
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('طلباتي', style: TextStyle(color: Colors.black)),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HomePage(initialIndex: 0),
+                ),
+                (route) => false,
+              );
+            },
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 40,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final isSelected = selectedIndex == index;
-                return GestureDetector(
-                  onTap: () => onCategorySelected(index),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.blue : Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      categories[index],
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
-                        fontSize: 13,
+        body: Column(
+          children: [
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 40,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final isSelected = selectedIndex == index;
+                  return GestureDetector(
+                    onTap: () => onCategorySelected(index),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: isSelected ? Colors.blue : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        categories[index],
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Expanded(
-                child:
-                    filteredOrders.isEmpty
-                        ? const Center(child: Text("لا يوجد طلبات"))
-                        : ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: filteredOrders.length,
-                          itemBuilder: (context, index) {
-                            final order = filteredOrders[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (_) => OrderDetailsView(
-                                          orderId: order.orderId,
-                                          vendorId: order.vendorId,
-                                        ),
-                                  ),
-                                );
-                              },
-                              child: buildOrderCard(order),
-                            );
-                          },
-                        ),
+                  );
+                },
               ),
-        ],
+            ),
+            const SizedBox(height: 12),
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Expanded(
+                  child:
+                      filteredOrders.isEmpty
+                          ? const Center(child: Text("لا يوجد طلبات"))
+                          : ListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: filteredOrders.length,
+                            itemBuilder: (context, index) {
+                              final order = filteredOrders[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (_) => OrderDetailsView(
+                                            orderId: order.orderId,
+                                            vendorId: order.vendorId,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                child: buildOrderCard(order),
+                              );
+                            },
+                          ),
+                ),
+          ],
+        ),
       ),
     );
   }

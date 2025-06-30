@@ -17,7 +17,7 @@ class _NotificationsScreenState extends State<Notifications> {
   final GetNotifications _getNotificationsService = GetNotifications();
   final ScrollController _scrollController = ScrollController();
 
-  List<NotificationModel> _notifications = [];
+  final List<NotificationModel> _notifications = [];
   bool _isLoading = false;
   String? _errorMessage;
   String _selectedFilter = 'الكل';
@@ -140,21 +140,22 @@ class _NotificationsScreenState extends State<Notifications> {
                     await _loadNotifications(reset: true);
                   }
                 },
-                items: ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                items:
+                    ['الكل', 'التحديثات', 'العروض', 'التنبيهات']
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList(),
               ),
             ),
           ),
@@ -224,12 +225,7 @@ class _NotificationsScreenState extends State<Notifications> {
         leading: const BackButton(color: Colors.black),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          _buildHeader(),
-          Expanded(child: _buildBody()),
-        ],
-      ),
+      body: Column(children: [_buildHeader(), Expanded(child: _buildBody())]),
     );
   }
 }

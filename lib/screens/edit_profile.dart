@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/helper/api_edit_profile.dart';
 import 'package:citio/screens/profile.dart';
 import 'package:flutter/material.dart';

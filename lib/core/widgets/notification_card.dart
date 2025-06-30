@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/mycolors.dart';
@@ -62,76 +64,93 @@ class NotificationCard extends StatelessWidget {
         onTapMarkAsRead();
         showDialog(
           context: context,
-          builder: (context) => Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+          builder:
+              (context) => Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: iconBgColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(icon, color: MyColors.themecolor, size: 28),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            notification.title,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: iconBgColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                icon,
+                                color: MyColors.themecolor,
+                                size: 28,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                notification.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      notification.body,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
-                        const SizedBox(width: 6),
+                        const SizedBox(height: 16),
                         Text(
-                          '${notification.createdAt.toLocal().toString().split('.')[0]}',
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                          notification.body,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 16,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              notification.createdAt.toLocal().toString().split(
+                                '.',
+                              )[0],
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton.icon(
+                              onPressed:
+                                  () => Share.share(
+                                    '${notification.title}\n\n${notification.body}',
+                                  ),
+                              icon: const Icon(Icons.share, size: 18),
+                              label: const Text('مشاركة'),
+                            ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('إغلاق'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () => Share.share(
-                            '${notification.title}\n\n${notification.body}',
-                          ),
-                          icon: const Icon(Icons.share, size: 18),
-                          label: const Text('مشاركة'),
-                        ),
-                        const SizedBox(width: 8),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('إغلاق'),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
         );
       },
       child: Card(
