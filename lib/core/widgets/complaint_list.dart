@@ -1,6 +1,6 @@
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅
 import 'package:intl/intl.dart';
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
@@ -43,31 +43,29 @@ class ComplaintList extends StatelessWidget {
   Widget buildTrailingWidget() {
     switch (type) {
       case 'inprogress':
-        return const Row(
+        return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.hourglass_top, size: 20, color: Colors.orange),
-            SizedBox(height: 4),
+            Icon(Icons.hourglass_top, size: 20.sp, color: Colors.orange),
+            SizedBox(width: 4.w),
             Text(
               'قيد المراجعة',
-              style: TextStyle(fontSize: 13, color: Colors.orange),
+              style: TextStyle(fontSize: 13.sp, color: Colors.orange),
             ),
           ],
         );
-
       case 'active':
-        return const Row(
+        return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.pending_actions, size: 20, color: Colors.blue),
-            SizedBox(height: 4),
+            Icon(Icons.pending_actions, size: 20.sp, color: Colors.blue),
+            SizedBox(width: 4.w),
             Text(
-              ' قيد الانتظار',
-              style: TextStyle(fontSize: 13, color: Colors.blue),
+              'قيد الانتظار',
+              style: TextStyle(fontSize: 13.sp, color: Colors.blue),
             ),
           ],
         );
-
       default:
         return const SizedBox();
     }
@@ -76,89 +74,86 @@ class ComplaintList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       itemCount: issues.length,
       itemBuilder: (context, index) {
         final issue = issues[index];
 
         return SizedBox(
-          height: 150, // زودنا شوية عشان الارتفاع
+          height: 150.h,
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: EdgeInsets.symmetric(vertical: 8.h),
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(16), // خففنا البادينج بدل 24
+              padding: EdgeInsets.all(16.w),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child:
-                        issue.image != null
-                            ? Image.network(
-                              _baseUrl + issue.image!,
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                            )
-                            : Image.network(
-                              'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                              width: 80,
-                              height: 80,
-                              fit: BoxFit.cover,
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                            ),
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: issue.image != null
+                        ? Image.network(
+                            _baseUrl + issue.image!,
+                            width: 80.w,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 40.sp),
+                          )
+                        : Image.network(
+                            'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                            width: 80.w,
+                            height: 80.h,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.broken_image, size: 40.sp),
+                          ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           issue.title,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         Text(
                           issue.description ?? '',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 0, 0, 0),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: const Color.fromARGB(255, 0, 0, 0),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const Spacer(), // 🧠 ده المفتاح لمنع الضغط الزايد
+                        const Spacer(),
                         Text(
                           (type == 'inprogress')
                               ? 'تحت المراجعة'
                               : (type == 'active')
-                              ? getTimeAgo(issue.date)
-                              : (issue.date.isNotEmpty ? issue.date : ''),
-                          style: const TextStyle(
-                            fontSize: 14,
+                                  ? getTimeAgo(issue.date)
+                                  : (issue.date.isNotEmpty ? issue.date : ''),
+                          style: TextStyle(
+                            fontSize: 14.sp,
                             color: Colors.grey,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: buildTrailingWidget(),
