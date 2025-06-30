@@ -47,6 +47,8 @@ class _ProfileState extends State<Profile> {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
+    print("🖼️ imageUrl => ${user?.imageUrl}");
+    print("🖼️ full URL => $baseUrl${user?.imageUrl}");
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -59,14 +61,19 @@ class _ProfileState extends State<Profile> {
               Center(
                 child: CircleAvatar(
                   radius: 55,
-                  backgroundImage: NetworkImage(
-                    user?.imageUrl ??
-                        'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                  ),
+                  backgroundImage:
+                      (user?.imageUrl != null &&
+                              user!.imageUrl!.trim().isNotEmpty)
+                          ? NetworkImage(
+                            "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
+                            "${user!.imageUrl!.trim().startsWith('/') ? '' : '/'}${user!.imageUrl!.trim()}",
+                          )
+                          : const NetworkImage(
+                            'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                          ),
                 ),
               ),
               const SizedBox(height: 13),
-
               Center(
                 child: Column(
                   children: [
@@ -86,7 +93,6 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 20),
-
               _profileItem(
                 icon: Icons.phone,
                 color: Colors.blue,
@@ -122,7 +128,6 @@ class _ProfileState extends State<Profile> {
                 value: user?.floorNumber ?? "-",
               ),
               const SizedBox(height: 30),
-
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -138,16 +143,18 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const EditProfile()),
                     );
+                    if (result == true) {
+                      _loadProfileData();
+                    }
                   },
                 ),
               ),
               const SizedBox(height: 10),
-
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(

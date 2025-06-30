@@ -1,7 +1,12 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/models/profile_model.dart';
+
+const String baseUrl =
+    "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io";
 
 class ApiProfileHelper {
   static Future<ProfileModel?> fetchProfile() async {
@@ -10,9 +15,7 @@ class ApiProfileHelper {
 
     if (token == null) throw Exception("التوكن غير موجود");
 
-    final url = Uri.parse(
-      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Account",
-    );
+    final url = Uri.parse("$baseUrl/api/Account");
 
     final response = await http.get(
       url,
