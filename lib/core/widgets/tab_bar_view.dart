@@ -238,8 +238,12 @@ class _CustomCardState extends State<CustomCard> {
                                               context,
                                               MaterialPageRoute(
                                                 builder:
-                                                    (context) =>
-                                                        const ApplyService(),
+                                                    (context) => ApplyService(
+                                                      id:
+                                                          widget
+                                                              .request
+                                                              .serviceId,
+                                                    ),
                                               ),
                                             );
                                           },

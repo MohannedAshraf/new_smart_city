@@ -152,4 +152,25 @@ class MostRequestedServices {
 
     return service;
   }
+
+  Future<List<RequiredFields>> getRequiredFields(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Fields/Required/Service/$id',
+      token: token,
+      // token: token
+    );
+    List<RequiredFields> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(RequiredFields.fromJason(data[i]));
+    }
+    return requestsList;
+  }
 }

@@ -57,3 +57,26 @@ class RequiredFiles {
     );
   }
 }
+
+class RequiredFields {
+  final int id;
+  final String fileName;
+  final String description;
+  final String htmlType;
+
+  RequiredFields({
+    required this.id,
+    required this.fileName,
+    required this.description,
+    required this.htmlType,
+  });
+
+  factory RequiredFields.fromJason(jsonData) {
+    return RequiredFields(
+      id: jsonData['id'],
+      fileName: jsonData['filedName'],
+      description: jsonData['description'],
+      htmlType: jsonData['htmlType'],
+    );
+  }
+}
