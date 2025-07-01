@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, unused_import
+
 import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
 import 'package:file_picker/file_picker.dart';

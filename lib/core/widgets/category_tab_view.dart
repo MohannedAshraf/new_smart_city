@@ -1,7 +1,6 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/vendor_subcategory.dart';
-import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

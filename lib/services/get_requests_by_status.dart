@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/request.dart';
