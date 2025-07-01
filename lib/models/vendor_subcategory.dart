@@ -14,12 +14,14 @@ class VendorSubcategoryProducts {
   final double? price;
   final String? image;
   final String? description;
+  final int id;
 
   VendorSubcategoryProducts({
     required this.name,
     this.price,
     this.image,
     this.description,
+    required this.id,
   });
 
   factory VendorSubcategoryProducts.fromJason(jsonData) {
@@ -31,6 +33,7 @@ class VendorSubcategoryProducts {
               : 0.0,
       image: jsonData['mainImageUrl'],
       description: jsonData['description'],
+      id: jsonData['id'],
     );
   }
 }

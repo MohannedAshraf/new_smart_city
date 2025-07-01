@@ -27,16 +27,32 @@ class _ApplyService extends State<ApplyService> {
   bool isFileUploaded = false;
   bool showUploadError = false;
 
+  late Future<List<RequiredFields>> _fields;
+  late Future<List<RequiredFiles>> _files;
+
+  late Future<List<dynamic>> _combinedFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _combinedFuture = Future.wait([
+      MostRequestedServices().getRequiredFields(widget.id),
+      MostRequestedServices().getRequiredFiles(widget.id),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<RequiredFields>>(
-      future: MostRequestedServices().getRequiredFields(widget.id),
+    return FutureBuilder<List<dynamic>>(
+      future: _combinedFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        }
+        } else if (snapshot.hasData) {
+          final fields = snapshot.data![0] as List<RequiredFields>;
+          final files = snapshot.data![1] as List<RequiredFiles>;
 
-        final fields = snapshot.data!;
+          // final fields = snapshot.data!;
 
         return Scaffold(
           backgroundColor: MyColors.offWhite,
