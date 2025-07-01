@@ -55,8 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -70,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: w * .126,
+                    spacing: 45,
                     children: [
                       const EmergencyButton(
                         color: MyColors.ambulanceShade,
@@ -150,11 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       items: services,
                       destination: const GovernmentServices(),
                       fit: BoxFit.contain,
-                      height: 165.h,
-                      imageHeight: 50.h,
+                      height: 165,
+                      imageHeight: 50,
                       imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
-                      imageWidth: 50.w,
-                      width: 160.w,
+                      imageWidth: 50,
+                      width: 160,
                       maximumlines: 3,
                     );
                   } else {
@@ -173,15 +171,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return BuildProductsBoxes(
                       title: 'المنتجات',
                       items: products,
-                      titlefontSize: 12.sp,
+                      titlefontSize: 12,
                       destination: const ServiceOrderScreen(),
                       fit: BoxFit.cover,
-                      height: 155.h,
+                      height: 155,
                       maximumLines: 3,
-                      imageHeight: 70.h,
+                      imageHeight: 70,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 190.w,
-                      width: 190.w,
+                      imageWidth: 190,
+                      width: 190,
                     );
                   } else {
                     return const SizedBox(
@@ -199,15 +197,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return BuildVendorssBoxes(
                       title: 'البائعين',
                       items: vendors,
-                      titlefontSize: 12.sp,
+                      titlefontSize: 12,
                       destination: const AllVendorsScreen(),
                       fit: BoxFit.cover,
-                      height: 160.h,
+                      height: 160,
                       maximumLines: 3,
-                      imageHeight: 73.h,
+                      imageHeight: 70,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 180.w,
-                      width: 180.w,
+                      imageWidth: 180,
+                      width: 180,
                     );
                   } else {
                     return const SizedBox(
