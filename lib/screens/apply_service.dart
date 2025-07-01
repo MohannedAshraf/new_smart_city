@@ -33,6 +33,14 @@ class _ApplyService extends State<ApplyService> {
   Map<String, TextEditingController> controllers = {};
   TextEditingController birthDateController = TextEditingController();
   Map<int, PlatformFile> uploadedFiles = {};
+  late Future<List<RequiredFields>> fieldsFuture;
+  late Future<List<RequiredFiles>> filesFuture;
+  @override
+  void initState() {
+    super.initState();
+    fieldsFuture = MostRequestedServices().getRequiredFields(widget.id);
+    filesFuture = MostRequestedServices().getRequiredFiles(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class _ApplyService extends State<ApplyService> {
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: Text(
-            widget.title,
+            'لطلب ${widget.title}',
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -57,7 +65,7 @@ class _ApplyService extends State<ApplyService> {
           child: Column(
             children: [
               FutureBuilder<List<RequiredFields>>(
-                future: MostRequestedServices().getRequiredFields(widget.id),
+                future: fieldsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -131,7 +139,7 @@ class _ApplyService extends State<ApplyService> {
                 },
               ),
               FutureBuilder<List<RequiredFiles>>(
-                future: MostRequestedServices().getRequiredFiles(widget.id),
+                future: filesFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -174,41 +182,6 @@ class _ApplyService extends State<ApplyService> {
                     ),
                   );
                 },
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 5,
-                ),
-                child: ServiceContainer(
-                  icon: Icons.file_upload,
-                  title: 'الوثائق المطلوبة',
-                  content: [
-                    CustomUploadBox(
-                      header: 'header',
-                      //title: 'Tap to upload ID document',
-                      //subTitle: 'PDF, JPG, PNG (Max 5MB)',
-                      showError: showUploadError,
-                      onTap: () async {
-                        result = await FilePicker.platform.pickFiles(
-                          allowMultiple: true,
-                        );
-                        if (result == null) {
-                          print("No file selected");
-                        } else {
-                          print("تم تحميل");
-                          setState(() {
-                            isFileUploaded = true;
-                          });
-                          for (var element in result!.files) {
-                            print(element.name);
-                          }
-                        }
-                      },
-                    ),
-                  ],
-                ),
               ),
 
               Row(children: [akcCheckBox()]),
@@ -659,7 +632,7 @@ class _CustomUploadBoxState extends State<CustomUploadBox> {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      widget.file != null ? 'اضغط لرفع الملف' : 'تم تحميل ملف',
+                      widget.file != null ? 'تم تحميل ملف' : 'اضغط لرفع ملف',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
