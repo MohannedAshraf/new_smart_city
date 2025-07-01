@@ -171,15 +171,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return BuildProductsBoxes(
                       title: 'المنتجات',
                       items: products,
-                      titlefontSize: 12,
+                      titlefontSize: 12.sp,
                       destination: const ServiceOrderScreen(),
                       fit: BoxFit.cover,
-                      height: 155,
+                      height: 155.h,
                       maximumLines: 3,
-                      imageHeight: 70,
+                      imageHeight: 70.h,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 190,
-                      width: 190,
+                      imageWidth: 190.w,
+                      width: 190.w,
                     );
                   } else {
                     return const SizedBox(
@@ -197,15 +197,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return BuildVendorssBoxes(
                       title: 'البائعين',
                       items: vendors,
-                      titlefontSize: 12,
+                      titlefontSize: 12.sp,
                       destination: const AllVendorsScreen(),
                       fit: BoxFit.cover,
-                      height: 160,
+                      height: 160.h,
                       maximumLines: 3,
-                      imageHeight: 73,
+                      imageHeight: 73.h,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 180,
-                      width: 180,
+                      imageWidth: 180.w,
+                      width: 180.w,
                     );
                   } else {
                     return const SizedBox(
