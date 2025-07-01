@@ -240,7 +240,7 @@ class _CustomCardState extends State<CustomCard> {
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
                                 child: Text(
                                   widget.request.responseText,
                                   style: TextStyle(
