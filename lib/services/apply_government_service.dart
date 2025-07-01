@@ -15,7 +15,7 @@ class ApplyGovernmentService {
     required List<PlatformFile> files,
   }) async {
     try {
-      final uri = Uri.parse('${Urls.governmentbaseUrl}}/api/Requests/Submit');
+      final uri = Uri.parse('${Urls.governmentbaseUrl}/api/Requests/Submit');
       final req = http.MultipartRequest('POST', uri);
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? token = prefs.getString('token');
