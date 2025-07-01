@@ -7,7 +7,7 @@ class RequestsByStatus {
   Future<List<Request>> getRequestsByStatus({required String status}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
-
+    print(token);
     if (token == null) {
       throw Exception('لم يتم العثور على التوكن!');
     }

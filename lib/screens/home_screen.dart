@@ -148,11 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       items: services,
                       destination: const GovernmentServices(),
                       fit: BoxFit.contain,
-                      height: 165,
-                      imageHeight: 50,
+                      height: 165.h,
+                      imageHeight: 50.h,
                       imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
-                      imageWidth: 50,
-                      width: 160,
+                      imageWidth: 50.w,
+                      width: 160.w,
                       maximumlines: 3,
                     );
                   } else {
