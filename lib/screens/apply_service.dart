@@ -4,6 +4,7 @@ import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/models/most_requested_services.dart';
+import 'package:citio/services/apply_government_service.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ import 'package:dotted_border/dotted_border.dart';
 
 class ApplyService extends StatefulWidget {
   final int id;
-  const ApplyService({super.key, required this.id});
+  final String title;
+  const ApplyService({super.key, required this.id, required this.title});
 
   @override
   _ApplyService createState() => _ApplyService();
@@ -27,39 +29,57 @@ class _ApplyService extends State<ApplyService> {
   bool isButtonPressed = false;
   bool isFileUploaded = false;
   bool showUploadError = false;
+  List<Map<String, dynamic>> serviceData = [];
+  Map<String, TextEditingController> controllers = {};
+  TextEditingController birthDateController = TextEditingController();
+  Map<int, PlatformFile> uploadedFiles = {};
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<RequiredFields>>(
-      future: MostRequestedServices().getRequiredFields(widget.id),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final fields = snapshot.data!;
-
-        return Scaffold(
-          backgroundColor: MyColors.offWhite,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(60.h),
-            child: AppBar(
-              backgroundColor: MyColors.white,
-              surfaceTintColor: MyColors.white,
-              automaticallyImplyLeading: true,
-              title: Text(
-                'لتجديد رخصة القيادة',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-              ),
-              centerTitle: true,
-            ),
+    return Scaffold(
+      backgroundColor: MyColors.offWhite,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.h),
+        child: AppBar(
+          backgroundColor: MyColors.white,
+          surfaceTintColor: MyColors.white,
+          automaticallyImplyLeading: true,
+          title: Text(
+            widget.title,
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Column(
-                children: [
-                  Padding(
+          centerTitle: true,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.h),
+          child: Column(
+            children: [
+              FutureBuilder<List<RequiredFields>>(
+                future: MostRequestedServices().getRequiredFields(widget.id),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('لا توجد بيانات مطلوبة.'));
+                  }
+
+                  final fields = snapshot.data!;
+                  fields.forEach((field) {
+                    controllers.putIfAbsent(
+                      field.fileName,
+                      () => TextEditingController(),
+                    );
+
+                    serviceData.add({
+                      'FieldId': field.id,
+                      'FieldValueString': '',
+                    });
+                  });
+                  return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 5,
@@ -69,131 +89,135 @@ class _ApplyService extends State<ApplyService> {
                       title: 'المعلومات الشخصية',
                       content:
                           fields.map<Widget>((field) {
+                            int index = serviceData.indexWhere(
+                              (item) => item['FieldId'] == field.id,
+                            );
                             if (field.htmlType == 'text') {
                               return CustomTextField(
                                 hintText: field.description,
                                 header: field.fileName,
+                                controller: controllers[field.fileName],
+                                onChanged: (value) {
+                                  serviceData[index]['FieldValueString'] =
+                                      value;
+                                },
                               );
                             } else if (field.htmlType == 'date') {
-                              return DateTextField(header: field.fileName);
+                              return DateTextField(
+                                header: field.fileName,
+                                controller: controllers[field.fileName],
+                                onDateSelected: (value) {
+                                  serviceData[index]['FieldValueString'] =
+                                      value;
+                                },
+                              );
                             } else if (field.htmlType == 'number') {
                               return CustomTextField(
                                 hintText: field.description,
                                 header: field.fileName,
                                 isInt: true,
+                                controller: controllers[field.fileName],
+                                onChanged: (value) {
+                                  serviceData[index]['FieldValueString'] =
+                                      value;
+                                },
                               );
                             } else {
                               return const SizedBox();
                             }
                           }).toList(),
                     ),
-                  ),
-                  Padding(
+                  );
+                },
+              ),
+              FutureBuilder<List<RequiredFiles>>(
+                future: MostRequestedServices().getRequiredFiles(widget.id),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('لا يوجد وثائق مطلوبة.'));
+                  }
+
+                  final files = snapshot.data!;
+
+                  return Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.w,
                       vertical: 5.h,
-                    ),
-                    child: const ServiceContainer(
-                      icon: Icons.location_on,
-                      title: 'بيانات العنوان',
-                      content: [SizedBox()],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 5.h,
-                    ),
-                    child: const ServiceContainer(
-                      icon: Icons.location_on,
-                      title: 'بيانات العنوان',
-                      content: [SizedBox()],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
                     ),
                     child: ServiceContainer(
                       icon: Icons.file_upload,
                       title: 'الوثائق المطلوبة',
-                      content: [
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                        ),
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                        ),
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                          showError: true,
-                          isInt: true,
-                        ),
-                        const DateTextField(header: 'header', showError: true),
-                        const SizedBox(
-                          height: 120,
-                          child: CustomTextField(
-                            header: 'header',
-                            hintText: 'scrollable وطويلة شوية للعنوان',
-                            maxLines: 5,
-                            expands: true,
-                          ),
-                        ),
-                        const CustomDropDown(
-                          showError: true,
-                          header: 'header',
-                          hintText: r'اختر منطقتك/حيك',
-                          items: [
-                            'الحي الأول',
-                            'الحي التالت',
-                            'حي الزهور',
-                            'الحي الجديد',
-                            'الحي الأجدد منه',
-                            'حي مساكن السلام',
-                            'الحي الأخير',
-                          ],
-                        ),
-                        CustomUploadBox(
-                          header: 'header',
-                          title: 'Tap to upload ID document',
-                          subTitle: 'PDF, JPG, PNG (Max 5MB)',
-                          showError: showUploadError,
-                          onTap: () async {
-                            result = await FilePicker.platform.pickFiles(
-                              allowMultiple: true,
-                            );
-                            if (result == null) {
-                              print("No file selected");
-                            } else {
-                              print("تم تحميل");
-                              setState(() {
-                                isFileUploaded = true;
-                              });
-                              for (var element in result!.files) {
-                                print(element.name);
-                              }
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
 
-                  Row(children: [akcCheckBox()]),
-                  SizedBox(height: 13.h),
-                  Row(children: [applyButton()]),
-                ],
+                      content:
+                          files.map<Widget>((file) {
+                            return CustomUploadBox(
+                              file: uploadedFiles[file.id],
+                              //title: 'اضغط للتحميل',
+                              //subTitle: file.fileExtension,
+                              header: file.fileName,
+                              onTap: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
+
+                                if (result != null && result.files.isNotEmpty) {
+                                  setState(() {
+                                    uploadedFiles[file.id] = result.files.first;
+                                  });
+                                }
+                              },
+                            );
+                          }).toList(),
+                    ),
+                  );
+                },
               ),
-            ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 5,
+                ),
+                child: ServiceContainer(
+                  icon: Icons.file_upload,
+                  title: 'الوثائق المطلوبة',
+                  content: [
+                    CustomUploadBox(
+                      header: 'header',
+                      //title: 'Tap to upload ID document',
+                      //subTitle: 'PDF, JPG, PNG (Max 5MB)',
+                      showError: showUploadError,
+                      onTap: () async {
+                        result = await FilePicker.platform.pickFiles(
+                          allowMultiple: true,
+                        );
+                        if (result == null) {
+                          print("No file selected");
+                        } else {
+                          print("تم تحميل");
+                          setState(() {
+                            isFileUploaded = true;
+                          });
+                          for (var element in result!.files) {
+                            print(element.name);
+                          }
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+              Row(children: [akcCheckBox()]),
+              SizedBox(height: 13.h),
+              Row(children: [applyButton()]),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -283,10 +307,17 @@ class _ApplyService extends State<ApplyService> {
                   } else {
                     setState(() {
                       showUploadError = false;
-                      // تابع تنفيذ الإرسال هنا
                     });
                   }
                   ///// hena elpayemnt ba3den lama te3mleh
+                  ///
+                  print(serviceData);
+                  print(uploadedFiles);
+                  ApplyGovernmentService().submit(
+                    serviceId: widget.id,
+                    serviceData: serviceData,
+                    files: uploadedFiles.values.toList(),
+                  );
                 }
               },
               icon: Icon(
@@ -329,6 +360,7 @@ class CustomTextField extends StatelessWidget {
   final bool isInt;
   final int? fixedLength;
   final bool isFloat;
+  final TextEditingController? controller;
 
   const CustomTextField({
     super.key,
@@ -342,6 +374,7 @@ class CustomTextField extends StatelessWidget {
     this.isInt = false,
     this.isFloat = false,
     this.fixedLength,
+    this.controller,
   });
 
   @override
@@ -377,6 +410,7 @@ class CustomTextField extends StatelessWidget {
           child: SizedBox(
             height: 45.h,
             child: TextField(
+              controller: controller,
               textAlignVertical: TextAlignVertical.top,
               onChanged: onChanged,
               minLines: expands ? null : minLines,
@@ -429,10 +463,15 @@ class CustomTextField extends StatelessWidget {
 class DateTextField extends StatefulWidget {
   final String header;
   final bool showError;
+  final TextEditingController? controller;
+  final void Function(String)? onDateSelected;
+
   const DateTextField({
     super.key,
     required this.header,
+    this.controller,
     this.showError = false,
+    this.onDateSelected,
   });
 
   @override
@@ -440,8 +479,6 @@ class DateTextField extends StatefulWidget {
 }
 
 class _DateTextFieldState extends State<DateTextField> {
-  final TextEditingController _controller = TextEditingController();
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -463,12 +500,16 @@ class _DateTextFieldState extends State<DateTextField> {
           child: child!,
         );
       },
-
       locale: const Locale('en', 'US'),
     );
     if (picked != null) {
       setState(() {
-        _controller.text = DateFormat('MM/dd/yy').format(picked);
+        String formattedDate = DateFormat('MM/dd/yy').format(picked);
+        widget.controller!.text = formattedDate;
+
+        if (widget.onDateSelected != null) {
+          widget.onDateSelected!(formattedDate);
+        }
       });
     }
   }
@@ -509,7 +550,7 @@ class _DateTextFieldState extends State<DateTextField> {
           child: SizedBox(
             height: 45.h,
             child: TextField(
-              controller: _controller,
+              controller: widget.controller,
               readOnly: true,
               onTap: () => _selectDate(context),
               decoration: InputDecoration(
@@ -544,133 +585,25 @@ class _DateTextFieldState extends State<DateTextField> {
   }
 }
 
-class CustomDropDown extends StatefulWidget {
-  final String hintText;
-  final List<String> items;
-  final String? selectedValue;
-  final void Function(String?)? onChanged;
+class CustomUploadBox extends StatefulWidget {
   final String header;
   final bool showError;
-
-  const CustomDropDown({
-    super.key,
-    required this.hintText,
-    required this.items,
-    this.selectedValue,
-    this.onChanged,
-    required this.header,
-    this.showError = false,
-  });
-  @override
-  _CustomDropDownState createState() => _CustomDropDownState();
-}
-
-class _CustomDropDownState extends State<CustomDropDown> {
-  String? _selectedValue;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 0.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.showError)
-                    Text(
-                      ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  Text(
-                    widget.header,
-                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
-          child: DropdownButtonFormField<String>(
-            menuMaxHeight: 250.h,
-            borderRadius: BorderRadius.circular(15.r),
-            focusColor: MyColors.fadedGrey,
-
-            iconEnabledColor: MyColors.white,
-            isExpanded: true,
-            dropdownColor: MyColors.white,
-            value: widget.selectedValue,
-            // onChanged: widget.onChanged,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
-              hintText: widget.hintText,
-              hintStyle: TextStyle(color: MyColors.black, fontSize: 12.sp),
-              suffixIcon: const Icon(Icons.arrow_drop_down),
-              fillColor: MyColors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: BorderSide(
-                  color: widget.showError ? Colors.red : MyColors.gray,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: BorderSide(
-                  color: widget.showError ? Colors.red : MyColors.dodgerBlue,
-                ),
-              ),
-            ),
-            // icon: const Icon(Icons.keyboard_arrow_down),
-            items:
-                widget.items.map((item) {
-                  return DropdownMenuItem(
-                    value: item,
-                    enabled: true,
-                    child: Text(item),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              setState(() {
-                _selectedValue = value;
-              });
-              widget.onChanged; //الفانكشن التانية يا لولوووو
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class CustomUploadBox extends StatelessWidget {
-  final String title;
-  final String subTitle;
+  final PlatformFile? file;
   final VoidCallback? onTap;
-  final bool showError;
-  final String header;
 
   const CustomUploadBox({
     super.key,
-    required this.title,
-    required this.subTitle,
     required this.header,
     this.showError = false,
+    this.file,
     this.onTap,
   });
 
+  @override
+  State<CustomUploadBox> createState() => _CustomUploadBoxState();
+}
+
+class _CustomUploadBoxState extends State<CustomUploadBox> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -681,7 +614,7 @@ class CustomUploadBox extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (showError)
+              if (widget.showError)
                 Text(
                   ' *',
                   style: TextStyle(
@@ -692,7 +625,7 @@ class CustomUploadBox extends StatelessWidget {
                 ),
               Expanded(
                 child: Text(
-                  header,
+                  widget.header,
                   style: TextStyle(fontSize: 14.sp, color: MyColors.black),
                 ),
               ),
@@ -708,7 +641,7 @@ class CustomUploadBox extends StatelessWidget {
             radius: Radius.circular(15.r),
             dashPattern: const [6, 4],
             child: GestureDetector(
-              onTap: onTap,
+              onTap: widget.onTap,
               child: Container(
                 height: 120.h,
                 width: double.infinity,
@@ -717,13 +650,16 @@ class CustomUploadBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.cloud_upload_outlined,
-                      color: MyColors.grey,
+                      widget.file != null
+                          ? Icons.picture_as_pdf
+                          : Icons.cloud_upload_outlined,
+                      color:
+                          widget.file != null ? MyColors.grey : MyColors.black,
                       size: 36.sp,
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      title,
+                      widget.file != null ? 'اضغط لرفع الملف' : 'تم تحميل ملف',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
@@ -731,7 +667,9 @@ class CustomUploadBox extends StatelessWidget {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      subTitle,
+                      widget.file != null
+                          ? widget.file!.name
+                          : 'لم يتم اختيار ملف',
                       style: TextStyle(fontSize: 12.sp, color: MyColors.grey),
                     ),
                   ],

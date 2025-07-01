@@ -340,7 +340,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ApplyService(id: service.id),
+                          builder:
+                              (context) => ApplyService(
+                                id: service.id,
+                                title: service.serviceName,
+                              ),
                         ),
                       );
                     },

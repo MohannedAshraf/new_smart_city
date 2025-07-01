@@ -1,44 +1,63 @@
-import 'package:citio/helper/api.dart';
-import 'package:citio/models/submitted_service_request.dart';
+import 'dart:convert';
+
+import 'package:citio/core/utils/variables.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApplyGovernmentService {
-  Future<SubmittedService> AddRequest({
-    required String title,
-    required String price,
-    required String desc,
-    required String image,
-    required String category,
+  Future<dynamic> submit({
+    required int serviceId,
+    required List<Map<String, dynamic>>
+    serviceData, // مثال: [{'FieldId': 1, 'FieldValueString': 'Fathi'}]
+    required List<PlatformFile> files,
   }) async {
-    Map<String, dynamic> data = await Api().post(
-      url: 'https://fakestoreapi.com/products',
-      body: {
-        'title': title,
-        'price': price,
-        'description': desc,
-        'image': image,
-        'category': category,
-      },
-    );
-    return SubmittedService.fromJson(data);
-  }
+    try {
+      final uri = Uri.parse('${Urls.governmentbaseUrl}}/api/Requests/Submit');
+      final req = http.MultipartRequest('POST', uri);
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? token = prefs.getString('token');
 
-  Future<SubmittedService> UpdateRequest({
-    required String title,
-    required String price,
-    required String desc,
-    required String image,
-    required String category,
-  }) async {
-    Map<String, dynamic> data = await Api().post(
-      url: 'https://fakestoreapi.com/products',
-      body: {
-        'title': title,
-        'price': price,
-        'description': desc,
-        'image': image,
-        'category': category,
-      },
-    );
-    return SubmittedService.fromJson(data);
+      if (token == null) {
+        throw Exception('لم يتم العثور على التوكن!');
+      }
+      req.headers['Authorization'] = 'Bearer $token';
+
+      // 2. أضف الحقول النصية (ServiceId و ServiceData)
+      req.fields['ServiceId'] = serviceId.toString();
+
+      for (int i = 0; i < serviceData.length; i++) {
+        req.fields['ServiceData[$i].FieldId'] =
+            serviceData[i]['FieldId'].toString();
+        req.fields['ServiceData[$i].FieldValueString'] =
+            serviceData[i]['FieldValueString'];
+      }
+
+      // 3. أضف الملفات
+      for (var file in files) {
+        final multipartFile = await http.MultipartFile.fromPath(
+          'files',
+          file.path!,
+          filename: file.name,
+          contentType: MediaType('application', 'octet-stream'),
+        );
+        req.files.add(multipartFile);
+      }
+
+      // 4. إرسال الريكوست
+      final streamedResponse = await req.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data; // رجع البيانات
+      } else {
+        throw Exception('Error ${response.statusCode}: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Request failed: $e');
+    }
   }
 }
