@@ -416,26 +416,42 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
 
           final products = snapshot.data!;
 
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 0.7,
-            ),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ProductCard(
-                productId: product.id,
-                image: ProductService.baseUrl + product.mainImageUrl,
-                price: '${product.price.toStringAsFixed(0)} LE',
-                rating: (product.requestCount / 5).clamp(0, 5).toDouble(),
-                description: product.description,
-                productName: product.nameEn,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              // ✅ نحدد عدد الأعمدة بناءً على العرض
+              int crossAxisCount;
+              double width = constraints.maxWidth;
+
+              if (width >= 900) {
+                crossAxisCount = 4; // large tablet
+              } else if (width >= 600) {
+                crossAxisCount = 3; // small tablet
+              } else {
+                crossAxisCount = 2; // phone
+              }
+
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 10.w,
+                  mainAxisSpacing: 10.h,
+                  childAspectRatio: 0.58,
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(
+                    productId: product.id,
+                    image: ProductService.baseUrl + product.mainImageUrl,
+                    price: '${product.price.toStringAsFixed(0)} LE',
+                    rating: (product.requestCount / 5).clamp(0, 5).toDouble(),
+                    description: product.description,
+                    productName: product.nameEn,
+                  );
+                },
               );
             },
           );

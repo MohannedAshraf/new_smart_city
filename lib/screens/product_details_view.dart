@@ -174,9 +174,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
                 /// ✅ عدد المنتجات + زر الإضافة
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    /// ✅ Custom Item Counter
+                    /// ✅ العداد
                     Row(
                       children: [
                         Container(
@@ -233,9 +232,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       ],
                     ),
 
-                    /// ✅ زر Add to Cart بحالة متغيرة
-                    SizedBox(
-                      width: 250.w,
+                    /// ✅ زر Add to Cart بياخد المساحة الباقية تلقائيًا
+                    const Spacer(),
+                    Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
@@ -251,7 +250,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: buttonColor,
                           padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
+                            horizontal: 10.w,
                             vertical: 14.h,
                           ),
                           shape: RoundedRectangleBorder(

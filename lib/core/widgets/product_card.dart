@@ -54,7 +54,7 @@ class ProductCard extends StatelessWidget {
             children: [
               SizedBox(
                 width: 182,
-                height: 130,
+                height: 150,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.r),
@@ -72,7 +72,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 5.h),
+              SizedBox(height: 2.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.0.h),
                 child: Text(

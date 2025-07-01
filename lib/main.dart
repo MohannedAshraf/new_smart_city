@@ -7,6 +7,7 @@ import 'package:citio/screens/mylogin_page.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:citio/screens/social_media.dart';
 import 'package:citio/screens/welcome-page.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,17 +27,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Stripe.publishableKey =
-      'pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg';
+  Stripe.publishableKey = 'your_key';
   await Stripe.instance.applySettings();
   await NotificationHelper.initialize();
   await Firebase.initializeApp();
   await FCMService().initFCM();
+
   final prefs = await SharedPreferences.getInstance();
   final seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  runApp(CityApp(seenOnboarding: seenOnboarding));
+  runApp(
+    DevicePreview(
+      enabled: false, // شغل المعاينة على VS Code فقط
+      builder: (context) => CityApp(seenOnboarding: seenOnboarding),
+    ),
+  );
 }
 
 class CityApp extends StatelessWidget {
@@ -215,8 +221,8 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.online_prediction),
-              title: const Text('لطلب الخدمات'),
+              leading: const Icon(Icons.view_compact_sharp),
+              title: const Text('الخدمات'),
               onTap: () {
                 setState(() {
                   currentIndex = 3;
@@ -326,9 +332,9 @@ class HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              currentIndex == 3 ? Icons.help : Icons.help_outline_outlined,
+              currentIndex == 3 ? Icons.view_compact_alt : Icons.view_compact_sharp,
             ),
-            label: 'لطلب خدمات',
+            label: 'الخدمات ',
           ),
         ],
       ),
