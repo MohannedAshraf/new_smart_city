@@ -49,6 +49,7 @@ class ApplyGovernmentService {
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
+        print('successfly');
         final data = jsonDecode(response.body);
         return data;
       } else {

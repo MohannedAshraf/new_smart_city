@@ -112,8 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Container(
-                              width: 40,
-                              height: 40,
+                              width: 37,
+                              height: 37,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyColors.buttonGreenShade,
@@ -124,10 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 7),
                           const Text(
                             'أضف شكوى',
-                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            style: TextStyle(fontSize: 11, color: Colors.black),
                           ),
                         ],
                       ),
