@@ -27,165 +27,150 @@ class _ApplyService extends State<ApplyService> {
   bool isFileUploaded = false;
   bool showUploadError = false;
 
+  late Future<List<RequiredFields>> _fields;
+  late Future<List<RequiredFiles>> _files;
+
+  late Future<List<dynamic>> _combinedFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _combinedFuture = Future.wait([
+      MostRequestedServices().getRequiredFields(widget.id),
+      MostRequestedServices().getRequiredFiles(widget.id),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<RequiredFields>>(
-      future: MostRequestedServices().getRequiredFields(widget.id),
+    return FutureBuilder<List<dynamic>>(
+      future: _combinedFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        }
+        } else if (snapshot.hasData) {
+          final fields = snapshot.data![0] as List<RequiredFields>;
+          final files = snapshot.data![1] as List<RequiredFiles>;
 
-        final fields = snapshot.data!;
+          // final fields = snapshot.data!;
 
-        return Scaffold(
-          backgroundColor: MyColors.offWhite,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(60),
-            child: AppBar(
-              backgroundColor: MyColors.white,
-              surfaceTintColor: MyColors.white,
-              automaticallyImplyLeading: true,
-              title: const Text(
-                'لتجديد رخصة القيادة',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          return Scaffold(
+            backgroundColor: MyColors.offWhite,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(60),
+              child: AppBar(
+                backgroundColor: MyColors.white,
+                surfaceTintColor: MyColors.white,
+                automaticallyImplyLeading: true,
+                title: const Text(
+                  'لتجديد رخصة القيادة',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                centerTitle: true,
               ),
-              centerTitle: true,
             ),
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
-                    ),
-                    child: ServiceContainer(
-                      icon: Icons.person,
-                      title: 'المعلومات الشخصية',
-                      content:
-                          fields.map<Widget>((field) {
-                            if (field.htmlType == 'text') {
-                              return CustomTextField(
-                                hintText: field.description,
-                                header: field.fileName,
-                              );
-                            } else if (field.htmlType == 'date') {
-                              return DateTextField(header: field.fileName);
-                            } else if (field.htmlType == 'number') {
-                              return CustomTextField(
-                                hintText: field.description,
-                                header: field.fileName,
-                                isInt: true,
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          }).toList(),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: ServiceContainer(
-                      icon: Icons.location_on,
-                      title: 'بيانات العنوان',
-                      content: [SizedBox()],
-                    ),
-                  ),
-
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: ServiceContainer(
-                      icon: Icons.location_on,
-                      title: 'بيانات العنوان',
-                      content: [SizedBox()],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
-                    ),
-                    child: ServiceContainer(
-                      icon: Icons.file_upload,
-                      title: 'الوثائق المطلوبة',
-                      content: [
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                        ),
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                        ),
-                        const CustomTextField(
-                          hintText: 'labelText',
-                          header: 'header',
-                          showError: true,
-                          isInt: true,
-                        ),
-                        const DateTextField(header: 'header', showError: true),
-                        const SizedBox(
-                          height: 120,
-                          child: CustomTextField(
-                            header: 'header',
-                            hintText: 'scrollable وطويلة شوية للعنوان',
-                            maxLines: 5,
-                            expands: true,
-                          ),
-                        ),
-                        const CustomDropDown(
-                          showError: true,
-                          header: 'header',
-                          hintText: r'اختر منطقتك/حيك',
-                          items: [
-                            'الحي الأول',
-                            'الحي التالت',
-                            'حي الزهور',
-                            'الحي الجديد',
-                            'الحي الأجدد منه',
-                            'حي مساكن السلام',
-                            'الحي الأخير',
-                          ],
-                        ),
-                        CustomUploadBox(
-                          header: 'header',
-                          title: 'Tap to upload ID document',
-                          subTitle: 'PDF, JPG, PNG (Max 5MB)',
-                          showError: showUploadError,
-                          onTap: () async {
-                            result = await FilePicker.platform.pickFiles(
-                              allowMultiple: true,
-                            );
-                            if (result == null) {
-                              print("No file selected");
-                            } else {
-                              print("تم تحميل");
-                              setState(() {
-                                isFileUploaded = true;
-                              });
-                              for (var element in result!.files) {
-                                print(element.name);
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
+                      ),
+                      child: ServiceContainer(
+                        icon: Icons.person,
+                        title: 'المعلومات الشخصية',
+                        content:
+                            fields.map<Widget>((field) {
+                              if (field.htmlType == 'text') {
+                                return CustomTextField(
+                                  hintText: field.description,
+                                  header: field.fileName,
+                                );
+                              } else if (field.htmlType == 'date') {
+                                return DateTextField(header: field.fileName);
+                              } else if (field.htmlType == 'number') {
+                                return CustomTextField(
+                                  hintText: field.description,
+                                  header: field.fileName,
+                                  isInt: true,
+                                );
+                              } else {
+                                return const SizedBox();
                               }
-                            }
-                          },
-                        ),
-                      ],
+                            }).toList(),
+                      ),
                     ),
-                  ),
 
-                  Row(children: [akcCheckBox()]),
-                  const SizedBox(height: 13),
-                  Row(children: [applyButton()]),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
+                      ),
+                      child: ServiceContainer(
+                        icon: Icons.file_upload,
+                        title: 'الوثائق المطلوبة',
+                        content:
+                            files.map<Widget>((file) {
+                              return CustomUploadBox(
+                                header: file.fileName,
+                                title: 'اضغط للتحميل',
+                                subTitle: file.fileExtension,
+                              );
+                            }).toList(),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
+                      ),
+                      child: ServiceContainer(
+                        icon: Icons.file_upload,
+                        title: 'الوثائق المطلوبة',
+                        content: [
+                          CustomUploadBox(
+                            header: 'header',
+                            title: 'Tap to upload ID document',
+                            subTitle: 'PDF, JPG, PNG (Max 5MB)',
+                            showError: showUploadError,
+                            onTap: () async {
+                              result = await FilePicker.platform.pickFiles(
+                                allowMultiple: true,
+                              );
+                              if (result == null) {
+                                print("No file selected");
+                              } else {
+                                print("تم تحميل");
+                                setState(() {
+                                  isFileUploaded = true;
+                                });
+                                for (var element in result!.files) {
+                                  print(element.name);
+                                }
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Row(children: [akcCheckBox()]),
+                    const SizedBox(height: 13),
+                    Row(children: [applyButton()]),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        } else {
+          return Scaffold(
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
       },
     );
   }
