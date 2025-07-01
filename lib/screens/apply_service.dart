@@ -184,41 +184,6 @@ class _ApplyService extends State<ApplyService> {
                 },
               ),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 5,
-                ),
-                child: ServiceContainer(
-                  icon: Icons.file_upload,
-                  title: 'الوثائق المطلوبة',
-                  content: [
-                    CustomUploadBox(
-                      header: 'header',
-                      //title: 'Tap to upload ID document',
-                      //subTitle: 'PDF, JPG, PNG (Max 5MB)',
-                      showError: showUploadError,
-                      onTap: () async {
-                        result = await FilePicker.platform.pickFiles(
-                          allowMultiple: true,
-                        );
-                        if (result == null) {
-                          print("No file selected");
-                        } else {
-                          print("تم تحميل");
-                          setState(() {
-                            isFileUploaded = true;
-                          });
-                          for (var element in result!.files) {
-                            print(element.name);
-                          }
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
               Row(children: [akcCheckBox()]),
               SizedBox(height: 13.h),
               Row(children: [applyButton()]),
