@@ -55,6 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 45,
+                    spacing: w * .126,
                     children: [
                       const EmergencyButton(
                         color: MyColors.ambulanceShade,

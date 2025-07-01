@@ -51,7 +51,7 @@ class CategoryTabView extends StatelessWidget {
   Center emptyCategory() {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // علشان تتوسّط الشاشة
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
@@ -60,10 +60,10 @@ class CategoryTabView extends StatelessWidget {
             child: Icon(
               Icons.inventory,
               color: MyColors.fadedGrey,
-              size: 40.sp, // خليه أكبر شوية
+              size: 40.sp,
             ),
           ),
-          SizedBox(height: 20.h), // مسافة بين الصورة والنص
+          SizedBox(height: 20.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(

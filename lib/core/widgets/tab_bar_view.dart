@@ -62,7 +62,7 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
   Center emptyCategory() {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // علشان تتوسّط الشاشة
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
@@ -71,10 +71,10 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
             child: Icon(
               Icons.inventory,
               color: MyColors.fadedGrey,
-              size: 40.sp, // خليه أكبر شوية
+              size: 40.sp,
             ),
           ),
-          SizedBox(height: 20.h), // مسافة بين الصورة والنص
+          SizedBox(height: 20.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
@@ -117,12 +117,12 @@ class _CustomCardState extends State<CustomCard> {
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
-        margin: EdgeInsets.fromLTRB(15.w, 10.h, 15.w, 10.h),
+        margin: EdgeInsets.fromLTRB(15, 10, 15, 10),
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(15),
           boxShadow:
               isHovered
                   ? [
@@ -145,7 +145,7 @@ class _CustomCardState extends State<CustomCard> {
         child: GestureDetector(
           onTap: () {},
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+            padding: EdgeInsets.symmetric(horizontal: 7, vertical: 7),
             child: Row(
               children: [
                 // Icon Section
@@ -153,7 +153,7 @@ class _CustomCardState extends State<CustomCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10.h, 25.w),
+                      padding: EdgeInsets.fromLTRB(0, 0, 10, 25),
                       child: Container(
                         decoration: BoxDecoration(
                           color:
@@ -161,10 +161,10 @@ class _CustomCardState extends State<CustomCard> {
                                   .request
                                   .requestStatus]?['color'] ??
                               MyColors.gray,
-                          borderRadius: BorderRadius.circular(15.r),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        width: 50.w,
-                        height: 50.h,
+                        width: 50,
+                        height: 50,
                         child: Center(
                           child: Icon(
                             Styles.requestsStyle[widget
@@ -185,12 +185,12 @@ class _CustomCardState extends State<CustomCard> {
                 ),
 
                 // Spacer
-                SizedBox(width: 10.w),
+                SizedBox(width: 10),
 
                 // Text Content
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(4.w, 2.h, 15.w, 2.h),
+                    padding: EdgeInsets.fromLTRB(4, 2, 15, 2),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -210,7 +210,7 @@ class _CustomCardState extends State<CustomCard> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                              margin: EdgeInsets.fromLTRB(6, 0, 6, 5),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 12.w,
                                 vertical: 8.h,
@@ -238,17 +238,20 @@ class _CustomCardState extends State<CustomCard> {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0),
-                              child: Text(
-                                widget.request.responseText,
-                                style: TextStyle(
-                                  color:
-                                      Styles.requestsStyle[widget
-                                          .request
-                                          .requestStatus]?['fontColor'] ??
-                                      MyColors.black,
-                                  fontSize: 14,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                                child: Text(
+                                  widget.request.responseText,
+                                  style: TextStyle(
+                                    color:
+                                        Styles.requestsStyle[widget
+                                            .request
+                                            .requestStatus]?['fontColor'] ??
+                                        MyColors.black,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 3,
                                 ),
                               ),
                             ),
