@@ -101,34 +101,21 @@ class _CartViewState extends State<CartView> {
         centerTitle: true,
         title: Text(
           "العربة ",
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height * 0.025,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.025,
-          bottom: MediaQuery.of(context).size.height * 0.015,
-          right: MediaQuery.of(context).size.width * 0.03,
-        ),
+        padding: EdgeInsets.only(left: 10.0.w, bottom: 12.h, right: 12.w),
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 5.0.w,
-            vertical: MediaQuery.of(context).size.height * 0.0125,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "قائمة التسوق ",
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.025,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+              SizedBox(height: 10.h),
 
               ...items.map((item) {
                 return OrderCard(
@@ -151,14 +138,11 @@ class _CartViewState extends State<CartView> {
                 );
               }),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+              SizedBox(height: 20.h),
 
               // ✅ خانة كود الخصم
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.025,
-                  vertical: MediaQuery.of(context).size.height * 0.015,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
                 decoration: BoxDecoration(
                   color: MyAppColors.background,
                   borderRadius: BorderRadius.circular(10),
@@ -184,55 +168,39 @@ class _CartViewState extends State<CartView> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.04,
-                          vertical: MediaQuery.of(context).size.height * 0.015,
+                          horizontal: 16.w,
+                          vertical: 12.h,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            MediaQuery.of(context).size.width * 0.02,
-                          ),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
                       child: Text(
                         'تفعيل',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: MediaQuery.of(context).size.height * 0.025,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 20.sp),
                       ),
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.025),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: TextField(
                         controller: discountController,
                         decoration: InputDecoration(
                           hintText: 'ادخل كود الخصم',
-                          hintStyle: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.0175,
-                          ),
+                          hintStyle: TextStyle(fontSize: 14.sp),
                           contentPadding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.03,
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.0125,
+                            horizontal: 12.w,
+                            vertical: 10.h,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.02,
-                            ),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.02,
-                            ),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.02,
-                            ),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: const BorderSide(
                               color: Colors.blueAccent,
                             ),
@@ -244,19 +212,14 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+              SizedBox(height: 20.h),
 
               // ✅ الملخص
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.025,
-                  vertical: MediaQuery.of(context).size.height * 0.0125,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   color: MyAppColors.background,
-                  borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.025,
-                  ),
+                  borderRadius: BorderRadius.circular(10.r),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
@@ -280,16 +243,13 @@ class _CartViewState extends State<CartView> {
                         Text(
                           "ملخص  الطلب",
                           style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.01875,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0075,
-                    ),
+                    SizedBox(height: 6.h),
                     Row(
                       children: [
                         const Text("المجموع الفرعي "),
@@ -301,15 +261,11 @@ class _CartViewState extends State<CartView> {
                     const Row(
                       children: [Text("الضريبة"), Spacer(), Text("LE 3.00")],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0075,
-                    ),
+                    SizedBox(height: 6.h),
                     const Row(
                       children: [Text("التوصيل"), Spacer(), Text("LE 2.00")],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0075,
-                    ),
+                    SizedBox(height: 6.h),
                     if (discountValue > 0)
                       Row(
                         children: [
@@ -325,8 +281,7 @@ class _CartViewState extends State<CartView> {
                           "المجموع  ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
+                            fontSize: 20.sp,
                           ),
                         ),
                         const Spacer(),
@@ -334,8 +289,7 @@ class _CartViewState extends State<CartView> {
                           "LE ${total.toStringAsFixed(2)}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.025,
+                            fontSize: 20.sp,
                           ),
                         ),
                       ],
@@ -344,17 +298,15 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03125),
+              SizedBox(height: 25.h),
 
               // ✅ زر Checkout
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.06875,
+                height: 55.h,
                 decoration: BoxDecoration(
                   color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.width * 0.01,
-                  ),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: TextButton(
                   onPressed: () {
@@ -369,7 +321,7 @@ class _CartViewState extends State<CartView> {
                   child: Text(
                     "الدفع",
                     style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.03125,
+                      fontSize: 25.sp,
                       fontWeight: FontWeight.bold,
                       color: MyAppColors.background,
                     ),
@@ -377,7 +329,7 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+              SizedBox(height: 20.h),
             ],
           ),
         ),

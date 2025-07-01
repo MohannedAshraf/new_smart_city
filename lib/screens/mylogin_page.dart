@@ -64,9 +64,7 @@ class _LoginPageState extends State<MyloginPage> {
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(
-        MediaQuery.of(context).size.width * 0.03,
-      ),
+      borderRadius: BorderRadius.circular(12.r),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
   }
@@ -79,9 +77,7 @@ class _LoginPageState extends State<MyloginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.03,
-            ),
+            padding: EdgeInsets.symmetric(vertical: 24.h),
             child: Form(
               key: _formKey,
               autovalidateMode:
@@ -93,30 +89,22 @@ class _LoginPageState extends State<MyloginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset(
-                      "assets/icon/citio.svg",
-                      height: MediaQuery.of(context).size.height * 0.0250,
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    SvgPicture.asset("assets/icon/citio.svg", height: 120.h),
+                    SizedBox(height: 16.h),
                     Text(
                       "مرحباً بعودتك",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.blueAccent,
                       ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    SizedBox(height: 8.h),
                     Text(
                       "سجّل الدخول لإدارة خدمات المدينة",
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.02,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                    SizedBox(height: 24.h),
 
                     // Email
                     TextFormField(
@@ -135,9 +123,7 @@ class _LoginPageState extends State<MyloginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    SizedBox(height: 16.h),
 
                     // Password
                     TextFormField(
@@ -173,7 +159,7 @@ class _LoginPageState extends State<MyloginPage> {
                         return null;
                       },
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    SizedBox(height: 8.h),
 
                     // Forgot password
                     Align(
@@ -197,7 +183,7 @@ class _LoginPageState extends State<MyloginPage> {
                       ),
                     ),
 
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    SizedBox(height: 8.h),
 
                     // Login Button
                     SizedBox(
@@ -205,29 +191,22 @@ class _LoginPageState extends State<MyloginPage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.025,
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.03,
-                            ),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
                         onPressed: () => loginUser(context),
                         child: Text(
                           _isLoading ? "جاري التحقق..." : "تسجيل الدخول",
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.02,
+                            fontSize: 16.sp,
                             color: Colors.white,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    SizedBox(height: 16.h),
 
                     // Register Option
                     Row(
@@ -235,9 +214,7 @@ class _LoginPageState extends State<MyloginPage> {
                       children: [
                         Text(
                           "ليس لديك حساب؟",
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.02,
-                          ),
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                         TextButton(
                           onPressed: () {
@@ -251,8 +228,7 @@ class _LoginPageState extends State<MyloginPage> {
                           child: Text(
                             "افتح حساب",
                             style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.height * 0.01875,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.blueAccent,
                             ),
@@ -261,16 +237,11 @@ class _LoginPageState extends State<MyloginPage> {
                       ],
                     ),
 
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.015,
-                    ),
+                    SizedBox(height: 12.h),
                     Text(
                       " Powered by Citio\n version 2.1.0",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: MediaQuery.of(context).size.height * 0.01875,
-                      ),
+                      style: TextStyle(color: Colors.grey, fontSize: 15.sp),
                     ),
                   ],
                 ),

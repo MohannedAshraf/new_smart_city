@@ -7,6 +7,7 @@ import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
@@ -144,9 +145,7 @@ class _EditProfileState extends State<EditProfile> {
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * 0.01,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
@@ -157,22 +156,15 @@ class _EditProfileState extends State<EditProfile> {
             return 'برجاء إدخال بريد إلكتروني صحيح';
           return null;
         },
-        style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.0175),
+        style: TextStyle(fontSize: 14.sp),
         decoration: InputDecoration(
           hintText: hint,
-          prefixIcon: Icon(
-            icon,
-            size: MediaQuery.of(context).size.height * 0.025,
-          ),
+          prefixIcon: Icon(icon, size: 20.sp),
           contentPadding: EdgeInsets.symmetric(
-            vertical: MediaQuery.of(context).size.height * 0.015,
-            horizontal: MediaQuery.of(context).size.width * 0.04,
+            vertical: 12.h,
+            horizontal: 16.w,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.03,
-            ),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
         ),
       ),
     );
@@ -185,18 +177,16 @@ class _EditProfileState extends State<EditProfile> {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.05,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+                SizedBox(height: 20.h),
                 Stack(
                   children: [
                     CircleAvatar(
-                      radius: MediaQuery.of(context).size.width * 0.15,
+                      radius: 60.r,
                       backgroundImage:
                           _imageFile != null
                               ? FileImage(_imageFile!)
@@ -212,15 +202,15 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     Positioned(
                       bottom: 0,
-                      right: MediaQuery.of(context).size.width * 0.01,
+                      right: 4.w,
                       child: GestureDetector(
                         onTap: _showImageSourcePicker,
                         child: CircleAvatar(
-                          radius: MediaQuery.of(context).size.width * 0.04,
+                          radius: 16.r,
                           backgroundColor: Colors.green,
                           child: Icon(
                             Icons.camera_alt,
-                            size: MediaQuery.of(context).size.height * 0.02,
+                            size: 16.sp,
                             color: Colors.white,
                           ),
                         ),
@@ -238,7 +228,7 @@ class _EditProfileState extends State<EditProfile> {
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+                SizedBox(height: 16.h),
                 _buildFormField(
                   hint: "الإسم",
                   icon: Icons.person,
@@ -270,7 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                         controller: buildingController,
                       ),
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.025),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: _buildFormField(
                         hint: "الدور",
@@ -280,19 +270,15 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+                SizedBox(height: 20.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
-                      padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.025,
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.03,
-                        ),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
                     onPressed:
@@ -342,9 +328,8 @@ class _EditProfileState extends State<EditProfile> {
                     child:
                         _isSaving
                             ? SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0250,
-                              width: MediaQuery.of(context).size.width * 0.05,
+                              height: 20.h,
+                              width: 20.w,
                               child: const CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 2,
@@ -354,13 +339,12 @@ class _EditProfileState extends State<EditProfile> {
                               "حفظ التعديلات",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.02,
+                                fontSize: 16.sp,
                               ),
                             ),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                SizedBox(height: 10.h),
               ],
             ),
           ),

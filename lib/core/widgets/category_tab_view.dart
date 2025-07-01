@@ -1,6 +1,7 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/vendor_subcategory.dart';
+import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,26 +29,26 @@ class CategoryTabView extends StatelessWidget {
           if (snapshot.data!.isNotEmpty) {
             List<VendorSubcategoryProducts> products = snapshot.data!;
             return ListView.builder(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+              padding: EdgeInsets.all(8.r),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 8.0.h),
-                  child: productCard(context, products, index),
+                  child: productCard(products, index),
                 );
               },
             );
           } else {
-            return emptyCategory(context);
+            return emptyCategory();
           }
         } else {
-          return emptyCategory(context);
+          return emptyCategory();
         }
       },
     );
   }
 
-  Center emptyCategory(BuildContext context) {
+  Center emptyCategory() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -55,40 +56,28 @@ class CategoryTabView extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: MyColors.white,
-            radius: MediaQuery.of(context).size.width * 0.1125,
+            radius: 45.r,
             child: Icon(
               Icons.inventory,
               color: MyColors.fadedGrey,
-              size: MediaQuery.of(context).size.height * 0.05, // خليه أكبر شوية
+              size: 40.sp, // خليه أكبر شوية
             ),
           ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.0250,
-          ), // مسافة بين الصورة والنص
+          SizedBox(height: 20.h), // مسافة بين الصورة والنص
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.05,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات غير متوفرة',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.02,
-                color: MyAppColors.black,
-              ),
+              style: TextStyle(fontSize: 16.sp, color: MyAppColors.black),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+          SizedBox(height: 10.h),
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.05,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات في هذه الفئة غير متوفرة حاليا',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.02,
-                color: MyAppColors.gray,
-              ),
+              style: TextStyle(fontSize: 16.sp, color: MyAppColors.gray),
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
@@ -98,11 +87,7 @@ class CategoryTabView extends StatelessWidget {
     );
   }
 
-  Card productCard(
-    BuildContext context,
-    List<VendorSubcategoryProducts> products,
-    int index,
-  ) {
+  Card productCard(List<VendorSubcategoryProducts> products, int index) {
     return Card(
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
@@ -112,20 +97,15 @@ class CategoryTabView extends StatelessWidget {
           Column(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(MediaQuery.of(context).size.width * 0.05),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.02,
-                    vertical: MediaQuery.of(context).size.height * 0.01,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Image.network(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: 80.w,
+                        height: 80.h,
 
                         _baseUrl + products[index].image!,
                         fit: BoxFit.contain,
@@ -135,8 +115,8 @@ class CategoryTabView extends StatelessWidget {
                           StackTrace? stackTrace,
                         ) {
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: 80.h,
+                            width: 80.w,
                             child: const Image(
                               image: AssetImage(MyAssetsImage.brokenImage),
                             ),
@@ -159,18 +139,12 @@ class CategoryTabView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              MediaQuery.of(context).size.width * 0.02,
-                              MediaQuery.of(context).size.height * 0.01,
-                              MediaQuery.of(context).size.width * 0.02,
-                              MediaQuery.of(context).size.height * 0.0125,
-                            ),
+                            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
                             child: Text(
                               products[index].name,
                               style: TextStyle(
                                 color: MyAppColors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.0175,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 3,
@@ -184,18 +158,12 @@ class CategoryTabView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              MediaQuery.of(context).size.width * 0.02,
-                              MediaQuery.of(context).size.height * 0.01,
-                              MediaQuery.of(context).size.width * 0.02,
-                              MediaQuery.of(context).size.height * 0.0125,
-                            ),
+                            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
                             child: Text(
                               '${products[index].price}LE',
                               style: TextStyle(
                                 color: MyAppColors.black,
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.015,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -209,12 +177,7 @@ class CategoryTabView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.02,
-                          0.h,
-                          MediaQuery.of(context).size.width * 0.02,
-                          MediaQuery.of(context).size.height * 0.0125,
-                        ),
+                        padding: EdgeInsets.fromLTRB(8.w, 0.h, 8.w, 10.h),
                         child: Text(
                           products[index].description!,
                           maxLines: 6,
@@ -222,8 +185,7 @@ class CategoryTabView extends StatelessWidget {
 
                           style: TextStyle(
                             color: MyAppColors.black,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.01625,
+                            fontSize: 13.sp,
                           ),
                         ),
                       ),

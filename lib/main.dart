@@ -21,6 +21,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'services/notification_helper.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,25 +46,32 @@ class CityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      locale: const Locale('ar'),
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      debugShowCheckedModeBanner: false,
-      home: seenOnboarding ? const StartPage() : const SliderScreen(),
-      theme: ThemeData(
-        hoverColor: Colors.transparent,
-        splashFactory: NoSplash.splashFactory,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
-        scaffoldBackgroundColor: Colors.white,
-      ),
+    return ScreenUtilInit(
+      designSize: const Size(400, 800), // مقاس التصميم الأساسي (زي Pixel 3)
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp(
+          locale: const Locale('ar'),
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          home: seenOnboarding ? const StartPage() : const SliderScreen(),
+          theme: ThemeData(
+            hoverColor: Colors.transparent,
+            splashFactory: NoSplash.splashFactory,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+            scaffoldBackgroundColor: Colors.white,
+          ),
+        );
+      },
     );
   }
 }
@@ -100,9 +108,7 @@ class HomePageState extends State<HomePage> {
       appBar:
           currentIndex == 0
               ? PreferredSize(
-                preferredSize: Size.fromHeight(
-                  MediaQuery.of(context).size.height * 0.075,
-                ),
+                preferredSize: Size.fromHeight(60.h),
                 child: AppBar(
                   //automaticallyImplyLeading: true,
                   centerTitle: true,
@@ -111,12 +117,7 @@ class HomePageState extends State<HomePage> {
                   surfaceTintColor: MyAppColors.specialbackground,
                   elevation: 0,
                   title: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      0,
-                      MediaQuery.of(context).size.height * 0.02,
-                      0,
-                      MediaQuery.of(context).size.height * 0.02,
-                    ),
+                    padding: EdgeInsets.fromLTRB(0.w, 16.h, 0.w, 16.h),
                     child: Column(
                       children: [
                         Row(
@@ -124,10 +125,8 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Expanded(
                               child: CustomSearchBar(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                borderRadius:
-                                    MediaQuery.of(context).size.width * 0.0625,
+                                height: 40.h,
+                                borderRadius: 25.r,
                                 hintText: 'ماذا تريد',
                               ),
                             ),
@@ -173,16 +172,13 @@ class HomePageState extends State<HomePage> {
                     'مدينتنا',
                     style: TextStyle(
                       color: MyColors.black,
-                      fontSize: MediaQuery.of(context).size.height * 0.03,
+                      fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'مرحباً بكم!',
-                    style: TextStyle(
-                      color: MyColors.black,
-                      fontSize: MediaQuery.of(context).size.height * 0.02,
-                    ),
+                    style: TextStyle(color: MyColors.black, fontSize: 16.sp),
                   ),
                 ],
               ),
@@ -293,18 +289,10 @@ class HomePageState extends State<HomePage> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-        selectedIconTheme: IconThemeData(
-          size: MediaQuery.of(context).size.height * 0.0375,
-        ),
-        unselectedIconTheme: IconThemeData(
-          size: MediaQuery.of(context).size.height * 0.03,
-        ),
-        selectedLabelStyle: TextStyle(
-          fontSize: MediaQuery.of(context).size.height * 0.02,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: MediaQuery.of(context).size.height * 0.0175,
-        ),
+        selectedIconTheme: IconThemeData(size: 30.sp),
+        unselectedIconTheme: IconThemeData(size: 25.sp),
+        selectedLabelStyle: TextStyle(fontSize: 16.sp),
+        unselectedLabelStyle: TextStyle(fontSize: 14.sp),
         type: BottomNavigationBarType.fixed,
         backgroundColor: MyAppColors.specialbackground,
         selectedItemColor: MyColors.dodgerBlue,

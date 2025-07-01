@@ -8,6 +8,7 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_under_sub_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final int selectedCategoryIndex;
@@ -92,8 +93,8 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        width: MediaQuery.of(context).size.width * 0.175,
-        height: MediaQuery.of(context).size.height * 0.0625,
+        width: 70.w,
+        height: 50.h,
         decoration: const BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
@@ -108,7 +109,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: MediaQuery.of(context).size.height * 0.0375,
+            size: 30.sp,
           ),
         ),
       ),
@@ -127,17 +128,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0125,
-                    ),
+                    SizedBox(height: 10.h),
                     _buildCategoryList(),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0125,
-                    ),
+                    SizedBox(height: 10.h),
                     _buildSubCategoryList(),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0250,
-                    ),
+                    SizedBox(height: 20.h),
                     isLoadingProducts
                         ? const Center(child: CircularProgressIndicator())
                         : products.isEmpty
@@ -168,7 +163,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               name: category.nameAr,
               imageUrl: category.imageUrl,
               isSelected: selectedCategoryIndex == index,
-              radius: MediaQuery.of(context).size.width * 0.075,
+              radius: 30.r,
             ),
           );
         }),
@@ -198,7 +193,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   name: subCategory.nameAr,
                   imageUrl: subCategory.imageUrl,
                   isSelected: selectedSubCategoryIndex == index,
-                  radius: MediaQuery.of(context).size.width * 0.0625,
+                  radius: 25.r,
                 ),
               );
             }),
@@ -210,9 +205,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.height * 0.0125,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 10.h),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 8.5 / 12,

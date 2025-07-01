@@ -6,6 +6,7 @@ import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_emergency.dart';
 import 'package:citio/models/emergency_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({
@@ -98,24 +99,16 @@ class EmergencyButton extends StatelessWidget {
         children: [
           InkWell(
             onTap: () => _showCountdownDialog(context),
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.1,
-            ),
+            borderRadius: BorderRadius.circular(40.r),
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.1,
-              height: MediaQuery.of(context).size.height * 0.05,
+              width: 40.w,
+              height: 40.h,
               decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               child: emicon,
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
-          Text(
-            emname,
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.height * 0.015,
-              color: Colors.black,
-            ),
-          ),
+          SizedBox(height: 10.h),
+          Text(emname, style: TextStyle(fontSize: 12.sp, color: Colors.black)),
         ],
       ),
     );

@@ -33,13 +33,9 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.0125,
-        ),
+        margin: EdgeInsets.only(top: 10.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width * 0.05,
-          ),
+          borderRadius: BorderRadius.circular(20.r),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -52,11 +48,7 @@ class ProductCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.only(
-            bottom: 5.0.h,
-            right: MediaQuery.of(context).size.width * 0.0125,
-            left: MediaQuery.of(context).size.width * 0.0125,
-          ),
+          padding: EdgeInsets.only(bottom: 5.0.h, right: 5.w, left: 5.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -65,12 +57,8 @@ class ProductCard extends StatelessWidget {
                 height: 130,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(
-                      MediaQuery.of(context).size.width * 0.025,
-                    ),
-                    topRight: Radius.circular(
-                      MediaQuery.of(context).size.width * 0.025,
-                    ),
+                    topLeft: Radius.circular(10.r),
+                    topRight: Radius.circular(10.r),
                   ),
                   child: Image.network(
                     image,
@@ -84,7 +72,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.00625),
+              SizedBox(height: 5.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 5.0.h),
                 child: Text(
@@ -100,10 +88,7 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Text(
                       description.isNotEmpty ? description : 'لا يوجد وصف',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.015,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2, // عرض سطرين فقط
                     ),
@@ -122,11 +107,7 @@ class ProductCard extends StatelessWidget {
                         },
                         child: Text(
                           '...',
-                          style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.015,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                         ),
                       ),
                   ],
@@ -135,9 +116,7 @@ class ProductCard extends StatelessWidget {
 
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.height * 0.00625,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 5.h),
                 child: Row(
                   children: [
                     Text("$rating"),

@@ -28,30 +28,17 @@ class _VendorProfileState extends State<VendorProfile> {
         // foregroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
         title: Padding(
-          padding: EdgeInsets.fromLTRB(
-            0.w,
-            MediaQuery.of(context).size.height * 0.015,
-            0.w,
-            MediaQuery.of(context).size.height * 0.015,
-          ),
+          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
           child: Text(
             'تفاصيل الخدمة',
-            style: TextStyle(
-              color: MyColors.black,
-              fontSize: MediaQuery.of(context).size.height * 0.025,
-            ),
+            style: TextStyle(color: MyColors.black, fontSize: 20.sp),
           ),
         ),
         centerTitle: true,
       ),
       backgroundColor: MyColors.offWhite,
       body: Padding(
-        padding: EdgeInsets.fromLTRB(
-          0.w,
-          MediaQuery.of(context).size.height * 0.00875,
-          0.w,
-          0.h,
-        ),
+        padding: EdgeInsets.fromLTRB(0.w, 7.h, 0.w, 0.h),
         child: FutureBuilder<List<VendorSubcategory>>(
           future: GetVendor().getVendorSubcategory(widget.id),
           builder: (context, snapshot) {
@@ -69,15 +56,13 @@ class _VendorProfileState extends State<VendorProfile> {
                           return vendorCard(vendor);
                         } else {
                           return SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.35,
+                            height: 280.h,
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
                     Container(
                       color: MyColors.white,
                       child: Transform.translate(
@@ -125,12 +110,7 @@ class _VendorProfileState extends State<VendorProfile> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.05,
-        MediaQuery.of(context).size.height * 0.0125,
-        MediaQuery.of(context).size.width * 0.05,
-        MediaQuery.of(context).size.height * 0.00375,
-      ),
+      margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 3.h),
       child: SizedBox(
         width: screenWidth * .9,
         height: screenHeight * 0.37,
@@ -142,12 +122,8 @@ class _VendorProfileState extends State<VendorProfile> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(
-                      MediaQuery.of(context).size.width * 0.05,
-                    ),
-                    topRight: Radius.circular(
-                      MediaQuery.of(context).size.width * 0.05,
-                    ),
+                    topLeft: Radius.circular(20.r),
+                    topRight: Radius.circular(20.r),
                   ),
                   child:
                       vendor.coverImage != null
@@ -183,14 +159,9 @@ class _VendorProfileState extends State<VendorProfile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          0.w,
-                          MediaQuery.of(context).size.height * 0.01,
-                          MediaQuery.of(context).size.width * 0.05,
-                          MediaQuery.of(context).size.height * 0.0250,
-                        ),
+                        padding: EdgeInsets.fromLTRB(0.w, 8.h, 20.w, 20.h),
                         child: CircleAvatar(
-                          radius: MediaQuery.of(context).size.width * 0.08,
+                          radius: 32.r,
 
                           backgroundImage:
                               vendor.image != null
@@ -209,17 +180,12 @@ class _VendorProfileState extends State<VendorProfile> {
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    0.w,
-                    MediaQuery.of(context).size.height * 0.05,
-                    MediaQuery.of(context).size.width * 0.05,
-                    0.h,
-                  ),
+                  padding: EdgeInsets.fromLTRB(0.w, 40.h, 20.w, 0.h),
                   child: Text(
                     vendor.businessName,
                     style: TextStyle(
                       color: MyColors.black,
-                      fontSize: MediaQuery.of(context).size.height * 0.02250,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -233,39 +199,24 @@ class _VendorProfileState extends State<VendorProfile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.025,
-                          MediaQuery.of(context).size.height * 0.00625,
-                          MediaQuery.of(context).size.width * 0.05,
-                          0.h,
-                        ),
+                        padding: EdgeInsets.fromLTRB(10.w, 5.h, 20.w, 0.h),
                         child: Text(
                           vendor.type,
                           style: TextStyle(
                             color: MyColors.gray,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.0175,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.025,
-                          MediaQuery.of(context).size.height * 0.0125,
-                          MediaQuery.of(context).size.width * 0.05,
-                          MediaQuery.of(context).size.height * 0.01875,
-                        ),
+                        padding: EdgeInsets.fromLTRB(10.w, 10.h, 20.w, 15.h),
                         child: Row(
                           children: [
                             const Icon(Icons.star, color: MyColors.star),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.015,
-                            ),
+                            SizedBox(width: 6.w),
                             Text(vendor.rating.toStringAsFixed(2)),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.015,
-                            ),
+                            SizedBox(width: 6.w),
                             Text(
                               '(${vendor.rating.toString()} تقييما)',
                               style: TextStyle(color: MyColors.gray),

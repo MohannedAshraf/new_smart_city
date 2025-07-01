@@ -5,6 +5,7 @@ import 'package:citio/helper/api_make_order.dart';
 import 'package:citio/models/make_order_model.dart';
 import 'package:citio/screens/my_order_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:citio/helper/api_cash_payment.dart'; // أضفه مع باقي الـ imports
 
@@ -129,10 +130,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         centerTitle: true,
         title: Text(
           "الدفع ",
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height * 0.0375,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold),
         ),
         leading: const BackButton(),
       ),
@@ -144,16 +142,16 @@ class _CheckoutViewState extends State<CheckoutView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildAddressSection(),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                SizedBox(height: 10.h),
                 _buildItemsSection(),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                SizedBox(height: 10.h),
                 _buildPaymentMethodSection(),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                SizedBox(height: 10.h),
                 _buildSummarySection(subtotal, deliveryFee, tax, total),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+                SizedBox(height: 20.h),
                 SizedBox(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.0625,
+                  height: 50.h,
                   child: ElevatedButton(
                     onPressed:
                         isLoading
@@ -192,9 +190,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.02,
-                        ),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
                     child:
@@ -212,7 +208,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             ),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: 40.h),
               ],
             ),
           ),
@@ -227,21 +223,19 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: Center(
                     child: SingleChildScrollView(
                       padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.06,
-                        right: MediaQuery.of(context).size.width * 0.06,
-                        top: MediaQuery.of(context).size.height * 0.05,
+                        left: 24.w,
+                        right: 24.w,
+                        top: 40.h,
                         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
                       ),
                       child: Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.05,
-                          vertical: MediaQuery.of(context).size.height * 0.0250,
+                          horizontal: 20.w,
+                          vertical: 20.h,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(
-                            MediaQuery.of(context).size.width * 0.04,
-                          ),
+                          borderRadius: BorderRadius.circular(16.r),
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -249,15 +243,11 @@ class _CheckoutViewState extends State<CheckoutView> {
                             Text(
                               "ادخل بيانات البطاقة",
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.025,
+                                fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0250,
-                            ),
+                            SizedBox(height: 20.h),
                             CardFormField(
                               style: CardFormStyle(
                                 backgroundColor: Colors.grey.shade100,
@@ -270,10 +260,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 _cardDetails = card;
                               },
                             ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0250,
-                            ),
+                            SizedBox(height: 20.h),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -289,21 +276,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                                         : Text(
                                           "ادفع الآن",
                                           style: TextStyle(
-                                            fontSize:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.height *
-                                                0.02,
+                                            fontSize: 16.sp,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white,
                                           ),
                                         ),
                               ),
                             ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0125,
-                            ),
+                            SizedBox(height: 10.h),
                             TextButton(
                               onPressed: () {
                                 setState(() {
@@ -330,20 +310,15 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   Widget _buildAddressSection() {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.03,
-        vertical: MediaQuery.of(context).size.height * 0.015,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          MediaQuery.of(context).size.width * 0.03,
-        ),
+        borderRadius: BorderRadius.circular(12.r),
         color: Colors.white,
       ),
       child: Row(
         children: [
           const Icon(Icons.location_on_outlined),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,10 +327,10 @@ class _CheckoutViewState extends State<CheckoutView> {
                   "عنوان التسليم",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: MediaQuery.of(context).size.height * 0.01875,
+                    fontSize: 15.sp,
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+                SizedBox(height: 2.h),
                 const Text("123 Main Street\nNew York, NY 10001"),
               ],
             ),
@@ -372,46 +347,32 @@ class _CheckoutViewState extends State<CheckoutView> {
       children: [
         Text(
           "العناصر المطلوبة",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: MediaQuery.of(context).size.height * 0.025,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+        SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.03,
-            vertical: MediaQuery.of(context).size.height * 0.015,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.025,
-            ),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
             children:
                 widget.cartItems.map((item) {
                   return Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.0075,
-                    ),
+                    margin: EdgeInsets.symmetric(vertical: 6.h),
                     child: Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            MediaQuery.of(context).size.width * 0.02,
-                          ),
+                          borderRadius: BorderRadius.circular(8.r),
                           child: Image.network(
                             "https://service-provider.runasp.net${item.mainImageUrl}",
-                            width: MediaQuery.of(context).size.width * 0.150,
-                            height: MediaQuery.of(context).size.height * 0.075,
+                            width: 60.w,
+                            height: 60.h,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -422,17 +383,10 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.005,
-                              ),
+                              SizedBox(height: 4.h),
                               Text(
                                 "X: ${item.quantity}",
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.height *
-                                      0.01875,
-                                ),
+                                style: TextStyle(fontSize: 15.sp),
                               ),
                             ],
                           ),
@@ -457,22 +411,14 @@ class _CheckoutViewState extends State<CheckoutView> {
       children: [
         Text(
           "طريقة الدفع",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: MediaQuery.of(context).size.height * 0.025,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+        SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.03,
-            vertical: MediaQuery.of(context).size.height * 0.015,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.025,
-            ),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
             children: [
@@ -516,29 +462,21 @@ class _CheckoutViewState extends State<CheckoutView> {
       children: [
         Text(
           "ملخص الطلب",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: MediaQuery.of(context).size.height * 0.025,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+        SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.03,
-            vertical: MediaQuery.of(context).size.height * 0.015,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.025,
-            ),
+            borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
             children: [
               rowText("المجموع الفرعي", subtotal),
               rowText("الضريبة", deliveryFee),
               rowText("التوصيل", tax),
-              Divider(height: MediaQuery.of(context).size.height * 0.0250),
+              Divider(height: 20.h),
               rowText("المجموع", total, bold: true),
             ],
           ),

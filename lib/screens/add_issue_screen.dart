@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NewComplaintCenterPage extends StatefulWidget {
   const NewComplaintCenterPage({super.key});
@@ -26,9 +27,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(MediaQuery.of(context).size.width * 0.04),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (context) {
         return SafeArea(
@@ -38,14 +37,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 leading: Icon(
                   Icons.camera_alt,
                   color: Colors.blue,
-                  size: MediaQuery.of(context).size.height * 0.02750,
+                  size: 22.sp,
                 ),
-                title: Text(
-                  'الكاميرا',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.0175,
-                  ),
-                ),
+                title: Text('الكاميرا', style: TextStyle(fontSize: 14.sp)),
                 onTap: () async {
                   Navigator.pop(context);
                   final pickedFile = await ImagePicker().pickImage(
@@ -57,16 +51,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 },
               ),
               ListTile(
-                leading: Icon(
-                  Icons.photo,
-                  color: Colors.green,
-                  size: MediaQuery.of(context).size.height * 0.02750,
-                ),
+                leading: Icon(Icons.photo, color: Colors.green, size: 22.sp),
                 title: Text(
                   'اختيار من المعرض',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.0175,
-                  ),
+                  style: TextStyle(fontSize: 14.sp),
                 ),
                 onTap: () async {
                   Navigator.pop(context);
@@ -95,9 +83,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       builder:
           (context) => Dialog(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                MediaQuery.of(context).size.width * 0.03,
-              ),
+              borderRadius: BorderRadius.circular(12.r),
               child: Image.file(imageFile, fit: BoxFit.contain),
             ),
           ),
@@ -111,9 +97,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         SnackBar(
           content: Text(
             "من فضلك اكتب وصف الشكوى",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.height * 0.0175,
-            ),
+            style: TextStyle(fontSize: 14.sp),
           ),
         ),
       );
@@ -128,15 +112,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
             (context) => AlertDialog(
               title: Text(
                 "صلاحية الموقع مطلوبة",
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.02,
-                ),
+                style: TextStyle(fontSize: 16.sp),
               ),
               content: Text(
                 "يجب السماح للتطبيق بالوصول إلى الموقع لإرسال الشكوى.",
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.0175,
-                ),
+                style: TextStyle(fontSize: 14.sp),
               ),
               actions: [
                 TextButton(
@@ -147,19 +127,12 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   },
                   child: Text(
                     "سماح بالموقع",
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.0175,
-                    ),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "إلغاء",
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.0175,
-                    ),
-                  ),
+                  child: Text("إلغاء", style: TextStyle(fontSize: 14.sp)),
                 ),
               ],
             ),
@@ -193,14 +166,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
           SnackBar(
             duration: const Duration(seconds: 5),
             behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width * 0.04,
-              vertical: MediaQuery.of(context).size.height * 0.015,
-            ),
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                MediaQuery.of(context).size.width * 0.03,
-              ),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             backgroundColor: Colors.green.shade600,
             content: Row(
@@ -209,10 +177,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 Expanded(
                   child: Text(
                     "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.height * 0.01625,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -225,26 +190,17 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.green.shade800,
                     padding: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.03,
-                      vertical: MediaQuery.of(context).size.height * 0.0075,
+                      horizontal: 12.w,
+                      vertical: 6.h,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.05,
-                      ),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                   ),
-                  icon: Icon(
-                    Icons.share,
-                    size: MediaQuery.of(context).size.height * 0.02,
-                    color: Colors.white,
-                  ),
+                  icon: Icon(Icons.share, size: 16.sp, color: Colors.white),
                   label: Text(
                     "مشاركة",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.height * 0.01625,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
                   ),
                 ),
               ],
@@ -256,9 +212,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
           SnackBar(
             content: Text(
               "فشل في إرسال الشكوى",
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.0175,
-              ),
+              style: TextStyle(fontSize: 14.sp),
             ),
           ),
         );
@@ -268,20 +222,13 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         SnackBar(
           content: Text(
             "🚨 حدثت مشكلة أثناء إرسال الشكوى. الرجاء المحاولة لاحقًا.",
-            style: TextStyle(
-              fontSize: MediaQuery.of(context).size.height * 0.0175,
-            ),
+            style: TextStyle(fontSize: 14.sp),
           ),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.04,
-            vertical: MediaQuery.of(context).size.height * 0.015,
-          ),
+          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              MediaQuery.of(context).size.width * 0.03,
-            ),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
       );
@@ -298,32 +245,22 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         leading: const BackButton(),
-        title: Text(
-          "شكوى جديدة",
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height * 0.02250,
-          ),
-        ),
+        title: Text("شكوى جديدة", style: TextStyle(fontSize: 18.sp)),
       ),
       body: Padding(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.04,
-                ),
+                borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.shade300,
-                    blurRadius: MediaQuery.of(context).size.width * 0.02,
-                    offset: Offset(
-                      0,
-                      MediaQuery.of(context).size.height * 0.0025,
-                    ),
+                    blurRadius: 8.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -336,42 +273,34 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     onChanged: (_) => setState(() {}),
                     decoration: InputDecoration(
                       hintText: "وصف المشكلة..؟",
-                      hintStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.0175,
-                      ),
+                      hintStyle: TextStyle(fontSize: 14.sp),
                       border: InputBorder.none,
                       counterText: "",
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+                  SizedBox(height: 10.h),
                   if (_selectedImage != null)
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.015,
-                        ),
+                        padding: EdgeInsets.only(top: 12.h),
                         child: Stack(
                           children: [
                             GestureDetector(
                               onTap: () => _previewImage(_selectedImage!),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  MediaQuery.of(context).size.width * 0.03,
-                                ),
+                                borderRadius: BorderRadius.circular(12.r),
                                 child: Image.file(
                                   _selectedImage!,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.1,
+                                  width: 80.w,
+                                  height: 80.h,
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                             Positioned(
-                              top: MediaQuery.of(context).size.height * 0.005,
-                              right: MediaQuery.of(context).size.width * 0.01,
+                              top: 4.h,
+                              right: 4.w,
                               child: GestureDetector(
                                 onTap: _removeImage,
                                 child: Container(
@@ -380,15 +309,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(
-                                      MediaQuery.of(context).size.width * 0.01,
-                                    ),
+                                    padding: EdgeInsets.all(4.w),
                                     child: Icon(
                                       Icons.close,
                                       color: Colors.white,
-                                      size:
-                                          MediaQuery.of(context).size.height *
-                                          0.02,
+                                      size: 16.sp,
                                     ),
                                   ),
                                 ),
@@ -405,14 +330,13 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                         onPressed: _pickImage,
                         icon: Icon(
                           Icons.camera_alt_outlined,
-                          size: MediaQuery.of(context).size.height * 0.025,
+                          size: 20.sp,
                           color: Colors.black,
                         ),
                         label: Text(
                           "إضافة صورة",
                           style: TextStyle(
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.0175,
+                            fontSize: 14.sp,
                             color: Colors.black,
                           ),
                         ),
@@ -422,22 +346,19 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                         icon: Icon(
                           Icons.send,
                           color: Colors.white,
-                          size: MediaQuery.of(context).size.height * 0.02250,
+                          size: 18.sp,
                         ),
                         label: Text(
                           "إرسال",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize:
-                                MediaQuery.of(context).size.height * 0.0175,
+                            fontSize: 14.sp,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.shade300,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.06,
-                            ),
+                            borderRadius: BorderRadius.circular(24.r),
                           ),
                         ),
                       ),
@@ -447,17 +368,14 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       '${_controller.text.length}/500',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.015,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                     ),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
+            SizedBox(height: 16.h),
             TextButton.icon(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -465,15 +383,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   MaterialPageRoute(builder: (_) => const IssueScreen()),
                 );
               },
-              icon: Icon(
-                Icons.list_alt,
-                size: MediaQuery.of(context).size.height * 0.025,
-                color: Colors.blueAccent,
-              ),
+              icon: Icon(Icons.list_alt, size: 20.sp, color: Colors.blueAccent),
               label: Text(
                 'عرض الشكاوى السابقة',
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.0175,
+                  fontSize: 14.sp,
                   color: Colors.blueAccent,
                   fontWeight: FontWeight.w500,
                 ),
@@ -483,9 +397,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
             const Spacer(),
             if (_isLoading)
               Padding(
-                padding: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.02,
-                ),
+                padding: EdgeInsets.all(8.w),
                 child: const CircularProgressIndicator(),
               ),
           ],

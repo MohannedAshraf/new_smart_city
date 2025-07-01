@@ -43,18 +43,13 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                   children: [
                     Expanded(
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.1125,
+                        height: 90.h,
                         color: MyColors.white,
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.0475,
-                            MediaQuery.of(context).size.height * 0.01875,
-                            MediaQuery.of(context).size.width * 0.0475,
-                            MediaQuery.of(context).size.height * 0.01875,
-                          ),
+                          padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
                           child: SizedBox(
                             width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.0875,
+                            height: 70.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -88,9 +83,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                         ? MyColors.inProgress
                                         : MyColors.dodgerBlue,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    MediaQuery.of(context).size.width * 0.0350,
-                                  ),
+                                  borderRadius: BorderRadius.circular(14.r),
                                 ),
                               ),
                             ),
@@ -116,12 +109,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                         SocialmediaUser user = snapshot.data!;
 
                         return Container(
-                          padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.0175,
-                            MediaQuery.of(context).size.height * 0.0250,
-                            MediaQuery.of(context).size.width * 0.05,
-                            MediaQuery.of(context).size.height * 0.00875,
-                          ),
+                          padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
                           child: Column(
                             children: [
                               Row(
@@ -147,22 +135,15 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(
-                                            MediaQuery.of(context).size.width *
-                                                0.005,
-                                            MediaQuery.of(context).size.height *
-                                                0.00625,
-                                            MediaQuery.of(context).size.width *
-                                                0.02,
+                                            2.w,
+                                            5.h,
+                                            8.w,
                                             0.h,
                                           ),
                                           child: Text(
                                             user.name,
                                             style: TextStyle(
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.01625,
+                                              fontSize: 13.sp,
                                               fontWeight: FontWeight.bold,
                                               color: MyColors.black,
                                             ),
@@ -171,21 +152,15 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
 
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
+                                            4.w,
                                             0.h,
-                                            MediaQuery.of(context).size.width *
-                                                0.02,
+                                            8.w,
                                             0.h,
                                           ),
                                           child: Text(
                                             posts[index].date ?? '',
                                             style: TextStyle(
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.01625,
+                                              fontSize: 13.sp,
                                               color: const Color.fromRGBO(
                                                 134,
                                                 133,
@@ -203,41 +178,19 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                         children: [
                                           Container(
                                             margin: EdgeInsets.fromLTRB(
-                                              MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  0.015,
+                                              6.w,
                                               0.h,
-                                              MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  0.015,
-                                              MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.00625,
+                                              6.w,
+                                              5.h,
                                             ),
                                             padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.width *
-                                                  0.03,
-                                              vertical:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.01,
+                                              horizontal: 12.w,
+                                              vertical: 8.h,
                                             ),
                                             decoration: BoxDecoration(
                                               color: MyColors.ambulance,
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                    MediaQuery.of(
-                                                          context,
-                                                        ).size.width *
-                                                        0.05,
-                                                  ),
+                                                  BorderRadius.circular(20.r),
                                             ),
                                             child: Text(
                                               (posts[index].tags != null &&
@@ -266,12 +219,9 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(
                                             0.w,
-                                            MediaQuery.of(context).size.height *
-                                                0.005,
-                                            MediaQuery.of(context).size.width *
-                                                0.02,
-                                            MediaQuery.of(context).size.height *
-                                                0.005,
+                                            4.h,
+                                            8.w,
+                                            4.h,
                                           ),
                                           child: Text(
                                             posts[index].caption ?? '',
@@ -289,22 +239,10 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                                 false) {
                                               return Container(
                                                 padding: EdgeInsets.fromLTRB(
-                                                  MediaQuery.of(
-                                                        context,
-                                                      ).size.width *
-                                                      0.005,
-                                                  MediaQuery.of(
-                                                        context,
-                                                      ).size.height *
-                                                      0.005,
-                                                  MediaQuery.of(
-                                                        context,
-                                                      ).size.width *
-                                                      0.005,
-                                                  MediaQuery.of(
-                                                        context,
-                                                      ).size.height *
-                                                      0.005,
+                                                  2.w,
+                                                  4.h,
+                                                  2.w,
+                                                  4.h,
                                                 ),
                                                 child: GalleryImage(
                                                   minScale: .5,
@@ -345,8 +283,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                               ),
                               SizedBox(
                                 width: screenWidth - 10,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.0025,
+                                height: 2.h,
                                 child: const ColoredBox(
                                   color: MyColors.fadedGrey,
                                 ),
@@ -375,11 +312,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                                 .toString(),
                                             style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.0125,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],
@@ -403,11 +336,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                             posts[index].saveCount.toString(),
                                             style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.0125,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],
@@ -429,11 +358,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                             'مشاركة',
                                             style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.0125,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],

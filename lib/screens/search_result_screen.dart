@@ -64,15 +64,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("نتائج البحث")),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.04,
-          vertical: MediaQuery.of(context).size.height * 0.0125,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Column(
           children: [
             // ✅ شريط البحث
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.0025,
+              height: 42.h,
               child: TextField(
                 controller: _controller,
                 onSubmitted: (value) {
@@ -80,13 +77,11 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     _performSearch(value.trim());
                   }
                 },
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.0175,
-                ),
+                style: TextStyle(fontSize: 14.sp),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 0.h,
-                    horizontal: MediaQuery.of(context).size.width * 0.04,
+                    horizontal: 16.w,
                   ),
                   hintText: 'ماذا تريد؟',
                   prefixIcon: InkWell(
@@ -95,29 +90,22 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         _performSearch(_controller.text.trim());
                       }
                     },
-                    child: Icon(
-                      Icons.search,
-                      size: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    child: Icon(Icons.search, size: 20.sp),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 0.05,
-                    ),
+                    borderRadius: BorderRadius.circular(20.0.r),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black87),
-                    borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 0.05,
-                    ),
+                    borderRadius: BorderRadius.circular(20.0.r),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+            SizedBox(height: 20.h),
 
             // ✅ محتوى نتائج البحث
             if (_isLoading)
@@ -177,19 +165,15 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       }
                     },
                     child: Card(
-                      margin: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.01,
-                      ),
+                      margin: EdgeInsets.symmetric(vertical: 8.h),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.03,
-                        ),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       elevation: 3,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.03,
-                          vertical: MediaQuery.of(context).size.height * 0.015,
+                          horizontal: 12.w,
+                          vertical: 12.h,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,14 +181,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             if (result.imageUrl != null &&
                                 result.imageUrl!.isNotEmpty)
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  MediaQuery.of(context).size.width * 0.02,
-                                ),
+                                borderRadius: BorderRadius.circular(8.r),
                                 child: Image.network(
                                   "$baseImageUrl${result.imageUrl!}",
-                                  height:
-                                      MediaQuery.of(context).size.height *
-                                      0.225,
+                                  height: 180.h,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
@@ -217,22 +197,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                               )
                             else
                               Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.225,
+                                height: 180.h,
                                 color: Colors.grey[200],
                                 child: Center(
                                   child: Icon(
                                     Icons.image_not_supported,
-                                    size:
-                                        MediaQuery.of(context).size.height *
-                                        0.0625,
+                                    size: 50.sp,
                                   ),
                                 ),
                               ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.0125,
-                            ),
+                            SizedBox(height: 10.h),
                             Row(
                               children: [
                                 Expanded(
@@ -240,9 +214,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                     result.nameAr ?? "بدون اسم",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                          0.02,
+                                      fontSize: 16.sp,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -259,19 +231,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   ),
                               ],
                             ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.005,
-                            ),
+                            SizedBox(height: 4.h),
                             Row(
                               children: [
                                 Expanded(
                                   child: Text(
                                     result.categoryNameAr ?? "بدون تصنيف",
                                     style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                          0.01625,
+                                      fontSize: 13.sp,
                                       color: Colors.grey[700],
                                     ),
                                     overflow: TextOverflow.ellipsis,

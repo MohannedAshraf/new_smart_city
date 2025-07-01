@@ -43,15 +43,10 @@ class _SocialMediaState extends State<SocialMedia> {
           },
         ),
         flexibleSpace: Container(height: 0.h),
-        toolbarHeight: MediaQuery.of(context).size.height * 0.0625,
+        toolbarHeight: 50.h,
 
         title: Padding(
-          padding: EdgeInsets.fromLTRB(
-            0.w,
-            MediaQuery.of(context).size.height * 0.015,
-            0.w,
-            MediaQuery.of(context).size.height * 0.015,
-          ),
+          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
           child: Row(
             children: [
               SizedBox(width: screenWidth * .13),
@@ -59,10 +54,7 @@ class _SocialMediaState extends State<SocialMedia> {
                 children: [
                   Text(
                     'آخر المشاركات',
-                    style: TextStyle(
-                      color: MyColors.black,
-                      fontSize: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    style: TextStyle(color: MyColors.black, fontSize: 20.sp),
                   ),
                 ],
               ),

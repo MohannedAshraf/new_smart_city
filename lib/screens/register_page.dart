@@ -27,9 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(
-        MediaQuery.of(context).size.width * 0.03,
-      ),
+      borderRadius: BorderRadius.circular(12.r),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
   }
@@ -81,33 +79,25 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 15.0.w,
-                  vertical: MediaQuery.of(context).size.height * 0.0125,
+                  vertical: 10.h,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset(
-                      "assets/icon/citio.svg",
-                      height: MediaQuery.of(context).size.height * 0.125,
-                    ),
+                    SvgPicture.asset("assets/icon/citio.svg", height: 100.h),
                     Text(
                       "إنشاء حساب",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.005,
-                    ),
+                    SizedBox(height: 4.h),
                     Text(
                       "انضم إلى Citio لإدارة خدمات مدينتك",
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.0175,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                    SizedBox(height: 18.h),
 
                     // Full Name
                     TextFormField(
@@ -125,9 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       validator:
                           (value) => value!.isEmpty ? "يرجى إدخال الاسم" : null,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
 
                     // Phone
                     TextFormField(
@@ -144,9 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           (value) =>
                               value!.isEmpty ? "يرجى إدخال رقم الهاتف" : null,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
 
                     // Email
                     TextFormField(
@@ -164,9 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ? "يرجى إدخال البريد الإلكتروني"
                                   : null,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
 
                     // Password
                     TextFormField(
@@ -202,9 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
 
                     // Address
                     TextFormField(
@@ -223,9 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           (value) =>
                               value!.isEmpty ? "يرجى إدخال العنوان" : null,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    SizedBox(height: 15.h),
 
                     // Building + Floor
                     Row(
@@ -245,9 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.02,
-                        ),
+                        SizedBox(width: 8.w),
                         Expanded(
                           child: TextFormField(
                             controller: floorController,
@@ -265,9 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.0250,
-                    ),
+                    SizedBox(height: 20.h),
 
                     // Register Button
                     SizedBox(
@@ -275,14 +251,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
-                          padding: EdgeInsets.symmetric(
-                            vertical:
-                                MediaQuery.of(context).size.height * 0.0175,
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              MediaQuery.of(context).size.width * 0.03,
-                            ),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
                         onPressed: () {
@@ -293,16 +264,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Text(
                           _isLoading ? "جاري التسجيل..." : "أنشئ الحساب",
                           style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height * 0.02,
+                            fontSize: 16.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.025,
-                    ),
+                    SizedBox(height: 16.h),
 
                     // Already have account?
                     Row(

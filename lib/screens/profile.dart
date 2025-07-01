@@ -5,6 +5,7 @@ import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/edit_profile.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -73,13 +74,13 @@ class _ProfileState extends State<Profile> {
 
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: CircleAvatar(
-                  radius: MediaQuery.of(context).size.width * 0.1375,
+                  radius: 55.r,
                   backgroundImage:
                       (user?.imageUrl != null &&
                               user!.imageUrl!.trim().isNotEmpty)
@@ -92,31 +93,26 @@ class _ProfileState extends State<Profile> {
                           ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01625),
+              SizedBox(height: 13.h),
               Center(
                 child: Column(
                   children: [
                     Text(
                       user?.fullName ?? "بدون اسم",
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.0325,
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.005,
-                    ),
+                    SizedBox(height: 4.h),
                     Text(
                       'مستخدم',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.02,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
+              SizedBox(height: 20.h),
               _profileItem(
                 icon: Icons.phone,
                 color: Colors.blue,
@@ -151,27 +147,20 @@ class _ProfileState extends State<Profile> {
                 label: 'الدور',
                 value: user?.floorNumber ?? "-",
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
+              SizedBox(height: 30.h),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.edit, color: Colors.white),
                   label: Text(
                     "تعديل البيانات",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.height * 0.01875,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 15.sp),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.0175,
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03,
-                      ),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onPressed: () async {
@@ -187,27 +176,20 @@ class _ProfileState extends State<Profile> {
                   },
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
+              SizedBox(height: 10.h),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.logout, color: Colors.red),
                   label: Text(
                     "تسجيل الخروج",
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: MediaQuery.of(context).size.height * 0.0175,
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 14.sp),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.0175,
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
                     side: const BorderSide(color: Colors.red),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.03,
-                      ),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   onPressed: () => _deleteProfile(context),
@@ -227,16 +209,14 @@ class _ProfileState extends State<Profile> {
     required Color color,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * 0.0125,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: color.withOpacity(0.1),
             child: Icon(icon, color: color),
           ),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.0375),
+          SizedBox(width: 15.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,16 +224,16 @@ class _ProfileState extends State<Profile> {
                 Text(
                   label.toUpperCase(),
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.015,
+                    fontSize: 12.sp,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.0025),
+                SizedBox(height: 2.h),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.01875,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -267,9 +247,7 @@ class _ProfileState extends State<Profile> {
 
   Widget _divider() {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: MediaQuery.of(context).size.height * 0.005,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 4.h),
       child: const Divider(height: 1, color: Colors.grey),
     );
   }
