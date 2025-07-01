@@ -10,8 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApplyGovernmentService {
   Future<dynamic> submit({
     required int serviceId,
-    required List<Map<String, dynamic>>
-    serviceData, // مثال: [{'FieldId': 1, 'FieldValueString': 'Fathi'}]
+    required List<Map<String, dynamic>> serviceData,
     required List<PlatformFile> files,
   }) async {
     try {
@@ -25,7 +24,6 @@ class ApplyGovernmentService {
       }
       req.headers['Authorization'] = 'Bearer $token';
 
-      // 2. أضف الحقول النصية (ServiceId و ServiceData)
       req.fields['ServiceId'] = serviceId.toString();
 
       for (int i = 0; i < serviceData.length; i++) {
@@ -35,7 +33,6 @@ class ApplyGovernmentService {
             serviceData[i]['FieldValueString'];
       }
 
-      // 3. أضف الملفات
       for (var file in files) {
         final multipartFile = await http.MultipartFile.fromPath(
           'files',
@@ -46,13 +43,12 @@ class ApplyGovernmentService {
         req.files.add(multipartFile);
       }
 
-      // 4. إرسال الريكوست
       final streamedResponse = await req.send();
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return data; // رجع البيانات
+        return data;
       } else {
         throw Exception('Error ${response.statusCode}: ${response.body}');
       }

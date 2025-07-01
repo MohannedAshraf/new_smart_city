@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api, annotate_overrides, unused_field, avoid_print
-
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
