@@ -223,7 +223,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 10.w,
             mainAxisSpacing: 10.h,
-            childAspectRatio: 0.7,
+            childAspectRatio: 0.65,
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {
