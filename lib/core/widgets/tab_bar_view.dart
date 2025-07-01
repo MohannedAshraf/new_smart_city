@@ -291,6 +291,10 @@ class _CustomCardState extends State<CustomCard> {
                                                           widget
                                                               .request
                                                               .serviceId,
+                                                      title:
+                                                          widget
+                                                              .request
+                                                              .serviceName,
                                                     ),
                                               ),
                                             );
