@@ -39,12 +39,11 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: true, // شغل المعاينة على VS Code فقط
+      enabled: false, // شغل المعاينة على VS Code فقط
       builder: (context) => CityApp(seenOnboarding: seenOnboarding),
     ),
   );
 }
-
 
 class CityApp extends StatelessWidget {
   final bool seenOnboarding;
