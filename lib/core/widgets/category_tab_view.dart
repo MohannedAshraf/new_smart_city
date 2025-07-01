@@ -50,7 +50,7 @@ class CategoryTabView extends StatelessWidget {
   Center emptyCategory(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // علشان تتوسّط الشاشة
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(

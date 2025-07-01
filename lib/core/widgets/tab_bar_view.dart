@@ -30,8 +30,15 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
     return FutureBuilder<List<Request>>(
       future: future,
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (snapshot.hasData) {
           List<Request> requests = snapshot.data!;
+          if (requests.isEmpty) {
+            return emptyCategory();
+          }
+
           return ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: requests.length,
@@ -49,6 +56,45 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
           return const Center(child: CircularProgressIndicator());
         }
       },
+    );
+  }
+
+  Center emptyCategory() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            backgroundColor: MyColors.white,
+            radius: 45.r,
+            child: Icon(
+              Icons.inventory,
+              color: MyColors.fadedGrey,
+              size: 40.sp,
+            ),
+          ),
+          SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text(
+              'لا يوجد طلبات حاليا',
+              style: TextStyle(fontSize: 16.sp, color: MyColors.black),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Text(
+              'هذا الستخدم لو يرسل أي طلب',
+              style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -222,17 +268,20 @@ class _CustomCardState extends State<CustomCard> {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0),
-                              child: Text(
-                                widget.request.responseText,
-                                style: TextStyle(
-                                  color:
-                                      Styles.requestsStyle[widget
-                                          .request
-                                          .requestStatus]?['fontColor'] ??
-                                      MyColors.black,
-                                  fontSize: 14,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                                child: Text(
+                                  widget.request.responseText,
+                                  style: TextStyle(
+                                    color:
+                                        Styles.requestsStyle[widget
+                                            .request
+                                            .requestStatus]?['fontColor'] ??
+                                        MyColors.black,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 3,
                                 ),
                               ),
                             ),

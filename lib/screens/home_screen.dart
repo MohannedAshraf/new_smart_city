@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fit: BoxFit.cover,
                       height: 160,
                       maximumLines: 3,
-                      imageHeight: 73,
+                      imageHeight: 70,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       imageWidth: 180,
                       width: 180,
