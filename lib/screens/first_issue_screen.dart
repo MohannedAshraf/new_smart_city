@@ -24,7 +24,6 @@ class _IssueScreenState extends State<IssueScreen> {
   List<Values> resolved = [];
   List<Values> inprogress = [];
   bool isLoading = true;
-  DateTime? lastBackPressTime;
 
   @override
   void initState() {
@@ -84,19 +83,11 @@ class _IssueScreenState extends State<IssueScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    final now = DateTime.now();
-    if (lastBackPressTime == null ||
-        now.difference(lastBackPressTime!) > const Duration(seconds: 2)) {
-      lastBackPressTime = now;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('اضغط مرة أخرى للخروج'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return false;
-    }
-    return true;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+    return false;
   }
 
   @override

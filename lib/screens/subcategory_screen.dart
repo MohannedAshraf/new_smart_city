@@ -202,32 +202,46 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   }
 
   Widget _buildProductGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 10.h),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 8.5 / 12,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount;
+        double width = constraints.maxWidth;
 
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
-        final imageUrl =
-            product.imageUrl.startsWith('http')
-                ? product.imageUrl
-                : '${ApiProductUnderSub.imageBaseUrl}${product.imageUrl}';
+        if (width >= 900) {
+          crossAxisCount = 4;
+        } else if (width >= 600) {
+          crossAxisCount = 3;
+        } else {
+          crossAxisCount = 2;
+        }
 
-        return ProductCard(
-          productId: product.id,
-          image: imageUrl,
-          price: "${product.price.toStringAsFixed(0)} LE",
-          rating: product.rating,
-          description: product.description,
-          productName: product.nameAr,
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 10.w,
+            mainAxisSpacing: 10.h,
+            childAspectRatio: 0.7,
+          ),
+          itemCount: products.length,
+          itemBuilder: (context, index) {
+            final product = products[index];
+            final imageUrl =
+                product.imageUrl.startsWith('http')
+                    ? product.imageUrl
+                    : '${ApiProductUnderSub.imageBaseUrl}${product.imageUrl}';
+
+            return ProductCard(
+              productId: product.id,
+              image: imageUrl,
+              price: "${product.price.toStringAsFixed(0)} LE",
+              rating: product.rating,
+              description: product.description,
+              productName: product.nameAr,
+            );
+          },
         );
       },
     );

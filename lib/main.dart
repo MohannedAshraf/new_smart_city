@@ -221,8 +221,8 @@ class HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.online_prediction),
-              title: const Text('لطلب الخدمات'),
+              leading: const Icon(Icons.view_compact_sharp),
+              title: const Text('الخدمات'),
               onTap: () {
                 setState(() {
                   currentIndex = 3;
@@ -332,9 +332,9 @@ class HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              currentIndex == 3 ? Icons.help : Icons.help_outline_outlined,
+              currentIndex == 3 ? Icons.view_compact_alt : Icons.view_compact_sharp,
             ),
-            label: 'لطلب خدمات',
+            label: 'الخدمات ',
           ),
         ],
       ),
