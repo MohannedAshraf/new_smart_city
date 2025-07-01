@@ -3,6 +3,7 @@
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
+import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,32 +28,16 @@ class _ApplyService extends State<ApplyService> {
   bool isFileUploaded = false;
   bool showUploadError = false;
 
-  late Future<List<RequiredFields>> _fields;
-  late Future<List<RequiredFiles>> _files;
-
-  late Future<List<dynamic>> _combinedFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _combinedFuture = Future.wait([
-      MostRequestedServices().getRequiredFields(widget.id),
-      MostRequestedServices().getRequiredFiles(widget.id),
-    ]);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: _combinedFuture,
+    return FutureBuilder<List<RequiredFields>>(
+      future: MostRequestedServices().getRequiredFields(widget.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData) {
-          final fields = snapshot.data![0] as List<RequiredFields>;
-          final files = snapshot.data![1] as List<RequiredFiles>;
+        }
 
-          // final fields = snapshot.data!;
+        final fields = snapshot.data!;
 
         return Scaffold(
           backgroundColor: MyColors.offWhite,
@@ -75,9 +60,9 @@ class _ApplyService extends State<ApplyService> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 5.h,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 5,
                     ),
                     child: ServiceContainer(
                       icon: Icons.person,
@@ -103,7 +88,6 @@ class _ApplyService extends State<ApplyService> {
                           }).toList(),
                     ),
                   ),
-
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.w,
@@ -120,6 +104,18 @@ class _ApplyService extends State<ApplyService> {
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.w,
                       vertical: 5.h,
+                    ),
+                    child: const ServiceContainer(
+                      icon: Icons.location_on,
+                      title: 'بيانات العنوان',
+                      content: [SizedBox()],
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 5,
                     ),
                     child: ServiceContainer(
                       icon: Icons.file_upload,
@@ -263,7 +259,7 @@ class _ApplyService extends State<ApplyService> {
           padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
           child: SizedBox(
             width: double.infinity,
-            height: 70.h,
+            height: 70,
             child: ElevatedButton.icon(
               onPressed: () {
                 if (!isChecked) {
@@ -301,7 +297,7 @@ class _ApplyService extends State<ApplyService> {
               label: Text(
                 ' إرسال الطلب ',
                 style: TextStyle(
-                  fontSize: 17.sp,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: isButtonPressed ? MyColors.white : MyColors.grey,
                 ),
@@ -637,6 +633,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                 ),
               ),
             ),
+            // icon: const Icon(Icons.keyboard_arrow_down),
             items:
                 widget.items.map((item) {
                   return DropdownMenuItem(
