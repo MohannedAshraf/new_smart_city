@@ -244,10 +244,14 @@ class MySearchBar extends StatelessWidget {
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: MyColors.ghostColor),
-          borderRadius: BorderRadius.circular(25.0.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.0625,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25.0.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.0625,
+          ),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         filled: true,
@@ -286,7 +290,7 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
           );
         } else {
           return SizedBox(
-            height: 150.h,
+            height: MediaQuery.of(context).size.height * 0.1875,
             child: const Center(child: CircularProgressIndicator()),
           );
         }
@@ -319,7 +323,9 @@ class ImageCard extends StatelessWidget {
             ),
           ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0.r),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.025,
+        ),
         child: Stack(
           children: [
             Image.network(
@@ -332,7 +338,7 @@ class ImageCard extends StatelessWidget {
                 StackTrace? stackTrace,
               ) {
                 return SizedBox(
-                  height: 150.h,
+                  height: MediaQuery.of(context).size.height * 0.1875,
                   child: const Image(
                     image: AssetImage(MyAssetsImage.brokenImage),
                   ),
@@ -341,19 +347,19 @@ class ImageCard extends StatelessWidget {
             ),
             Positioned(
               bottom: 20.0.h,
-              left: 10.0.w,
+              left: MediaQuery.of(context).size.width * 0.025,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 10.0.w,
+                  horizontal: MediaQuery.of(context).size.width * 0.025,
                   vertical: 5.0.h,
                 ),
                 // ignore: deprecated_member_use
                 color: Colors.transparent,
                 child: StrokeText(
-                  height: 10.h,
-                  width: 10.w,
+                  height: MediaQuery.of(context).size.height * 0.0125,
+                  width: MediaQuery.of(context).size.width * 0.025,
                   text: data.name,
-                  textSize: 14.sp,
+                  textSize: MediaQuery.of(context).size.height * 0.0175,
                   textColor: MyColors.white,
                   strokeColor: MyColors.black,
                 ),
@@ -421,7 +427,8 @@ class _StrokeTextState extends State<StrokeText> {
           textAlign: TextAlign.left,
           widget.text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16.sp,
+            fontSize:
+                widget.textSize ?? MediaQuery.of(context).size.height * 0.02,
             letterSpacing: widget.letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
             foreground:
@@ -435,7 +442,8 @@ class _StrokeTextState extends State<StrokeText> {
         Text(
           widget.text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16.sp,
+            fontSize:
+                widget.textSize ?? MediaQuery.of(context).size.height * 0.02,
             letterSpacing: widget.letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
             color: widget.textColor ?? Colors.white,

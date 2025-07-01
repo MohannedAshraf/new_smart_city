@@ -1,6 +1,5 @@
 import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResetPasswordView extends StatelessWidget {
   ResetPasswordView({super.key});
@@ -10,22 +9,27 @@ class ResetPasswordView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text("نسيت كلمة المرور ")),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.025,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 50.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0625),
             Text(
               "البريد الالكتروني  ",
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.02250,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
             TextFormField(
               controller: emailController,
               decoration: InputDecoration(
-                border: myBorder(),
-                enabledBorder: myBorder(),
-                focusedBorder: myBorder(),
+                border: myBorder(context),
+                enabledBorder: myBorder(context),
+                focusedBorder: myBorder(context),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -40,14 +44,16 @@ class ResetPasswordView extends StatelessWidget {
                 return null;
               },
             ),
-            SizedBox(height: 30.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.025,
+                ),
               ),
               width: double.infinity,
-              height: 50.h,
+              height: MediaQuery.of(context).size.height * 0.0625,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -60,7 +66,7 @@ class ResetPasswordView extends StatelessWidget {
                 child: Text(
                   "ارسال",
                   style: TextStyle(
-                    fontSize: 28.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.0350,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -74,9 +80,11 @@ class ResetPasswordView extends StatelessWidget {
   }
 }
 
-OutlineInputBorder myBorder() {
+OutlineInputBorder myBorder(BuildContext context) {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15.r),
+    borderRadius: BorderRadius.circular(
+      MediaQuery.of(context).size.width * 0.0375,
+    ),
     borderSide: const BorderSide(
       color: Colors.grey, // لون البوردر أسود ثابت
     ),

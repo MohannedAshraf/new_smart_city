@@ -5,7 +5,6 @@ import 'package:citio/main.dart';
 import 'package:citio/models/myorder_model.dart';
 import 'package:citio/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -87,20 +86,27 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         ),
         body: Column(
           children: [
-            SizedBox(height: 8.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             SizedBox(
-              height: 40.h,
+              height: MediaQuery.of(context).size.height * 0.05,
               child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.03,
+                ),
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
-                separatorBuilder: (_, __) => SizedBox(width: 8.w),
+                separatorBuilder:
+                    (_, __) => SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                    ),
                 itemBuilder: (context, index) {
                   final isSelected = selectedIndex == index;
                   return GestureDetector(
                     onTap: () => onCategorySelected(index),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.04,
+                      ),
                       decoration: BoxDecoration(
                         color: isSelected ? Colors.blue : Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(20),
@@ -110,7 +116,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                         categories[index],
                         style: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
-                          fontSize: 13.sp,
+                          fontSize:
+                              MediaQuery.of(context).size.height * 0.01625,
                         ),
                       ),
                     ),
@@ -118,7 +125,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 },
               ),
             ),
-            SizedBox(height: 12.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.015),
             isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
@@ -173,50 +180,61 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     final orderDate = order.orderDate.toLocal().toString().split(' ')[0];
 
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height * 0.015,
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.03,
+        vertical: MediaQuery.of(context).size.height * 0.015,
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.03,
+        ),
         color: Colors.white,
         boxShadow: const [BoxShadow(blurRadius: 4, color: Colors.black12)],
       ),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * 0.025,
+            ),
             child: Image.network(
               "https://service-provider.runasp.net${order.vendorImageUrl}",
-              width: 70.w,
-              height: 70.h,
+              width: MediaQuery.of(context).size.width * 0.175,
+              height: MediaQuery.of(context).size.height * 0.0875,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Image.network(
                   'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                  width: 70.w,
-                  height: 70.h,
+                  width: MediaQuery.of(context).size.width * 0.175,
+                  height: MediaQuery.of(context).size.height * 0.0875,
                   fit: BoxFit.cover,
                 );
               },
             ),
           ),
-          SizedBox(width: 12.w),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.03),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "رقم الطلب: #${order.orderId}",
-                  style: TextStyle(fontSize: 12.sp),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.015,
+                  ),
                 ),
-                SizedBox(height: 4.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
                 Text(
                   order.vendorName,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.005),
                 Text(
                   "$orderDate\n${order.totalItems} منتج • ${order.totalAmount.toStringAsFixed(0)} جنيه",
                   style: const TextStyle(fontSize: 13),
@@ -225,16 +243,21 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.03,
+              vertical: MediaQuery.of(context).size.height * 0.01,
+            ),
             decoration: BoxDecoration(
               color: badgeColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: badgeColor, width: 1.2.w),
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.05,
+              ),
+              border: Border.all(color: badgeColor, width: 1.6),
             ),
             child: Text(
               order.orderStatus,
               style: TextStyle(
-                fontSize: 13.sp,
+                fontSize: MediaQuery.of(context).size.height * 0.01625,
                 color: badgeColor,
                 fontWeight: FontWeight.bold,
               ),

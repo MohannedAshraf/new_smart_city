@@ -81,17 +81,30 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         // foregroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
         title: Padding(
-          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            0.w,
+            MediaQuery.of(context).size.height * 0.015,
+            0.w,
+            MediaQuery.of(context).size.height * 0.015,
+          ),
           child: Text(
             'المتاجر والخدمات',
-            style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+            style: TextStyle(
+              color: MyColors.black,
+              fontSize: MediaQuery.of(context).size.height * 0.025,
+            ),
           ),
         ),
         centerTitle: true,
       ),
       backgroundColor: MyColors.offWhite,
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
+        padding: EdgeInsets.fromLTRB(
+          0.w,
+          MediaQuery.of(context).size.height * 0.0125,
+          0.w,
+          0.w,
+        ),
         child: Column(
           children: [
             Row(
@@ -100,7 +113,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0.w, 16.h, 6.w, 16.h),
+                      padding: EdgeInsets.fromLTRB(
+                        0.w,
+                        MediaQuery.of(context).size.height * 0.025,
+                        MediaQuery.of(context).size.width * 0.015,
+                        MediaQuery.of(context).size.height * 0.025,
+                      ),
                       child: IconButton(
                         onPressed:
                             () => setState(() {
@@ -109,7 +127,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                         icon: Icon(
                           Icons.tune,
                           color: MyColors.black,
-                          size: 32.sp,
+                          size: MediaQuery.of(context).size.height * 0.04,
                         ),
                       ),
                     ),
@@ -119,7 +137,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16.w, 10.h, 5.w, 10.h),
+                        padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.04,
+                          MediaQuery.of(context).size.height * 0.0125,
+                          MediaQuery.of(context).size.width * 0.0125,
+                          MediaQuery.of(context).size.height * 0.0125,
+                        ),
                         child: Theme(
                           data: Theme.of(context).copyWith(
                             hoverColor: Colors.transparent,
@@ -153,7 +176,9 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                             ),
                             shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.0375,
+                                ),
                               ), // Rounded corners
                             ),
                             onChanged: (value) {
@@ -231,12 +256,14 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                         if (index == vendors.length - 1 && isLoading)
                           Padding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 10.w,
-                              vertical: 10.h,
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.025,
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.0125,
                             ),
                             child: SpinKitFadingCircle(
                               color: MyColors.mintgreen,
-                              size: 40.sp,
+                              size: MediaQuery.of(context).size.height * 0.05,
                             ),
                           ),
                       ],
@@ -255,10 +282,19 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.05,
+        ),
+      ),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 8.h),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.05,
+        MediaQuery.of(context).size.height * 0.0125,
+        MediaQuery.of(context).size.width * 0.05,
+        MediaQuery.of(context).size.height * 0.01,
+      ),
       child: SizedBox(
         width: screenWidth * .9,
         height: screenHeight * 0.37,
@@ -270,8 +306,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.r),
-                    topRight: Radius.circular(20.r),
+                    topLeft: Radius.circular(
+                      MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    topRight: Radius.circular(
+                      MediaQuery.of(context).size.width * 0.05,
+                    ),
                   ),
                   child:
                       vendors[index].coverImage != null
@@ -308,9 +348,14 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0.w, 8.h, 20.w, 20.h),
+                        padding: EdgeInsets.fromLTRB(
+                          0.w,
+                          MediaQuery.of(context).size.height * 0.01,
+                          MediaQuery.of(context).size.width * 0.05,
+                          MediaQuery.of(context).size.height * 0.0250,
+                        ),
                         child: CircleAvatar(
-                          radius: 32.sp,
+                          radius: MediaQuery.of(context).size.height * 0.04,
 
                           backgroundImage:
                               vendors[index].profileImage != null
@@ -330,7 +375,12 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0.w, 40.h, 20.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(
+                    0.w,
+                    MediaQuery.of(context).size.height * 0.05,
+                    MediaQuery.of(context).size.width * 0.05,
+                    0.h,
+                  ),
                   child: Text(
                     vendors[index].businessName,
                     style: const TextStyle(
@@ -349,22 +399,35 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.fromLTRB(10.w, 5.h, 20.w, 0.h),
+                        padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.025,
+                          MediaQuery.of(context).size.height * 0.00625,
+                          MediaQuery.of(context).size.width * 0.05,
+                          0.h,
+                        ),
                         child: Text(
                           vendors[index].type,
                           style: TextStyle(
                             color: MyColors.gray,
-                            fontSize: 14.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.0175,
                           ),
                         ),
                       ),
 
                       Padding(
-                        padding: EdgeInsets.fromLTRB(10.w, 10.h, 20.w, 15.h),
+                        padding: EdgeInsets.fromLTRB(
+                          MediaQuery.of(context).size.width * 0.025,
+                          MediaQuery.of(context).size.height * 0.0125,
+                          MediaQuery.of(context).size.width * 0.05,
+                          MediaQuery.of(context).size.height * 0.01875,
+                        ),
                         child: Row(
                           children: [
                             const Icon(Icons.star, color: MyColors.star),
-                            SizedBox(width: 6.w),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.015,
+                            ),
                             Text(vendors[index].rating.toStringAsFixed(2)),
                           ],
                         ),
@@ -399,11 +462,13 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     Text(
                       "Filter by Category",
                       style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.025,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.025,
+                    ),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -430,7 +495,9 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                             );
                           }).toList(),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0250,
+                    ),
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
@@ -442,7 +509,9 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                         elevation: WidgetStateProperty.all(0),
                         shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.03,
+                            ),
                             side: const BorderSide(color: MyColors.ghostColor),
                           ),
                         ),

@@ -113,8 +113,8 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         floatingActionButton: Container(
-          width: 70.w,
-          height: 50.h,
+          width: MediaQuery.of(context).size.width * 0.175,
+          height: MediaQuery.of(context).size.height * 0.0625,
           decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
           child: IconButton(
             onPressed: () {
@@ -126,7 +126,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             icon: Icon(
               Icons.shopping_bag_sharp,
               color: Colors.white,
-              size: 30.sp,
+              size: MediaQuery.of(context).size.height * 0.0375,
             ),
           ),
         ),
@@ -141,18 +141,20 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.025,
+                  ),
                   child: MySearchBar(
                     controller: _controller,
                     onSearch: _performSearch,
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
                 _buildCategories(),
                 if (selectedCategoryIndex != null) _buildSubCategories(),
-                SizedBox(height: 30.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
                 _isLoadingBanners
                     ? const Center(child: CircularProgressIndicator())
                     : _bannerError != null
@@ -160,11 +162,11 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                       child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
                     )
                     : BannerSliderWidget(banners: _banners!),
-                SizedBox(height: 20.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
                 Text(
                   "أفضل التقييمات",
                   style: TextStyle(
-                    fontSize: 25.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.03125,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -203,7 +205,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 name: _categories![index].nameAr,
                 imageUrl: _categories![index].imageUrl,
                 isSelected: selectedCategoryIndex == index,
-                radius: 30.r,
+                radius: MediaQuery.of(context).size.width * 0.075,
               ),
             );
           }),
@@ -246,7 +248,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   child: CategoryCircle(
                     name: subCategories[index].nameAr,
                     imageUrl: subCategories[index].imageUrl,
-                    radius: 25.r,
+                    radius: MediaQuery.of(context).size.width * 0.0625,
                   ),
                 );
               }),
@@ -271,25 +273,39 @@ class MySearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 42.h, // تقليل ارتفاع السيرش بار
+      height:
+          MediaQuery.of(context).size.height *
+          0.0025, // تقليل ارتفاع السيرش بار
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSearch(),
-        style: TextStyle(fontSize: 14.sp), // تصغير حجم الخط
+        style: TextStyle(
+          fontSize: MediaQuery.of(context).size.height * 0.0175,
+        ), // تصغير حجم الخط
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 16.w),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 0.h,
+            horizontal: MediaQuery.of(context).size.width * 0.04,
+          ),
           hintText: 'ماذا تريد ',
           prefixIcon: InkWell(
             onTap: onSearch,
-            child: Icon(Icons.search, size: 20.sp),
+            child: Icon(
+              Icons.search,
+              size: MediaQuery.of(context).size.height * 0.025,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey), // بوردر غامق
-            borderRadius: BorderRadius.circular(20.0.r),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * 0.05,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black87),
-            borderRadius: BorderRadius.circular(20.0.r),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * 0.05,
+            ),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -318,7 +334,9 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
           items:
               widget.banners.map((banner) {
                 return ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.02,
+                  ),
                   child: GestureDetector(
                     onTap:
                         () => Navigator.push(
@@ -342,13 +360,15 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                                   const Icon(Icons.broken_image),
                         ),
                         Positioned(
-                          bottom: 10.h,
-                          left: 10.w,
+                          bottom: MediaQuery.of(context).size.height * 0.0125,
+                          left: MediaQuery.of(context).size.width * 0.025,
                           child: Container(
                             color: Colors.black54,
                             padding: EdgeInsets.symmetric(
-                              horizontal: 8.w,
-                              vertical: 8.h,
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.02,
+                              vertical:
+                                  MediaQuery.of(context).size.height * 0.01,
                             ),
                             child: Text(
                               banner.description,
@@ -419,7 +439,10 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.025,
+              vertical: MediaQuery.of(context).size.height * 0.0125,
+            ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,

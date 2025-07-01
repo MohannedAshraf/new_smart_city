@@ -10,7 +10,6 @@ import 'package:citio/screens/add_issue_screen.dart';
 import 'package:citio/services/get_issues.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
@@ -114,7 +113,7 @@ class _IssueScreenState extends State<IssueScreen> {
               icon: Icon(
                 Icons.arrow_back,
                 color: MyColors.themecolor,
-                size: 22.sp,
+                size: MediaQuery.of(context).size.height * 0.02750,
               ),
               onPressed: () {
                 Navigator.pushReplacement(
@@ -131,7 +130,7 @@ class _IssueScreenState extends State<IssueScreen> {
                   'المشاكل',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 24.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -146,14 +145,16 @@ class _IssueScreenState extends State<IssueScreen> {
                   : Column(
                     children: [
                       Divider(
-                        height: 1.h,
-                        thickness: 0.6.h,
+                        height: MediaQuery.of(context).size.height * 0.00125,
+                        thickness: 0.6,
                         color: Colors.black12,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 5.w,
-                          vertical: 5.h,
+                          horizontal:
+                              MediaQuery.of(context).size.width * 0.0125,
+                          vertical:
+                              MediaQuery.of(context).size.height * 0.00625,
                         ),
                         child: TabBar(
                           splashFactory: NoSplash.splashFactory,
@@ -177,8 +178,8 @@ class _IssueScreenState extends State<IssueScreen> {
                         ),
                       ),
                       Divider(
-                        height: 1.h,
-                        thickness: 0.5.h,
+                        height: MediaQuery.of(context).size.height * 0.00125,
+                        thickness: 0.6,
                         color: Colors.black12,
                       ),
                       Expanded(
@@ -208,7 +209,11 @@ class _IssueScreenState extends State<IssueScreen> {
                 loadIssues();
               });
             },
-            child: Icon(Icons.add, size: 20.sp, color: Colors.white),
+            child: Icon(
+              Icons.add,
+              size: MediaQuery.of(context).size.height * 0.025,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

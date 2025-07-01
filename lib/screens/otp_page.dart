@@ -20,20 +20,25 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text('رمز التحقق')),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: 20.0.w,
+          vertical: MediaQuery.of(context).size.height * 0.0250,
+        ),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 30.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
             Center(
               child: Text(
                 'أدخل رمز التحقق المكون من 4 أرقام',
-                style: TextStyle(fontSize: 18.sp),
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.02250,
+                ),
               ),
             ),
             // ignore: prefer_const_constructors
-            SizedBox(height: 20.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
             PinCodeTextField(
               appContext: context,
               length: 4,
@@ -42,9 +47,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
               animationType: AnimationType.fade,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(10.r),
-                fieldHeight: 50.h,
-                fieldWidth: 40.w,
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.025,
+                ),
+                fieldHeight: MediaQuery.of(context).size.height * 0.0625,
+                fieldWidth: MediaQuery.of(context).size.width * 0.1,
                 activeFillColor: Colors.white,
                 selectedFillColor: Colors.white,
                 inactiveFillColor: Colors.white,
@@ -69,19 +76,21 @@ class _VerificationScreenState extends State<VerificationScreen> {
               child: Text(
                 "اعادة ارسال الرمز",
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: MediaQuery.of(context).size.height * 0.0175,
                   decoration: TextDecoration.underline,
                 ),
               ),
             ),
-            SizedBox(height: 10.h),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.025,
+                ),
               ),
               width: double.infinity,
-              height: 50.h,
+              height: MediaQuery.of(context).size.height * 0.0625,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -94,7 +103,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 child: Text(
                   "ارسال",
                   style: TextStyle(
-                    fontSize: 28.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.0350,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

@@ -5,7 +5,6 @@ import 'package:citio/helper/api_product_details.dart';
 import 'package:citio/models/product_details_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({super.key, required this.productId});
@@ -53,8 +52,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج ")),
       floatingActionButton: Container(
-        width: 70.w,
-        height: 50.h,
+        width: MediaQuery.of(context).size.width * 0.175,
+        height: MediaQuery.of(context).size.height * 0.0625,
         decoration: const BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
@@ -69,7 +68,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: 30.sp,
+            size: MediaQuery.of(context).size.height * 0.0375,
           ),
         ),
       ),
@@ -89,88 +88,110 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           final discount = ((1 - product.price / oldPrice) * 100).round();
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.04,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.05,
+                  ),
                   child: Image.network(
                     '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
-                    height: 250.h,
+                    height: MediaQuery.of(context).size.height * 0.3125,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 15.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.01875),
                 Text(
                   product.nameAr,
                   style: TextStyle(
-                    fontSize: 22.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.02750,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
                 Row(
                   children: [
                     Text(
                       product.vendorBusinessName,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),
-                    Icon(Icons.star, color: Colors.orange, size: 20.sp),
-                    SizedBox(width: 5.w),
-                    Text("4.8", style: TextStyle(fontSize: 14.sp)),
+                    Icon(
+                      Icons.star,
+                      color: Colors.orange,
+                      size: MediaQuery.of(context).size.height * 0.025,
+                    ),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.0125),
+                    Text(
+                      "4.8",
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.0175,
+                      ),
+                    ),
                     Text(
                       " (120 تقييم)",
-                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.0175,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
                 Row(
                   children: [
                     Text(
                       "LE ${product.price.toStringAsFixed(2)}",
                       style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.025,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 15.w),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.0375),
                     Text(
                       "LE${oldPrice.toStringAsFixed(2)}",
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
                         color: Colors.grey,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.025),
                     Text(
                       "$discount% OFF",
-                      style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.0175,
+                        color: Colors.red,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
                 Text(
                   "الوصف",
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.02250,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   product.description,
-                  style: TextStyle(fontSize: 14.sp, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.0175,
+                    color: Colors.black87,
+                  ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
 
                 /// ✅ عدد المنتجات + زر الإضافة
                 Row(
@@ -181,11 +202,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       children: [
                         Container(
                           margin: EdgeInsets.symmetric(
-                            vertical: 5.h,
-                            horizontal: 5.w,
+                            vertical:
+                                MediaQuery.of(context).size.height * 0.00625,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.0125,
                           ),
-                          width: 40.w,
-                          height: 40.h,
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.05,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent,
@@ -204,17 +227,20 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         Text(
                           '$itemCount',
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.02250,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(
-                            horizontal: 5.w,
-                            vertical: 5.h,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.0125,
+                            vertical:
+                                MediaQuery.of(context).size.height * 0.00625,
                           ),
-                          width: 40.w,
-                          height: 40.h,
+                          width: MediaQuery.of(context).size.width * 0.1,
+                          height: MediaQuery.of(context).size.height * 0.05,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent,
@@ -235,7 +261,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
                     /// ✅ زر Add to Cart بحالة متغيرة
                     SizedBox(
-                      width: 250.w,
+                      width: MediaQuery.of(context).size.width * 0.625,
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
@@ -251,11 +277,15 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: buttonColor,
                           padding: EdgeInsets.symmetric(
-                            horizontal: 20.w,
-                            vertical: 14.h,
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.05,
+                            vertical:
+                                MediaQuery.of(context).size.height * 0.0175,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.025,
+                            ),
                           ),
                         ),
                         icon: Icon(buttonIcon, color: Colors.white),
@@ -270,7 +300,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     ),
                   ],
                 ),
-                SizedBox(height: 30.h),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
               ],
             ),
           );

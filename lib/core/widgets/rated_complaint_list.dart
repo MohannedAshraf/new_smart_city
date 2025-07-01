@@ -5,7 +5,6 @@ import 'package:citio/helper/api_rating_issue.dart';
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -16,49 +15,70 @@ class RatedComplaintList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h), // ✅
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+        vertical: MediaQuery.of(context).size.height * 0.01,
+      ), // ✅
       itemCount: issues.length,
       itemBuilder: (context, index) {
         final issue = issues[index];
 
         return SizedBox(
-          height: 140.h, // ✅
+          height: MediaQuery.of(context).size.height * 0.05, // ✅
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r), // ✅
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.04,
+              ), // ✅
             ),
-            margin: EdgeInsets.symmetric(vertical: 8.h), // ✅
+            margin: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.01,
+            ), // ✅
             color: Colors.white,
             child: Padding(
-              padding: EdgeInsets.all(24.w), // ✅
+              padding: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.06,
+              ), // ✅
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r), // ✅
+                    borderRadius: BorderRadius.circular(
+                      MediaQuery.of(context).size.width * 0.02,
+                    ), // ✅
                     child:
                         issue.image != null
                             ? Image.network(
                               _baseUrl + issue.image!,
-                              width: 80.w,
-                              height: 80.h,
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.1,
                               fit: BoxFit.cover,
                               errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image, size: 40.sp),
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size:
+                                        MediaQuery.of(context).size.height *
+                                        0.05,
+                                  ),
                             )
                             : Image.network(
                               'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                              width: 80.w,
-                              height: 80.h,
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.1,
                               fit: BoxFit.cover,
                               errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image, size: 40.sp),
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size:
+                                        MediaQuery.of(context).size.height *
+                                        0.05,
+                                  ),
                             ),
                   ),
-                  SizedBox(width: 16.w), // ✅
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.04,
+                  ), // ✅
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,35 +86,46 @@ class RatedComplaintList extends StatelessWidget {
                         Text(
                           issue.title,
                           style: TextStyle(
-                            fontSize: 14.sp, // ✅
+                            fontSize:
+                                MediaQuery.of(context).size.height *
+                                0.0175, // ✅
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h), // ✅
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0075,
+                        ), // ✅
                         Text(
                           issue.description ?? '',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.0175,
                             color: const Color.fromARGB(255, 0, 3, 5),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h), // ✅
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0075,
+                        ), // ✅
                         Text(
                           'تم حلها',
                           style: TextStyle(
-                            fontSize: 14.sp, // ✅
+                            fontSize:
+                                MediaQuery.of(context).size.height *
+                                0.0175, // ✅
                             color: Colors.grey,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 8.w), // ✅
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.02,
+                  ), // ✅
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
@@ -109,55 +140,87 @@ class RatedComplaintList extends StatelessWidget {
                               (context) => AlertDialog(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
-                                    16.r,
+                                    MediaQuery.of(context).size.width * 0.04,
                                   ), // ✅
                                 ),
                                 title: Text(
                                   "تقييم المشكلة",
-                                  style: TextStyle(fontSize: 16.sp), // ✅
+                                  style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ), // ✅
                                 ),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
                                       "من فضلك قيّم الخدمة التي قُدمت لك:",
-                                      style: TextStyle(fontSize: 14.sp), // ✅
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                            0.0175,
+                                      ), // ✅
                                     ),
-                                    SizedBox(height: 12.h), // ✅
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          0.015,
+                                    ), // ✅
                                     RatingBar.builder(
                                       initialRating: 0,
                                       minRating: 1,
                                       direction: Axis.horizontal,
                                       allowHalfRating: false,
                                       itemCount: 5,
-                                      itemSize: 30.sp, // ✅
+                                      itemSize:
+                                          MediaQuery.of(context).size.height *
+                                          0.0375, // ✅
                                       itemPadding: EdgeInsets.symmetric(
-                                        horizontal: 4.w,
+                                        horizontal:
+                                            MediaQuery.of(context).size.width *
+                                            0.01,
                                       ),
                                       itemBuilder:
                                           (context, _) => Icon(
                                             Icons.star,
                                             color: MyColors.themecolor,
-                                            size: 24.sp,
+                                            size:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.03,
                                           ),
                                       onRatingUpdate: (rating) {
                                         selectedRating = rating;
                                       },
                                     ),
-                                    SizedBox(height: 16.h), // ✅
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          0.025,
+                                    ), // ✅
                                     TextField(
                                       controller: commentController,
                                       maxLines: 3,
                                       decoration: InputDecoration(
                                         hintText: "اكتب تعليقك هنا...",
-                                        hintStyle: TextStyle(fontSize: 14.sp),
+                                        hintStyle: TextStyle(
+                                          fontSize:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.0175,
+                                        ),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
-                                            12.r,
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
                                           ), // ✅
                                         ),
                                         contentPadding: EdgeInsets.all(
-                                          12.w,
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
                                         ), // ✅
                                       ),
                                     ),
@@ -167,7 +230,11 @@ class RatedComplaintList extends StatelessWidget {
                                   TextButton(
                                     child: Text(
                                       "إلغاء",
-                                      style: TextStyle(fontSize: 14.sp),
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                            0.0175,
+                                      ),
                                     ),
                                     onPressed:
                                         () => Navigator.of(context).pop(),
@@ -177,7 +244,8 @@ class RatedComplaintList extends StatelessWidget {
                                       backgroundColor: MyColors.themecolor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
-                                          8.r,
+                                          MediaQuery.of(context).size.width *
+                                              0.02,
                                         ),
                                       ),
                                     ),
@@ -185,7 +253,9 @@ class RatedComplaintList extends StatelessWidget {
                                       "إرسال",
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14.sp,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                            0.0175,
                                       ),
                                     ),
                                     onPressed: () async {
@@ -199,7 +269,13 @@ class RatedComplaintList extends StatelessWidget {
                                           SnackBar(
                                             content: Text(
                                               "من فضلك اختر تقييم قبل الإرسال ⭐",
-                                              style: TextStyle(fontSize: 14.sp),
+                                              style: TextStyle(
+                                                fontSize:
+                                                    MediaQuery.of(
+                                                      context,
+                                                    ).size.height *
+                                                    0.0175,
+                                              ),
                                             ),
                                             backgroundColor: Colors.red,
                                           ),
@@ -224,7 +300,11 @@ class RatedComplaintList extends StatelessWidget {
                                               content: Text(
                                                 "تم إرسال تقييمك بنجاح ✅",
                                                 style: TextStyle(
-                                                  fontSize: 14.sp,
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height *
+                                                      0.0175,
                                                 ),
                                               ),
                                               backgroundColor: Colors.green,
@@ -241,7 +321,11 @@ class RatedComplaintList extends StatelessWidget {
                                                     ? response.message
                                                     : "فشل في إرسال التقييم",
                                                 style: TextStyle(
-                                                  fontSize: 14.sp,
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height *
+                                                      0.0175,
                                                 ),
                                               ),
                                               backgroundColor: Colors.red,
@@ -255,7 +339,13 @@ class RatedComplaintList extends StatelessWidget {
                                           SnackBar(
                                             content: Text(
                                               "حدث خطأ أثناء الإرسال: $e",
-                                              style: TextStyle(fontSize: 14.sp),
+                                              style: TextStyle(
+                                                fontSize:
+                                                    MediaQuery.of(
+                                                      context,
+                                                    ).size.height *
+                                                    0.0175,
+                                              ),
                                             ),
                                             backgroundColor: Colors.red,
                                           ),
@@ -272,14 +362,17 @@ class RatedComplaintList extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.star,
-                            size: 20.sp,
+                            size: MediaQuery.of(context).size.height * 0.025,
                             color: Colors.grey,
                           ), // ✅
-                          SizedBox(width: 4.w), // ✅
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01,
+                          ), // ✅
                           Text(
                             "Rate",
                             style: TextStyle(
-                              fontSize: 13.sp,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.01625,
                               color: Colors.grey,
                             ), // ✅
                           ),

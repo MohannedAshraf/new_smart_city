@@ -51,37 +51,59 @@ class _GovernmentServicesState extends State<GovernmentServices> {
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.h),
+        preferredSize: Size.fromHeight(
+          MediaQuery.of(context).size.height * 0.0625,
+        ),
         child: AppBar(
           backgroundColor: MyColors.white,
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: Text(
             'الخدمات الحكومية',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.height * 0.025,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
+        padding: EdgeInsets.fromLTRB(
+          0.w,
+          MediaQuery.of(context).size.height * 0.0125,
+          0.w,
+          0.h,
+        ),
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 8.h),
+              margin: EdgeInsets.fromLTRB(
+                0.w,
+                0.h,
+                0.w,
+                MediaQuery.of(context).size.height * 0.01,
+              ),
               color: MyColors.white,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10.w, 0.h, 19.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.025,
+                      0.h,
+                      MediaQuery.of(context).size.width * 0.0475,
+                      0.h,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: CustomSearchBar(
-                            height: 45.h,
-                            borderRadius: 5.r,
+                            height:
+                                MediaQuery.of(context).size.height * 0.05625,
+                            borderRadius:
+                                MediaQuery.of(context).size.width * 0.0125,
                             hintText: 'للبحث عن خدمة حكومية',
                             onSubmitted: (value) {
                               setState(() {
@@ -102,12 +124,16 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.0125,
+                                ),
                                 color: MyColors.whiteSmoke,
                               ),
                               margin: EdgeInsets.symmetric(
-                                horizontal: 8.w,
-                                vertical: 8.h,
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.02,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               child: IconButton(
                                 onPressed: () {},
@@ -125,7 +151,12 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 6.h),
+                      padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.width * 0.04,
+                        0.h,
+                        MediaQuery.of(context).size.width * 0.04,
+                        MediaQuery.of(context).size.height * 0.0075,
+                      ),
                       child:
                           tabsAreLoading
                               ? Row(
@@ -133,11 +164,17 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                   4,
                                   (index) => Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 6.h,
+                                      horizontal:
+                                          MediaQuery.of(context).size.height *
+                                          0.0075,
                                     ),
                                     child: Container(
-                                      width: 80.w,
-                                      height: 35.h,
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.2,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          0.04375,
                                       decoration: BoxDecoration(
                                         color: MyColors.whiteSmoke,
                                         borderRadius: BorderRadius.circular(20),
@@ -192,7 +229,12 @@ class _GovernmentServicesState extends State<GovernmentServices> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.025,
+                  0.h,
+                  MediaQuery.of(context).size.width * 0.025,
+                  0.h,
+                ),
                 child:
                     servicesLoading
                         ? GridView.builder(
@@ -208,7 +250,9 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                             return Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(12.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.03,
+                                ),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: MyColors.whiteSmoke,
@@ -220,25 +264,48 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 130.h,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.0375,
                                     decoration: BoxDecoration(
                                       color: MyColors.whiteSmoke,
                                       borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(12.r),
-                                        topRight: Radius.circular(12.r),
+                                        topLeft: Radius.circular(
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                        ),
+                                        topRight: Radius.circular(
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 10.h),
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.0125,
+                                  ),
                                   Container(
-                                    height: 14.h,
-                                    width: 100.w,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.0175,
+                                    width:
+                                        MediaQuery.of(context).size.width *
+                                        0.250,
                                     color: MyColors.whiteSmoke,
                                   ),
-                                  SizedBox(height: 6.h),
+                                  SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.0075,
+                                  ),
                                   Container(
-                                    height: 12.h,
-                                    width: 140.w,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.015,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.1,
                                     color: MyColors.whiteSmoke,
                                   ),
                                 ],
@@ -355,11 +422,21 @@ class GovTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+        margin: EdgeInsets.fromLTRB(
+          MediaQuery.of(context).size.width * 0.015,
+          0.h,
+          MediaQuery.of(context).size.width * 0.015,
+          MediaQuery.of(context).size.height * 0.00625,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.03,
+          vertical: MediaQuery.of(context).size.height * 0.01,
+        ),
         decoration: BoxDecoration(
           color: isSelected ? MyColors.dodgerBlue : MyColors.whiteSmoke,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.05,
+          ),
         ),
         child: Text(
           title,
@@ -395,11 +472,18 @@ class ServiceCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
 
-        margin: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
+        margin: EdgeInsets.fromLTRB(
+          MediaQuery.of(context).size.width * 0.015,
+          MediaQuery.of(context).size.height * 0.005,
+          MediaQuery.of(context).size.width * 0.015,
+          MediaQuery.of(context).size.height * 0.005,
+        ),
 
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(12.0.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.03,
+          ),
           boxShadow: const [
             BoxShadow(
               color: MyColors.whiteSmoke,
@@ -412,30 +496,52 @@ class ServiceCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.r),
-                topRight: Radius.circular(12.r),
+                topLeft: Radius.circular(
+                  MediaQuery.of(context).size.width * 0.03,
+                ),
+                topRight: Radius.circular(
+                  MediaQuery.of(context).size.width * 0.03,
+                ),
               ),
               child: Container(
                 color: color,
 
                 width: double.infinity,
-                height: 130.h,
-                child: Center(child: Icon(icon, size: 40.sp, color: fontColor)),
+                height: MediaQuery.of(context).size.height * 0.0375,
+                child: Center(
+                  child: Icon(
+                    icon,
+                    size: MediaQuery.of(context).size.height * 0.05,
+                    color: fontColor,
+                  ),
+                ),
               ),
             ),
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.02,
+                    MediaQuery.of(context).size.height * 0.01,
+                    MediaQuery.of(context).size.width * 0.02,
+                    0.h,
+                  ),
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                    margin: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.015,
+                      0.h,
+                      MediaQuery.of(context).size.width * 0.015,
+                      MediaQuery.of(context).size.height * 0.00625,
+                    ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
+                      horizontal: MediaQuery.of(context).size.width * 0.03,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
                     ),
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(
+                        MediaQuery.of(context).size.width * 0.05,
+                      ),
                     ),
                     child: Text(category, style: TextStyle(color: fontColor)),
                   ),
@@ -443,7 +549,12 @@ class ServiceCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
+              padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.005,
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.0025,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -454,7 +565,7 @@ class ServiceCard extends StatelessWidget {
                       softWrap: false,
                       style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 14.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.0175,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
@@ -465,7 +576,12 @@ class ServiceCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
+              padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.0025,
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.0125,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -474,7 +590,7 @@ class ServiceCard extends StatelessWidget {
                       details,
                       style: TextStyle(
                         color: Color.fromARGB(221, 59, 58, 58),
-                        fontSize: 12.0.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.015,
                       ),
                       textAlign: TextAlign.start,
                     ),

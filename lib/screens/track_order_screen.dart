@@ -1,7 +1,6 @@
 import 'package:citio/helper/api_track_order.dart';
 import 'package:citio/models/track_order_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TrackOrderView extends StatefulWidget {
   final int orderId;
@@ -44,7 +43,10 @@ class _TrackOrderViewState extends State<TrackOrderView> {
               : orderDetails == null
               ? const Center(child: Text("فشل تحميل الطلب"))
               : ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
+                  vertical: MediaQuery.of(context).size.height * 0.025,
+                ),
                 itemCount: orderDetails!.vendorGroups.length,
                 itemBuilder: (context, index) {
                   final vendor = orderDetails!.vendorGroups[index];
@@ -70,11 +72,18 @@ class _TrackOrderViewState extends State<TrackOrderView> {
     currentStepIndex = currentStepIndex == -1 ? 0 : currentStepIndex;
 
     return Container(
-      margin: EdgeInsets.only(bottom: 24.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height * 0.03,
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+        vertical: MediaQuery.of(context).size.height * 0.025,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.04,
+        ),
         boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
         ],
@@ -87,38 +96,54 @@ class _TrackOrderViewState extends State<TrackOrderView> {
             children: [
               Text(
                 vendor.businessName,
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.02250,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.025,
+                  vertical: MediaQuery.of(context).size.height * 0.005,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.blue.shade50,
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.05,
+                  ),
                 ),
                 child: Text(
                   vendor.shipementStatus ?? "Pending",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.blue),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.015,
+                    color: Colors.blue,
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 4.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.005),
           Text(
             "Est. delivery: ${vendor.estimatedDeliveryDate ?? 'غير متوفر'}",
-            style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.height * 0.01625,
+              color: Colors.grey,
+            ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.025),
 
           // Products
           ...vendor.items.map(
             (item) => Padding(
-              padding: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height * 0.0125,
+              ),
               child: _buildItemRow(item),
             ),
           ),
 
-          SizedBox(height: 12.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.015),
 
           // Timeline
           Row(
@@ -143,18 +168,25 @@ class _TrackOrderViewState extends State<TrackOrderView> {
 
               return Column(
                 children: [
-                  Icon(icon, color: color, size: 28.sp),
-                  SizedBox(height: 6.h),
+                  Icon(
+                    icon,
+                    color: color,
+                    size: MediaQuery.of(context).size.height * 0.0350,
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.0075),
                   Text(
                     statusSteps[index],
-                    style: TextStyle(fontSize: 11.sp, color: color),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.01375,
+                      color: color,
+                    ),
                   ),
                 ],
               );
             }),
           ),
 
-          SizedBox(height: 20.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.0250),
 
           // Contact Button
           SizedBox(
@@ -167,9 +199,13 @@ class _TrackOrderViewState extends State<TrackOrderView> {
               label: const Text("Contact Provider"),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 14.h),
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.0175,
+                ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.03,
+                  ),
                 ),
               ),
             ),
@@ -183,15 +219,17 @@ class _TrackOrderViewState extends State<TrackOrderView> {
     return Row(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(6.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.015,
+          ),
           child: Image.network(
             "https://service-provider.runasp.net${item.productImageUrl}",
-            width: 40.w,
-            height: 40.h,
+            width: MediaQuery.of(context).size.width * 0.1,
+            height: MediaQuery.of(context).size.height * 0.05,
             fit: BoxFit.cover,
           ),
         ),
-        SizedBox(width: 12.w),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.03),
         Expanded(
           child: Text(
             item.nameAr,

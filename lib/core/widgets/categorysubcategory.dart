@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Categorysubcategory extends StatelessWidget {
   const Categorysubcategory({
@@ -51,7 +50,7 @@ class Categorysubcategory extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(category),
-          SizedBox(height: 10.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.0125),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -60,12 +59,17 @@ class Categorysubcategory extends StatelessWidget {
                       .where((sub) => sub != null) // استبعدنا الـ null
                       .map(
                         (sub) => Container(
-                          width: 110.w,
-                          height: 60.h,
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: MediaQuery.of(context).size.width * 0.025,
+                          height: MediaQuery.of(context).size.height * 0.075,
+                          margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01,
+                          ),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * 0.02,
+                            ),
                           ),
                           child: TextButton(
                             onPressed: () {},

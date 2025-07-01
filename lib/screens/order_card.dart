@@ -1,7 +1,6 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_delete_product_from_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
@@ -29,10 +28,17 @@ class OrderCard extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(bottom: 5.h),
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height * 0.00625,
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.025,
+          vertical: MediaQuery.of(context).size.height * 0.0125,
+        ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.025,
+          ),
           color: MyAppColors.background,
           boxShadow: const [
             BoxShadow(
@@ -54,23 +60,25 @@ class OrderCard extends StatelessWidget {
           children: [
             /// ✅ صورة المنتج
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.02,
+              ),
               child: Image.network(
                 orderpic,
-                width: 80.w,
-                height: 70.h,
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.height * 0.0875,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.network(
                     'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                    width: 80.w,
-                    height: 70.h,
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.0875,
                     fit: BoxFit.cover,
                   );
                 },
               ),
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.025),
 
             /// ✅ اسم المنتج والسعر
             Expanded(
@@ -80,15 +88,17 @@ class OrderCard extends StatelessWidget {
                   Text(
                     ordername,
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.0175,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 5.h),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.00625,
+                  ),
                   Text(
                     'LE ${orderprice.toStringAsFixed(2)}',
                     style: TextStyle(
-                      fontSize: 15.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.01875,
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
                     ),
@@ -96,7 +106,7 @@ class OrderCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.025),
 
             /// ✅ العداد وزر الحذف
             Row(
@@ -108,10 +118,16 @@ class OrderCard extends StatelessWidget {
                       onQuantityChanged(quantity - 1);
                     }
                   },
+                  context: context,
                 ),
-                SizedBox(width: 6.w),
-                Text(quantity.toString(), style: TextStyle(fontSize: 16.sp)),
-                SizedBox(width: 6.w),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.015),
+                Text(
+                  quantity.toString(),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
+                  ),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.015),
                 _buildCircleButton(
                   icon: Icons.add,
                   onPressed: () {
@@ -119,8 +135,9 @@ class OrderCard extends StatelessWidget {
                       onQuantityChanged(quantity + 1);
                     }
                   },
+                  context: context,
                 ),
-                SizedBox(width: 3.w),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.0075),
 
                 /// ✅ زر الحذف مع رسالة تأكيد
                 IconButton(
@@ -161,7 +178,11 @@ class OrderCard extends StatelessWidget {
                       }
                     }
                   },
-                  icon: Icon(Icons.delete, color: Colors.red, size: 20.sp),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                    size: MediaQuery.of(context).size.height * 0.025,
+                  ),
                 ),
               ],
             ),
@@ -174,17 +195,22 @@ class OrderCard extends StatelessWidget {
   Widget _buildCircleButton({
     required IconData icon,
     required VoidCallback onPressed,
+    required BuildContext context,
   }) {
     return Container(
-      width: 20.w,
-      height: 20.h,
+      width: MediaQuery.of(context).size.width * 0.05,
+      height: MediaQuery.of(context).size.height * 0.0250,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.blueAccent,
       ),
       child: IconButton(
         padding: EdgeInsets.zero,
-        icon: Icon(icon, color: Colors.white, size: 16.sp),
+        icon: Icon(
+          icon,
+          color: Colors.white,
+          size: MediaQuery.of(context).size.height * 0.02,
+        ),
         onPressed: onPressed,
       ),
     );

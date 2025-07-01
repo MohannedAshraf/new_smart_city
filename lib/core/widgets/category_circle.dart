@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryCircle extends StatelessWidget {
   final String name; // اسم الكاتيجوري من الـ API
@@ -33,7 +32,7 @@ class CategoryCircle extends StatelessWidget {
                     ? const Icon(Icons.category, color: Colors.white)
                     : null,
           ),
-          SizedBox(height: 5.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.00625),
           Text(
             name, // الاسم اللي جاي من الـ API
             style: TextStyle(
@@ -42,7 +41,7 @@ class CategoryCircle extends StatelessWidget {
                       ? Colors.red
                       : Colors.black, // تغيير لون النص إذا كانت مختارة
               fontWeight: FontWeight.bold,
-              fontSize: 12.sp,
+              fontSize: MediaQuery.of(context).size.height * 0.015,
             ),
           ),
         ],

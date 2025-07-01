@@ -71,12 +71,19 @@ class _CustomCardState extends State<CustomCard> {
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
-        margin: EdgeInsets.fromLTRB(15.w, 10.h, 15.w, 10.h),
+        margin: EdgeInsets.fromLTRB(
+          MediaQuery.of(context).size.width * 0.0375,
+          MediaQuery.of(context).size.height * 0.0125,
+          MediaQuery.of(context).size.width * 0.0375,
+          MediaQuery.of(context).size.height * 0.0125,
+        ),
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.0375,
+          ),
           boxShadow:
               isHovered
                   ? [
@@ -99,7 +106,10 @@ class _CustomCardState extends State<CustomCard> {
         child: GestureDetector(
           onTap: () {},
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0175,
+              vertical: MediaQuery.of(context).size.height * 0.00875,
+            ),
             child: Row(
               children: [
                 // Icon Section
@@ -107,7 +117,12 @@ class _CustomCardState extends State<CustomCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10.h, 25.w),
+                      padding: EdgeInsets.fromLTRB(
+                        0,
+                        0,
+                        MediaQuery.of(context).size.height * 0.0125,
+                        MediaQuery.of(context).size.width * 0.0625,
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color:
@@ -115,10 +130,12 @@ class _CustomCardState extends State<CustomCard> {
                                   .request
                                   .requestStatus]?['color'] ??
                               MyColors.gray,
-                          borderRadius: BorderRadius.circular(15.r),
+                          borderRadius: BorderRadius.circular(
+                            MediaQuery.of(context).size.width * 0.0375,
+                          ),
                         ),
-                        width: 50.w,
-                        height: 50.h,
+                        width: MediaQuery.of(context).size.width * 0.125,
+                        height: MediaQuery.of(context).size.height * 0.0625,
                         child: Center(
                           child: Icon(
                             Styles.requestsStyle[widget
@@ -139,12 +156,17 @@ class _CustomCardState extends State<CustomCard> {
                 ),
 
                 // Spacer
-                SizedBox(width: 10.w),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.025),
 
                 // Text Content
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(4.w, 2.h, 15.w, 2.h),
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.01,
+                      MediaQuery.of(context).size.height * 0.0025,
+                      MediaQuery.of(context).size.width * 0.0375,
+                      MediaQuery.of(context).size.height * 0.0025,
+                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -158,16 +180,24 @@ class _CustomCardState extends State<CustomCard> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: MyColors.fontcolor,
-                                  fontSize: 16.sp,
+                                  fontSize:
+                                      MediaQuery.of(context).size.height * 0.02,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                              margin: EdgeInsets.fromLTRB(
+                                MediaQuery.of(context).size.width * 0.015,
+                                0.h,
+                                MediaQuery.of(context).size.width * 0.015,
+                                MediaQuery.of(context).size.height * 0.00625,
+                              ),
                               padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 8.h,
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.03,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.01,
                               ),
                               decoration: BoxDecoration(
                                 color:
@@ -208,7 +238,9 @@ class _CustomCardState extends State<CustomCard> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 5.h),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.00625,
+                        ),
                         Row(
                           children: [
                             Column(
@@ -229,8 +261,12 @@ class _CustomCardState extends State<CustomCard> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       SizedBox(
-                                        height: 30.h,
-                                        width: 90.w,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                            0.0375,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                            0.225,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -260,7 +296,11 @@ class _CustomCardState extends State<CustomCard> {
                                             maxLines: 1,
                                             style: TextStyle(
                                               color: MyColors.white,
-                                              fontSize: 13.sp,
+                                              fontSize:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.01625,
                                             ),
                                           ),
                                         ),

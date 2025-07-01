@@ -70,7 +70,12 @@ class BuildBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 15.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.02,
+            MediaQuery.of(context).size.height * 0.0125,
+            MediaQuery.of(context).size.width * 0.0375,
+            MediaQuery.of(context).size.height * 0.0125,
+          ),
           child: Row(
             children: [
               Column(
@@ -78,7 +83,7 @@ class BuildBoxes extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 20.0.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.025,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -96,7 +101,8 @@ class BuildBoxes extends StatelessWidget {
                             text: 'عرض الجميع',
                             style: TextStyle(
                               color: const Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12.sp,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.015,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -207,7 +213,12 @@ class BuildProductsBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.02,
+            MediaQuery.of(context).size.height * 0.0125,
+            MediaQuery.of(context).size.width * 0.02,
+            MediaQuery.of(context).size.height * 0.0125,
+          ),
           child: Row(
             children: [
               Column(
@@ -215,7 +226,7 @@ class BuildProductsBoxes extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 20.0.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.025,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -233,7 +244,8 @@ class BuildProductsBoxes extends StatelessWidget {
                             text: 'عرض الجميع',
                             style: TextStyle(
                               color: const Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12.sp,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.015,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -333,7 +345,12 @@ class BuildVendorssBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.02,
+            MediaQuery.of(context).size.height * 0.0125,
+            MediaQuery.of(context).size.width * 0.02,
+            MediaQuery.of(context).size.height * 0.0125,
+          ),
           child: Row(
             children: [
               Column(
@@ -341,7 +358,7 @@ class BuildVendorssBoxes extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 20.0.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.025,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -359,7 +376,8 @@ class BuildVendorssBoxes extends StatelessWidget {
                             text: 'عرض الجميع',
                             style: TextStyle(
                               color: const Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12.sp,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.015,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -453,10 +471,17 @@ class ServiceBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      margin: EdgeInsets.fromLTRB(4.w, 2.h, 4.w, 2.h),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.01,
+        MediaQuery.of(context).size.height * 0.0025,
+        MediaQuery.of(context).size.width * 0.01,
+        MediaQuery.of(context).size.height * 0.0025,
+      ),
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(12.0.r),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.03,
+        ),
         boxShadow: const [
           BoxShadow(
             color: MyColors.whiteSmoke,
@@ -469,8 +494,12 @@ class ServiceBox extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.r),
-              topRight: Radius.circular(20.r),
+              topLeft: Radius.circular(
+                MediaQuery.of(context).size.width * 0.05,
+              ),
+              topRight: Radius.circular(
+                MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
             child: Padding(
               padding: imagePadding,
@@ -482,13 +511,20 @@ class ServiceBox extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               color: backgroundColor,
-                              borderRadius: BorderRadius.circular(15.r),
+                              borderRadius: BorderRadius.circular(
+                                MediaQuery.of(context).size.width * 0.0375,
+                              ),
                             ),
 
                             width: imageWidth,
                             height: imageHeight,
                             child: Center(
-                              child: Icon(icon, size: 20.sp, color: iconColor),
+                              child: Icon(
+                                icon,
+                                size:
+                                    MediaQuery.of(context).size.height * 0.025,
+                                color: iconColor,
+                              ),
                             ),
                           ),
                         ]
@@ -517,7 +553,12 @@ class ServiceBox extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.025,
+              MediaQuery.of(context).size.height * 0.005,
+              MediaQuery.of(context).size.width * 0.025,
+              MediaQuery.of(context).size.height * 0.0025,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -528,7 +569,9 @@ class ServiceBox extends StatelessWidget {
                     softWrap: false,
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: titlefontSize ?? 14.sp,
+                      fontSize:
+                          titlefontSize ??
+                          MediaQuery.of(context).size.height * 0.0175,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
@@ -540,7 +583,12 @@ class ServiceBox extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.025,
+              MediaQuery.of(context).size.height * 0.0025,
+              MediaQuery.of(context).size.width * 0.025,
+              MediaQuery.of(context).size.height * 0.0125,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -549,7 +597,7 @@ class ServiceBox extends StatelessWidget {
                     details,
                     style: TextStyle(
                       color: const Color.fromARGB(221, 59, 58, 58),
-                      fontSize: 12.0.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.015,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -574,7 +622,9 @@ class ServiceDetailsScreen extends StatelessWidget {
       body: Center(
         child: Text(
           'تفاصيل الخدمة: $serviceName',
-          style: TextStyle(fontSize: 20.sp),
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.height * 0.025,
+          ),
         ),
       ),
     );

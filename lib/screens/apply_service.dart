@@ -3,7 +3,6 @@
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
-import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -42,21 +41,28 @@ class _ApplyService extends State<ApplyService> {
         return Scaffold(
           backgroundColor: MyColors.offWhite,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(60.h),
+            preferredSize: Size.fromHeight(
+              MediaQuery.of(context).size.height * 0.075,
+            ),
             child: AppBar(
               backgroundColor: MyColors.white,
               surfaceTintColor: MyColors.white,
               automaticallyImplyLeading: true,
               title: Text(
                 'لتجديد رخصة القيادة',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               centerTitle: true,
             ),
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.0125,
+              ),
               child: Column(
                 children: [
                   Padding(
@@ -90,8 +96,8 @@ class _ApplyService extends State<ApplyService> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 5.h,
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                      vertical: MediaQuery.of(context).size.height * 0.00625,
                     ),
                     child: const ServiceContainer(
                       icon: Icons.location_on,
@@ -102,8 +108,8 @@ class _ApplyService extends State<ApplyService> {
 
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 5.h,
+                      horizontal: MediaQuery.of(context).size.width * 0.05,
+                      vertical: MediaQuery.of(context).size.height * 0.00625,
                     ),
                     child: const ServiceContainer(
                       icon: Icons.location_on,
@@ -186,7 +192,9 @@ class _ApplyService extends State<ApplyService> {
                   ),
 
                   Row(children: [akcCheckBox()]),
-                  SizedBox(height: 13.h),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01625,
+                  ),
                   Row(children: [applyButton()]),
                 ],
               ),
@@ -202,10 +210,17 @@ class _ApplyService extends State<ApplyService> {
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(
+            MediaQuery.of(context).size.width * 0.05,
+          ),
         ),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.05,
+            MediaQuery.of(context).size.height * 0.00625,
+            MediaQuery.of(context).size.width * 0.05,
+            MediaQuery.of(context).size.height * 0.00625,
+          ),
           child: Row(
             children: [
               Checkbox(
@@ -219,13 +234,16 @@ class _ApplyService extends State<ApplyService> {
                   });
                 },
               ),
-              SizedBox(width: 7.w),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.0175),
               Expanded(
                 child: Stack(
                   children: [
                     Text(
                       'أُقر بأن جميع المعلومات المقدمة دقيقة وأوافق على معالجة بياناتي الشخصية لهذا الطلب.',
-                      style: TextStyle(color: MyColors.gray, fontSize: 14.sp),
+                      style: TextStyle(
+                        color: MyColors.gray,
+                        fontSize: MediaQuery.of(context).size.height * 0.0175,
+                      ),
                     ),
                     if (showError)
                       Positioned(
@@ -235,7 +253,8 @@ class _ApplyService extends State<ApplyService> {
                           '*',
                           style: TextStyle(
                             color: MyColors.ambulance,
-                            fontSize: 20.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.025,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -253,10 +272,15 @@ class _ApplyService extends State<ApplyService> {
   Expanded applyButton() {
     return Expanded(
       child: Container(
-        height: 90.h,
+        height: MediaQuery.of(context).size.height * 0.1125,
         color: MyColors.white,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.0475,
+            MediaQuery.of(context).size.height * 0.01875,
+            MediaQuery.of(context).size.width * 0.0475,
+            MediaQuery.of(context).size.height * 0.01875,
+          ),
           child: SizedBox(
             width: double.infinity,
             height: 70,
@@ -291,7 +315,7 @@ class _ApplyService extends State<ApplyService> {
               },
               icon: Icon(
                 Icons.send,
-                size: 20.sp,
+                size: MediaQuery.of(context).size.height * 0.025,
                 color: isButtonPressed ? MyColors.white : MyColors.grey,
               ),
               label: Text(
@@ -307,7 +331,9 @@ class _ApplyService extends State<ApplyService> {
                 backgroundColor:
                     isButtonPressed ? MyColors.dodgerBlue : MyColors.fadedGrey,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0350,
+                  ),
                 ),
               ),
             ),
@@ -350,7 +376,12 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.01,
+            MediaQuery.of(context).size.width * 0.0375,
+            MediaQuery.of(context).size.height * 0.005,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -359,23 +390,31 @@ class CustomTextField extends StatelessWidget {
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   header,
-                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.0175,
+                    color: MyColors.black,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            0.h,
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.015,
+          ),
           child: SizedBox(
-            height: 45.h,
+            height: MediaQuery.of(context).size.height * 0.05625,
             child: TextField(
               textAlignVertical: TextAlignVertical.top,
               onChanged: onChanged,
@@ -396,23 +435,37 @@ class CustomTextField extends StatelessWidget {
                   LengthLimitingTextInputFormatter(fixedLength!),
               ],
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
+                contentPadding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.03,
+                  MediaQuery.of(context).size.height * 0.015,
+                  MediaQuery.of(context).size.width * 0.03,
+                  MediaQuery.of(context).size.height * 0.01,
+                ),
                 fillColor: MyColors.white,
                 filled: true,
                 hintText: hintText,
-                hintStyle: TextStyle(color: MyColors.grey, fontSize: 16.sp),
+                hintStyle: TextStyle(
+                  color: MyColors.grey,
+                  fontSize: MediaQuery.of(context).size.height * 0.02,
+                ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide(
                     color: showError ? Colors.red : MyColors.gray,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide(
                     color: showError ? Colors.red : MyColors.dodgerBlue,
                   ),
@@ -482,7 +535,12 @@ class _DateTextFieldState extends State<DateTextField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
+              padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.01,
+                MediaQuery.of(context).size.width * 0.0375,
+                MediaQuery.of(context).size.height * 0.005,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -491,13 +549,16 @@ class _DateTextFieldState extends State<DateTextField> {
                       ' *',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     widget.header,
-                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.0175,
+                      color: MyColors.black,
+                    ),
                   ),
                 ],
               ),
@@ -505,9 +566,14 @@ class _DateTextFieldState extends State<DateTextField> {
           ],
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.01,
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.015,
+          ),
           child: SizedBox(
-            height: 45.h,
+            height: MediaQuery.of(context).size.height * 0.05625,
             child: TextField(
               controller: _controller,
               readOnly: true,
@@ -520,17 +586,23 @@ class _DateTextFieldState extends State<DateTextField> {
                 ),
                 suffixIcon: const Icon(Icons.calendar_today),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.gray,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.width * 0.0375,
+                  ),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.dodgerBlue,
                   ),
@@ -575,7 +647,12 @@ class _CustomDropDownState extends State<CustomDropDown> {
         Row(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 0.h),
+              padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.025,
+                MediaQuery.of(context).size.height * 0.01,
+                MediaQuery.of(context).size.width * 0.0375,
+                0.h,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -584,13 +661,16 @@ class _CustomDropDownState extends State<CustomDropDown> {
                       ' *',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     widget.header,
-                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.0175,
+                      color: MyColors.black,
+                    ),
                   ),
                 ],
               ),
@@ -598,10 +678,17 @@ class _CustomDropDownState extends State<CustomDropDown> {
           ],
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.01,
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.015,
+          ),
           child: DropdownButtonFormField<String>(
-            menuMaxHeight: 250.h,
-            borderRadius: BorderRadius.circular(15.r),
+            menuMaxHeight: MediaQuery.of(context).size.height * 0.3125,
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * 0.0375,
+            ),
             focusColor: MyColors.fadedGrey,
 
             iconEnabledColor: MyColors.white,
@@ -610,24 +697,35 @@ class _CustomDropDownState extends State<CustomDropDown> {
             value: widget.selectedValue,
             // onChanged: widget.onChanged,
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.03,
+              ),
               hintText: widget.hintText,
-              hintStyle: TextStyle(color: MyColors.black, fontSize: 12.sp),
+              hintStyle: TextStyle(
+                color: MyColors.black,
+                fontSize: MediaQuery.of(context).size.height * 0.015,
+              ),
               suffixIcon: const Icon(Icons.arrow_drop_down),
               fillColor: MyColors.white,
               filled: true,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.0375,
+                ),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.0375,
+                ),
                 borderSide: BorderSide(
                   color: widget.showError ? Colors.red : MyColors.gray,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.0375,
+                ),
                 borderSide: BorderSide(
                   color: widget.showError ? Colors.red : MyColors.dodgerBlue,
                 ),
@@ -677,7 +775,12 @@ class CustomUploadBox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.01,
+            MediaQuery.of(context).size.width * 0.0375,
+            MediaQuery.of(context).size.height * 0.005,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -686,31 +789,39 @@ class CustomUploadBox extends StatelessWidget {
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.02,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   header,
-                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.0175,
+                    color: MyColors.black,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.01,
+            MediaQuery.of(context).size.width * 0.025,
+            MediaQuery.of(context).size.height * 0.015,
+          ),
           child: DottedBorder(
             color: MyColors.gray,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: Radius.circular(15.r),
+            radius: Radius.circular(MediaQuery.of(context).size.width * 0.0375),
             dashPattern: const [6, 4],
             child: GestureDetector(
               onTap: onTap,
               child: Container(
-                height: 120.h,
+                height: MediaQuery.of(context).size.height * 0.0250,
                 width: double.infinity,
                 alignment: Alignment.center,
                 child: Column(
@@ -719,9 +830,9 @@ class CustomUploadBox extends StatelessWidget {
                     Icon(
                       Icons.cloud_upload_outlined,
                       color: MyColors.grey,
-                      size: 36.sp,
+                      size: MediaQuery.of(context).size.height * 0.045,
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                     Text(
                       title,
                       style: const TextStyle(
@@ -729,10 +840,15 @@ class CustomUploadBox extends StatelessWidget {
                         color: MyColors.black,
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.005,
+                    ),
                     Text(
                       subTitle,
-                      style: TextStyle(fontSize: 12.sp, color: MyColors.grey),
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.015,
+                        color: MyColors.grey,
+                      ),
                     ),
                   ],
                 ),

@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderScreen extends StatefulWidget {
@@ -92,7 +91,10 @@ class _SliderScreenState extends State<SliderScreen> {
         children: [
           // زر تخطي
           Padding(
-            padding: EdgeInsets.only(top: 30.h, right: 20.w),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.0375,
+              right: MediaQuery.of(context).size.width * 0.05,
+            ),
             child: Align(
               alignment: Alignment.topRight,
               child: TextButton(
@@ -103,7 +105,7 @@ class _SliderScreenState extends State<SliderScreen> {
                   'تخطي',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.025,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -132,15 +134,20 @@ class _SliderScreenState extends State<SliderScreen> {
                                 .cover, // تقدر تخليه contain لو عايز تحافظ على الأبعاد الأصلية
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.025,
+                    ),
                     Expanded(
                       flex: 3,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.height * 0.05,
+                        ),
                         child: Text(
                           pages[index]['text']!,
                           style: TextStyle(
-                            fontSize: 20.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.025,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
@@ -152,7 +159,7 @@ class _SliderScreenState extends State<SliderScreen> {
               },
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.025),
           // Dots indicator
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +167,9 @@ class _SliderScreenState extends State<SliderScreen> {
               pages.length,
               (index) => AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: EdgeInsets.symmetric(horizontal: 5.w),
+                margin: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.0125,
+                ),
                 width: _currentIndex == index ? 12 : 8,
                 height: _currentIndex == index ? 12 : 8,
                 decoration: BoxDecoration(
@@ -170,10 +179,13 @@ class _SliderScreenState extends State<SliderScreen> {
               ),
             ),
           ),
-          SizedBox(height: 30.h),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.0375),
           // زر التالي أو تم
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.05,
+              vertical: MediaQuery.of(context).size.height * 0.025,
+            ),
             child: TextButton(
               onPressed: () async {
                 if (_currentIndex == pages.length - 1) {
@@ -189,7 +201,7 @@ class _SliderScreenState extends State<SliderScreen> {
                 _currentIndex == pages.length - 1 ? 'تم' : 'التالي',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20.sp,
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
                   fontWeight: FontWeight.bold,
                 ),
               ),

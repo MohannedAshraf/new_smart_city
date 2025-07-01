@@ -25,7 +25,9 @@ class GovernmentServiceDetails extends StatelessWidget {
           return Scaffold(
             backgroundColor: MyColors.offWhite,
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(80.h),
+              preferredSize: Size.fromHeight(
+                MediaQuery.of(context).size.height * 0.1,
+              ),
               child: AppBar(
                 backgroundColor: MyColors.white,
                 surfaceTintColor: MyColors.white,
@@ -33,7 +35,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                 title: Text(
                   service.serviceName,
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: MediaQuery.of(context).size.height * 0.025,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -41,10 +43,15 @@ class GovernmentServiceDetails extends StatelessWidget {
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0),
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                    margin: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.015,
+                      0.h,
+                      MediaQuery.of(context).size.width * 0.015,
+                      MediaQuery.of(context).size.height * 0.00625,
+                    ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
+                      horizontal: MediaQuery.of(context).size.width * 0.03,
+                      vertical: MediaQuery.of(context).size.height * 0.01,
                     ),
                     decoration: BoxDecoration(
                       color:
@@ -67,7 +74,12 @@ class GovernmentServiceDetails extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
+                padding: EdgeInsets.fromLTRB(
+                  0.w,
+                  MediaQuery.of(context).size.height * 0.0125,
+                  0.w,
+                  0.w,
+                ),
                 child: Column(
                   children: [
                     Row(
@@ -75,17 +87,29 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+                            padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                            ),
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 10.h),
+                              margin: EdgeInsets.fromLTRB(
+                                0.w,
+                                0.h,
+                                0.w,
+                                MediaQuery.of(context).size.height * 0.0125,
+                              ),
                               decoration: BoxDecoration(
                                 color:
                                     Styles.govTabStyles[service
                                         .category]?['color'] ??
                                     MyColors.whiteSmoke,
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.05,
+                                ),
                               ),
-                              height: 200.h,
+                              height: MediaQuery.of(context).size.height * 0.25,
                               child: Center(
                                 child: Icon(
                                   Styles.govTabStyles[service
@@ -107,33 +131,56 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+                            padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                            ),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.05,
+                                ),
                               ),
                               child: Column(
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(
-                                      10.w,
-                                      16.h,
-                                      16.w,
-                                      12.h,
+                                      MediaQuery.of(context).size.width * 0.025,
+                                      MediaQuery.of(context).size.height *
+                                          0.025,
+                                      MediaQuery.of(context).size.width * 0.04,
+                                      MediaQuery.of(context).size.height *
+                                          0.015,
                                     ),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: MyColors.white,
-                                          radius: 14.r,
+                                          radius:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.0350,
                                           child: Icon(
                                             Icons.info,
                                             color: MyColors.dodgerBlue,
-                                            size: 28.sp,
+                                            size:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.0350,
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.02,
+                                        ),
                                         Expanded(
                                           child: Text(
                                             maxLines: 1,
@@ -141,7 +188,11 @@ class GovernmentServiceDetails extends StatelessWidget {
 
                                             style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 18.sp,
+                                              fontSize:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.02250,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.start,
@@ -153,10 +204,13 @@ class GovernmentServiceDetails extends StatelessWidget {
                                   ),
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(
-                                      19.w,
+                                      MediaQuery.of(context).size.width *
+                                          0.0475,
                                       0.h,
-                                      19.w,
-                                      20.h,
+                                      MediaQuery.of(context).size.width *
+                                          0.0475,
+                                      MediaQuery.of(context).size.height *
+                                          0.0250,
                                     ),
                                     child: Row(
                                       crossAxisAlignment:
@@ -166,7 +220,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                                           child: Text(
                                             service.description ?? '',
                                             style: TextStyle(
-                                              fontSize: 15.sp,
+                                              fontSize:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.height *
+                                                  0.01875,
                                               color: Colors.black87,
                                             ),
                                           ),
@@ -181,13 +239,20 @@ class GovernmentServiceDetails extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.0125,
+                    ),
 
                     Row(
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+                            padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                            ),
                             child: ServiceContainer(
                               icon: Icons.assignment,
                               title: 'الوثائق المطلوبة',
@@ -204,7 +269,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                                         Text(
                                           'لا توجد مستندات مطلوبة',
                                           style: TextStyle(
-                                            fontSize: 16.sp,
+                                            fontSize:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.02,
                                             color: Colors.black54,
                                           ),
                                         ),
@@ -219,20 +288,29 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+                            padding: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                              MediaQuery.of(context).size.width * 0.05,
+                              MediaQuery.of(context).size.height * 0.00625,
+                            ),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.05,
+                                ),
                               ),
                               child: Column(
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(
-                                      10.w,
-                                      16.h,
-                                      16.w,
-                                      12.h,
+                                      MediaQuery.of(context).size.width * 0.025,
+                                      MediaQuery.of(context).size.height *
+                                          0.025,
+                                      MediaQuery.of(context).size.width * 0.04,
+                                      MediaQuery.of(context).size.height *
+                                          0.015,
                                     ),
                                     child: Row(
                                       children: [
@@ -242,10 +320,20 @@ class GovernmentServiceDetails extends StatelessWidget {
                                           child: Icon(
                                             Icons.access_time_filled,
                                             color: const Color(0xFFE79420),
-                                            size: 28.sp,
+                                            size:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.0350,
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.02,
+                                        ),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
@@ -256,7 +344,11 @@ class GovernmentServiceDetails extends StatelessWidget {
 
                                                 style: TextStyle(
                                                   color: Colors.black87,
-                                                  fontSize: 18.sp,
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height *
+                                                      0.02250,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 textAlign: TextAlign.justify,
@@ -266,7 +358,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                                                 'الوقت المتوقع لإتمام العملية',
                                                 style: TextStyle(
                                                   color: Colors.black87,
-                                                  fontSize: 16.sp,
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height *
+                                                      0.02,
                                                 ),
                                                 textAlign: TextAlign.start,
                                                 maxLines: 2,
@@ -274,11 +370,25 @@ class GovernmentServiceDetails extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width *
+                                              0.02,
+                                        ),
                                         Padding(
                                           padding: EdgeInsets.symmetric(
-                                            horizontal: 8.w,
-                                            vertical: 8.h,
+                                            horizontal:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width *
+                                                0.02,
+                                            vertical:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.01,
                                           ),
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -286,17 +396,42 @@ class GovernmentServiceDetails extends StatelessWidget {
                                                 0xFFE79420,
                                               ).withOpacity(.1),
                                               borderRadius:
-                                                  BorderRadius.circular(20.r),
+                                                  BorderRadius.circular(
+                                                    MediaQuery.of(
+                                                          context,
+                                                        ).size.width *
+                                                        0.05,
+                                                  ),
                                             ),
 
-                                            height: 80.h,
-                                            width: 140.w,
+                                            height:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.height *
+                                                0.1,
+                                            width:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width *
+                                                0.1,
                                             child: Padding(
                                               padding: EdgeInsets.fromLTRB(
-                                                10.w,
-                                                16.h,
-                                                16.w,
-                                                12.h,
+                                                MediaQuery.of(
+                                                      context,
+                                                    ).size.width *
+                                                    0.025,
+                                                MediaQuery.of(
+                                                      context,
+                                                    ).size.height *
+                                                    0.025,
+                                                MediaQuery.of(
+                                                      context,
+                                                    ).size.width *
+                                                    0.04,
+                                                MediaQuery.of(
+                                                      context,
+                                                    ).size.height *
+                                                    0.015,
                                               ),
                                               child: Text(
                                                 maxLines: 3,
@@ -307,7 +442,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                                                   color: const Color(
                                                     0xFFE79420,
                                                   ),
-                                                  fontSize: 15.sp,
+                                                  fontSize:
+                                                      MediaQuery.of(
+                                                        context,
+                                                      ).size.height *
+                                                      0.01875,
                                                 ),
                                               ),
                                             ),
@@ -331,10 +470,15 @@ class GovernmentServiceDetails extends StatelessWidget {
               width: double.infinity,
               color: MyColors.white,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 16.h),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.0475,
+                  MediaQuery.of(context).size.height * 0.01,
+                  MediaQuery.of(context).size.width * 0.0475,
+                  MediaQuery.of(context).size.height * 0.025,
+                ),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 50.h,
+                  height: MediaQuery.of(context).size.height * 0.0625,
                   child: ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -346,13 +490,13 @@ class GovernmentServiceDetails extends StatelessWidget {
                     },
                     icon: Icon(
                       Icons.description,
-                      size: 20.sp,
+                      size: MediaQuery.of(context).size.height * 0.025,
                       color: MyColors.white,
                     ),
                     label: Text(
                       'اطلب هذه الخدمة',
                       style: TextStyle(
-                        fontSize: 17.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.021250,
                         fontWeight: FontWeight.bold,
                         color: MyColors.white,
                       ),
@@ -360,7 +504,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.dodgerBlue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14.r),
+                        borderRadius: BorderRadius.circular(
+                          MediaQuery.of(context).size.width * 0.0350,
+                        ),
                       ),
                     ),
                   ),
@@ -375,22 +521,30 @@ class GovernmentServiceDetails extends StatelessWidget {
     );
   }
 
-  Padding requirmentItem(String text) {
+  Padding requirmentItem(BuildContext context, String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.01,
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.015,
+      ),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 5.r,
+            radius: MediaQuery.of(context).size.width * 0.0125,
             child: Text(''),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.02),
           Expanded(
             child: Text(
               text,
 
-              style: TextStyle(color: Colors.black87, fontSize: 16.sp),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: MediaQuery.of(context).size.height * 0.02,
+              ),
               textAlign: TextAlign.justify,
               //maxLines: 2,
             ),
@@ -400,14 +554,24 @@ class GovernmentServiceDetails extends StatelessWidget {
     );
   }
 
-  Padding stepsItem(String text, String title, String num) {
+  Padding stepsItem(
+    BuildContext context,
+    String text,
+    String title,
+    String num,
+  ) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.01,
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.015,
+      ),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 16.r,
+            radius: MediaQuery.of(context).size.width * 0.04,
             child: Text(
               num,
               style: const TextStyle(
@@ -416,7 +580,7 @@ class GovernmentServiceDetails extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.02),
           Expanded(
             child: Column(
               children: [
@@ -427,7 +591,7 @@ class GovernmentServiceDetails extends StatelessWidget {
 
                       style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 18.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02250,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.justify,
@@ -445,7 +609,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                         maxLines: 3,
                         style: TextStyle(
                           color: Colors.black87,
-                          fontSize: 16.sp,
+                          fontSize: MediaQuery.of(context).size.height * 0.02,
                         ),
                         textAlign: TextAlign.justify,
                         //maxLines: 2,
@@ -470,20 +634,28 @@ class RequirmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.01,
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.015,
+      ),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 5.r,
+            radius: MediaQuery.of(context).size.width * 0.0125,
             child: Text(''),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.02),
           Expanded(
             child: Text(
               text,
 
-              style: TextStyle(color: Colors.black87, fontSize: 16.sp),
+              style: TextStyle(
+                color: Colors.black87,
+                fontSize: MediaQuery.of(context).size.height * 0.02,
+              ),
               textAlign: TextAlign.justify,
               //maxLines: 2,
             ),
@@ -508,12 +680,17 @@ class StepsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.01,
+        MediaQuery.of(context).size.width * 0.0475,
+        MediaQuery.of(context).size.height * 0.015,
+      ),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 16.r,
+            radius: MediaQuery.of(context).size.width * 0.04,
             child: Text(
               num,
               style: const TextStyle(
@@ -522,7 +699,7 @@ class StepsItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.02),
           Expanded(
             child: Column(
               children: [
@@ -533,7 +710,7 @@ class StepsItem extends StatelessWidget {
 
                       style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 18.sp,
+                        fontSize: MediaQuery.of(context).size.height * 0.02250,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.justify,
@@ -551,7 +728,7 @@ class StepsItem extends StatelessWidget {
                         maxLines: 3,
                         style: TextStyle(
                           color: Colors.black87,
-                          fontSize: 16.sp,
+                          fontSize: MediaQuery.of(context).size.height * 0.02,
                         ),
                         textAlign: TextAlign.justify,
                         //maxLines: 2,

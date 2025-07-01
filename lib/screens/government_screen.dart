@@ -9,7 +9,6 @@ import 'package:citio/screens/government_services.dart';
 import 'package:citio/screens/my_order_page.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:citio/screens/profile.dart';
-import 'package:citio/screens/social_media.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -193,7 +192,9 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.r),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * 0.075,
+            ),
           ),
           onPressed: () {
             Navigator.push(
@@ -204,7 +205,11 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
             );
           },
           backgroundColor: MyColors.dodgerBlue,
-          child: Icon(Icons.add, color: MyColors.white, size: 30.sp),
+          child: Icon(
+            Icons.add,
+            color: MyColors.white,
+            size: MediaQuery.of(context).size.height * 0.0375,
+          ),
         ),
         appBar: AppBar(
           leading: IconButton(
@@ -218,20 +223,30 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
               );
             },
           ),
-          toolbarHeight: 70.h,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.0875,
           backgroundColor: MyColors.white,
 
           title: Padding(
-            padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
+            padding: EdgeInsets.fromLTRB(
+              0.w,
+              MediaQuery.of(context).size.height * 0.015,
+              0.w,
+              MediaQuery.of(context).size.height * 0.015,
+            ),
             child: Text(
               'طلباتي',
-              style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+              style: TextStyle(
+                color: MyColors.black,
+                fontSize: MediaQuery.of(context).size.height * 0.025,
+              ),
             ),
           ),
           centerTitle: true,
 
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40.h),
+            preferredSize: Size.fromHeight(
+              MediaQuery.of(context).size.height * 0.05,
+            ),
             child: Column(
               children: [
                 const Divider(
@@ -244,7 +259,12 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   child: TabBar(
                     splashFactory: NoSplash.splashFactory,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    padding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                    padding: EdgeInsets.fromLTRB(
+                      0,
+                      0,
+                      MediaQuery.of(context).size.width * 0.025,
+                      0,
+                    ),
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: MyColors.white,

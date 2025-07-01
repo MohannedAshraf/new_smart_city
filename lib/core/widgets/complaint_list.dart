@@ -1,6 +1,5 @@
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅
 import 'package:intl/intl.dart';
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
@@ -40,17 +39,24 @@ class ComplaintList extends StatelessWidget {
     }
   }
 
-  Widget buildTrailingWidget() {
+  Widget buildTrailingWidget(BuildContext context) {
     switch (type) {
       case 'inprogress':
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.hourglass_top, size: 20.sp, color: Colors.orange),
-            SizedBox(width: 4.w),
+            Icon(
+              Icons.hourglass_top,
+              size: MediaQuery.of(context).size.height * 0.025,
+              color: Colors.orange,
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
             Text(
               'قيد المراجعة',
-              style: TextStyle(fontSize: 13.sp, color: Colors.orange),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.01625,
+                color: Colors.orange,
+              ),
             ),
           ],
         );
@@ -58,11 +64,18 @@ class ComplaintList extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.pending_actions, size: 20.sp, color: Colors.blue),
-            SizedBox(width: 4.w),
+            Icon(
+              Icons.pending_actions,
+              size: MediaQuery.of(context).size.height * 0.025,
+              color: Colors.blue,
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
             Text(
               'قيد الانتظار',
-              style: TextStyle(fontSize: 13.sp, color: Colors.blue),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.height * 0.01625,
+                color: Colors.blue,
+              ),
             ),
           ],
         );
@@ -74,46 +87,66 @@ class ComplaintList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.04,
+        vertical: MediaQuery.of(context).size.height * 0.01,
+      ),
       itemCount: issues.length,
       itemBuilder: (context, index) {
         final issue = issues[index];
 
         return SizedBox(
-          height: 150.h,
+          height: MediaQuery.of(context).size.height * 0.1875,
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r),
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.04,
+              ),
             ),
-            margin: EdgeInsets.symmetric(vertical: 8.h),
+            margin: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height * 0.01,
+            ),
             color: Colors.white,
             child: Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
-                    child: issue.image != null
-                        ? Image.network(
-                            _baseUrl + issue.image!,
-                            width: 80.w,
-                            height: 80.h,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Icon(Icons.broken_image, size: 40.sp),
-                          )
-                        : Image.network(
-                            'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                            width: 80.w,
-                            height: 80.h,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Icon(Icons.broken_image, size: 40.sp),
-                          ),
+                    borderRadius: BorderRadius.circular(
+                      MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    child:
+                        issue.image != null
+                            ? Image.network(
+                              _baseUrl + issue.image!,
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size:
+                                        MediaQuery.of(context).size.height *
+                                        0.05,
+                                  ),
+                            )
+                            : Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size:
+                                        MediaQuery.of(context).size.height *
+                                        0.05,
+                                  ),
+                            ),
                   ),
-                  SizedBox(width: 16.w),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.04),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,18 +154,22 @@ class ComplaintList extends StatelessWidget {
                         Text(
                           issue.title,
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.0175,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.0075,
+                        ),
                         Text(
                           issue.description ?? '',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.0175,
                             color: const Color.fromARGB(255, 0, 0, 0),
                           ),
                           maxLines: 2,
@@ -143,20 +180,21 @@ class ComplaintList extends StatelessWidget {
                           (type == 'inprogress')
                               ? 'تحت المراجعة'
                               : (type == 'active')
-                                  ? getTimeAgo(issue.date)
-                                  : (issue.date.isNotEmpty ? issue.date : ''),
+                              ? getTimeAgo(issue.date)
+                              : (issue.date.isNotEmpty ? issue.date : ''),
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize:
+                                MediaQuery.of(context).size.height * 0.0175,
                             color: Colors.grey,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: buildTrailingWidget(),
+                    child: buildTrailingWidget(context),
                   ),
                 ],
               ),

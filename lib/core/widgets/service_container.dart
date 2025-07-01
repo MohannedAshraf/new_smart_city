@@ -17,22 +17,33 @@ class ServiceContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(
+          MediaQuery.of(context).size.width * 0.05,
+        ),
       ),
       // width: MediaQuery.of(context).size.width - 30,
       //height: 200,
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 16.h, 16.w, 12.h),
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.025,
+              MediaQuery.of(context).size.height * 0.025,
+              MediaQuery.of(context).size.width * 0.04,
+              MediaQuery.of(context).size.height * 0.015,
+            ),
             child: Row(
               children: [
                 CircleAvatar(
                   backgroundColor: MyColors.white,
-                  radius: 14.r,
-                  child: Icon(icon, color: MyColors.dodgerBlue, size: 28.sp),
+                  radius: MediaQuery.of(context).size.width * 0.0350,
+                  child: Icon(
+                    icon,
+                    color: MyColors.dodgerBlue,
+                    size: MediaQuery.of(context).size.height * 0.0350,
+                  ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                 Expanded(
                   child: Text(
                     maxLines: 1,
@@ -40,7 +51,7 @@ class ServiceContainer extends StatelessWidget {
 
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: 18.sp,
+                      fontSize: MediaQuery.of(context).size.height * 0.02250,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
@@ -51,7 +62,12 @@ class ServiceContainer extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 20.h),
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.0475,
+              0.h,
+              MediaQuery.of(context).size.width * 0.0475,
+              MediaQuery.of(context).size.height * 0.0250,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: content,
