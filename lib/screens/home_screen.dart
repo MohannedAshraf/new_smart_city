@@ -129,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'أضف شكوى',
                             style: TextStyle(fontSize: 11, color: Colors.black),
                           ),
+                          const SizedBox(height: 3),
                         ],
                       ),
                     ],

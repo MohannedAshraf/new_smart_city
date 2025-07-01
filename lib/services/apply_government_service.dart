@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 
 import 'package:citio/core/utils/variables.dart';
@@ -49,7 +47,6 @@ class ApplyGovernmentService {
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        print('successfly');
         final data = jsonDecode(response.body);
         return data;
       } else {
