@@ -419,7 +419,7 @@ class ServiceCard extends StatelessWidget {
                 color: color,
 
                 width: double.infinity,
-                height: 130.h,
+                height: 100.h,
                 child: Center(child: Icon(icon, size: 40.sp, color: fontColor)),
               ),
             ),
