@@ -6,6 +6,7 @@ import 'package:citio/models/request.dart';
 import 'package:citio/screens/apply_service.dart';
 import 'package:citio/services/get_requests_by_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabBarViewItem extends StatefulWidget {
   final String title;
@@ -70,12 +71,12 @@ class _CustomCardState extends State<CustomCard> {
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
-        margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+        margin: EdgeInsets.fromLTRB(15.w, 10.h, 15.w, 10.h),
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(15.r),
           boxShadow:
               isHovered
                   ? [
@@ -100,7 +101,7 @@ class _CustomCardState extends State<CustomCard> {
             // Add your tap action here
           },
           child: Container(
-            padding: const EdgeInsets.all(7),
+            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
             child: Row(
               children: [
                 // Icon Section
@@ -108,7 +109,7 @@ class _CustomCardState extends State<CustomCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 25),
+                      padding: EdgeInsets.fromLTRB(0, 0, 10.h, 25.w),
                       child: Container(
                         decoration: BoxDecoration(
                           color:
@@ -116,10 +117,10 @@ class _CustomCardState extends State<CustomCard> {
                                   .request
                                   .requestStatus]?['color'] ??
                               MyColors.gray,
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(15.r),
                         ),
-                        width: 50,
-                        height: 50,
+                        width: 50.w,
+                        height: 50.h,
                         child: Center(
                           child: Icon(
                             Styles.requestsStyle[widget
@@ -140,12 +141,12 @@ class _CustomCardState extends State<CustomCard> {
                 ),
 
                 // Spacer
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
 
                 // Text Content
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 2, 15, 2),
+                    padding: EdgeInsets.fromLTRB(4.w, 2.h, 15.w, 2.h),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -157,18 +158,18 @@ class _CustomCardState extends State<CustomCard> {
                                 widget.request.serviceName,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: MyColors.fontcolor,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
+                              margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 8.h,
                               ),
                               decoration: BoxDecoration(
                                 color:
@@ -209,7 +210,7 @@ class _CustomCardState extends State<CustomCard> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: 5.h),
                         Row(
                           children: [
                             Column(
@@ -230,8 +231,8 @@ class _CustomCardState extends State<CustomCard> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       SizedBox(
-                                        height: 30,
-                                        width: 90,
+                                        height: 30.h,
+                                        width: 90.w,
                                         child: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -256,12 +257,12 @@ class _CustomCardState extends State<CustomCard> {
                                               EdgeInsets.zero,
                                             ),
                                           ),
-                                          child: const Text(
+                                          child: Text(
                                             'اعادة الطلب',
                                             maxLines: 1,
                                             style: TextStyle(
                                               color: MyColors.white,
-                                              fontSize: 13,
+                                              fontSize: 13.sp,
                                             ),
                                           ),
                                         ),

@@ -8,6 +8,7 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_under_sub_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final int selectedCategoryIndex;
@@ -92,8 +93,8 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        width: 70,
-        height: 50,
+        width: 70.w,
+        height: 50.h,
         decoration: const BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
@@ -105,10 +106,10 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               MaterialPageRoute(builder: (context) => const CartView()),
             );
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: 30,
+            size: 30.sp,
           ),
         ),
       ),
@@ -127,11 +128,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     _buildCategoryList(),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     _buildSubCategoryList(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     isLoadingProducts
                         ? const Center(child: CircularProgressIndicator())
                         : products.isEmpty
@@ -162,7 +163,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               name: category.nameAr,
               imageUrl: category.imageUrl,
               isSelected: selectedCategoryIndex == index,
-              radius: 30,
+              radius: 30.r,
             ),
           );
         }),
@@ -192,7 +193,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   name: subCategory.nameAr,
                   imageUrl: subCategory.imageUrl,
                   isSelected: selectedSubCategoryIndex == index,
-                  radius: 25,
+                  radius: 25.r,
                 ),
               );
             }),
@@ -204,7 +205,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10.h),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 8.5 / 12,

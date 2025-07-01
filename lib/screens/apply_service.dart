@@ -3,11 +3,11 @@
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
-import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -41,27 +41,27 @@ class _ApplyService extends State<ApplyService> {
         return Scaffold(
           backgroundColor: MyColors.offWhite,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(60),
+            preferredSize: Size.fromHeight(60.h),
             child: AppBar(
               backgroundColor: MyColors.white,
               surfaceTintColor: MyColors.white,
               automaticallyImplyLeading: true,
-              title: const Text(
+              title: Text(
                 'لتجديد رخصة القيادة',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
               centerTitle: true,
             ),
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 10.h),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 5.h,
                     ),
                     child: ServiceContainer(
                       icon: Icons.person,
@@ -88,9 +88,12 @@ class _ApplyService extends State<ApplyService> {
                     ),
                   ),
 
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: ServiceContainer(
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 5.h,
+                    ),
+                    child: const ServiceContainer(
                       icon: Icons.location_on,
                       title: 'بيانات العنوان',
                       content: [SizedBox()],
@@ -98,9 +101,9 @@ class _ApplyService extends State<ApplyService> {
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 5.h,
                     ),
                     child: ServiceContainer(
                       icon: Icons.file_upload,
@@ -171,7 +174,7 @@ class _ApplyService extends State<ApplyService> {
                   ),
 
                   Row(children: [akcCheckBox()]),
-                  const SizedBox(height: 13),
+                  SizedBox(height: 13.h),
                   Row(children: [applyButton()]),
                 ],
               ),
@@ -187,10 +190,10 @@ class _ApplyService extends State<ApplyService> {
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+          padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
           child: Row(
             children: [
               Checkbox(
@@ -204,23 +207,23 @@ class _ApplyService extends State<ApplyService> {
                   });
                 },
               ),
-              const SizedBox(width: 7),
+              SizedBox(width: 7.w),
               Expanded(
                 child: Stack(
                   children: [
-                    const Text(
+                    Text(
                       'أُقر بأن جميع المعلومات المقدمة دقيقة وأوافق على معالجة بياناتي الشخصية لهذا الطلب.',
-                      style: TextStyle(color: MyColors.gray, fontSize: 14),
+                      style: TextStyle(color: MyColors.gray, fontSize: 14.sp),
                     ),
                     if (showError)
-                      const Positioned(
+                      Positioned(
                         left: 0,
                         top: 0,
                         child: Text(
                           '*',
                           style: TextStyle(
                             color: MyColors.ambulance,
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -238,13 +241,13 @@ class _ApplyService extends State<ApplyService> {
   Expanded applyButton() {
     return Expanded(
       child: Container(
-        height: 90,
+        height: 90.h,
         color: MyColors.white,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(19, 15, 19, 15),
+          padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
           child: SizedBox(
             width: double.infinity,
-            height: 70,
+            height: 70.h,
             child: ElevatedButton.icon(
               onPressed: () {
                 if (!isChecked) {
@@ -273,25 +276,16 @@ class _ApplyService extends State<ApplyService> {
                   }
                   ///// hena elpayemnt ba3den lama te3mleh
                 }
-                // setState(() {
-                //   isButtonPressed = true;
-                // });
-
-                // Future.delayed(const Duration(milliseconds: 200), () {
-                //   setState(() {
-                //     isButtonPressed = false;
-                //   });
-                // });
               },
               icon: Icon(
                 Icons.send,
-                size: 20,
+                size: 20.sp,
                 color: isButtonPressed ? MyColors.white : MyColors.grey,
               ),
               label: Text(
                 ' إرسال الطلب ',
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 17.sp,
                   fontWeight: FontWeight.bold,
                   color: isButtonPressed ? MyColors.white : MyColors.grey,
                 ),
@@ -301,7 +295,7 @@ class _ApplyService extends State<ApplyService> {
                 backgroundColor:
                     isButtonPressed ? MyColors.dodgerBlue : MyColors.fadedGrey,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
               ),
             ),
@@ -344,32 +338,32 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 15, 4),
+          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showError)
-                const Text(
+                Text(
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   header,
-                  style: const TextStyle(fontSize: 14, color: MyColors.black),
+                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+          padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 12.h),
           child: SizedBox(
-            height: 45,
+            height: 45.h,
             child: TextField(
               textAlignVertical: TextAlignVertical.top,
               onChanged: onChanged,
@@ -390,23 +384,23 @@ class CustomTextField extends StatelessWidget {
                   LengthLimitingTextInputFormatter(fixedLength!),
               ],
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
                 fillColor: MyColors.white,
                 filled: true,
                 hintText: hintText,
-                hintStyle: const TextStyle(color: MyColors.grey, fontSize: 16),
+                hintStyle: TextStyle(color: MyColors.grey, fontSize: 16.sp),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide(
                     color: showError ? Colors.red : MyColors.gray,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide(
                     color: showError ? Colors.red : MyColors.dodgerBlue,
                   ),
@@ -476,22 +470,22 @@ class _DateTextFieldState extends State<DateTextField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 15, 4),
+              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (widget.showError)
-                    const Text(
+                    Text(
                       ' *',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     widget.header,
-                    style: const TextStyle(fontSize: 14, color: MyColors.black),
+                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
                   ),
                 ],
               ),
@@ -499,9 +493,9 @@ class _DateTextFieldState extends State<DateTextField> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
           child: SizedBox(
-            height: 45,
+            height: 45.h,
             child: TextField(
               controller: _controller,
               readOnly: true,
@@ -514,17 +508,17 @@ class _DateTextFieldState extends State<DateTextField> {
                 ),
                 suffixIcon: const Icon(Icons.calendar_today),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.gray,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(15.r),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.dodgerBlue,
                   ),
@@ -569,22 +563,22 @@ class _CustomDropDownState extends State<CustomDropDown> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 15, 0),
+              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 0.h),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (widget.showError)
-                    const Text(
+                    Text(
                       ' *',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
                     widget.header,
-                    style: const TextStyle(fontSize: 14, color: MyColors.black),
+                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
                   ),
                 ],
               ),
@@ -592,10 +586,10 @@ class _CustomDropDownState extends State<CustomDropDown> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
           child: DropdownButtonFormField<String>(
-            menuMaxHeight: 250,
-            borderRadius: BorderRadius.circular(15),
+            menuMaxHeight: 250.h,
+            borderRadius: BorderRadius.circular(15.r),
             focusColor: MyColors.fadedGrey,
 
             iconEnabledColor: MyColors.white,
@@ -604,30 +598,29 @@ class _CustomDropDownState extends State<CustomDropDown> {
             value: widget.selectedValue,
             // onChanged: widget.onChanged,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
               hintText: widget.hintText,
-              hintStyle: const TextStyle(color: MyColors.black, fontSize: 12),
+              hintStyle: TextStyle(color: MyColors.black, fontSize: 12.sp),
               suffixIcon: const Icon(Icons.arrow_drop_down),
               fillColor: MyColors.white,
               filled: true,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15.r),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15.r),
                 borderSide: BorderSide(
                   color: widget.showError ? Colors.red : MyColors.gray,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15.r),
                 borderSide: BorderSide(
                   color: widget.showError ? Colors.red : MyColors.dodgerBlue,
                 ),
               ),
             ),
-            // icon: const Icon(Icons.keyboard_arrow_down),
             items:
                 widget.items.map((item) {
                   return DropdownMenuItem(
@@ -671,51 +664,51 @@ class CustomUploadBox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 15, 4),
+          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showError)
-                const Text(
+                Text(
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   header,
-                  style: const TextStyle(fontSize: 14, color: MyColors.black),
+                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
           child: DottedBorder(
             color: MyColors.gray,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: const Radius.circular(15),
+            radius: Radius.circular(15.r),
             dashPattern: const [6, 4],
             child: GestureDetector(
               onTap: onTap,
               child: Container(
-                height: 120,
+                height: 120.h,
                 width: double.infinity,
                 alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.cloud_upload_outlined,
                       color: MyColors.grey,
-                      size: 36,
+                      size: 36.sp,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       title,
                       style: const TextStyle(
@@ -723,13 +716,10 @@ class CustomUploadBox extends StatelessWidget {
                         color: MyColors.black,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       subTitle,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: MyColors.grey,
-                      ),
+                      style: TextStyle(fontSize: 12.sp, color: MyColors.grey),
                     ),
                   ],
                 ),

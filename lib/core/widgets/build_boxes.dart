@@ -16,6 +16,7 @@ import 'package:citio/screens/vendor_profile.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
 // ignore: must_be_immutable
@@ -69,15 +70,15 @@ class BuildBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 15, 10),
+          padding: EdgeInsets.fromLTRB(8.w, 10.h, 15.w, 10.h),
           child: Row(
             children: [
               Column(
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 20.0,
+                    style: TextStyle(
+                      fontSize: 20.0.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -93,9 +94,9 @@ class BuildBoxes extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'عرض الجميع',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 99, 167, 222),
+                              fontSize: 12.sp,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -118,7 +119,6 @@ class BuildBoxes extends StatelessWidget {
             ],
           ),
         ),
-        // const SizedBox(height: 10.0),
         SizedBox(
           height: height,
 
@@ -162,7 +162,7 @@ class BuildBoxes extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 20.0),
+        SizedBox(height: 20.0.h),
       ],
     );
   }
@@ -207,15 +207,15 @@ class BuildProductsBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
           child: Row(
             children: [
               Column(
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 20.0,
+                    style: TextStyle(
+                      fontSize: 20.0.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -231,9 +231,9 @@ class BuildProductsBoxes extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'عرض الجميع',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 99, 167, 222),
+                              fontSize: 12.sp,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -257,7 +257,6 @@ class BuildProductsBoxes extends StatelessWidget {
             ],
           ),
         ),
-        // const SizedBox(height: 10.0),
         SizedBox(
           height: height,
 
@@ -289,7 +288,7 @@ class BuildProductsBoxes extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 20.0),
+        SizedBox(height: 20.0.h),
       ],
     );
   }
@@ -334,15 +333,15 @@ class BuildVendorssBoxes extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
           child: Row(
             children: [
               Column(
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 20.0,
+                    style: TextStyle(
+                      fontSize: 20.0.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textDirection: TextDirection.rtl,
@@ -358,9 +357,9 @@ class BuildVendorssBoxes extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: 'عرض الجميع',
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 99, 167, 222),
-                              fontSize: 12,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 99, 167, 222),
+                              fontSize: 12.sp,
                             ),
                             recognizer:
                                 TapGestureRecognizer()
@@ -382,7 +381,6 @@ class BuildVendorssBoxes extends StatelessWidget {
             ],
           ),
         ),
-        // const SizedBox(height: 10.0),
         SizedBox(
           height: height,
 
@@ -414,7 +412,7 @@ class BuildVendorssBoxes extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 20.0),
+        SizedBox(height: 20.0.h),
       ],
     );
   }
@@ -455,10 +453,10 @@ class ServiceBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      margin: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+      margin: EdgeInsets.fromLTRB(4.w, 2.h, 4.w, 2.h),
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(12.0.r),
         boxShadow: const [
           BoxShadow(
             color: MyColors.whiteSmoke,
@@ -470,9 +468,9 @@ class ServiceBox extends StatelessWidget {
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.r),
+              topRight: Radius.circular(20.r),
             ),
             child: Padding(
               padding: imagePadding,
@@ -484,13 +482,13 @@ class ServiceBox extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                               color: backgroundColor,
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(15.r),
                             ),
 
                             width: imageWidth,
                             height: imageHeight,
                             child: Center(
-                              child: Icon(icon, size: 20, color: iconColor),
+                              child: Icon(icon, size: 20.sp, color: iconColor),
                             ),
                           ),
                         ]
@@ -519,7 +517,7 @@ class ServiceBox extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
+            padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
             child: Row(
               children: [
                 Expanded(
@@ -530,7 +528,7 @@ class ServiceBox extends StatelessWidget {
                     softWrap: false,
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: titlefontSize ?? 14,
+                      fontSize: titlefontSize ?? 14.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
@@ -542,16 +540,16 @@ class ServiceBox extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
+            padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     maxLines: maximumlines ?? 2,
                     details,
-                    style: const TextStyle(
-                      color: Color.fromARGB(221, 59, 58, 58),
-                      fontSize: 12.0,
+                    style: TextStyle(
+                      color: const Color.fromARGB(221, 59, 58, 58),
+                      fontSize: 12.0.sp,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -576,7 +574,7 @@ class ServiceDetailsScreen extends StatelessWidget {
       body: Center(
         child: Text(
           'تفاصيل الخدمة: $serviceName',
-          style: const TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 20.sp),
         ),
       ),
     );

@@ -2,6 +2,7 @@
 import 'package:citio/helper/api_register.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
   }
@@ -76,27 +77,27 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Form(
               key: _formKey,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                  vertical: 10,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15.0.w,
+                  vertical: 10.h,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset("assets/icon/citio.svg", height: 100),
-                    const Text(
+                    SvgPicture.asset("assets/icon/citio.svg", height: 100.h),
+                    Text(
                       "إنشاء حساب",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    const Text(
+                    SizedBox(height: 4.h),
+                    Text(
                       "انضم إلى Citio لإدارة خدمات مدينتك",
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                     ),
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     // Full Name
                     TextFormField(
@@ -114,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       validator:
                           (value) => value!.isEmpty ? "يرجى إدخال الاسم" : null,
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
 
                     // Phone
                     TextFormField(
@@ -131,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           (value) =>
                               value!.isEmpty ? "يرجى إدخال رقم الهاتف" : null,
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
 
                     // Email
                     TextFormField(
@@ -149,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ? "يرجى إدخال البريد الإلكتروني"
                                   : null,
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
 
                     // Password
                     TextFormField(
@@ -185,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
 
                     // Address
                     TextFormField(
@@ -204,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           (value) =>
                               value!.isEmpty ? "يرجى إدخال العنوان" : null,
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
 
                     // Building + Floor
                     Row(
@@ -224,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         Expanded(
                           child: TextFormField(
                             controller: floorController,
@@ -242,7 +243,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Register Button
                     SizedBox(
@@ -250,9 +251,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
                         onPressed: () {
@@ -262,15 +263,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         child: Text(
                           _isLoading ? "جاري التسجيل..." : "أنشئ الحساب",
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: 16.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Already have account?
                     Row(

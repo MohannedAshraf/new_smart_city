@@ -14,6 +14,7 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_model.dart';
 import 'package:citio/helper/api_service.dart';
 import 'package:citio/screens/subcategory_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ServiceOrderScreen extends StatefulWidget {
   const ServiceOrderScreen({super.key});
@@ -112,8 +113,8 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
       onWillPop: _onWillPop,
       child: Scaffold(
         floatingActionButton: Container(
-          width: 70,
-          height: 50,
+          width: 70.w,
+          height: 50.h,
           decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
           child: IconButton(
             onPressed: () {
@@ -122,7 +123,11 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 MaterialPageRoute(builder: (context) => const CartView()),
               );
             },
-            icon: Icon(Icons.shopping_bag_sharp, color: Colors.white, size: 30),
+            icon: Icon(
+              Icons.shopping_bag_sharp,
+              color: Colors.white,
+              size: 30.sp,
+            ),
           ),
         ),
         appBar: AppBar(
@@ -132,22 +137,22 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            padding: EdgeInsets.symmetric(horizontal: 5.0.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                   child: MySearchBar(
                     controller: _controller,
                     onSearch: _performSearch,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 _buildCategories(),
                 if (selectedCategoryIndex != null) _buildSubCategories(),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 _isLoadingBanners
                     ? const Center(child: CircularProgressIndicator())
                     : _bannerError != null
@@ -155,10 +160,13 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                       child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
                     )
                     : BannerSliderWidget(banners: _banners!),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: 20.h),
+                Text(
                   "أفضل التقييمات",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 MostRequestedProductsView(),
               ],
@@ -195,7 +203,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                 name: _categories![index].nameAr,
                 imageUrl: _categories![index].imageUrl,
                 isSelected: selectedCategoryIndex == index,
-                radius: 30,
+                radius: 30.r,
               ),
             );
           }),
@@ -238,7 +246,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                   child: CategoryCircle(
                     name: subCategories[index].nameAr,
                     imageUrl: subCategories[index].imageUrl,
-                    radius: 25,
+                    radius: 25.r,
                   ),
                 );
               }),
@@ -263,28 +271,25 @@ class MySearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 42, // تقليل ارتفاع السيرش بار
+      height: 42.h, // تقليل ارتفاع السيرش بار
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSearch(),
-        style: const TextStyle(fontSize: 14), // تصغير حجم الخط
+        style: TextStyle(fontSize: 14.sp), // تصغير حجم الخط
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 0,
-            horizontal: 16,
-          ),
+          contentPadding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 16.w),
           hintText: 'ماذا تريد ',
           prefixIcon: InkWell(
             onTap: onSearch,
-            child: const Icon(Icons.search, size: 20),
+            child: Icon(Icons.search, size: 20.sp),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey), // بوردر غامق
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(20.0.r),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black87),
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(20.0.r),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -313,7 +318,7 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
           items:
               widget.banners.map((banner) {
                 return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                   child: GestureDetector(
                     onTap:
                         () => Navigator.push(
@@ -337,11 +342,14 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                                   const Icon(Icons.broken_image),
                         ),
                         Positioned(
-                          bottom: 10,
-                          left: 10,
+                          bottom: 10.h,
+                          left: 10.w,
                           child: Container(
                             color: Colors.black54,
-                            padding: const EdgeInsets.all(8),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 8.h,
+                            ),
                             child: Text(
                               banner.description,
                               style: const TextStyle(color: Colors.white),
@@ -354,7 +362,7 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                 );
               }).toList(),
           options: CarouselOptions(
-            height: 190.0,
+            height: 190.0.h,
             autoPlay: true,
             enlargeCenterPage: true,
             onPageChanged: (index, reason) {
@@ -364,22 +372,6 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
             },
           ),
         ),
-        // const SizedBox(height: 10),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: List.generate(
-        //     widget.banners.length,
-        //     (index) => Container(
-        //       width: 10.0,
-        //       height: 10.0,
-        //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: _currentIndex == index ? Colors.blueAccent : Colors.grey,
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -427,7 +419,7 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,

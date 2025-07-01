@@ -1,5 +1,6 @@
 import 'package:citio/core/utils/variables.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTextButton extends StatelessWidget {
   const MyTextButton({
@@ -15,11 +16,11 @@ class MyTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      margin: const EdgeInsets.only(top: 20),
+      height: 50.h,
+      margin: EdgeInsets.only(top: 20.h),
       decoration: BoxDecoration(
         color: MyColors.gray,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: Center(
         child: TextButton(
@@ -36,8 +37,8 @@ class MyTextButton extends StatelessWidget {
           },
           child: Text(
             text,
-            style: const TextStyle(
-              fontSize: 24,
+            style: TextStyle(
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: MyColors.white,
             ),

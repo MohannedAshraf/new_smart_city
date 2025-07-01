@@ -4,6 +4,7 @@ import 'package:citio/helper/auth_helper.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -39,9 +40,9 @@ class _StartPageState extends State<StartPage> {
       backgroundColor: MyColors.backgroundColor,
       body: Center(
         child: Container(
-          width: 250,
-          height: 250,
-          margin: const EdgeInsets.all(20),
+          width: 250.w,
+          height: 250.h,
+          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(MyAssetsImage.city),

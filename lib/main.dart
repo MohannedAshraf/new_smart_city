@@ -76,7 +76,6 @@ class CityApp extends StatelessWidget {
   }
 }
 
-
 // كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
   final int initialIndex;
@@ -109,7 +108,7 @@ class HomePageState extends State<HomePage> {
       appBar:
           currentIndex == 0
               ? PreferredSize(
-                preferredSize: const Size.fromHeight(60),
+                preferredSize: Size.fromHeight(60.h),
                 child: AppBar(
                   //automaticallyImplyLeading: true,
                   centerTitle: true,
@@ -118,16 +117,16 @@ class HomePageState extends State<HomePage> {
                   surfaceTintColor: MyAppColors.specialbackground,
                   elevation: 0,
                   title: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                    padding: EdgeInsets.fromLTRB(0.w, 16.h, 0.w, 16.h),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: CustomSearchBar(
-                                height: 40,
-                                borderRadius: 25,
+                                height: 40.h,
+                                borderRadius: 25.r,
                                 hintText: 'ماذا تريد',
                               ),
                             ),
@@ -162,8 +161,10 @@ class HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: MyAppColors.specialbackground),
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: MyAppColors.specialbackground,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,13 +172,13 @@ class HomePageState extends State<HomePage> {
                     'مدينتنا',
                     style: TextStyle(
                       color: MyColors.black,
-                      fontSize: 24,
+                      fontSize: 24.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     'مرحباً بكم!',
-                    style: TextStyle(color: MyColors.black, fontSize: 16),
+                    style: TextStyle(color: MyColors.black, fontSize: 16.sp),
                   ),
                 ],
               ),
@@ -288,10 +289,10 @@ class HomePageState extends State<HomePage> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-        selectedIconTheme: const IconThemeData(size: 30),
-        unselectedIconTheme: const IconThemeData(size: 25),
-        selectedLabelStyle: const TextStyle(fontSize: 16),
-        unselectedLabelStyle: const TextStyle(fontSize: 14),
+        selectedIconTheme: IconThemeData(size: 30.sp),
+        unselectedIconTheme: IconThemeData(size: 25.sp),
+        selectedLabelStyle: TextStyle(fontSize: 16.sp),
+        unselectedLabelStyle: TextStyle(fontSize: 14.sp),
         type: BottomNavigationBarType.fixed,
         backgroundColor: MyAppColors.specialbackground,
         selectedItemColor: MyColors.dodgerBlue,

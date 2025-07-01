@@ -8,6 +8,7 @@ import 'package:citio/models/cart_model.dart';
 import 'package:citio/screens/checkout_view.dart';
 import 'package:citio/screens/order_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
@@ -85,7 +86,7 @@ class _CartViewState extends State<CartView> {
     }
 
     if (cart == null || cart!.items.isEmpty) {
-      return const Scaffold(body: Center(child: Text('Your cart is empty')));
+      return const Scaffold(body: Center(child: Text('العربة فارغة')));
     }
 
     final items = cart!.items;
@@ -98,23 +99,23 @@ class _CartViewState extends State<CartView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "العربة ",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 10.0, bottom: 12, right: 12),
+        padding: EdgeInsets.only(left: 10.0.w, bottom: 12.h, right: 12.w),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 5.0.w, vertical: 10.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "قائمة التسوق ",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
 
               ...items.map((item) {
                 return OrderCard(
@@ -137,14 +138,11 @@ class _CartViewState extends State<CartView> {
                 );
               }),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // ✅ خانة كود الخصم
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 12,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
                 decoration: BoxDecoration(
                   color: MyAppColors.background,
                   borderRadius: BorderRadius.circular(10),
@@ -169,40 +167,40 @@ class _CartViewState extends State<CartView> {
                       onPressed: applyDiscount,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 12.h,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'تفعيل',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 20.sp),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     Expanded(
                       child: TextField(
                         controller: discountController,
                         decoration: InputDecoration(
                           hintText: 'ادخل كود الخصم',
-                          hintStyle: const TextStyle(fontSize: 14),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
+                          hintStyle: TextStyle(fontSize: 14.sp),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 10.h,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: BorderSide(color: Colors.grey.shade300),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                             borderSide: const BorderSide(
                               color: Colors.blueAccent,
                             ),
@@ -214,14 +212,14 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // ✅ الملخص
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   color: MyAppColors.background,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
@@ -240,18 +238,18 @@ class _CartViewState extends State<CartView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
                         Text(
                           "ملخص  الطلب",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Row(
                       children: [
                         const Text("المجموع الفرعي "),
@@ -263,11 +261,11 @@ class _CartViewState extends State<CartView> {
                     const Row(
                       children: [Text("الضريبة"), Spacer(), Text("LE 3.00")],
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     const Row(
                       children: [Text("التوصيل"), Spacer(), Text("LE 2.00")],
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     if (discountValue > 0)
                       Row(
                         children: [
@@ -279,19 +277,19 @@ class _CartViewState extends State<CartView> {
                     const Divider(),
                     Row(
                       children: [
-                        const Text(
+                        Text(
                           "المجموع  ",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 20.sp,
                           ),
                         ),
                         const Spacer(),
                         Text(
                           "LE ${total.toStringAsFixed(2)}",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 20.sp,
                           ),
                         ),
                       ],
@@ -300,15 +298,15 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 25.h),
 
               // ✅ زر Checkout
               Container(
                 width: double.infinity,
-                height: 55,
+                height: 55.h,
                 decoration: BoxDecoration(
                   color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: TextButton(
                   onPressed: () {
@@ -320,10 +318,10 @@ class _CartViewState extends State<CartView> {
                       ),
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     "الدفع",
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 25.sp,
                       fontWeight: FontWeight.bold,
                       color: MyAppColors.background,
                     ),
@@ -331,7 +329,7 @@ class _CartViewState extends State<CartView> {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),

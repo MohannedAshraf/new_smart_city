@@ -5,6 +5,7 @@ import 'package:citio/main.dart';
 import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:citio/services/fcm_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,7 +64,7 @@ class _LoginPageState extends State<MyloginPage> {
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
   }
@@ -76,7 +77,7 @@ class _LoginPageState extends State<MyloginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: EdgeInsets.symmetric(vertical: 24.h),
             child: Form(
               key: _formKey,
               autovalidateMode:
@@ -84,26 +85,26 @@ class _LoginPageState extends State<MyloginPage> {
                       ? AutovalidateMode.always
                       : AutovalidateMode.disabled,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: 15.0.w),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset("assets/icon/citio.svg", height: 120),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SvgPicture.asset("assets/icon/citio.svg", height: 120.h),
+                    SizedBox(height: 16.h),
+                    Text(
                       "مرحباً بعودتك",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.blueAccent,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: 8.h),
+                    Text(
                       "سجّل الدخول لإدارة خدمات المدينة",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Email
                     TextFormField(
@@ -122,7 +123,7 @@ class _LoginPageState extends State<MyloginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Password
                     TextFormField(
@@ -158,7 +159,7 @@ class _LoginPageState extends State<MyloginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
 
                     // Forgot password
                     Align(
@@ -182,7 +183,7 @@ class _LoginPageState extends State<MyloginPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
 
                     // Login Button
                     SizedBox(
@@ -190,30 +191,30 @@ class _LoginPageState extends State<MyloginPage> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blueAccent,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
                         ),
                         onPressed: () => loginUser(context),
                         child: Text(
                           _isLoading ? "جاري التحقق..." : "تسجيل الدخول",
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: 16.sp,
                             color: Colors.white,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Register Option
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "ليس لديك حساب؟",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                         TextButton(
                           onPressed: () {
@@ -224,10 +225,10 @@ class _LoginPageState extends State<MyloginPage> {
                               ),
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             "افتح حساب",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.bold,
                               color: Colors.blueAccent,
                             ),
@@ -236,11 +237,11 @@ class _LoginPageState extends State<MyloginPage> {
                       ],
                     ),
 
-                    const SizedBox(height: 12),
-                    const Text(
+                    SizedBox(height: 12.h),
+                    Text(
                       " Powered by Citio\n version 2.1.0",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                      style: TextStyle(color: Colors.grey, fontSize: 15.sp),
                     ),
                   ],
                 ),

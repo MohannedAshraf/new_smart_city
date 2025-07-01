@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:citio/core/utils/variables.dart';
 
 class TabItem extends StatelessWidget {
@@ -18,7 +19,7 @@ class TabItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.normal),
             overflow: TextOverflow.ellipsis,
           ),
         ],

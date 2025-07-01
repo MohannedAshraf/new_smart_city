@@ -6,6 +6,7 @@ import 'package:citio/core/widgets/socialmedia_tab_view.dart';
 import 'package:citio/main.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final Uri _url = Uri.parse('https://x.com/home');
 
@@ -41,19 +42,19 @@ class _SocialMediaState extends State<SocialMedia> {
             );
           },
         ),
-        flexibleSpace: Container(height: 0),
-        toolbarHeight: 50,
+        flexibleSpace: Container(height: 0.h),
+        toolbarHeight: 50.h,
 
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
           child: Row(
             children: [
               SizedBox(width: screenWidth * .13),
-              const Column(
+              Column(
                 children: [
                   Text(
                     'آخر المشاركات',
-                    style: TextStyle(color: MyColors.black, fontSize: 20),
+                    style: TextStyle(color: MyColors.black, fontSize: 20.sp),
                   ),
                 ],
               ),

@@ -8,6 +8,7 @@ import 'package:citio/models/vendor.dart';
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VendorProfile extends StatefulWidget {
   final String id;
@@ -26,18 +27,18 @@ class _VendorProfileState extends State<VendorProfile> {
         backgroundColor: MyColors.white,
         // foregroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
-        title: const Padding(
-          padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+        title: Padding(
+          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
           child: Text(
             'تفاصيل الخدمة',
-            style: TextStyle(color: MyColors.black, fontSize: 20),
+            style: TextStyle(color: MyColors.black, fontSize: 20.sp),
           ),
         ),
         centerTitle: true,
       ),
       backgroundColor: MyColors.offWhite,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
+        padding: EdgeInsets.fromLTRB(0.w, 7.h, 0.w, 0.h),
         child: FutureBuilder<List<VendorSubcategory>>(
           future: GetVendor().getVendorSubcategory(widget.id),
           builder: (context, snapshot) {
@@ -54,14 +55,14 @@ class _VendorProfileState extends State<VendorProfile> {
                           Vendor vendor = snapshot.data!;
                           return vendorCard(vendor);
                         } else {
-                          return const SizedBox(
-                            height: 280,
+                          return SizedBox(
+                            height: 280.h,
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
                       },
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
                     Container(
                       color: MyColors.white,
                       child: Transform.translate(
@@ -109,7 +110,7 @@ class _VendorProfileState extends State<VendorProfile> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: const EdgeInsets.fromLTRB(20, 10, 20, 3),
+      margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 3.h),
       child: SizedBox(
         width: screenWidth * .9,
         height: screenHeight * 0.37,
@@ -120,9 +121,9 @@ class _VendorProfileState extends State<VendorProfile> {
               //alignment: Alignment.topRight,
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.r),
+                    topRight: Radius.circular(20.r),
                   ),
                   child:
                       vendor.coverImage != null
@@ -158,9 +159,9 @@ class _VendorProfileState extends State<VendorProfile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 20, 20),
+                        padding: EdgeInsets.fromLTRB(0.w, 8.h, 20.w, 20.h),
                         child: CircleAvatar(
-                          radius: 32,
+                          radius: 32.r,
 
                           backgroundImage:
                               vendor.image != null
@@ -179,12 +180,12 @@ class _VendorProfileState extends State<VendorProfile> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 40, 20, 0),
+                  padding: EdgeInsets.fromLTRB(0.w, 40.h, 20.w, 0.h),
                   child: Text(
                     vendor.businessName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: MyColors.black,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -198,24 +199,24 @@ class _VendorProfileState extends State<VendorProfile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 5, 20, 0),
+                        padding: EdgeInsets.fromLTRB(10.w, 5.h, 20.w, 0.h),
                         child: Text(
                           vendor.type,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: MyColors.gray,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 20, 15),
+                        padding: EdgeInsets.fromLTRB(10.w, 10.h, 20.w, 15.h),
                         child: Row(
                           children: [
                             const Icon(Icons.star, color: MyColors.star),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
                             Text(vendor.rating.toStringAsFixed(2)),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
                             Text(
                               '(${vendor.rating.toString()} تقييما)',
                               style: TextStyle(color: MyColors.gray),

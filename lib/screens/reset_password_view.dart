@@ -1,5 +1,6 @@
 import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResetPasswordView extends StatelessWidget {
   ResetPasswordView({super.key});
@@ -9,16 +10,16 @@ class ResetPasswordView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text("نسيت كلمة المرور ")),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 50),
-            const Text(
+            SizedBox(height: 50.h),
+            Text(
               "البريد الالكتروني  ",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             TextFormField(
               controller: emailController,
               decoration: InputDecoration(
@@ -39,14 +40,14 @@ class ResetPasswordView extends StatelessWidget {
                 return null;
               },
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30.h),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
               width: double.infinity,
-              height: 50,
+              height: 50.h,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -56,10 +57,10 @@ class ResetPasswordView extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   "ارسال",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -75,7 +76,7 @@ class ResetPasswordView extends StatelessWidget {
 
 OutlineInputBorder myBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
+    borderRadius: BorderRadius.circular(15.r),
     borderSide: const BorderSide(
       color: Colors.grey, // لون البوردر أسود ثابت
     ),

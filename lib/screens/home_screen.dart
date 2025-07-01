@@ -22,6 +22,7 @@ import 'package:citio/services/get_vendor.dart';
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
@@ -243,10 +244,10 @@ class MySearchBar extends StatelessWidget {
         prefixIcon: const Icon(Icons.search),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: MyColors.ghostColor),
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(25.0.r),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(25.0.r),
           borderSide: const BorderSide(color: Colors.grey),
         ),
         filled: true,
@@ -273,7 +274,7 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
               CarouselSlider(
                 items: cards,
                 options: CarouselOptions(
-                  height: 150.0,
+                  height: 150.0.h,
                   autoPlay: true,
                   enlargeCenterPage: true,
                   onPageChanged:
@@ -281,19 +282,12 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              /* Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  data.length,
-                  (index) => Indicator(isActive: _currentIndex == index),
-                ),
-              ),*/
             ],
           );
         } else {
-          return const SizedBox(
-            height: 150,
-            child: Center(child: CircularProgressIndicator()),
+          return SizedBox(
+            height: 150.h,
+            child: const Center(child: CircularProgressIndicator()),
           );
         }
       },
@@ -325,7 +319,7 @@ class ImageCard extends StatelessWidget {
             ),
           ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10.0.r),
         child: Stack(
           children: [
             Image.network(
@@ -337,38 +331,32 @@ class ImageCard extends StatelessWidget {
                 Object error,
                 StackTrace? stackTrace,
               ) {
-                return const SizedBox(
-                  height: 150,
-                  child: Image(image: AssetImage(MyAssetsImage.brokenImage)),
+                return SizedBox(
+                  height: 150.h,
+                  child: const Image(
+                    image: AssetImage(MyAssetsImage.brokenImage),
+                  ),
                 );
               },
             ),
             Positioned(
-              bottom: 20.0,
-              left: 10.0,
+              bottom: 20.0.h,
+              left: 10.0.w,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10.0,
-                  vertical: 5.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10.0.w,
+                  vertical: 5.0.h,
                 ),
                 // ignore: deprecated_member_use
                 color: Colors.transparent,
                 child: StrokeText(
-                  height: 10,
-                  width: 10,
+                  height: 10.h,
+                  width: 10.w,
                   text: data.name,
-                  textSize: 14,
+                  textSize: 14.sp,
                   textColor: MyColors.white,
                   strokeColor: MyColors.black,
                 ),
-                /*Text(
-                  data['title']!,
-                  style: const TextStyle(
-                    color: MyColors.fontcolor,
-                    fontSize: 16.0,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),*/
               ),
             ),
           ],
@@ -385,9 +373,9 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 8.0,
-      height: 8.0,
-      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+      width: 8.0.w,
+      height: 8.0.h,
+      margin: EdgeInsets.symmetric(horizontal: 4.0.w),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isActive ? Colors.green : Colors.grey,
@@ -433,7 +421,7 @@ class _StrokeTextState extends State<StrokeText> {
           textAlign: TextAlign.left,
           widget.text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16,
+            fontSize: widget.textSize ?? 16.sp,
             letterSpacing: widget.letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
             foreground:
@@ -447,7 +435,7 @@ class _StrokeTextState extends State<StrokeText> {
         Text(
           widget.text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16,
+            fontSize: widget.textSize ?? 16.sp,
             letterSpacing: widget.letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
             color: widget.textColor ?? Colors.white,

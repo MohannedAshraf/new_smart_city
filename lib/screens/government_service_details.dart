@@ -9,6 +9,7 @@ import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentServiceDetails extends StatelessWidget {
   final int id;
@@ -24,23 +25,26 @@ class GovernmentServiceDetails extends StatelessWidget {
           return Scaffold(
             backgroundColor: MyColors.offWhite,
             appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(80),
+              preferredSize: Size.fromHeight(80.h),
               child: AppBar(
                 backgroundColor: MyColors.white,
                 surfaceTintColor: MyColors.white,
                 automaticallyImplyLeading: true,
                 title: Text(
                   service.serviceName,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 centerTitle: true,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0),
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                    margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
                     ),
                     decoration: BoxDecoration(
                       color:
@@ -63,7 +67,7 @@ class GovernmentServiceDetails extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
                 child: Column(
                   children: [
                     Row(
@@ -71,18 +75,17 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
                             child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              margin: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 10.h),
                               decoration: BoxDecoration(
                                 color:
                                     Styles.govTabStyles[service
                                         .category]?['color'] ??
                                     MyColors.whiteSmoke,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              // width: MediaQuery.of(context).size.width - 30,
-                              height: 200,
+                              height: 200.h,
                               child: Center(
                                 child: Icon(
                                   Styles.govTabStyles[service
@@ -104,43 +107,41 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              // width: MediaQuery.of(context).size.width - 30,
-                              //height: 200,
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      10,
-                                      16,
-                                      16,
-                                      12,
+                                    padding: EdgeInsets.fromLTRB(
+                                      10.w,
+                                      16.h,
+                                      16.w,
+                                      12.h,
                                     ),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: MyColors.white,
-                                          radius: 14,
+                                          radius: 14.r,
                                           child: Icon(
                                             Icons.info,
                                             color: MyColors.dodgerBlue,
-                                            size: 28,
+                                            size: 28.sp,
                                           ),
                                         ),
-                                        SizedBox(width: 8),
+                                        SizedBox(width: 8.w),
                                         Expanded(
                                           child: Text(
                                             maxLines: 1,
                                             'تفاصيل هذه الخدمة',
 
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 18,
+                                              fontSize: 18.sp,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.start,
@@ -151,11 +152,11 @@ class GovernmentServiceDetails extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      19,
-                                      0,
-                                      19,
-                                      20,
+                                    padding: EdgeInsets.fromLTRB(
+                                      19.w,
+                                      0.h,
+                                      19.w,
+                                      20.h,
                                     ),
                                     child: Row(
                                       crossAxisAlignment:
@@ -165,7 +166,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                                           child: Text(
                                             service.description ?? '',
                                             style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: 15.sp,
                                               color: Colors.black87,
                                             ),
                                           ),
@@ -180,13 +181,13 @@ class GovernmentServiceDetails extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     Row(
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
                             child: ServiceContainer(
                               icon: Icons.assignment,
                               title: 'الوثائق المطلوبة',
@@ -203,7 +204,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                                         Text(
                                           'لا توجد مستندات مطلوبة',
                                           style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 16.sp,
                                             color: Colors.black54,
                                           ),
                                         ),
@@ -218,22 +219,20 @@ class GovernmentServiceDetails extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              // width: MediaQuery.of(context).size.width - 30,
-                              //height: 200,
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      10,
-                                      16,
-                                      16,
-                                      12,
+                                    padding: EdgeInsets.fromLTRB(
+                                      10.w,
+                                      16.h,
+                                      16.w,
+                                      12.h,
                                     ),
                                     child: Row(
                                       children: [
@@ -243,10 +242,10 @@ class GovernmentServiceDetails extends StatelessWidget {
                                           child: Icon(
                                             Icons.access_time_filled,
                                             color: const Color(0xFFE79420),
-                                            size: 28,
+                                            size: 28.sp,
                                           ),
                                         ),
-                                        SizedBox(width: 8),
+                                        SizedBox(width: 8.w),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
@@ -255,9 +254,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                                               Text(
                                                 'مدة التنفيذ',
 
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: Colors.black87,
-                                                  fontSize: 18,
+                                                  fontSize: 18.sp,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 textAlign: TextAlign.justify,
@@ -265,9 +264,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                                               ),
                                               Text(
                                                 'الوقت المتوقع لإتمام العملية',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: Colors.black87,
-                                                  fontSize: 16,
+                                                  fontSize: 16.sp,
                                                 ),
                                                 textAlign: TextAlign.start,
                                                 maxLines: 2,
@@ -275,28 +274,30 @@ class GovernmentServiceDetails extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 8),
+                                        SizedBox(width: 8.w),
                                         Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8.w,
+                                            vertical: 8.h,
+                                          ),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: const Color(
                                                 0xFFE79420,
                                               ).withOpacity(.1),
                                               borderRadius:
-                                                  BorderRadius.circular(20),
+                                                  BorderRadius.circular(20.r),
                                             ),
 
-                                            height: 80,
-                                            width: 140,
+                                            height: 80.h,
+                                            width: 140.w,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    10,
-                                                    16,
-                                                    16,
-                                                    12,
-                                                  ),
+                                              padding: EdgeInsets.fromLTRB(
+                                                10.w,
+                                                16.h,
+                                                16.w,
+                                                12.h,
+                                              ),
                                               child: Text(
                                                 maxLines: 3,
                                                 textAlign: TextAlign.center,
@@ -306,7 +307,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                                                   color: const Color(
                                                     0xFFE79420,
                                                   ),
-                                                  fontSize: 15,
+                                                  fontSize: 15.sp,
                                                 ),
                                               ),
                                             ),
@@ -330,10 +331,10 @@ class GovernmentServiceDetails extends StatelessWidget {
               width: double.infinity,
               color: MyColors.white,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(19, 8, 19, 16),
+                padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 16.h),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 50.h,
                   child: ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -343,15 +344,15 @@ class GovernmentServiceDetails extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.description,
-                      size: 20,
+                      size: 20.sp,
                       color: MyColors.white,
                     ),
-                    label: const Text(
+                    label: Text(
                       'اطلب هذه الخدمة',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.bold,
                         color: MyColors.white,
                       ),
@@ -359,7 +360,7 @@ class GovernmentServiceDetails extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.dodgerBlue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(14.r),
                       ),
                     ),
                   ),
@@ -376,20 +377,20 @@ class GovernmentServiceDetails extends StatelessWidget {
 
   Padding requirmentItem(String text) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(19, 8, 19, 12),
+      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 5,
+            radius: 5.r,
             child: Text(''),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
 
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
+              style: TextStyle(color: Colors.black87, fontSize: 16.sp),
               textAlign: TextAlign.justify,
               //maxLines: 2,
             ),
@@ -401,12 +402,12 @@ class GovernmentServiceDetails extends StatelessWidget {
 
   Padding stepsItem(String text, String title, String num) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(19, 8, 19, 12),
+      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 16,
+            radius: 16.r,
             child: Text(
               num,
               style: const TextStyle(
@@ -415,7 +416,7 @@ class GovernmentServiceDetails extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               children: [
@@ -424,9 +425,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                     Text(
                       title,
 
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.justify,
@@ -442,9 +443,9 @@ class GovernmentServiceDetails extends StatelessWidget {
                       child: Text(
                         text,
                         maxLines: 3,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black87,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                         ),
                         textAlign: TextAlign.justify,
                         //maxLines: 2,
@@ -469,20 +470,20 @@ class RequirmentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(19, 8, 19, 12),
+      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 5,
+            radius: 5.r,
             child: Text(''),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
 
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
+              style: TextStyle(color: Colors.black87, fontSize: 16.sp),
               textAlign: TextAlign.justify,
               //maxLines: 2,
             ),
@@ -507,12 +508,12 @@ class StepsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(19, 8, 19, 12),
+      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: MyColors.dodgerBlue,
-            radius: 16,
+            radius: 16.r,
             child: Text(
               num,
               style: const TextStyle(
@@ -521,7 +522,7 @@ class StepsItem extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(
             child: Column(
               children: [
@@ -530,9 +531,9 @@ class StepsItem extends StatelessWidget {
                     Text(
                       title,
 
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.justify,
@@ -548,9 +549,9 @@ class StepsItem extends StatelessWidget {
                       child: Text(
                         text,
                         maxLines: 3,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black87,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                         ),
                         textAlign: TextAlign.justify,
                         //maxLines: 2,

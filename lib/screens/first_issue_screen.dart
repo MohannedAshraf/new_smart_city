@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/complaint_list.dart';
 import 'package:citio/core/widgets/rated_complaint_list.dart';
@@ -45,8 +47,14 @@ class _IssueScreenState extends State<IssueScreen> {
             RegExp(r'([a-zA-Z]+ \d{1,2}),(\d{4})'),
             (match) => '${match[1]}, ${match[2]}',
           );
-          final dateA = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedA);
-          final dateB = DateFormat("MMMM d, yyyy h:mm a", "en_US").parse(fixedB);
+          final dateA = DateFormat(
+            "MMMM d, yyyy h:mm a",
+            "en_US",
+          ).parse(fixedA);
+          final dateB = DateFormat(
+            "MMMM d, yyyy h:mm a",
+            "en_US",
+          ).parse(fixedB);
           return dateB.compareTo(dateA);
         } catch (e) {
           return 0;
@@ -56,9 +64,10 @@ class _IssueScreenState extends State<IssueScreen> {
       setState(() {
         active = issues.where((e) => e.status == 'Active').toList();
         resolved = issues.where((e) => e.status == 'Resolved').toList();
-        inprogress = issues
-            .where((e) => e.status != 'Active' && e.status != 'Resolved')
-            .toList();
+        inprogress =
+            issues
+                .where((e) => e.status != 'Active' && e.status != 'Resolved')
+                .toList();
         isLoading = false;
       });
     } catch (e) {
@@ -102,7 +111,11 @@ class _IssueScreenState extends State<IssueScreen> {
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: MyColors.themecolor, size: 22.sp),
+              icon: Icon(
+                Icons.arrow_back,
+                color: MyColors.themecolor,
+                size: 22.sp,
+              ),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
@@ -127,59 +140,70 @@ class _IssueScreenState extends State<IssueScreen> {
             centerTitle: true,
             elevation: 0,
           ),
-          body: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    Divider(
-                      height: 1.h,
-                      thickness: 0.6.h,
-                      color: Colors.black12,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 5.w,
-                        vertical: 5.h,
+          body:
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
+                    children: [
+                      Divider(
+                        height: 1.h,
+                        thickness: 0.6.h,
+                        color: Colors.black12,
                       ),
-                      child: TabBar(
-                        splashFactory: NoSplash.splashFactory,
-                        overlayColor: WidgetStateProperty.all(Colors.transparent),
-                        isScrollable: false,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        dividerColor: MyColors.white,
-                        indicatorColor: MyColors.inProgress,
-                        labelColor: MyColors.inProgress,
-                        unselectedLabelColor: MyColors.gray,
-                        tabs: [
-                          TabItem(title: 'نشطة', count: active.length),
-                          TabItem(title: 'تحت المراجعة', count: inprogress.length),
-                          TabItem(title: 'المقبولة', count: resolved.length),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5.w,
+                          vertical: 5.h,
+                        ),
+                        child: TabBar(
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: WidgetStateProperty.all(
+                            Colors.transparent,
+                          ),
+                          isScrollable: false,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          dividerColor: MyColors.white,
+                          indicatorColor: MyColors.inProgress,
+                          labelColor: MyColors.inProgress,
+                          unselectedLabelColor: MyColors.gray,
+                          tabs: [
+                            TabItem(title: 'نشطة', count: active.length),
+                            TabItem(
+                              title: 'تحت المراجعة',
+                              count: inprogress.length,
+                            ),
+                            TabItem(title: 'المقبولة', count: resolved.length),
+                          ],
+                        ),
                       ),
-                    ),
-                    Divider(
-                      height: 1.h,
-                      thickness: 0.5.h,
-                      color: Colors.black12,
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          ComplaintList(issues: active, type: 'active'),
-                          ComplaintList(issues: inprogress, type: 'inprogress'),
-                          RatedComplaintList(issues: resolved),
-                        ],
+                      Divider(
+                        height: 1.h,
+                        thickness: 0.5.h,
+                        color: Colors.black12,
                       ),
-                    ),
-                  ],
-                ),
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            ComplaintList(issues: active, type: 'active'),
+                            ComplaintList(
+                              issues: inprogress,
+                              type: 'inprogress',
+                            ),
+                            RatedComplaintList(issues: resolved),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
           floatingActionButton: FloatingActionButton(
             shape: const CircleBorder(),
             backgroundColor: MyColors.themecolor,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NewComplaintCenterPage()),
+                MaterialPageRoute(
+                  builder: (context) => const NewComplaintCenterPage(),
+                ),
               ).then((_) {
                 loadIssues();
               });

@@ -7,6 +7,7 @@ import 'package:citio/screens/vendor_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/search_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final String keyword;
@@ -63,12 +64,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("نتائج البحث")),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         child: Column(
           children: [
             // ✅ شريط البحث
             SizedBox(
-              height: 42,
+              height: 42.h,
               child: TextField(
                 controller: _controller,
                 onSubmitted: (value) {
@@ -76,11 +77,11 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     _performSearch(value.trim());
                   }
                 },
-                style: const TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 14.sp),
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 16,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 0.h,
+                    horizontal: 16.w,
                   ),
                   hintText: 'ماذا تريد؟',
                   prefixIcon: InkWell(
@@ -89,22 +90,22 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         _performSearch(_controller.text.trim());
                       }
                     },
-                    child: const Icon(Icons.search, size: 20),
+                    child: Icon(Icons.search, size: 20.sp),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(20.0.r),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black87),
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(20.0.r),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             // ✅ محتوى نتائج البحث
             if (_isLoading)
@@ -164,23 +165,26 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       }
                     },
                     child: Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      margin: EdgeInsets.symmetric(vertical: 8.h),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       elevation: 3,
                       child: Padding(
-                        padding: const EdgeInsets.all(12),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 12.h,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (result.imageUrl != null &&
                                 result.imageUrl!.isNotEmpty)
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.r),
                                 child: Image.network(
                                   "$baseImageUrl${result.imageUrl!}",
-                                  height: 180,
+                                  height: 180.h,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
@@ -193,16 +197,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                               )
                             else
                               Container(
-                                height: 180,
+                                height: 180.h,
                                 color: Colors.grey[200],
                                 child: Center(
                                   child: Icon(
                                     Icons.image_not_supported,
-                                    size: 50,
+                                    size: 50.sp,
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10.h),
                             Row(
                               children: [
                                 Expanded(
@@ -210,7 +214,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                     result.nameAr ?? "بدون اسم",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -227,14 +231,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Row(
                               children: [
                                 Expanded(
                                   child: Text(
                                     result.categoryNameAr ?? "بدون تصنيف",
                                     style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: 13.sp,
                                       color: Colors.grey[700],
                                     ),
                                     overflow: TextOverflow.ellipsis,

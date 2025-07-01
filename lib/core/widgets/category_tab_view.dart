@@ -3,6 +3,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 String _baseUrl = 'https://service-provider.runasp.net';
 
@@ -27,11 +28,11 @@ class CategoryTabView extends StatelessWidget {
           if (snapshot.data!.isNotEmpty) {
             List<VendorSubcategoryProducts> products = snapshot.data!;
             return ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(8.r),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: EdgeInsets.symmetric(vertical: 8.0.h),
                   child: productCard(products, index),
                 );
               },
@@ -47,35 +48,35 @@ class CategoryTabView extends StatelessWidget {
   }
 
   Center emptyCategory() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center, // علشان تتوسّط الشاشة
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundColor: MyColors.white,
-            radius: 45,
+            radius: 45.r,
             child: Icon(
               Icons.inventory,
               color: MyColors.fadedGrey,
-              size: 40, // خليه أكبر شوية
+              size: 40.sp, // خليه أكبر شوية
             ),
           ),
-          SizedBox(height: 20), // مسافة بين الصورة والنص
+          SizedBox(height: 20.h), // مسافة بين الصورة والنص
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات غير متوفرة',
-              style: TextStyle(fontSize: 16, color: MyAppColors.black),
+              style: TextStyle(fontSize: 16.sp, color: MyAppColors.black),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات في هذه الفئة غير متوفرة حاليا',
-              style: TextStyle(fontSize: 16, color: MyAppColors.gray),
+              style: TextStyle(fontSize: 16.sp, color: MyAppColors.gray),
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
@@ -95,15 +96,15 @@ class CategoryTabView extends StatelessWidget {
           Column(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Image.network(
-                        width: 80,
-                        height: 80,
+                        width: 80.w,
+                        height: 80.h,
 
                         _baseUrl + products[index].image!,
                         fit: BoxFit.contain,
@@ -112,10 +113,10 @@ class CategoryTabView extends StatelessWidget {
                           Object error,
                           StackTrace? stackTrace,
                         ) {
-                          return const SizedBox(
-                            height: 80,
-                            width: 80,
-                            child: Image(
+                          return SizedBox(
+                            height: 80.h,
+                            width: 80.w,
+                            child: const Image(
                               image: AssetImage(MyAssetsImage.brokenImage),
                             ),
                           );
@@ -137,12 +138,12 @@ class CategoryTabView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
+                            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
                             child: Text(
                               products[index].name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: MyAppColors.black,
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 3,
@@ -156,12 +157,12 @@ class CategoryTabView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
+                            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
                             child: Text(
                               '${products[index].price}LE',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: MyAppColors.black,
-                                fontSize: 12,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -175,15 +176,15 @@ class CategoryTabView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+                        padding: EdgeInsets.fromLTRB(8.w, 0.h, 8.w, 10.h),
                         child: Text(
                           products[index].description!,
                           maxLines: 6,
                           softWrap: true,
 
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: MyAppColors.black,
-                            fontSize: 13,
+                            fontSize: 13.sp,
                           ),
                         ),
                       ),

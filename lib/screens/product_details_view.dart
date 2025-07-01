@@ -5,6 +5,7 @@ import 'package:citio/helper/api_product_details.dart';
 import 'package:citio/models/product_details_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({super.key, required this.productId});
@@ -20,7 +21,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   late Future<ProductDetails> _productDetailsFuture;
 
   Color buttonColor = Colors.blue;
-  String buttonText = "Add to Cart";
+  String buttonText = "أضف إلي العربة";
   IconData buttonIcon = Icons.add_shopping_cart;
 
   @override
@@ -41,7 +42,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         buttonColor = Colors.blue;
-        buttonText = "Add to Cart";
+        buttonText = "أضف إلي  العربة";
         buttonIcon = Icons.add_shopping_cart;
       });
     });
@@ -50,10 +51,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text("Product Details")),
+      appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج ")),
       floatingActionButton: Container(
-        width: 70,
-        height: 50,
+        width: 70.w,
+        height: 50.h,
         decoration: const BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
@@ -65,10 +66,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               MaterialPageRoute(builder: (context) => const CartView()),
             );
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: 30,
+            size: 30.sp,
           ),
         ),
       ),
@@ -88,85 +89,88 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           final discount = ((1 - product.price / oldPrice) * 100).round();
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   child: Image.network(
                     '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
-                    height: 250,
+                    height: 250.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 Text(
                   product.nameAr,
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 Row(
                   children: [
                     Text(
                       product.vendorBusinessName,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),
-                    const Icon(Icons.star, color: Colors.orange, size: 20),
-                    const SizedBox(width: 5),
-                    const Text("4.8", style: TextStyle(fontSize: 14)),
-                    const Text(
-                      " (120 reviews)",
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    Icon(Icons.star, color: Colors.orange, size: 20.sp),
+                    SizedBox(width: 5.w),
+                    Text("4.8", style: TextStyle(fontSize: 14.sp)),
+                    Text(
+                      " (120 تقييم)",
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 Row(
                   children: [
                     Text(
                       "LE ${product.price.toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: 20.sp,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 15),
+                    SizedBox(width: 15.w),
                     Text(
                       "LE${oldPrice.toStringAsFixed(2)}",
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: 16.sp,
                         color: Colors.grey,
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     Text(
                       "$discount% OFF",
-                      style: const TextStyle(fontSize: 14, color: Colors.red),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.red),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  "Description",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                SizedBox(height: 10.h),
+                Text(
+                  "الوصف",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 Text(
                   product.description,
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.black87),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 /// ✅ عدد المنتجات + زر الإضافة
                 Row(
@@ -176,9 +180,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     Row(
                       children: [
                         Container(
-                          margin: const EdgeInsets.all(5),
-                          width: 40,
-                          height: 40,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 5.h,
+                            horizontal: 5.w,
+                          ),
+                          width: 40.w,
+                          height: 40.h,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent,
@@ -196,15 +203,18 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         ),
                         Text(
                           '$itemCount',
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.all(5),
-                          width: 40,
-                          height: 40,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5.w,
+                            vertical: 5.h,
+                          ),
+                          width: 40.w,
+                          height: 40.h,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.blueAccent,
@@ -225,7 +235,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
                     /// ✅ زر Add to Cart بحالة متغيرة
                     SizedBox(
-                      width: 250,
+                      width: 250.w,
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
@@ -233,19 +243,19 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                               productId: product.id,
                               quantity: itemCount,
                             );
-                            updateButton(Colors.green, "Added", Icons.check);
+                            updateButton(Colors.green, "تم", Icons.check);
                           } catch (e) {
-                            updateButton(Colors.red, "Failed", Icons.error);
+                            updateButton(Colors.red, "فشل", Icons.error);
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: buttonColor,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 14,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 14.h,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
                         ),
                         icon: Icon(buttonIcon, color: Colors.white),
@@ -260,7 +270,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
               ],
             ),
           );

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/screens/on_boarding_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderScreen extends StatefulWidget {
@@ -91,18 +92,18 @@ class _SliderScreenState extends State<SliderScreen> {
         children: [
           // زر تخطي
           Padding(
-            padding: const EdgeInsets.only(top: 30, right: 20),
+            padding: EdgeInsets.only(top: 30.h, right: 20.w),
             child: Align(
               alignment: Alignment.topRight,
               child: TextButton(
                 onPressed: () async {
                   await _completeOnboarding();
                 },
-                child: const Text(
+                child: Text(
                   'تخطي',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -131,15 +132,15 @@ class _SliderScreenState extends State<SliderScreen> {
                                 .cover, // تقدر تخليه contain لو عايز تحافظ على الأبعاد الأصلية
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     Expanded(
                       flex: 3,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Text(
                           pages[index]['text']!,
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
@@ -151,7 +152,7 @@ class _SliderScreenState extends State<SliderScreen> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           // Dots indicator
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +160,7 @@ class _SliderScreenState extends State<SliderScreen> {
               pages.length,
               (index) => AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                margin: EdgeInsets.symmetric(horizontal: 5.w),
                 width: _currentIndex == index ? 12 : 8,
                 height: _currentIndex == index ? 12 : 8,
                 decoration: BoxDecoration(
@@ -169,10 +170,10 @@ class _SliderScreenState extends State<SliderScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           // زر التالي أو تم
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.h),
             child: TextButton(
               onPressed: () async {
                 if (_currentIndex == pages.length - 1) {
@@ -186,9 +187,9 @@ class _SliderScreenState extends State<SliderScreen> {
               },
               child: Text(
                 _currentIndex == pages.length - 1 ? 'تم' : 'التالي',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -2,6 +2,7 @@
 
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -19,20 +20,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text('رمز التحقق')),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.h),
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
-            const Center(
+            SizedBox(height: 30.h),
+            Center(
               child: Text(
                 'أدخل رمز التحقق المكون من 4 أرقام',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18.sp),
               ),
             ),
             // ignore: prefer_const_constructors
-            SizedBox(height: 20),
+            SizedBox(height: 20.h),
             PinCodeTextField(
               appContext: context,
               length: 4,
@@ -41,9 +42,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
               animationType: AnimationType.fade,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(10),
-                fieldHeight: 50,
-                fieldWidth: 40,
+                borderRadius: BorderRadius.circular(10.r),
+                fieldHeight: 50.h,
+                fieldWidth: 40.w,
                 activeFillColor: Colors.white,
                 selectedFillColor: Colors.white,
                 inactiveFillColor: Colors.white,
@@ -65,22 +66,22 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
             TextButton(
               onPressed: () {},
-              child: const Text(
+              child: Text(
                 "اعادة ارسال الرمز",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   decoration: TextDecoration.underline,
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Container(
               decoration: BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
               width: double.infinity,
-              height: 50,
+              height: 50.h,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -90,10 +91,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     ),
                   );
                 },
-                child: const Text(
+                child: Text(
                   "ارسال",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

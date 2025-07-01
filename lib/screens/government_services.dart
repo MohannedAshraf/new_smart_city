@@ -8,6 +8,7 @@ import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentServices extends StatefulWidget {
   const GovernmentServices({super.key});
@@ -50,37 +51,37 @@ class _GovernmentServicesState extends State<GovernmentServices> {
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
+        preferredSize: Size.fromHeight(50.h),
         child: AppBar(
           backgroundColor: MyColors.white,
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
-          title: const Text(
+          title: Text(
             'الخدمات الحكومية',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+        padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+              margin: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 8.h),
               color: MyColors.white,
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 19, 0),
+                    padding: EdgeInsets.fromLTRB(10.w, 0.h, 19.w, 0.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: CustomSearchBar(
-                            height: 45,
-                            borderRadius: 5,
+                            height: 45.h,
+                            borderRadius: 5.r,
                             hintText: 'للبحث عن خدمة حكومية',
                             onSubmitted: (value) {
                               setState(() {
@@ -101,10 +102,13 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(5.0.r),
                                 color: MyColors.whiteSmoke,
                               ),
-                              margin: const EdgeInsets.all(8),
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 8.h,
+                              ),
                               child: IconButton(
                                 onPressed: () {},
                                 icon: const Icon(
@@ -113,7 +117,6 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 ),
                               ),
                             ),
-                            // const SizedBox(height: 0),
                           ],
                         ),
                       ],
@@ -122,19 +125,19 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 6.h),
                       child:
                           tabsAreLoading
                               ? Row(
                                 children: List.generate(
                                   4,
                                   (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 6.h,
                                     ),
                                     child: Container(
-                                      width: 80,
-                                      height: 35,
+                                      width: 80.w,
+                                      height: 35.h,
                                       decoration: BoxDecoration(
                                         color: MyColors.whiteSmoke,
                                         borderRadius: BorderRadius.circular(20),
@@ -189,7 +192,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
                 child:
                     servicesLoading
                         ? GridView.builder(
@@ -205,7 +208,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                             return Container(
                               decoration: BoxDecoration(
                                 color: MyColors.white,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: MyColors.whiteSmoke,
@@ -217,25 +220,25 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: 130,
+                                    height: 130.h,
                                     decoration: BoxDecoration(
                                       color: MyColors.whiteSmoke,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12),
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12.r),
+                                        topRight: Radius.circular(12.r),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  SizedBox(height: 10.h),
                                   Container(
-                                    height: 14,
-                                    width: 100,
+                                    height: 14.h,
+                                    width: 100.w,
                                     color: MyColors.whiteSmoke,
                                   ),
-                                  const SizedBox(height: 6),
+                                  SizedBox(height: 6.h),
                                   Container(
-                                    height: 12,
-                                    width: 140,
+                                    height: 12.h,
+                                    width: 140.w,
                                     color: MyColors.whiteSmoke,
                                   ),
                                 ],
@@ -250,7 +253,6 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 crossAxisSpacing: 0,
                                 mainAxisSpacing: 0,
                                 childAspectRatio: 158 / 250,
-                                //childAspectRatio: 0.60869,
                               ),
                           itemCount: availableServices.length,
                           itemBuilder: (context, index) {
@@ -334,14 +336,6 @@ class _GovernmentServicesState extends State<GovernmentServices> {
       });
     });
   }
-
-  // void getServiceDetails(int id) {
-  //   MostRequestedServices().getServiceDetails(id).then((fetchedService) {
-  //     setState(() {
-  //       serviceDetails = fetchedService;
-  //     });
-  //   });
-  // }
 }
 
 class GovTabItem extends StatelessWidget {
@@ -361,11 +355,11 @@ class GovTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: isSelected ? MyColors.dodgerBlue : MyColors.whiteSmoke,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(
           title,
@@ -400,12 +394,12 @@ class ServiceCard extends StatelessWidget {
       onTap: ontab,
       child: Container(
         width: double.infinity,
-        //height: 230,
-        margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+
+        margin: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
 
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(12.0.r),
           boxShadow: const [
             BoxShadow(
               color: MyColors.whiteSmoke,
@@ -417,31 +411,31 @@ class ServiceCard extends StatelessWidget {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12.r),
+                topRight: Radius.circular(12.r),
               ),
               child: Container(
                 color: color,
 
                 width: double.infinity,
-                height: 130,
-                child: Center(child: Icon(icon, size: 40, color: fontColor)),
+                height: 130.h,
+                child: Center(child: Icon(icon, size: 40.sp, color: fontColor)),
               ),
             ),
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 0.h),
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(6, 0, 6, 5),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                    margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 8.h,
                     ),
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(category, style: TextStyle(color: fontColor)),
                   ),
@@ -449,7 +443,7 @@ class ServiceCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
+              padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
               child: Row(
                 children: [
                   Expanded(
@@ -458,9 +452,9 @@ class ServiceCard extends StatelessWidget {
                       serviceName,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
@@ -471,16 +465,16 @@ class ServiceCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
+              padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
                       maxLines: 2,
                       details,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color.fromARGB(221, 59, 58, 58),
-                        fontSize: 12.0,
+                        fontSize: 12.0.sp,
                       ),
                       textAlign: TextAlign.start,
                     ),

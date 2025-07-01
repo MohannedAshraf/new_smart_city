@@ -1,5 +1,6 @@
 import 'package:citio/core/utils/variables.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
@@ -18,7 +19,7 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
-      width: 200,
+      width: 200.w,
       child: TextField(
         onSubmitted: (value) {
           onSubmitted;

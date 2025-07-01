@@ -1,5 +1,6 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ServiceContainer extends StatelessWidget {
   final IconData icon;
@@ -16,30 +17,30 @@ class ServiceContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       // width: MediaQuery.of(context).size.width - 30,
       //height: 200,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 16, 16, 12),
+            padding: EdgeInsets.fromLTRB(10.w, 16.h, 16.w, 12.h),
             child: Row(
               children: [
                 CircleAvatar(
                   backgroundColor: MyColors.white,
-                  radius: 14,
-                  child: Icon(icon, color: MyColors.dodgerBlue, size: 28),
+                  radius: 14.r,
+                  child: Icon(icon, color: MyColors.dodgerBlue, size: 28.sp),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     maxLines: 1,
                     title,
 
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black87,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
@@ -50,7 +51,7 @@ class ServiceContainer extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(19, 0, 19, 20),
+            padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: content,

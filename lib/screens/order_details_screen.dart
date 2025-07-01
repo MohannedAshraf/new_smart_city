@@ -5,6 +5,7 @@ import 'package:citio/models/order_details_moel.dart';
 import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -55,19 +56,19 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
           final orderInfo = order.vendorOrderDto;
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(orderInfo),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildOrderedItems(
                   order.vendorOrderItemResponse,
                   orderInfo.orderStatus,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildDeliveryDetails(order),
-                const SizedBox(height: 150),
+                SizedBox(height: 150.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -82,15 +83,15 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'تتبع الطلب',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
                     ),
                   ),
                 ),
@@ -119,10 +120,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
@@ -130,27 +131,21 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
         children: [
           Text(
             "رقم الطلب: ${order.orderId}",
-            style: const TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 13.sp),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Row(
             children: [
               Text(
                 order.vendorName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: badgeColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(color: badgeColor),
                 ),
                 child: Text(
@@ -163,23 +158,20 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Row(
             children: [
-              const Text(
+              Text(
                 "إجمالي المبلغ: ",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(fontSize: 14.sp, color: Colors.grey),
               ),
               Text(
                 "${order.totalAmount} جنيه",
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             "تاريخ الطلب: ${order.orderDate.toLocal().toString().split(' ')[0]}",
             style: const TextStyle(color: Colors.grey),
@@ -191,20 +183,20 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
 
   Widget _buildOrderedItems(List<OrderItem> items, String orderStatus) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "المنتجات المطلوبة",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           for (var item in items) _buildItemRow(item, orderStatus),
         ],
       ),
@@ -213,28 +205,28 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
 
   Widget _buildItemRow(OrderItem item, String orderStatus) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             child: Image.network(
               'https://service-provider.runasp.net${item.productImageUrl}',
-              width: 55,
-              height: 55,
+              width: 55.w,
+              height: 55.h,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Image.network(
                   'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                  width: 55,
-                  height: 55,
+                  width: 55.w,
+                  height: 55.h,
                   fit: BoxFit.cover,
                 );
               },
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,12 +235,12 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   item.nameAr,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   "الكمية: ${item.quantity}",
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12.sp),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 if (orderStatus.toLowerCase() == "delivered" &&
                     !tempRatedProducts.containsKey(item.productId)) ...[
                   RatingBar.builder(
@@ -256,7 +248,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
-                    itemSize: 20,
+                    itemSize: 20.sp,
                     itemCount: 5,
                     unratedColor: Colors.grey.shade300,
                     itemBuilder:
@@ -294,7 +286,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                 if (tempRatedProducts.containsKey(item.productId)) ...[
                   Text(
                     "تم التقييم بـ ${tempRatedProducts[item.productId]!.toStringAsFixed(1)} نجوم",
-                    style: const TextStyle(fontSize: 12, color: Colors.green),
+                    style: TextStyle(fontSize: 12.sp, color: Colors.green),
                   ),
                 ],
               ],
@@ -311,43 +303,43 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
 
   Widget _buildDeliveryDetails(VendorOrderDetailsResponse order) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "تفاصيل التوصيل",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Row(
             children: [
-              const Icon(Icons.location_on, size: 18, color: Colors.blue),
-              const SizedBox(width: 8),
+              Icon(Icons.location_on, size: 18.sp, color: Colors.blue),
+              SizedBox(width: 8.w),
               Expanded(child: Text(order.userAddress)),
             ],
           ),
           if (order.vendorPhone != null) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Row(
               children: [
-                const Icon(Icons.phone, size: 18, color: Colors.blue),
-                const SizedBox(width: 8),
+                Icon(Icons.phone, size: 18.sp, color: Colors.blue),
+                SizedBox(width: 8.w),
                 Text(order.vendorPhone!),
               ],
             ),
           ],
           if (order.estimatedDeliveryDate != null) ...[
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Row(
               children: [
-                const Icon(Icons.timer, size: 18, color: Colors.blue),
-                const SizedBox(width: 8),
+                Icon(Icons.timer, size: 18.sp, color: Colors.blue),
+                SizedBox(width: 8.w),
                 Text(order.estimatedDeliveryDate!),
               ],
             ),

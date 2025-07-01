@@ -1,5 +1,6 @@
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductCard extends StatelessWidget {
@@ -32,9 +33,9 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 10.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -47,7 +48,7 @@ class ProductCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 5.0, right: 5, left: 5),
+          padding: EdgeInsets.only(bottom: 5.0.h, right: 5.w, left: 5.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,9 +56,9 @@ class ProductCard extends StatelessWidget {
                 width: 182,
                 height: 130,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.r),
+                    topRight: Radius.circular(10.r),
                   ),
                   child: Image.network(
                     image,
@@ -71,9 +72,9 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 5),
+              SizedBox(height: 5.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0.h),
                 child: Text(
                   productName,
                   overflow: TextOverflow.ellipsis,
@@ -81,13 +82,13 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       description.isNotEmpty ? description : 'لا يوجد وصف',
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2, // عرض سطرين فقط
                     ),
@@ -104,9 +105,9 @@ class ProductCard extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           '...',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                         ),
                       ),
                   ],
@@ -115,7 +116,7 @@ class ProductCard extends StatelessWidget {
 
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: EdgeInsets.symmetric(horizontal: 5.h),
                 child: Row(
                   children: [
                     Text("$rating"),
@@ -129,19 +130,6 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // const SizedBox(height: 10),
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 60),
-              //   child: RatingBarIndicator(
-              //     rating: rating,
-              //     itemBuilder:
-              //         (context, index) =>
-              //             const Icon(Icons.star, color: Colors.amber),
-              //     itemCount: 5,
-              //     itemSize: 20.0,
-              //     direction: Axis.horizontal,
-              //   ),
-              // ),
             ],
           ),
         ),

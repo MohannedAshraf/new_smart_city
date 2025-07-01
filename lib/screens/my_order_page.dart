@@ -5,6 +5,7 @@ import 'package:citio/main.dart';
 import 'package:citio/models/myorder_model.dart';
 import 'package:citio/screens/order_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -86,20 +87,20 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         ),
         body: Column(
           children: [
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             SizedBox(
-              height: 40,
+              height: 40.h,
               child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
                 scrollDirection: Axis.horizontal,
                 itemCount: categories.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                separatorBuilder: (_, __) => SizedBox(width: 8.w),
                 itemBuilder: (context, index) {
                   final isSelected = selectedIndex == index;
                   return GestureDetector(
                     onTap: () => onCategorySelected(index),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
                       decoration: BoxDecoration(
                         color: isSelected ? Colors.blue : Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(20),
@@ -109,7 +110,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                         categories[index],
                         style: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
-                          fontSize: 13,
+                          fontSize: 13.sp,
                         ),
                       ),
                     ),
@@ -117,7 +118,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 },
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
@@ -172,50 +173,50 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
     final orderDate = order.orderDate.toLocal().toString().split(' ')[0];
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         color: Colors.white,
         boxShadow: const [BoxShadow(blurRadius: 4, color: Colors.black12)],
       ),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
             child: Image.network(
               "https://service-provider.runasp.net${order.vendorImageUrl}",
-              width: 70,
-              height: 70,
+              width: 70.w,
+              height: 70.h,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Image.network(
                   'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                  width: 70,
-                  height: 70,
+                  width: 70.w,
+                  height: 70.h,
                   fit: BoxFit.cover,
                 );
               },
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "رقم الطلب: #${order.orderId}",
-                  style: const TextStyle(fontSize: 12),
+                  style: TextStyle(fontSize: 12.sp),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   order.vendorName,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   "$orderDate\n${order.totalItems} منتج • ${order.totalAmount.toStringAsFixed(0)} جنيه",
                   style: const TextStyle(fontSize: 13),
@@ -224,16 +225,16 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
             decoration: BoxDecoration(
               color: badgeColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: badgeColor, width: 1.2),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: badgeColor, width: 1.2.w),
             ),
             child: Text(
               order.orderStatus,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 13.sp,
                 color: badgeColor,
                 fontWeight: FontWeight.bold,
               ),

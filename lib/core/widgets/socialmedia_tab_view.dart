@@ -9,6 +9,7 @@ import 'package:citio/services/get_post.dart';
 import 'package:citio/services/get_socialmedia_user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:galleryimage/galleryimage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,13 +43,13 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                   children: [
                     Expanded(
                       child: Container(
-                        height: 90,
+                        height: 90.h,
                         color: MyColors.white,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(19, 15, 19, 15),
+                          padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
                           child: SizedBox(
                             width: double.infinity,
-                            height: 70,
+                            height: 70.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -82,7 +83,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                         ? MyColors.inProgress
                                         : MyColors.dodgerBlue,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14.r),
                                 ),
                               ),
                             ),
@@ -108,7 +109,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                         SocialmediaUser user = snapshot.data!;
 
                         return Container(
-                          padding: const EdgeInsets.fromLTRB(7, 20, 20, 7),
+                          padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
                           child: Column(
                             children: [
                               Row(
@@ -133,16 +134,16 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                            2,
-                                            5,
-                                            8,
-                                            0,
+                                          padding: EdgeInsets.fromLTRB(
+                                            2.w,
+                                            5.h,
+                                            8.w,
+                                            0.h,
                                           ),
                                           child: Text(
                                             user.name,
-                                            style: const TextStyle(
-                                              fontSize: 13,
+                                            style: TextStyle(
+                                              fontSize: 13.sp,
                                               fontWeight: FontWeight.bold,
                                               color: MyColors.black,
                                             ),
@@ -150,17 +151,17 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                         ),
 
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                            4,
-                                            0,
-                                            8,
-                                            0,
+                                          padding: EdgeInsets.fromLTRB(
+                                            4.w,
+                                            0.h,
+                                            8.w,
+                                            0.h,
                                           ),
                                           child: Text(
                                             posts[index].date ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: Color.fromRGBO(
+                                            style: TextStyle(
+                                              fontSize: 13.sp,
+                                              color: const Color.fromRGBO(
                                                 134,
                                                 133,
                                                 133,
@@ -176,20 +177,20 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                       ? Column(
                                         children: [
                                           Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                              6,
-                                              0,
-                                              6,
-                                              5,
+                                            margin: EdgeInsets.fromLTRB(
+                                              6.w,
+                                              0.h,
+                                              6.w,
+                                              5.h,
                                             ),
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 8,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w,
+                                              vertical: 8.h,
                                             ),
                                             decoration: BoxDecoration(
                                               color: MyColors.ambulance,
                                               borderRadius:
-                                                  BorderRadius.circular(20),
+                                                  BorderRadius.circular(20.r),
                                             ),
                                             child: Text(
                                               (posts[index].tags != null &&
@@ -216,11 +217,11 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                            0,
-                                            4,
-                                            8,
-                                            4,
+                                          padding: EdgeInsets.fromLTRB(
+                                            0.w,
+                                            4.h,
+                                            8.w,
+                                            4.h,
                                           ),
                                           child: Text(
                                             posts[index].caption ?? '',
@@ -237,13 +238,12 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                                     ?.isNotEmpty ??
                                                 false) {
                                               return Container(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                      2,
-                                                      4,
-                                                      2,
-                                                      4,
-                                                    ),
+                                                padding: EdgeInsets.fromLTRB(
+                                                  2.w,
+                                                  4.h,
+                                                  2.w,
+                                                  4.h,
+                                                ),
                                                 child: GalleryImage(
                                                   minScale: .5,
                                                   childAspectRatio: .8,
@@ -283,7 +283,7 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                               ),
                               SizedBox(
                                 width: screenWidth - 10,
-                                height: 2,
+                                height: 2.h,
                                 child: const ColoredBox(
                                   color: MyColors.fadedGrey,
                                 ),
@@ -310,9 +310,9 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                                         ?.total ??
                                                     0)
                                                 .toString(),
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize: 10,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],
@@ -334,9 +334,9 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                           ),
                                           Text(
                                             posts[index].saveCount.toString(),
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize: 10,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],
@@ -354,11 +354,11 @@ class _SocialmediaTabViewState extends State<SocialmediaTabView> {
                                             reactionHoverColor: Colors.blue
                                                 .withOpacity(.3),
                                           ),
-                                          const Text(
+                                          Text(
                                             'مشاركة',
                                             style: TextStyle(
                                               color: MyColors.gray,
-                                              fontSize: 10,
+                                              fontSize: 10.sp,
                                             ),
                                           ),
                                         ],

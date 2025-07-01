@@ -6,6 +6,7 @@ import 'package:citio/main.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentScreen extends StatefulWidget {
   const GovernmentScreen({super.key});
@@ -43,7 +44,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30.r),
           ),
           onPressed: () {
             Navigator.push(
@@ -54,7 +55,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
             );
           },
           backgroundColor: MyColors.dodgerBlue,
-          child: const Icon(Icons.add, color: MyColors.white, size: 30),
+          child: Icon(Icons.add, color: MyColors.white, size: 30.sp),
         ),
         appBar: AppBar(
           leading: IconButton(
@@ -68,21 +69,20 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
               );
             },
           ),
-          //flexibleSpace: Container(height: 0),
-          toolbarHeight: 70,
+          toolbarHeight: 70.h,
           backgroundColor: MyColors.white,
 
-          title: const Padding(
-            padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
+          title: Padding(
+            padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
             child: Text(
               'طلباتي',
-              style: TextStyle(color: MyColors.black, fontSize: 20),
+              style: TextStyle(color: MyColors.black, fontSize: 20.sp),
             ),
           ),
           centerTitle: true,
 
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(40),
+            preferredSize: Size.fromHeight(40.h),
             child: Column(
               children: [
                 const Divider(
@@ -95,7 +95,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   child: TabBar(
                     splashFactory: NoSplash.splashFactory,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                    padding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: MyColors.white,

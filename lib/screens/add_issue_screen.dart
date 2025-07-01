@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
+
 import 'dart:io';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
@@ -32,11 +34,17 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
           child: Wrap(
             children: [
               ListTile(
-                leading: Icon(Icons.camera_alt, color: Colors.blue, size: 22.sp),
+                leading: Icon(
+                  Icons.camera_alt,
+                  color: Colors.blue,
+                  size: 22.sp,
+                ),
                 title: Text('الكاميرا', style: TextStyle(fontSize: 14.sp)),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.camera,
+                  );
                   if (pickedFile != null) {
                     setState(() => _selectedImage = File(pickedFile.path));
                   }
@@ -44,10 +52,15 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               ),
               ListTile(
                 leading: Icon(Icons.photo, color: Colors.green, size: 22.sp),
-                title: Text('اختيار من المعرض', style: TextStyle(fontSize: 14.sp)),
+                title: Text(
+                  'اختيار من المعرض',
+                  style: TextStyle(fontSize: 14.sp),
+                ),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
                   if (pickedFile != null) {
                     setState(() => _selectedImage = File(pickedFile.path));
                   }
@@ -67,12 +80,13 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   void _previewImage(File imageFile) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.r),
-          child: Image.file(imageFile, fit: BoxFit.contain),
-        ),
-      ),
+      builder:
+          (context) => Dialog(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: Image.file(imageFile, fit: BoxFit.contain),
+            ),
+          ),
     );
   }
 
@@ -80,7 +94,12 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     final description = _controller.text.trim();
     if (description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("من فضلك اكتب وصف الشكوى", style: TextStyle(fontSize: 14.sp))),
+        SnackBar(
+          content: Text(
+            "من فضلك اكتب وصف الشكوى",
+            style: TextStyle(fontSize: 14.sp),
+          ),
+        ),
       );
       return;
     }
@@ -89,27 +108,34 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     if (!status.isGranted) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text("صلاحية الموقع مطلوبة", style: TextStyle(fontSize: 16.sp)),
-          content: Text(
-            "يجب السماح للتطبيق بالوصول إلى الموقع لإرسال الشكوى.",
-            style: TextStyle(fontSize: 14.sp),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final newStatus = await Permission.location.request();
-                if (newStatus.isGranted) _sendComplaint();
-              },
-              child: Text("سماح بالموقع", style: TextStyle(fontSize: 14.sp)),
+        builder:
+            (context) => AlertDialog(
+              title: Text(
+                "صلاحية الموقع مطلوبة",
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              content: Text(
+                "يجب السماح للتطبيق بالوصول إلى الموقع لإرسال الشكوى.",
+                style: TextStyle(fontSize: 14.sp),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    final newStatus = await Permission.location.request();
+                    if (newStatus.isGranted) _sendComplaint();
+                  },
+                  child: Text(
+                    "سماح بالموقع",
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("إلغاء", style: TextStyle(fontSize: 14.sp)),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("إلغاء", style: TextStyle(fontSize: 14.sp)),
-            ),
-          ],
-        ),
       );
       return;
     }
@@ -141,7 +167,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
             duration: const Duration(seconds: 5),
             behavior: SnackBarBehavior.floating,
             margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.r),
+            ),
             backgroundColor: Colors.green.shade600,
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,16 +183,25 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    final shareText = "لقد قمت بتقديم شكوى في تطبيق المدينة: $description";
+                    final shareText =
+                        "لقد قمت بتقديم شكوى في تطبيق المدينة: $description";
                     Share.share(shareText);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.green.shade800,
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
                   ),
                   icon: Icon(Icons.share, size: 16.sp, color: Colors.white),
-                  label: Text("مشاركة", style: TextStyle(color: Colors.white, fontSize: 13.sp)),
+                  label: Text(
+                    "مشاركة",
+                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                  ),
                 ),
               ],
             ),
@@ -172,17 +209,27 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("فشل في إرسال الشكوى", style: TextStyle(fontSize: 14.sp))),
+          SnackBar(
+            content: Text(
+              "فشل في إرسال الشكوى",
+              style: TextStyle(fontSize: 14.sp),
+            ),
+          ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("🚨 حدثت مشكلة أثناء إرسال الشكوى. الرجاء المحاولة لاحقًا.", style: TextStyle(fontSize: 14.sp)),
+          content: Text(
+            "🚨 حدثت مشكلة أثناء إرسال الشكوى. الرجاء المحاولة لاحقًا.",
+            style: TextStyle(fontSize: 14.sp),
+          ),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
           margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
         ),
       );
     } finally {
@@ -263,7 +310,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(4.w),
-                                    child: Icon(Icons.close, color: Colors.white, size: 16.sp),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16.sp,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -277,16 +328,38 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     children: [
                       TextButton.icon(
                         onPressed: _pickImage,
-                        icon: Icon(Icons.camera_alt_outlined, size: 20.sp, color: Colors.black),
-                        label: Text("إضافة صورة", style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                        icon: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 20.sp,
+                          color: Colors.black,
+                        ),
+                        label: Text(
+                          "إضافة صورة",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                       ElevatedButton.icon(
                         onPressed: _isLoading ? null : _sendComplaint,
-                        icon: Icon(Icons.send, color: Colors.white, size: 18.sp),
-                        label: Text("إرسال", style: TextStyle(color: Colors.white, fontSize: 14.sp)),
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.white,
+                          size: 18.sp,
+                        ),
+                        label: Text(
+                          "إرسال",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue.shade300,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24.r),
+                          ),
                         ),
                       ),
                     ],
