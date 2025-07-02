@@ -27,10 +27,38 @@ class ApplyGovernmentService {
       req.fields['ServiceId'] = serviceId.toString();
 
       for (int i = 0; i < serviceData.length; i++) {
-        req.fields['ServiceData[$i].FieldId'] =
-            serviceData[i]['FieldId'].toString();
-        req.fields['ServiceData[$i].FieldValueString'] =
-            serviceData[i]['FieldValueString'];
+        final item = serviceData[i];
+        final type = item['FieldType'];
+        final value = item['FieldValue'];
+
+        req.fields['ServiceData[$i].FieldId'] = item['FieldId'].toString();
+
+        if (value == null) {
+          // لو القيمة null، ممكن تحط نص فاضي أو ما تبعتش الحقل حسب الحاجة
+          // هنا بحط نص فاضي لكل الحقول
+          if (type == 'number') {
+            req.fields['ServiceData[$i].FieldValueInt'] = '0';
+          } else if (type == 'float') {
+            req.fields['ServiceData[$i].FieldValueFloat'] = '0.0';
+          } else if (type == 'date') {
+            // ممكن ما تبعتش الحقل أو تبعت تاريخ افتراضي
+            // مثلا:
+            // req.fields['ServiceData[$i].FieldValueDate'] = DateTime.now().toIso8601String();
+          } else {
+            req.fields['ServiceData[$i].FieldValueString'] = '';
+          }
+        } else {
+          if (type == 'number') {
+            req.fields['ServiceData[$i].FieldValueInt'] = value.toString();
+          } else if (type == 'float') {
+            req.fields['ServiceData[$i].FieldValueFloat'] = value.toString();
+          } else if (type == 'date') {
+            req.fields['ServiceData[$i].FieldValueDate'] =
+                (value as DateTime).toIso8601String();
+          } else {
+            req.fields['ServiceData[$i].FieldValueString'] = value.toString();
+          }
+        }
       }
 
       for (var file in files) {
@@ -45,8 +73,10 @@ class ApplyGovernmentService {
 
       final streamedResponse = await req.send();
       final response = await http.Response.fromStream(streamedResponse);
+      print(response);
 
       if (response.statusCode == 200) {
+        print('succes');
         final data = jsonDecode(response.body);
         return data;
       } else {

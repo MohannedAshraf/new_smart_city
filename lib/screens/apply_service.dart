@@ -21,23 +21,55 @@ class ApplyService extends StatefulWidget {
 }
 
 class _ApplyService extends State<ApplyService> {
-  FilePickerResult? result;
+  bool isLoading = true;
   bool isChecked = false;
   bool showError = false;
   bool isButtonPressed = false;
-  bool isFileUploaded = false;
   bool showUploadError = false;
+
+  List<RequiredFields> fields = [];
+  List<RequiredFiles> files = [];
   List<Map<String, dynamic>> serviceData = [];
+
   Map<String, TextEditingController> controllers = {};
-  TextEditingController birthDateController = TextEditingController();
   Map<int, PlatformFile> uploadedFiles = {};
-  late Future<List<RequiredFields>> fieldsFuture;
-  late Future<List<RequiredFiles>> filesFuture;
+
   @override
   void initState() {
     super.initState();
-    fieldsFuture = MostRequestedServices().getRequiredFields(widget.id);
-    filesFuture = MostRequestedServices().getRequiredFiles(widget.id);
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    try {
+      final fetchedFields = await MostRequestedServices().getRequiredFields(
+        widget.id,
+      );
+      final fetchedFiles = await MostRequestedServices().getRequiredFiles(
+        widget.id,
+      );
+
+      fetchedFields.forEach((field) {
+        if (!controllers.containsKey(field.fileName)) {
+          controllers[field.fileName] = TextEditingController();
+
+          serviceData.add({
+            'FieldId': field.id,
+            'FieldValueString': null,
+            'FieldValueInt': null,
+            'FieldValueFloat': null,
+            'FieldValueDate': null,
+          });
+        }
+      });
+      setState(() {
+        fields = fetchedFields;
+        files = fetchedFiles;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading data: $e');
+    }
   }
 
   @override
@@ -57,136 +89,101 @@ class _ApplyService extends State<ApplyService> {
           centerTitle: true,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h),
-          child: Column(
-            children: [
-              FutureBuilder<List<RequiredFields>>(
-                future: fieldsFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : buildForm(),
+    );
+  }
 
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('لا توجد بيانات مطلوبة.'));
-                  }
+  Widget buildForm() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: ServiceContainer(
+                icon: Icons.person,
+                title: 'المعلومات الشخصية',
+                content:
+                    fields.map<Widget>((field) {
+                      int index = serviceData.indexWhere(
+                        (item) => item['FieldId'] == field.id,
+                      );
 
-                  final fields = snapshot.data!;
-                  fields.forEach((field) {
-                    controllers.putIfAbsent(
-                      field.fileName,
-                      () => TextEditingController(),
-                    );
-
-                    serviceData.add({
-                      'FieldId': field.id,
-                      'FieldValueString': '',
-                    });
-                  });
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 5,
-                    ),
-                    child: ServiceContainer(
-                      icon: Icons.person,
-                      title: 'المعلومات الشخصية',
-                      content:
-                          fields.map<Widget>((field) {
-                            int index = serviceData.indexWhere(
-                              (item) => item['FieldId'] == field.id,
-                            );
-                            if (field.htmlType == 'text') {
-                              return CustomTextField(
-                                hintText: field.description,
-                                header: field.fileName,
-                                controller: controllers[field.fileName],
-                                onChanged: (value) {
-                                  serviceData[index]['FieldValueString'] =
-                                      value;
-                                },
-                              );
-                            } else if (field.htmlType == 'date') {
-                              return DateTextField(
-                                header: field.fileName,
-                                controller: controllers[field.fileName],
-                                onDateSelected: (value) {
-                                  serviceData[index]['FieldValueString'] =
-                                      value;
-                                },
-                              );
-                            } else if (field.htmlType == 'number') {
-                              return CustomTextField(
-                                hintText: field.description,
-                                header: field.fileName,
-                                isInt: true,
-                                controller: controllers[field.fileName],
-                                onChanged: (value) {
-                                  serviceData[index]['FieldValueString'] =
-                                      value;
-                                },
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          }).toList(),
-                    ),
-                  );
-                },
+                      if (field.htmlType == 'text') {
+                        return CustomTextField(
+                          hintText: field.description,
+                          header: field.fileName,
+                          controller: controllers[field.fileName],
+                          onChanged: (value) {
+                            serviceData[index]['FieldValueString'] = value;
+                          },
+                        );
+                      } else if (field.htmlType == 'date') {
+                        return DateTextField(
+                          header: field.fileName,
+                          controller: controllers[field.fileName],
+                          onDateSelected: (value) {
+                            serviceData[index]['FieldValueDate'] = value;
+                          },
+                        );
+                      } else if (field.htmlType == 'number') {
+                        return CustomTextField(
+                          hintText: field.description,
+                          header: field.fileName,
+                          isInt: true,
+                          controller: controllers[field.fileName],
+                          onChanged: (value) {
+                            serviceData[index]['FieldValueInt'] = value;
+                          },
+                        );
+                      } else if (field.htmlType == 'float') {
+                        return CustomTextField(
+                          hintText: field.description,
+                          header: field.fileName,
+                          isFloat: true,
+                          controller: controllers[field.fileName],
+                          onChanged: (value) {
+                            serviceData[index]['FieldValueFloat'] = value;
+                          },
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    }).toList(),
               ),
-              FutureBuilder<List<RequiredFiles>>(
-                future: filesFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+              child: ServiceContainer(
+                icon: Icons.file_upload,
+                title: 'الوثائق المطلوبة',
+                content:
+                    files.map<Widget>((file) {
+                      return CustomUploadBox(
+                        file: uploadedFiles[file.id],
+                        header: file.fileName,
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles();
 
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('لا يوجد وثائق مطلوبة.'));
-                  }
-
-                  final files = snapshot.data!;
-
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.w,
-                      vertical: 5.h,
-                    ),
-                    child: ServiceContainer(
-                      icon: Icons.file_upload,
-                      title: 'الوثائق المطلوبة',
-
-                      content:
-                          files.map<Widget>((file) {
-                            return CustomUploadBox(
-                              file: uploadedFiles[file.id],
-                              //title: 'اضغط للتحميل',
-                              //subTitle: file.fileExtension,
-                              header: file.fileName,
-                              onTap: () async {
-                                FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles();
-
-                                if (result != null && result.files.isNotEmpty) {
-                                  setState(() {
-                                    uploadedFiles[file.id] = result.files.first;
-                                  });
-                                }
-                              },
-                            );
-                          }).toList(),
-                    ),
-                  );
-                },
+                          if (result != null && result.files.isNotEmpty) {
+                            setState(() {
+                              uploadedFiles[file.id] = result.files.first;
+                            });
+                          }
+                        },
+                      );
+                    }).toList(),
               ),
-
-              Row(children: [akcCheckBox()]),
-              SizedBox(height: 13.h),
-              Row(children: [applyButton()]),
-            ],
-          ),
+            ),
+            Row(children: [akcCheckBox()]),
+            SizedBox(height: 13.h),
+            Row(children: [applyButton()]),
+          ],
         ),
       ),
     );
@@ -261,6 +258,10 @@ class _ApplyService extends State<ApplyService> {
                   setState(() {
                     showError = true;
                   });
+                } else if (uploadedFiles.isEmpty) {
+                  setState(() {
+                    showUploadError = true;
+                  });
                 } else {
                   setState(() {
                     isButtonPressed = true;
@@ -271,19 +272,7 @@ class _ApplyService extends State<ApplyService> {
                       isButtonPressed = false;
                     });
                   });
-                  if (!isFileUploaded) {
-                    setState(() {
-                      showUploadError = true;
-                    });
-                  } else {
-                    setState(() {
-                      showUploadError = false;
-                    });
-                  }
-                  ///// hena elpayemnt ba3den lama te3mleh
-                  ///
-                  print(serviceData);
-                  print(uploadedFiles);
+
                   ApplyGovernmentService().submit(
                     serviceId: widget.id,
                     serviceData: serviceData,

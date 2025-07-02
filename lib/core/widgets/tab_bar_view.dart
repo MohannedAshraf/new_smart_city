@@ -78,7 +78,7 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
-              'لا يوجد طلبات حاليا',
+              'لا يوجد طلبات حكومية حاليا',
               style: TextStyle(fontSize: 16.sp, color: MyColors.black),
               textAlign: TextAlign.center,
             ),
@@ -87,7 +87,7 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
-              'هذا الستخدم لو يرسل أي طلب',
+              'هذا الستخدم لم يرسل أي طلب',
               style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
               maxLines: 2,
               textAlign: TextAlign.center,
