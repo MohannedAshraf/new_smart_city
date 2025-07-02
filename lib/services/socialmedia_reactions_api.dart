@@ -1,0 +1,47 @@
+// services/socialmedia_reactions_api.dart
+
+import 'dart:convert';
+import 'package:citio/models/impression_model.dart';
+import 'package:citio/core/utils/variables.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class SocialMediaReactionsApi {
+  static Future<ImpressionsCount?> sendReaction({
+    required String postId,
+    required String reactionType,
+  }) async {
+    print('➡️ Sending reaction "$reactionType" for postId: $postId');
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) return null;
+
+    try {
+      final response = await http.post(
+        Uri.parse('${Urls.socialmediaBaseUrl}/api/posts/$postId/reactions'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'reactionType': reactionType}),
+      );
+      print('⬅️ Response status: ${response.statusCode}');
+      print('⬅️ Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
+        if (decoded['post']?['impressionsCount'] != null) {
+          return ImpressionsCount.fromJson(decoded['post']['impressionsCount']);
+        }
+      } else {
+        print('❌ Error ${response.statusCode}: ${response.body}');
+      }
+    } catch (e) {
+      print('❌ Exception in sending reaction: $e');
+    }
+
+    return null;
+  }
+}

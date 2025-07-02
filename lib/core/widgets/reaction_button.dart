@@ -1,0 +1,75 @@
+// core/widgets/reaction_button.dart
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:citio/core/widgets/reaction_icon_mapper.dart';
+import 'package:citio/core/widgets/reaction_dialog.dart';
+import 'package:citio/services/socialmedia_reactions_api.dart';
+import 'package:citio/core/utils/variables.dart';
+
+class ReactionButton extends StatefulWidget {
+  final String postId;
+  final String? currentUserReaction; // null لو معملش ريأكشن
+  final int totalCount;
+  final Function(String newReaction, int newTotal)? onReacted;
+
+  const ReactionButton({
+    super.key,
+    required this.postId,
+    this.currentUserReaction,
+    required this.totalCount,
+    this.onReacted,
+  });
+
+  @override
+  State<ReactionButton> createState() => _ReactionButtonState();
+}
+
+class _ReactionButtonState extends State<ReactionButton> {
+  late String? _userReaction;
+  late int _totalCount;
+
+  @override
+  void initState() {
+    super.initState();
+    _userReaction = widget.currentUserReaction;
+    _totalCount = widget.totalCount;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final selected = await showDialog<String>(
+          context: context,
+          builder: (_) => const ReactionDialog(),
+        );
+
+        if (selected != null) {
+          final success = await SocialMediaReactionsApi.sendReaction(
+            postId: widget.postId,
+            reactionType: selected,
+          );
+
+          if (success != null) {
+            setState(() {
+              _userReaction = selected;
+              _totalCount = success.total ?? _totalCount;
+            });
+            widget.onReacted?.call(selected, _totalCount);
+          }
+        }
+      },
+      child: Row(
+        children: [
+          ReactionIconMapper.getReactionIcon(_userReaction, size: 24),
+          SizedBox(width: 4.w),
+          Text(
+            '$_totalCount',
+            style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+          ),
+        ],
+      ),
+    );
+  }
+}

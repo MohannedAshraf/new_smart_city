@@ -6,61 +6,63 @@ class SocialmediaPost {
   List<Data> data;
   String message;
 
-  SocialmediaPost({required this.data, required this.message});
+  SocialmediaPost({
+    required this.data,
+    required this.message,
+  });
 
-  factory SocialmediaPost.fromJason(Map<String, dynamic> jasonData) {
+  factory SocialmediaPost.fromJason(Map<String, dynamic> jsonData) {
     return SocialmediaPost(
-      data: (jasonData['data'] as List?)
-              ?.map((x) => Data.fromJason(x))
+      data: (jsonData['data'] as List<dynamic>?)
+              ?.map((x) => Data.fromJson(x))
               .toList() ??
           [],
-      message: jasonData['message'] ?? '',
+      message: jsonData['message'] ?? '',
     );
   }
 }
 
 class Data {
-  final String? caption;
-  final List<Media>? media;
-  final ImpressionsCount? impressionsCount;
-  final int? shareCount;
-  final int? saveCount;
-  final String? date;
-  final String? userId;
-  final bool adminPost;
-  final List<String>? tags;
+  String? id;            // من _id
+  String? authorId;      // من author (بدل userId)
+  String? postCaption;   // من postCaption (بدل caption)
+  String? createdAt;     // من createdAt (بدل dateIssued)
+  bool adminPost;
+  List<Media>? media;
+  List<String?>? tags;
+  ImpressionsCount? impressionsCount;
+  int saveCount;
+  String? userReaction;
 
   Data({
-    this.caption,
+    this.id,
+    this.authorId,
+    this.postCaption,
+    this.createdAt,
+    this.adminPost = false,
     this.media,
-    this.impressionsCount,
-    this.saveCount,
-    this.shareCount,
-    this.date,
-    this.userId,
-    required this.adminPost,
     this.tags,
+    this.impressionsCount,
+    this.saveCount = 0,
+    this.userReaction,
   });
 
-  factory Data.fromJason(Map<String, dynamic> jasonData) {
+  factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      caption: jasonData['postCaption'] ?? '',
-      media: (jasonData['media'] as List?)
-              ?.map((x) => Media.fromJson(x))
-              .toList() ??
-          [],
-      impressionsCount: jasonData['impressionsCount'] != null
-          ? ImpressionsCount.fromJson(jasonData['impressionsCount'])
+      id: json['_id'] as String?,
+      authorId: json['author'] as String?,
+      postCaption: json['postCaption'] as String?,
+      createdAt: json['createdAt'] as String?,
+      adminPost: json['adminPost'] ?? false,
+      media: (json['media'] as List<dynamic>?)
+          ?.map((item) => Media.fromJson(item))
+          .toList(),
+      tags: (json['tags'] as List<dynamic>?)?.cast<String?>(),
+      impressionsCount: json['impressionsCount'] != null
+          ? ImpressionsCount.fromJson(json['impressionsCount'])
           : null,
-      shareCount: jasonData['shareCount'],
-      saveCount: jasonData['saveCount'],
-      date: (jasonData['createdAt'] != null &&
-              jasonData['createdAt'].toString().isNotEmpty)
-          ? getTimeAgo(jasonData['createdAt'])
-          : 'التاريخ غير متوفر',
-      userId: jasonData['author'],
-      adminPost: jasonData['adminPost'] ?? false,
-      tags: (jasonData['tags'] as List?)?.map((e) => e.toString()).toList(),
+      saveCount: json['saveCount'] ?? 0,
+      userReaction: json['userReaction'], // حسب وجودها في JSON
     );
   }
 }
@@ -74,11 +76,11 @@ class Media {
 
   factory Media.fromJson(Map<String, dynamic> jsonData) {
     return Media(
-      type: jsonData['type'],
+      type: jsonData['type'] as String?,
       url: jsonData['url'] != null
-          ? Urls.socialmediaBaseUrl + jsonData['url']
+          ? Urls.socialmediaBaseUrl + (jsonData['url'] as String)
           : null,
-      sId: jsonData['_id'],
+      sId: jsonData['_id'] as String?,
     );
   }
 }
@@ -104,13 +106,13 @@ class ImpressionsCount {
 
   factory ImpressionsCount.fromJson(Map<String, dynamic> jsonData) {
     return ImpressionsCount(
-      like: jsonData['like'],
-      love: jsonData['love'],
-      care: jsonData['care'],
-      laugh: jsonData['laugh'],
-      sad: jsonData['sad'],
-      hate: jsonData['hate'],
-      total: jsonData['total'],
+      like: jsonData['like'] as int?,
+      love: jsonData['love'] as int?,
+      care: jsonData['care'] as int?,
+      laugh: jsonData['laugh'] as int?,
+      sad: jsonData['sad'] as int?,
+      hate: jsonData['hate'] as int?,
+      total: jsonData['total'] as int?,
     );
   }
 }

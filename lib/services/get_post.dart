@@ -12,14 +12,18 @@ class GetPost {
       throw Exception('لم يتم العثور على التوكن!');
     }
 
-    // ignore: avoid_print
-    print('Token used in getTenPosts: $token'); // هنا الطباعة ✅
+    print('Token used in getTenPosts: $token'); // طباعة التوكن
 
+    // استدعاء API
     dynamic data = await Api().get(
       url: '${Urls.socialmediaBaseUrl}/api/posts/?limit=10',
       token: token,
     );
 
+    // طباعة الاستجابة الخام بصيغة JSON
+    print('########################Raw JSON response from API: $data');
+
+    // تحويل JSON إلى نموذج Dart
     SocialmediaPost posts = SocialmediaPost.fromJason(data);
     return posts;
   }

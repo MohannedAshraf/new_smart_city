@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/widgets/reaction_button.dart';
 import 'package:citio/core/widgets/reactions.dart';
 import 'package:citio/models/socialmedia_post.dart';
 import 'package:citio/models/socialmedia_user.dart';
@@ -24,7 +25,7 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
-  static List<Data>? _persistedPosts; // ✅ الكاش المؤقت
+  static List<Data>? _persistedPosts; // ✅ كاش مؤقت
   List<Data>? cachedPosts;
   bool isLoading = true;
   bool isButtonPressed = false;
@@ -39,7 +40,6 @@ class _SocialMediaState extends State<SocialMedia> {
 
   Future<void> _fetchPostsOnce() async {
     try {
-      // ✅ لو الكاش موجود، نستخدمه
       if (_persistedPosts != null && _persistedPosts!.isNotEmpty) {
         print('📦 Using cached posts');
         setState(() {
@@ -82,7 +82,7 @@ class _SocialMediaState extends State<SocialMedia> {
     double screenWidth,
     double screenHeight,
   ) {
-    final userId = post.userId ?? '';
+    final userId = post.authorId ?? ''; // استخدم authorId حسب نموذج البيانات
     if (userCache.containsKey(userId)) {
       final user = userCache[userId]!;
       return _buildPostWithUser(post, user, screenWidth, screenHeight);
@@ -124,6 +124,8 @@ class _SocialMediaState extends State<SocialMedia> {
     double screenWidth,
     double screenHeight,
   ) {
+    print('Building post with id: ${post.id}');
+
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
 
@@ -156,7 +158,7 @@ class _SocialMediaState extends State<SocialMedia> {
                       ),
                     ),
                     Text(
-                      post.date ?? '',
+                      getTimeAgo(post.createdAt ?? ''),
                       style: TextStyle(
                         fontSize: 13.sp,
                         color: const Color.fromRGBO(134, 133, 133, 1),
@@ -178,7 +180,7 @@ class _SocialMediaState extends State<SocialMedia> {
                   ),
                   child: Text(
                     (post.tags != null && post.tags!.isNotEmpty)
-                        ? post.tags![0]
+                        ? post.tags![0] ?? ''
                         : '',
                     style: const TextStyle(color: MyColors.white),
                   ),
@@ -186,29 +188,27 @@ class _SocialMediaState extends State<SocialMedia> {
             ],
           ),
           const SizedBox(height: 8),
-          Text(post.caption ?? '', softWrap: true),
+          Text(post.postCaption ?? '', softWrap: true),
           if (imageUrls.isNotEmpty)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
-                child:
-                    imageUrls.length == 1
-                        ? Image.network(
-                          imageUrls[0],
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          errorBuilder:
-                              (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image),
-                        )
-                        : GalleryImage(
-                          imageUrls: imageUrls,
-                          numOfShowImages:
-                              imageUrls.length > 3 ? 3 : imageUrls.length,
-                          titleGallery: 'Citio',
-                          imageRadius: 8,
-                        ),
+                child: imageUrls.length == 1
+                    ? Image.network(
+                        imageUrls[0],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.broken_image),
+                      )
+                    : GalleryImage(
+                        imageUrls: imageUrls,
+                        numOfShowImages:
+                            imageUrls.length > 3 ? 3 : imageUrls.length,
+                        titleGallery: 'Citio',
+                        imageRadius: 8,
+                      ),
               ),
             ),
           SizedBox(
@@ -219,10 +219,16 @@ class _SocialMediaState extends State<SocialMedia> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildReactionColumn(
-                icon: Icons.favorite_border_outlined,
-                count: post.impressionsCount?.total ?? 0,
-                hoverColor: Colors.red.withOpacity(0.3),
+              ReactionButton(
+                postId: post.id ?? '',
+                currentUserReaction: post.userReaction,
+                totalCount: post.impressionsCount?.total ?? 0,
+                onReacted: (reaction, total) {
+                  setState(() {
+                    post.userReaction = reaction;
+                    post.impressionsCount?.total = total;
+                  });
+                },
               ),
               _buildReactionColumn(
                 icon: FluentIcons.comment_28_regular,
@@ -279,9 +285,9 @@ class _SocialMediaState extends State<SocialMedia> {
                 onPressed: () async {
                   setState(() {
                     isLoading = true;
-                    _persistedPosts = null; // 🧹 امسح الكاش
+                    _persistedPosts = null; // امسح الكاش
                   });
-                  await _fetchPostsOnce(); // 📡 حمل من جديد
+                  await _fetchPostsOnce(); // حمل جديد
                 },
                 icon: const Icon(Icons.refresh, color: MyColors.gray),
               ),
@@ -290,71 +296,69 @@ class _SocialMediaState extends State<SocialMedia> {
         ),
         centerTitle: true,
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                onRefresh: () async {
-                  _persistedPosts = null;
-                  await _fetchPostsOnce();
-                },
-                child: ListView.builder(
-                  itemCount: cachedPosts!.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == cachedPosts!.length) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 19.w,
-                          vertical: 15.h,
-                        ),
-                        child: SizedBox(
-                          height: 70.h,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() => isButtonPressed = true);
-                              Future.delayed(
-                                const Duration(milliseconds: 200),
-                                () {
-                                  setState(() => isButtonPressed = false);
-                                },
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  isButtonPressed
-                                      ? MyColors.inProgress
-                                      : MyColors.dodgerBlue,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14.r),
-                              ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: () async {
+                _persistedPosts = null;
+                await _fetchPostsOnce();
+              },
+              child: ListView.builder(
+                itemCount: cachedPosts!.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == cachedPosts!.length) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 19.w,
+                        vertical: 15.h,
+                      ),
+                      child: SizedBox(
+                        height: 70.h,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() => isButtonPressed = true);
+                            Future.delayed(
+                              const Duration(milliseconds: 200),
+                              () {
+                                setState(() => isButtonPressed = false);
+                              },
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isButtonPressed
+                                ? MyColors.inProgress
+                                : MyColors.dodgerBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14.r),
                             ),
-                            child: const Text(
-                              ' مشاهدة الجميع',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: MyColors.white,
-                              ),
+                          ),
+                          child: const Text(
+                            ' مشاهدة الجميع',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: MyColors.white,
                             ),
                           ),
                         ),
-                      );
-                    }
-
-                    final post = cachedPosts![index];
-                    return Card(
-                      color: MyColors.white,
-                      shadowColor: MyColors.white,
-                      child: _buildPostUserWidget(
-                        post,
-                        screenWidth,
-                        screenHeight,
                       ),
                     );
-                  },
-                ),
+                  }
+
+                  final post = cachedPosts![index];
+                  return Card(
+                    color: MyColors.white,
+                    shadowColor: MyColors.white,
+                    child: _buildPostUserWidget(
+                      post,
+                      screenWidth,
+                      screenHeight,
+                    ),
+                  );
+                },
               ),
+            ),
     );
   }
 
