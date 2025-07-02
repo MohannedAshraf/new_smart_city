@@ -324,6 +324,7 @@ class PopUpDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      surfaceTintColor: MyColors.white,
       title: const Text('سيتم تحويلك خارج  citio'),
       content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
       actions: <Widget>[
