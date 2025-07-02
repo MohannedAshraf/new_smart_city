@@ -241,53 +241,56 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   style: TextStyle(fontSize: 12.sp),
                 ),
                 SizedBox(height: 4.h),
-                if (orderStatus.toLowerCase() == "delivered" &&
-                    !tempRatedProducts.containsKey(item.productId)) ...[
-                  RatingBar.builder(
-                    initialRating: 0,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemSize: 20.sp,
-                    itemCount: 5,
-                    unratedColor: Colors.grey.shade300,
-                    itemBuilder:
-                        (context, _) =>
-                            const Icon(Icons.star, color: Colors.amber),
-                    onRatingUpdate: (rating) async {
-                      setState(() {
-                        tempRatedProducts[item.productId] = rating;
-                      });
 
-                      try {
-                        final prefs = await SharedPreferences.getInstance();
-                        final token = prefs.getString('token');
-                        if (token == null) throw Exception("Token not found");
+                // ⭐ التقييم الجديد
+                if (orderStatus.toLowerCase() == "delivered") ...[
+                  if (!item.isRated) ...[
+                    RatingBar.builder(
+                      initialRating: 0,
+                      minRating: 1,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemSize: 20.sp,
+                      itemCount: 5,
+                      unratedColor: Colors.grey.shade300,
+                      itemBuilder:
+                          (context, _) =>
+                              const Icon(Icons.star, color: Colors.amber),
+                      onRatingUpdate: (rating) async {
+                        setState(() {
+                          tempRatedProducts[item.productId] = rating;
+                          item.isRated = true;
+                          item.rating = rating;
+                        });
 
-                        final url = Uri.parse(
-                          "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
-                        );
-                        final response = await http.post(
-                          url,
-                          headers: {
-                            'Authorization': 'Bearer $token',
-                            'Content-Type': 'application/json',
-                          },
-                          body: jsonEncode({"rating": rating, "comment": ""}),
-                        );
+                        try {
+                          final prefs = await SharedPreferences.getInstance();
+                          final token = prefs.getString('token');
+                          if (token == null) throw Exception("Token not found");
 
-                        print("⭐ تم إرسال التقييم: ${response.statusCode}");
-                      } catch (e) {
-                        print("❌ خطأ أثناء إرسال التقييم: $e");
-                      }
-                    },
-                  ),
-                ],
-                if (tempRatedProducts.containsKey(item.productId)) ...[
-                  Text(
-                    "تم التقييم بـ ${tempRatedProducts[item.productId]!.toStringAsFixed(1)} نجوم",
-                    style: TextStyle(fontSize: 12.sp, color: Colors.green),
-                  ),
+                          final url = Uri.parse(
+                            "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
+                          );
+                          final response = await http.post(
+                            url,
+                            headers: {
+                              'Authorization': 'Bearer $token',
+                              'Content-Type': 'application/json',
+                            },
+                            body: jsonEncode({"rating": rating, "comment": ""}),
+                          );
+                          print("⭐ تم إرسال التقييم: ${response.statusCode}");
+                        } catch (e) {
+                          print("❌ خطأ أثناء إرسال التقييم: $e");
+                        }
+                      },
+                    ),
+                  ] else ...[
+                    Text(
+                      "تم التقييم بـ ${item.rating.toStringAsFixed(1)} نجوم",
+                      style: TextStyle(fontSize: 12.sp, color: Colors.green),
+                    ),
+                  ],
                 ],
               ],
             ),
