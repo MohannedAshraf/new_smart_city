@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 
 class FCMApi {
   final Dio _dio = Dio();
-
   Future<void> sendTokenToBackend({
     required String token,
     required String userToken,
@@ -16,8 +15,16 @@ class FCMApi {
         options: Options(headers: {'Authorization': 'Bearer $userToken'}),
       );
       print('✅ FCM token sent to backend: ${response.statusCode}');
+      print('Response data: ${response.data}');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print('❌ Failed to send FCM token, status: ${e.response?.statusCode}');
+        print('Response data: ${e.response?.data}');
+      } else {
+        print('❌ Failed to send FCM token: ${e.message}');
+      }
     } catch (e) {
-      print('❌ Failed to send FCM token: $e');
+      print('❌ Unexpected error: $e');
     }
   }
 }
