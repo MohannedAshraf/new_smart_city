@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures
 
+import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/models/order_details_moel.dart';
 import 'package:citio/screens/track_order_screen.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class OrderDetailsView extends StatefulWidget {
   final int orderId;
@@ -204,104 +204,142 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
   }
 
   Widget _buildItemRow(OrderItem item, String orderStatus) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: Image.network(
-              'https://service-provider.runasp.net${item.productImageUrl}',
-              width: 55.w,
-              height: 55.h,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Image.network(
-                  'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+    return FutureBuilder<void>(
+      future: _fetchItemRatingIfNeeded(item),
+      builder: (context, snapshot) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: 12.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: Image.network(
+                  'https://service-provider.runasp.net${item.productImageUrl}',
                   width: 55.w,
                   height: 55.h,
                   fit: BoxFit.cover,
-                );
-              },
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.nameAr,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  errorBuilder:
+                      (context, error, stackTrace) => Image.network(
+                        'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                        width: 55.w,
+                        height: 55.h,
+                        fit: BoxFit.cover,
+                      ),
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  "الكمية: ${item.quantity}",
-                  style: TextStyle(fontSize: 12.sp),
-                ),
-                SizedBox(height: 4.h),
-
-                // ⭐ التقييم الجديد
-                if (orderStatus.toLowerCase() == "delivered") ...[
-                  if (!item.isRated) ...[
-                    RatingBar.builder(
-                      initialRating: 0,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemSize: 20.sp,
-                      itemCount: 5,
-                      unratedColor: Colors.grey.shade300,
-                      itemBuilder:
-                          (context, _) =>
-                              const Icon(Icons.star, color: Colors.amber),
-                      onRatingUpdate: (rating) async {
-                        setState(() {
-                          tempRatedProducts[item.productId] = rating;
-                          item.isRated = true;
-                          item.rating = rating;
-                        });
-
-                        try {
-                          final prefs = await SharedPreferences.getInstance();
-                          final token = prefs.getString('token');
-                          if (token == null) throw Exception("Token not found");
-
-                          final url = Uri.parse(
-                            "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
-                          );
-                          final response = await http.post(
-                            url,
-                            headers: {
-                              'Authorization': 'Bearer $token',
-                              'Content-Type': 'application/json',
-                            },
-                            body: jsonEncode({"rating": rating, "comment": ""}),
-                          );
-                          print("⭐ تم إرسال التقييم: ${response.statusCode}");
-                        } catch (e) {
-                          print("❌ خطأ أثناء إرسال التقييم: $e");
-                        }
-                      },
-                    ),
-                  ] else ...[
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      "تم التقييم بـ ${item.rating.toStringAsFixed(1)} نجوم",
-                      style: TextStyle(fontSize: 12.sp, color: Colors.green),
+                      item.nameAr,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "الكمية: ${item.quantity}",
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
+                    SizedBox(height: 4.h),
+                    if (orderStatus.toLowerCase() == "delivered") ...[
+                      if (!item.isRated) ...[
+                        RatingBar.builder(
+                          initialRating: 0,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemSize: 20.sp,
+                          itemCount: 5,
+                          unratedColor: Colors.grey.shade300,
+                          itemBuilder:
+                              (context, _) =>
+                                  const Icon(Icons.star, color: Colors.amber),
+                          onRatingUpdate: (rating) async {
+                            setState(() {
+                              item.rating = rating;
+                              item.isRated = true;
+                            });
+                            await _submitRating(item.productId, rating);
+                          },
+                        ),
+                      ] else ...[
+                        Text(
+                          "تم التقييم بـ ${item.rating.toStringAsFixed(1)} نجوم",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ],
                   ],
-                ],
-              ],
-            ),
+                ),
+              ),
+              Text(
+                "${item.price.toStringAsFixed(0)} جنيه",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
-          Text(
-            "${item.price.toStringAsFixed(0)} جنيه",
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
+        );
+      },
     );
+  }
+
+  Future<void> _fetchItemRatingIfNeeded(OrderItem item) async {
+    if (item.isRated || item.rating > 0) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token == null) return;
+
+      final url = Uri.parse(
+        "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
+      );
+      final response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final fetchedRating = (data['rating'] as num?)?.toDouble() ?? 0.0;
+        if (fetchedRating > 0) {
+          setState(() {
+            item.rating = fetchedRating;
+            item.isRated = true;
+          });
+        }
+      }
+    } catch (e) {
+      print("⚠️ فشل تحميل تقييم المنتج: $e");
+    }
+  }
+
+  Future<void> _submitRating(int productId, double rating) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token == null) return;
+
+      final url = Uri.parse(
+        "https://service-provider.runasp.net/api/Products/$productId/reviews",
+      );
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"rating": rating, "comment": ""}),
+      );
+
+      print("⭐ تم إرسال التقييم: ${response.statusCode}");
+    } catch (e) {
+      print("❌ خطأ أثناء إرسال التقييم: $e");
+    }
   }
 
   Widget _buildDeliveryDetails(VendorOrderDetailsResponse order) {

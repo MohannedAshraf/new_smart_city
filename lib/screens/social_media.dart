@@ -53,7 +53,7 @@ class _SocialMediaState extends State<SocialMedia> {
       final postsResult = await GetPost().getTenPosts();
       print('📥 API Response: ${postsResult.data}');
 
-      if (postsResult.data == null || postsResult.data!.isEmpty) {
+      if (postsResult.data.isEmpty) {
         print('⚠️ No posts received');
         setState(() {
           cachedPosts = [];
