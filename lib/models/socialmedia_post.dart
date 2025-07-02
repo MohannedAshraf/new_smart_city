@@ -5,11 +5,16 @@ import 'package:citio/core/utils/variables.dart';
 class SocialmediaPost {
   List<Data> data;
   String message;
+
   SocialmediaPost({required this.data, required this.message});
+
   factory SocialmediaPost.fromJason(Map<String, dynamic> jasonData) {
     return SocialmediaPost(
-      data: List<Data>.from(jasonData['data'].map((x) => Data.fromJason(x))),
-      message: jasonData['message'],
+      data: (jasonData['data'] as List?)
+              ?.map((x) => Data.fromJason(x))
+              .toList() ??
+          [],
+      message: jasonData['message'] ?? '',
     );
   }
 }
@@ -36,32 +41,26 @@ class Data {
     required this.adminPost,
     this.tags,
   });
+
   factory Data.fromJason(Map<String, dynamic> jasonData) {
     return Data(
-      caption: jasonData['postCaption'],
-      media:
-          jasonData['media'] != null
-              ? List<Media>.from(
-                jasonData['media'].map((x) => Media.fromJson(x)),
-              )
-              : null,
-      impressionsCount:
-          jasonData['impressionsCount'] != null
-              ? ImpressionsCount.fromJson(jasonData['impressionsCount'])
-              : null,
+      caption: jasonData['postCaption'] ?? '',
+      media: (jasonData['media'] as List?)
+              ?.map((x) => Media.fromJson(x))
+              .toList() ??
+          [],
+      impressionsCount: jasonData['impressionsCount'] != null
+          ? ImpressionsCount.fromJson(jasonData['impressionsCount'])
+          : null,
       shareCount: jasonData['shareCount'],
       saveCount: jasonData['saveCount'],
-      date:
-          jasonData['createdAt'] != null &&
-                  jasonData['createdAt'].toString().isNotEmpty
-              ? getTimeAgo(jasonData['createdAt'])
-              : 'التاريخ غير متوفر',
+      date: (jasonData['createdAt'] != null &&
+              jasonData['createdAt'].toString().isNotEmpty)
+          ? getTimeAgo(jasonData['createdAt'])
+          : 'التاريخ غير متوفر',
       userId: jasonData['author'],
-      adminPost: jasonData['adminPost'],
-      tags:
-          jasonData['tags'] != null
-              ? List<String>.from(jasonData['tags'] as List)
-              : null,
+      adminPost: jasonData['adminPost'] ?? false,
+      tags: (jasonData['tags'] as List?)?.map((e) => e.toString()).toList(),
     );
   }
 }
@@ -76,7 +75,9 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> jsonData) {
     return Media(
       type: jsonData['type'],
-      url: Urls.socialmediaBaseUrl + jsonData['url'],
+      url: jsonData['url'] != null
+          ? Urls.socialmediaBaseUrl + jsonData['url']
+          : null,
       sId: jsonData['_id'],
     );
   }
@@ -100,6 +101,7 @@ class ImpressionsCount {
     this.hate,
     this.total,
   });
+
   factory ImpressionsCount.fromJson(Map<String, dynamic> jsonData) {
     return ImpressionsCount(
       like: jsonData['like'],
@@ -114,19 +116,23 @@ class ImpressionsCount {
 }
 
 String getTimeAgo(String dateString) {
-  final date = DateTime.parse(dateString);
-  final now = DateTime.now();
-  final diff = now.difference(date);
+  try {
+    final date = DateTime.parse(dateString);
+    final now = DateTime.now();
+    final diff = now.difference(date);
 
-  if (diff.inSeconds < 60) {
-    return 'منذ ${diff.inSeconds} ثانية';
-  } else if (diff.inMinutes < 60) {
-    return 'منذ ${diff.inMinutes} دقيقة';
-  } else if (diff.inHours < 24) {
-    return 'منذ ${diff.inHours} ساعة';
-  } else if (diff.inDays < 7) {
-    return 'منذ ${diff.inDays} يوم';
-  } else {
-    return DateFormat.yMMMMd('ar_EG').format(date);
+    if (diff.inSeconds < 60) {
+      return 'منذ ${diff.inSeconds} ثانية';
+    } else if (diff.inMinutes < 60) {
+      return 'منذ ${diff.inMinutes} دقيقة';
+    } else if (diff.inHours < 24) {
+      return 'منذ ${diff.inHours} ساعة';
+    } else if (diff.inDays < 7) {
+      return 'منذ ${diff.inDays} يوم';
+    } else {
+      return DateFormat.yMMMMd('ar_EG').format(date);
+    }
+  } catch (_) {
+    return 'تاريخ غير صالح';
   }
 }

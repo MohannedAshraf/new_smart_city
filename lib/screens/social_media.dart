@@ -24,11 +24,11 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
+  static List<Data>? _persistedPosts; // ✅ الكاش المؤقت
   List<Data>? cachedPosts;
   bool isLoading = true;
   bool isButtonPressed = false;
 
-  // كاش لتخزين بيانات المستخدمين بعد أول تحميل
   final Map<String, SocialmediaUser> userCache = {};
 
   @override
@@ -39,12 +39,37 @@ class _SocialMediaState extends State<SocialMedia> {
 
   Future<void> _fetchPostsOnce() async {
     try {
+      // ✅ لو الكاش موجود، نستخدمه
+      if (_persistedPosts != null && _persistedPosts!.isNotEmpty) {
+        print('📦 Using cached posts');
+        setState(() {
+          cachedPosts = _persistedPosts;
+          isLoading = false;
+        });
+        return;
+      }
+
+      print('🌐 Fetching posts from API...');
       final postsResult = await GetPost().getTenPosts();
+      print('📥 API Response: ${postsResult.data}');
+
+      if (postsResult.data == null || postsResult.data!.isEmpty) {
+        print('⚠️ No posts received');
+        setState(() {
+          cachedPosts = [];
+          _persistedPosts = [];
+          isLoading = false;
+        });
+        return;
+      }
+
+      _persistedPosts = postsResult.data;
       setState(() {
-        cachedPosts = postsResult.data;
+        cachedPosts = _persistedPosts;
         isLoading = false;
       });
     } catch (e) {
+      print('❌ Error fetching posts: $e');
       setState(() {
         cachedPosts = [];
         isLoading = false;
@@ -52,7 +77,6 @@ class _SocialMediaState extends State<SocialMedia> {
     }
   }
 
-  // دالة لبناء عرض البوست مع بيانات المستخدم (تتحقق من الكاش)
   Widget _buildPostUserWidget(
     Data post,
     double screenWidth,
@@ -60,11 +84,9 @@ class _SocialMediaState extends State<SocialMedia> {
   ) {
     final userId = post.userId ?? '';
     if (userCache.containsKey(userId)) {
-      // إذا المستخدم موجود في الكاش، نعرضه مباشرة
       final user = userCache[userId]!;
       return _buildPostWithUser(post, user, screenWidth, screenHeight);
     } else {
-      // إذا مش موجود، نجيب البيانات من الشبكة ونخزنها في الكاش
       return FutureBuilder<SocialmediaUser>(
         future: GetSocialmediaUser().getSocialMediaUser(id: userId),
         builder: (context, snapshot) {
@@ -82,7 +104,6 @@ class _SocialMediaState extends State<SocialMedia> {
           }
 
           final user = snapshot.data!;
-          // خزّن المستخدم في الكاش وحدث الواجهة
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!userCache.containsKey(userId)) {
               setState(() {
@@ -97,7 +118,6 @@ class _SocialMediaState extends State<SocialMedia> {
     }
   }
 
-  // دالة لبناء بطاقة البوست مع بيانات المستخدم الجاهزة
   Widget _buildPostWithUser(
     Data post,
     SocialmediaUser user,
@@ -257,8 +277,11 @@ class _SocialMediaState extends State<SocialMedia> {
               const Spacer(),
               IconButton(
                 onPressed: () async {
-                  setState(() => isLoading = true);
-                  await _fetchPostsOnce();
+                  setState(() {
+                    isLoading = true;
+                    _persistedPosts = null; // 🧹 امسح الكاش
+                  });
+                  await _fetchPostsOnce(); // 📡 حمل من جديد
                 },
                 icon: const Icon(Icons.refresh, color: MyColors.gray),
               ),
@@ -271,7 +294,10 @@ class _SocialMediaState extends State<SocialMedia> {
           isLoading
               ? const Center(child: CircularProgressIndicator())
               : RefreshIndicator(
-                onRefresh: _fetchPostsOnce,
+                onRefresh: () async {
+                  _persistedPosts = null;
+                  await _fetchPostsOnce();
+                },
                 child: ListView.builder(
                   itemCount: cachedPosts!.length + 1,
                   itemBuilder: (context, index) {
@@ -317,7 +343,6 @@ class _SocialMediaState extends State<SocialMedia> {
                     }
 
                     final post = cachedPosts![index];
-
                     return Card(
                       color: MyColors.white,
                       shadowColor: MyColors.white,

@@ -9,8 +9,8 @@ class FCMApi {
     required String userToken,
   }) async {
     try {
-      final response = await _dio.post(
-        'https://cms-central-ffb6acaub5afeecj.uaenorth-01.azurewebsites.net/api/User/update-fcm-token',
+      final response = await _dio.put(
+        'https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/User/update-fcm-token',
         data: {'fcmDeviceToken': token},
         options: Options(headers: {'Authorization': 'Bearer $userToken'}),
       );
