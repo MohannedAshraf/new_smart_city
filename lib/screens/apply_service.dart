@@ -50,7 +50,7 @@ class _ApplyService extends State<ApplyService> {
         widget.id,
       );
 
-      fetchedFields.forEach((field) {
+      for (var field in fetchedFields) {
         if (!controllers.containsKey(field.fileName)) {
           controllers[field.fileName] = TextEditingController();
           fieldsError.add(false);
@@ -62,7 +62,7 @@ class _ApplyService extends State<ApplyService> {
             'FieldValueDate': null,
           });
         }
-      });
+      }
       setState(() {
         fields = fetchedFields;
         files = fetchedFiles;

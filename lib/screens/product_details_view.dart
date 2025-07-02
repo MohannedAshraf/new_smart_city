@@ -176,65 +176,72 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 Row(
                   children: [
                     /// ✅ العداد
-                    Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            vertical: 5.h,
-                            horizontal: 5.w,
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 5.h,
+                              horizontal: 5.w,
+                            ),
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blueAccent,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                if (itemCount > 1) {
+                                  setState(() {
+                                    itemCount--;
+                                  });
+                                }
+                              },
+                            ),
                           ),
-                          width: 40.w,
-                          height: 40.h,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blueAccent,
+                          Text(
+                            '$itemCount',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          child: IconButton(
-                            icon: const Icon(Icons.remove, color: Colors.white),
-                            onPressed: () {
-                              if (itemCount > 1) {
-                                setState(() {
-                                  itemCount--;
-                                });
-                              }
-                            },
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              vertical: 5.h,
+                              horizontal: 5.w,
+                            ),
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blueAccent,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(Icons.add, color: Colors.white),
+                              onPressed: () {
+                                if (itemCount < 10) {
+                                  setState(() {
+                                    itemCount++;
+                                  });
+                                }
+                              },
+                            ),
                           ),
-                        ),
-                        Text(
-                          '$itemCount',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 5.w,
-                            vertical: 5.h,
-                          ),
-                          width: 40.w,
-                          height: 40.h,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blueAccent,
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            onPressed: () {
-                              if (itemCount < 10) {
-                                setState(() {
-                                  itemCount++;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
 
-                    /// ✅ زر Add to Cart بياخد المساحة الباقية تلقائيًا
-                    const Spacer(),
+                    /// ✅ زر Add to Cart
                     Expanded(
+                      flex: 2, // عشان ياخد مساحة أكبر من العداد
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
@@ -269,6 +276,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     ),
                   ],
                 ),
+
                 SizedBox(height: 30.h),
               ],
             ),

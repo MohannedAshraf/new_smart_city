@@ -7,7 +7,7 @@ class ProductDetails {
   final String vendorFullName;
   final String vendorBusinessName;
   final double price;
-  final double rating;
+  final int rating;
 
   ProductDetails({
     required this.id,
