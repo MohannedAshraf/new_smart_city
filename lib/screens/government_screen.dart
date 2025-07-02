@@ -3,12 +3,9 @@
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
 import 'package:citio/main.dart';
-import 'package:citio/screens/all_vendors_screen.dart';
-import 'package:citio/screens/first_issue_screen.dart';
+
 import 'package:citio/screens/government_services.dart';
-import 'package:citio/screens/my_order_page.dart';
-import 'package:citio/screens/mylogin_page.dart';
-import 'package:citio/screens/profile.dart';
+
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
