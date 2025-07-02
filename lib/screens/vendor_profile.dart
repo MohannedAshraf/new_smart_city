@@ -218,7 +218,7 @@ class _VendorProfileState extends State<VendorProfile> {
                             Text(vendor.rating.toStringAsFixed(2)),
                             SizedBox(width: 6.w),
                             Text(
-                              '(${vendor.rating.toString()} تقييما)',
+                              '(${vendor.numOfReviews.toString()} تقييما)',
                               style: TextStyle(color: MyColors.gray),
                             ),
                           ],

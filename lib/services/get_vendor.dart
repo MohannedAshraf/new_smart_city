@@ -36,7 +36,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&PageSize=3',
+          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&PageSize=10',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);
@@ -72,7 +72,7 @@ class GetVendor {
 
     dynamic data = await Api().get(
       url:
-          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&SearchValue=$encodedSearch&PageSize=3',
+          '${Urls.serviceProviderbaseUrl}/api/Vendors/for-mobile?pageNumer=$pageNumber&SearchValue=$encodedSearch&PageSize=10',
       token: token,
     );
     AllVendor vendors = AllVendor.fromJason(data);

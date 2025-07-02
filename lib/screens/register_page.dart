@@ -49,6 +49,19 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() => _isLoading = false);
 
       if (response.isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "تم إنشاء الحساب بنجاح",
+              style: TextStyle(fontSize: 10),
+            ),
+            backgroundColor: Colors.blueAccent,
+          ),
+        );
+
+        // الانتقال بعد عرض SnackBar بثانية مثلاً
+        await Future.delayed(const Duration(seconds: 1));
+
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MyloginPage()),
