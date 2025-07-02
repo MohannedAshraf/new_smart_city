@@ -48,13 +48,13 @@ class ProductCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.only(bottom: 5.0.h, right: 5.w, left: 5.w),
+          padding: EdgeInsets.only(bottom: 5.h, right: 5.w, left: 5.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 182,
-                height: 150,
+                height: 150.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.r),
