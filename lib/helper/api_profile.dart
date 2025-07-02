@@ -27,9 +27,22 @@ class ApiProfileHelper {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return ProfileModel.fromJson(data);
+      final profile = ProfileModel.fromJson(data);
+
+      if (profile.id != null) {
+        try {
+          final idAsInt = int.parse(profile.id!);
+          await prefs.setInt('mobileUserId', idAsInt);
+          print("✅ userId saved: $idAsInt");
+        } catch (e) {
+          print("❌ فشل في تحويل userId إلى int: $e");
+        }
+      }
+
+      return profile;
     } else {
       throw Exception("فشل في تحميل البيانات");
     }
   }
 }
+
