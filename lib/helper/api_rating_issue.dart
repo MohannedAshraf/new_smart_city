@@ -8,7 +8,7 @@ class FeedbackApiService {
   final Dio dio = Dio();
 
   Future<FeedbackResponse> sendFeedback({
-    required String reportId, // ✅ أضفها هنا
+    required int issueReportId,
     required String comment,
     required int rateValue,
   }) async {
@@ -22,7 +22,7 @@ class FeedbackApiService {
 
     const url = 'https://cms-reporting.runasp.net/api/Feedback';
     final body = {
-      "reportId": reportId, // ✅ أصبح موجود
+      "reportId": issueReportId,
       "comment": comment,
       "rateValue": rateValue,
     };
@@ -41,13 +41,24 @@ class FeedbackApiService {
             'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
           },
+          validateStatus: (status) {
+            // نسمح بالتحكم في حالات الرد بدون رمي Exception مباشرة
+            return status != null && status < 500;
+          },
         ),
       );
 
       print("✅ Response Status Code: ${response.statusCode}");
       print("📥 Response Data: ${response.data}");
 
-      return FeedbackResponse.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return FeedbackResponse.fromJson(response.data);
+      } else {
+        print("⚠️ Server returned error: ${response.statusCode}");
+        return FeedbackResponse(
+          message: response.data.toString(),
+        );
+      }
     } catch (e) {
       print("❌ Error while sending feedback: $e");
       return FeedbackResponse(message: "Error: $e");

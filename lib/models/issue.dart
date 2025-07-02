@@ -16,7 +16,7 @@ class Issue {
 }
 
 class Values {
-  final String id;
+  final int  id;
   final String title;
   final String date;
   final String status;

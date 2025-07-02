@@ -71,6 +71,7 @@ class _IssueScreenState extends State<IssueScreen> {
       });
     } catch (e) {
       setState(() => isLoading = false);
+      print('❌ Error loading issues: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
