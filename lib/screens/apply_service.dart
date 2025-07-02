@@ -33,6 +33,8 @@ class _ApplyService extends State<ApplyService> {
 
   Map<String, TextEditingController> controllers = {};
   Map<int, PlatformFile> uploadedFiles = {};
+  List<bool> fieldsError = [];
+  List<bool> filesError = [];
 
   @override
   void initState() {
@@ -52,7 +54,7 @@ class _ApplyService extends State<ApplyService> {
       fetchedFields.forEach((field) {
         if (!controllers.containsKey(field.fileName)) {
           controllers[field.fileName] = TextEditingController();
-
+          fieldsError.add(false);
           serviceData.add({
             'FieldId': field.id,
             'FieldValueString': null,
@@ -117,6 +119,7 @@ class _ApplyService extends State<ApplyService> {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
+                          showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
                             serviceData[index]['FieldValueString'] = value;
@@ -125,6 +128,7 @@ class _ApplyService extends State<ApplyService> {
                       } else if (field.htmlType == 'date') {
                         return DateTextField(
                           header: field.fileName,
+                          showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
                             serviceData[index]['FieldValueDate'] = value;
@@ -134,6 +138,7 @@ class _ApplyService extends State<ApplyService> {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
+                          showError: fieldsError[index],
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
@@ -144,6 +149,7 @@ class _ApplyService extends State<ApplyService> {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
+                          showError: fieldsError[index],
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
@@ -279,6 +285,7 @@ class _ApplyService extends State<ApplyService> {
                     files: uploadedFiles.values.toList(),
                   );
                   payment(context);
+                  validateFields();
                 }
               },
               icon: Icon(
@@ -307,6 +314,25 @@ class _ApplyService extends State<ApplyService> {
         ),
       ),
     );
+  }
+
+  bool validateFields() {
+    bool isValid = true;
+    for (int i = 0; i < fields.length; i++) {
+      var value =
+          serviceData[i]['FieldValueString'] ??
+          serviceData[i]['FieldValueInt'] ??
+          serviceData[i]['FieldValueFloat'] ??
+          serviceData[i]['FieldValueDate'];
+      if (value == null || value.toString().isEmpty) {
+        fieldsError[i] = true;
+        isValid = false;
+      } else {
+        fieldsError[i] = false;
+      }
+    }
+    setState(() {});
+    return isValid;
   }
 
   void payment(BuildContext context) {
