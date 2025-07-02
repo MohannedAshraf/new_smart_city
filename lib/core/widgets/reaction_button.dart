@@ -1,5 +1,3 @@
-// core/widgets/reaction_button.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:citio/core/widgets/reaction_icon_mapper.dart';
@@ -9,7 +7,7 @@ import 'package:citio/core/utils/variables.dart';
 
 class ReactionButton extends StatefulWidget {
   final String postId;
-  final String? currentUserReaction; // null لو معملش ريأكشن
+  final String? currentUserReaction;
   final int totalCount;
   final Function(String newReaction, int newTotal)? onReacted;
 
@@ -36,28 +34,41 @@ class _ReactionButtonState extends State<ReactionButton> {
     _totalCount = widget.totalCount;
   }
 
+  Future<void> _sendReaction(String reactionType) async {
+    final success = await SocialMediaReactionsApi.sendReaction(
+      postId: widget.postId,
+      reactionType: reactionType,
+    );
+
+    if (success != null) {
+      setState(() {
+        _userReaction = reactionType.isEmpty ? null : reactionType;
+        _totalCount = success.total ?? _totalCount;
+      });
+      widget.onReacted?.call(_userReaction ?? '', _totalCount);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        if (_userReaction != null) {
+          // حذف الريأكت الحالي
+          await _sendReaction('');
+        } else {
+          // إضافة لايك
+          await _sendReaction('like');
+        }
+      },
+      onLongPress: () async {
         final selected = await showDialog<String>(
           context: context,
           builder: (_) => const ReactionDialog(),
         );
 
         if (selected != null) {
-          final success = await SocialMediaReactionsApi.sendReaction(
-            postId: widget.postId,
-            reactionType: selected,
-          );
-
-          if (success != null) {
-            setState(() {
-              _userReaction = selected;
-              _totalCount = success.total ?? _totalCount;
-            });
-            widget.onReacted?.call(selected, _totalCount);
-          }
+          await _sendReaction(selected);
         }
       },
       child: Row(
