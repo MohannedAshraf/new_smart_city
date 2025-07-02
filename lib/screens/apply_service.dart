@@ -278,6 +278,7 @@ class _ApplyService extends State<ApplyService> {
                     serviceData: serviceData,
                     files: uploadedFiles.values.toList(),
                   );
+                  payment(context);
                 }
               },
               icon: Icon(
@@ -305,6 +306,118 @@ class _ApplyService extends State<ApplyService> {
           ),
         ),
       ),
+    );
+  }
+
+  void payment(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: MyColors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      context: context,
+      builder:
+          (_) => Padding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // TEST MODE Label
+                const SizedBox(height: 4),
+
+                // Title
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'ادخل بيانات الدفع',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Card Number Field
+                const TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Card number',
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.credit_card),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // MM/YY + CVC
+                const Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'MM / YY',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          labelText: 'CVC',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Country / Region
+                DropdownButtonFormField<String>(
+                  value: 'United States',
+                  items:
+                      ['United States', 'Canada', 'Egypt']
+                          .map(
+                            (country) => DropdownMenuItem(
+                              value: country,
+                              child: Text(country),
+                            ),
+                          )
+                          .toList(),
+                  onChanged: (val) {},
+                  decoration: const InputDecoration(
+                    labelText: 'Country or region',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // ZIP Code
+                const TextField(
+                  decoration: InputDecoration(
+                    labelText: 'ZIP Code',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+
+                // Pay Button
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.lock, color: MyColors.white),
+                  label: const Text(
+                    "Pay \$10.00",
+                    style: TextStyle(color: MyColors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.dodgerBlue,
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                ),
+              ],
+            ),
+          ),
     );
   }
 }
