@@ -34,16 +34,11 @@ class ApplyGovernmentService {
         req.fields['ServiceData[$i].FieldId'] = item['FieldId'].toString();
 
         if (value == null) {
-          // لو القيمة null، ممكن تحط نص فاضي أو ما تبعتش الحقل حسب الحاجة
-          // هنا بحط نص فاضي لكل الحقول
           if (type == 'number') {
             req.fields['ServiceData[$i].FieldValueInt'] = '0';
           } else if (type == 'float') {
             req.fields['ServiceData[$i].FieldValueFloat'] = '0.0';
           } else if (type == 'date') {
-            // ممكن ما تبعتش الحقل أو تبعت تاريخ افتراضي
-            // مثلا:
-            // req.fields['ServiceData[$i].FieldValueDate'] = DateTime.now().toIso8601String();
           } else {
             req.fields['ServiceData[$i].FieldValueString'] = '';
           }

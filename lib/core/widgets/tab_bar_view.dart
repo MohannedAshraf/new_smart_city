@@ -21,9 +21,7 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
   Widget build(BuildContext context) {
     Future<List<Request>> future;
     if (widget.title == 'الجميع') {
-      future =
-          RequestsByStatus()
-              .getAllRequests(); // هنا تحط ال API اللي بترجع كل الطلبات
+      future = RequestsByStatus().getAllRequests();
     } else {
       future = RequestsByStatus().getRequestsByStatus(status: widget.title);
     }
