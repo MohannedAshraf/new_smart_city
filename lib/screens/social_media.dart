@@ -27,10 +27,22 @@ class _SocialMediaState extends State<SocialMedia> {
   late Future<SocialmediaPost> postsFuture;
   bool isButtonPressed = false;
 
+  final Map<String, Future<SocialmediaUser>> _userCache = {};
+
   @override
   void initState() {
     super.initState();
     postsFuture = GetPost().getTenPosts();
+  }
+
+  Future<SocialmediaUser> _getCachedUser(String userId) {
+    if (_userCache.containsKey(userId)) {
+      return _userCache[userId]!;
+    } else {
+      final futureUser = GetSocialmediaUser().getSocialMediaUser(id: userId);
+      _userCache[userId] = futureUser;
+      return futureUser;
+    }
   }
 
   @override
@@ -97,10 +109,7 @@ class _SocialMediaState extends State<SocialMedia> {
             itemBuilder: (context, index) {
               if (index == posts.length) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 19.w,
-                    vertical: 15.h,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 19.w, vertical: 15.h),
                   child: SizedBox(
                     height: 70.h,
                     width: double.infinity,
@@ -113,9 +122,7 @@ class _SocialMediaState extends State<SocialMedia> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                            isButtonPressed
-                                ? MyColors.inProgress
-                                : MyColors.dodgerBlue,
+                            isButtonPressed ? MyColors.inProgress : MyColors.dodgerBlue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14.r),
                         ),
@@ -138,28 +145,24 @@ class _SocialMediaState extends State<SocialMedia> {
                 color: MyColors.white,
                 shadowColor: MyColors.white,
                 child: FutureBuilder<SocialmediaUser>(
-                  future: GetSocialmediaUser().getSocialMediaUser(
-                    id: post.userId ?? '',
-                  ),
+                  future: _getCachedUser(post.userId ?? ''),
                   builder: (context, userSnapshot) {
                     if (userSnapshot.hasError) {
-                      return const Center(
-                        child: Text('حدث خطأ في جلب المستخدم'),
-                      );
+                      return const Center(child: Text('حدث خطأ في جلب المستخدم'));
                     }
                     if (!userSnapshot.hasData) {
                       return Container(
                         color: MyColors.fadedGrey,
                         height: screenHeight * 0.2,
                         child: const Center(
-                          child: CircularProgressIndicator(
-                            color: MyColors.gray,
-                          ),
+                          child: CircularProgressIndicator(color: MyColors.gray),
                         ),
                       );
                     }
 
                     final user = userSnapshot.data!;
+                    final imageUrls = post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
+
                     return Padding(
                       padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
                       child: Column(
@@ -170,8 +173,7 @@ class _SocialMediaState extends State<SocialMedia> {
                               CircleAvatar(
                                 radius: screenWidth * 0.075,
                                 backgroundImage: NetworkImage(
-                                  (user.avatar != null &&
-                                          user.avatar!.isNotEmpty)
+                                  (user.avatar != null && user.avatar!.isNotEmpty)
                                       ? Urls.socialmediaBaseUrl + user.avatar!
                                       : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
                                 ),
@@ -193,12 +195,7 @@ class _SocialMediaState extends State<SocialMedia> {
                                       post.date ?? '',
                                       style: TextStyle(
                                         fontSize: 13.sp,
-                                        color: const Color.fromRGBO(
-                                          134,
-                                          133,
-                                          133,
-                                          1,
-                                        ),
+                                        color: const Color.fromRGBO(134, 133, 133, 1),
                                       ),
                                     ),
                                   ],
@@ -206,48 +203,39 @@ class _SocialMediaState extends State<SocialMedia> {
                               ),
                               if (post.adminPost)
                                 Container(
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 6.w,
-                                    vertical: 5.h,
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12.w,
-                                    vertical: 8.h,
-                                  ),
+                                  margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                                   decoration: BoxDecoration(
                                     color: MyColors.ambulance,
                                     borderRadius: BorderRadius.circular(20.r),
                                   ),
                                   child: Text(
-                                    (post.tags != null && post.tags!.isNotEmpty)
-                                        ? post.tags![0]
-                                        : '',
-                                    style: const TextStyle(
-                                      color: MyColors.white,
-                                    ),
+                                    (post.tags != null && post.tags!.isNotEmpty) ? post.tags![0] : '',
+                                    style: const TextStyle(color: MyColors.white),
                                   ),
                                 ),
                             ],
                           ),
                           const SizedBox(height: 8),
                           Text(post.caption ?? '', softWrap: true),
-                          if (post.media?.isNotEmpty ?? false)
-                            Container(
+                          if (imageUrls.isNotEmpty)
+                            Padding(
                               padding: EdgeInsets.symmetric(vertical: 4.h),
-                              child: GalleryImage(
-                                minScale: 0.5,
-                                childAspectRatio: 0.8,
-                                imageRadius: 12,
-                                numOfShowImages:
-                                    (post.media!.length > 3)
-                                        ? 3
-                                        : post.media!.length,
-                                imageUrls:
-                                    post.media!
-                                        .map((m) => m.url)
-                                        .whereType<String>()
-                                        .toList(),
-                                titleGallery: 'Citio',
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12.r),
+                                child: imageUrls.length == 1
+                                    ? Image.network(
+                                        imageUrls[0],
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                                      )
+                                    : GalleryImage(
+                                        imageUrls: imageUrls,
+                                        numOfShowImages: imageUrls.length > 3 ? 3 : imageUrls.length,
+                                        titleGallery: 'Citio',
+                                        imageRadius: 8,
+                                      ),
                               ),
                             ),
                           SizedBox(
@@ -324,7 +312,7 @@ class PopUpDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('سيتم تحويلك خارج  citio'),
+      title: const Text('سيتم تحويلك خارج citio'),
       content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
       actions: <Widget>[
         TextButton(
