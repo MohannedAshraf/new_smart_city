@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages, unused_element
-
 import 'package:intl/intl.dart';
 
 String _baseUrl = 'https://cms-reporting.runasp.net/';
@@ -18,6 +16,7 @@ class Issue {
 }
 
 class Values {
+  final String id;
   final String title;
   final String date;
   final String status;
@@ -26,6 +25,7 @@ class Values {
   final String? description;
 
   const Values({
+    required this.id,
     required this.title,
     required this.date,
     required this.status,
@@ -35,6 +35,7 @@ class Values {
   });
   factory Values.fromJason(jsonData) {
     return Values(
+      id: jsonData['id'] ?? '',
       title: jsonData['issueCategoryAR'],
       date: DateFormat.yMMMMd(
         'en_US',
