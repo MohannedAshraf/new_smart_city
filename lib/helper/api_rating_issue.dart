@@ -22,7 +22,7 @@ class FeedbackApiService {
 
     const url = 'https://cms-reporting.runasp.net/api/Feedback';
     final body = {
-      "reportId": issueReportId,
+      "issueReportId": issueReportId,
       "comment": comment,
       "rateValue": rateValue,
     };
@@ -55,9 +55,7 @@ class FeedbackApiService {
         return FeedbackResponse.fromJson(response.data);
       } else {
         print("⚠️ Server returned error: ${response.statusCode}");
-        return FeedbackResponse(
-          message: response.data.toString(),
-        );
+        return FeedbackResponse(message: response.data.toString());
       }
     } catch (e) {
       print("❌ Error while sending feedback: $e");
