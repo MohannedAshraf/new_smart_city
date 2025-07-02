@@ -9,6 +9,7 @@ class FeedbackApiService {
   final Dio dio = Dio();
 
   Future<FeedbackResponse> sendFeedback({
+    required String reportId, // ✅ أضفها هنا
     required String comment,
     required int rateValue,
   }) async {
@@ -21,20 +22,25 @@ class FeedbackApiService {
     }
 
     const url = 'https://cms-reporting.runasp.net/api/Feedback';
-    final body = {"comment": comment, "rateValue": rateValue};
+    final body = {
+      "reportId": reportId, // ✅ أصبح موجود
+      "comment": comment,
+      "rateValue": rateValue,
+    };
 
     try {
       print("📤 Sending Feedback...");
       print("🔸 URL: $url");
       print("🔸 Body: $body");
+      print("🔸 Token: $token");
 
       final response = await dio.post(
         url,
-        data: jsonEncode(body),
+        data: body,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:citio/helper/api_login.dart';
+import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
@@ -44,6 +45,11 @@ class _LoginPageState extends State<MyloginPage> {
       if (result != null && context.mounted) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', result.token!);
+        try {
+          await ApiProfileHelper.fetchProfile();
+        } catch (e) {
+          print("❌ فشل في تحميل البروفايل: $e");
+        }
         print('✅Token ${result.token!}');
         await FCMService().initFCM();
         Navigator.pushReplacement(

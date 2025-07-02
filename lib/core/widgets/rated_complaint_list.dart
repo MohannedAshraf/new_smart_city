@@ -22,7 +22,7 @@ class RatedComplaintList extends StatelessWidget {
         final issue = issues[index];
 
         return SizedBox(
-          height: 140.h, // ✅
+          height: 150.h, // ✅
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
@@ -212,6 +212,7 @@ class RatedComplaintList extends StatelessWidget {
                                             FeedbackApiService();
                                         final response = await feedbackService
                                             .sendFeedback(
+                                              reportId: issue.id,
                                               comment: comment,
                                               rateValue: selectedRating.toInt(),
                                             );
