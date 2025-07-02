@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/reaction_button.dart';
 import 'package:citio/core/widgets/reactions.dart';
@@ -25,64 +23,49 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
-  static List<Data>? _persistedPosts; // ✅ كاش مؤقت
   List<Data>? cachedPosts;
   bool isLoading = true;
-  bool isButtonPressed = false;
+  bool isLoadingMore = false;
+  bool hasMorePosts = true;
+  int currentPage = 1;
 
   final Map<String, SocialmediaUser> userCache = {};
 
   @override
   void initState() {
     super.initState();
-    _fetchPostsOnce();
+    _fetchPostsPage(page: currentPage);
   }
 
-  Future<void> _fetchPostsOnce() async {
+  Future<void> _fetchPostsPage({required int page}) async {
+    if (!hasMorePosts || isLoadingMore) return;
+
+    setState(() {
+      isLoadingMore = true;
+    });
+
     try {
-      if (_persistedPosts != null && _persistedPosts!.isNotEmpty) {
-        print('📦 Using cached posts');
-        setState(() {
-          cachedPosts = _persistedPosts;
-          isLoading = false;
-        });
-        return;
+      final postsResult = await GetPost().getPosts(page: page);
+      final newPosts = postsResult.data;
+
+      if (newPosts.isEmpty) {
+        hasMorePosts = false;
+      } else {
+        cachedPosts = (cachedPosts ?? []) + newPosts;
+        currentPage++;
       }
-
-      print('🌐 Fetching posts from API...');
-      final postsResult = await GetPost().getTenPosts();
-      print('📥 API Response: ${postsResult.data}');
-
-      if (postsResult.data.isEmpty) {
-        print('⚠️ No posts received');
-        setState(() {
-          cachedPosts = [];
-          _persistedPosts = [];
-          isLoading = false;
-        });
-        return;
-      }
-
-      _persistedPosts = postsResult.data;
-      setState(() {
-        cachedPosts = _persistedPosts;
-        isLoading = false;
-      });
     } catch (e) {
-      print('❌ Error fetching posts: $e');
-      setState(() {
-        cachedPosts = [];
-        isLoading = false;
-      });
+      print('❌ Error loading page $page: $e');
     }
+
+    setState(() {
+      isLoading = false;
+      isLoadingMore = false;
+    });
   }
 
-  Widget _buildPostUserWidget(
-    Data post,
-    double screenWidth,
-    double screenHeight,
-  ) {
-    final userId = post.authorId ?? ''; // استخدم authorId حسب نموذج البيانات
+  Widget _buildPostUserWidget(Data post, double screenWidth, double screenHeight) {
+    final userId = post.authorId ?? '';
     if (userCache.containsKey(userId)) {
       final user = userCache[userId]!;
       return _buildPostWithUser(post, user, screenWidth, screenHeight);
@@ -91,7 +74,8 @@ class _SocialMediaState extends State<SocialMedia> {
         future: GetSocialmediaUser().getSocialMediaUser(id: userId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('حدث خطأ في جلب المستخدم'));
+            // تجاهل البوست عند الخطأ
+            return const SizedBox.shrink();
           }
           if (!snapshot.hasData) {
             return Container(
@@ -102,7 +86,6 @@ class _SocialMediaState extends State<SocialMedia> {
               ),
             );
           }
-
           final user = snapshot.data!;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!userCache.containsKey(userId)) {
@@ -111,19 +94,13 @@ class _SocialMediaState extends State<SocialMedia> {
               });
             }
           });
-
           return _buildPostWithUser(post, user, screenWidth, screenHeight);
         },
       );
     }
   }
 
-  Widget _buildPostWithUser(
-    Data post,
-    SocialmediaUser user,
-    double screenWidth,
-    double screenHeight,
-  ) {
+  Widget _buildPostWithUser(Data post, SocialmediaUser user, double screenWidth, double screenHeight) {
     print('Building post with id: ${post.id}');
 
     final imageUrls =
@@ -285,9 +262,11 @@ class _SocialMediaState extends State<SocialMedia> {
                 onPressed: () async {
                   setState(() {
                     isLoading = true;
-                    _persistedPosts = null; // امسح الكاش
+                    cachedPosts = null;
+                    currentPage = 1;
+                    hasMorePosts = true;
                   });
-                  await _fetchPostsOnce(); // حمل جديد
+                  await _fetchPostsPage(page: currentPage);
                 },
                 icon: const Icon(Icons.refresh, color: MyColors.gray),
               ),
@@ -296,69 +275,46 @@ class _SocialMediaState extends State<SocialMedia> {
         ),
         centerTitle: true,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: () async {
-                _persistedPosts = null;
-                await _fetchPostsOnce();
-              },
-              child: ListView.builder(
-                itemCount: cachedPosts!.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == cachedPosts!.length) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 19.w,
-                        vertical: 15.h,
-                      ),
-                      child: SizedBox(
-                        height: 70.h,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            setState(() => isButtonPressed = true);
-                            Future.delayed(
-                              const Duration(milliseconds: 200),
-                              () {
-                                setState(() => isButtonPressed = false);
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isButtonPressed
-                                ? MyColors.inProgress
-                                : MyColors.dodgerBlue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14.r),
-                            ),
-                          ),
-                          child: const Text(
-                            ' مشاهدة الجميع',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: MyColors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  final post = cachedPosts![index];
-                  return Card(
-                    color: MyColors.white,
-                    shadowColor: MyColors.white,
-                    child: _buildPostUserWidget(
-                      post,
-                      screenWidth,
-                      screenHeight,
-                    ),
-                  );
-                },
-              ),
-            ),
+     body: isLoading
+    ? const Center(child: CircularProgressIndicator())
+    : RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            isLoading = true;
+            cachedPosts = null;
+            currentPage = 1;
+            hasMorePosts = true;
+          });
+          await _fetchPostsPage(page: currentPage);
+        },
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (scrollInfo) {
+            if (hasMorePosts &&
+                !isLoadingMore &&
+                scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 100) {
+              _fetchPostsPage(page: currentPage);
+              return true;
+            }
+            return false;
+          },
+          child: ListView.builder(
+            itemCount: cachedPosts?.length ?? 0,
+            itemBuilder: (context, index) {
+              final post = cachedPosts![index];
+              return Card(
+                color: MyColors.white,
+                shadowColor: MyColors.white,
+                child: _buildPostUserWidget(
+                  post,
+                  screenWidth,
+                  screenHeight,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -385,30 +341,6 @@ class _SocialMediaState extends State<SocialMedia> {
                 style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
               ),
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class PopUpDialog extends StatelessWidget {
-  const PopUpDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('سيتم تحويلك خارج citio'),
-      content: const Text('هل أنت متأكد بأنك ترغب بالرحيل'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context, 'Cancel'),
-          child: const Text('الغاء'),
-        ),
-        TextButton(
-          onPressed: () {
-            launchUrl(_url, mode: LaunchMode.inAppWebView);
-          },
-          child: const Text('نعم'),
         ),
       ],
     );

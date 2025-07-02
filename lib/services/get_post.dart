@@ -4,7 +4,7 @@ import 'package:citio/models/socialmedia_post.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetPost {
-  Future<SocialmediaPost> getTenPosts() async {
+  Future<SocialmediaPost> getPosts({int page = 1, int limit = 10}) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
 
@@ -12,18 +12,15 @@ class GetPost {
       throw Exception('لم يتم العثور على التوكن!');
     }
 
-    print('Token used in getTenPosts: $token'); // طباعة التوكن
+    print('Token used in getPosts: $token');
 
-    // استدعاء API
     dynamic data = await Api().get(
-      url: '${Urls.socialmediaBaseUrl}/api/posts/?limit=10',
+      url: '${Urls.socialmediaBaseUrl}/api/posts/?limit=$limit&page=$page',
       token: token,
     );
 
-    // طباعة الاستجابة الخام بصيغة JSON
     print('########################Raw JSON response from API: $data');
 
-    // تحويل JSON إلى نموذج Dart
     SocialmediaPost posts = SocialmediaPost.fromJason(data);
     return posts;
   }
