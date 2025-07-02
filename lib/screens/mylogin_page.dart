@@ -45,13 +45,17 @@ class _LoginPageState extends State<MyloginPage> {
       if (result != null && context.mounted) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', result.token!);
+
         try {
-          await ApiProfileHelper.fetchProfile();
+          final profile = await ApiProfileHelper.fetchProfile();
+          await prefs.setString('userId', profile!.id ?? '');
         } catch (e) {
           print("❌ فشل في تحميل البروفايل: $e");
         }
+
         print('✅Token ${result.token!}');
         await FCMService().initFCM();
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
