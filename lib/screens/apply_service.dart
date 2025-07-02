@@ -367,49 +367,46 @@ class CustomTextField extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 12.h),
-          child: SizedBox(
-            height: 45.h,
-            child: TextField(
-              controller: controller,
-              textAlignVertical: TextAlignVertical.top,
-              onChanged: onChanged,
-              minLines: expands ? null : minLines,
-              maxLines: expands ? null : maxLines,
-              expands: expands,
-              keyboardType:
-                  isInt
-                      ? TextInputType.number
-                      : isFloat
-                      ? const TextInputType.numberWithOptions(decimal: true)
-                      : TextInputType.text,
-              inputFormatters: [
-                if (isInt) FilteringTextInputFormatter.digitsOnly,
-                if (isFloat)
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                if (fixedLength != null)
-                  LengthLimitingTextInputFormatter(fixedLength!),
-              ],
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
-                fillColor: MyColors.white,
-                filled: true,
-                hintText: hintText,
-                hintStyle: TextStyle(color: MyColors.grey, fontSize: 16.sp),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: BorderSide.none,
+          child: TextField(
+            controller: controller,
+            textAlignVertical: TextAlignVertical.top,
+            onChanged: onChanged,
+            minLines: minLines,
+            maxLines: expands ? null : maxLines,
+            expands: expands,
+            keyboardType:
+                isInt
+                    ? TextInputType.number
+                    : isFloat
+                    ? const TextInputType.numberWithOptions(decimal: true)
+                    : TextInputType.text,
+            inputFormatters: [
+              if (isInt) FilteringTextInputFormatter.digitsOnly,
+              if (isFloat)
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              if (fixedLength != null)
+                LengthLimitingTextInputFormatter(fixedLength!),
+            ],
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
+              fillColor: MyColors.white,
+              filled: true,
+              hintText: hintText,
+              hintStyle: TextStyle(color: MyColors.grey, fontSize: 16.sp),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: BorderSide.none,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: BorderSide(
+                  color: showError ? Colors.red : MyColors.gray,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: BorderSide(
-                    color: showError ? Colors.red : MyColors.gray,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: BorderSide(
-                    color: showError ? Colors.red : MyColors.dodgerBlue,
-                  ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: BorderSide(
+                  color: showError ? Colors.red : MyColors.dodgerBlue,
                 ),
               ),
             ),
