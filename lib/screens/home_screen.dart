@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: 'الخدمات الحكومية',
                       items: services,
                       destination: const GovernmentServices(),
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                       height: 175,
                       imageHeight: 50,
                       imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
