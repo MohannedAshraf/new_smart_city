@@ -452,10 +452,10 @@ class _ApplyService extends State<ApplyService> {
                       print("Stripe error: $e");
                     }
                   },
-                  child: const Text('إرسال ودفع'),
-                  style: ButtonStyle(
+                  style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(MyColors.white),
                   ),
+                  child: const Text('إرسال ودفع'),
                 ),
               ],
             ),

@@ -24,7 +24,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final TextEditingController _captionController = TextEditingController();
   final int _maxLength = 1000;
   final int _minLength = 3;
-  List<XFile> _images = [];
+  final List<XFile> _images = [];
 
   late final SocialmediaUserMinimal myUser;
   bool isLoadingUser = true;
@@ -52,7 +52,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
         duration: const Duration(seconds: 3),
         content: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.white),
+            const Icon(Icons.warning_amber_rounded, color: Colors.white),
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
@@ -150,7 +150,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _showSnackBarMessage("نص المنشور لا يمكن أن يتجاوز 1000 حرف");
         return;
       }
-      if (_images.length < 1) {
+      if (_images.isEmpty) {
         _showSnackBarMessage("يجب إضافة صورة واحدة على الأقل");
         return;
       }
@@ -211,11 +211,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
-        title: Text('إضافة منشور', style: TextStyle(color: MyColors.black)),
+        title: const Text(
+          'إضافة منشور',
+          style: TextStyle(color: MyColors.black),
+        ),
         backgroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
         centerTitle: true,
-        leading: BackButton(color: MyColors.black),
+        leading: const BackButton(color: MyColors.black),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),

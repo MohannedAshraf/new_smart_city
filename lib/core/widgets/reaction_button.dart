@@ -102,9 +102,9 @@ Future<String?> showReactionDialogAtTap({
           Positioned(
             left: MediaQuery.of(context).size.width / 2 - 120,
             top: position.dy - 80,
-            child: Material(
+            child: const Material(
               color: Colors.transparent,
-              child: const ReactionDialog(),
+              child: ReactionDialog(),
             ),
           ),
         ],

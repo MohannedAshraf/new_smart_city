@@ -18,16 +18,18 @@ class UserAvatarWithName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String name = user?.fullName?.trim().isNotEmpty == true
-        ? user!.fullName!.trim()
-        : "مستخدم";
+    final String name =
+        user?.fullName?.trim().isNotEmpty == true
+            ? user!.fullName!.trim()
+            : "مستخدم";
 
     final String? imageUrl = user?.imageUrl;
     final bool hasImage = imageUrl != null && imageUrl.trim().isNotEmpty;
-    final String avatarUrl = hasImage
-        ? "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
-          "${imageUrl!.startsWith('/') ? '' : '/'}${imageUrl.trim()}"
-        : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png';
+    final String avatarUrl =
+        hasImage
+            ? "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
+                "${imageUrl.startsWith('/') ? '' : '/'}${imageUrl.trim()}"
+            : 'https://cdn-icons-png.flaticon.com/512/13434/13434972.png';
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +42,8 @@ class UserAvatarWithName extends StatelessWidget {
         Expanded(
           child: Text(
             name,
-            style: nameStyle ??
+            style:
+                nameStyle ??
                 TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
