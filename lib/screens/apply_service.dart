@@ -453,6 +453,9 @@ class _ApplyService extends State<ApplyService> {
                     }
                   },
                   child: const Text('إرسال ودفع'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(MyColors.white),
+                  ),
                 ),
               ],
             ),

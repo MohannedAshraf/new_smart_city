@@ -45,15 +45,17 @@ abstract class MyColors {
 
 abstract class Urls {
   static const String notificationBaseUrl =
-      'https://notification-service.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io';
+      'https://api.citio.tech/gateway/notification-service';
 
-  static const String socialmediaBaseUrl = 'https://graduation.amiralsayed.me';
+  static const String socialmediaBaseUrl =
+      'https://api.citio.tech/gateway/Social-media';
   static const String serviceProviderbaseUrl =
-      'https://service-provider.runasp.net';
+      'https://api.citio.tech/gateway/service-provider';
   static const String governmentbaseUrl =
-      'https://government-services.runasp.net';
+      'https://api.citio.tech/gateway/government';
 
-  static const issueBaseUrl = 'https://cms-reporting.runasp.net';
+  static const issueBaseUrl = 'https://api.citio.tech/gateway/issuing-report';
+  static const cmsBaseUrl = 'https://api.citio.tech/gateway/cms';
 }
 
 abstract class Styles {
