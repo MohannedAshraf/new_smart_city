@@ -1,8 +1,10 @@
-// ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures, unused_import
 
 import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
+import 'package:citio/helper/api_rate.dart';
 import 'package:citio/models/order_details_moel.dart';
+import 'package:citio/models/rate_model.dart';
 import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -25,8 +27,6 @@ class OrderDetailsView extends StatefulWidget {
 }
 
 class _OrderDetailsViewState extends State<OrderDetailsView> {
-  final Map<int, double> tempRatedProducts = {};
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,9 +204,15 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
   }
 
   Widget _buildItemRow(OrderItem item, String orderStatus) {
-    return FutureBuilder<void>(
-      future: _fetchItemRatingIfNeeded(item),
+    return FutureBuilder<ProductReview?>(
+      future: ProductReviewApi.getReview(item.productId),
       builder: (context, snapshot) {
+        final alreadyRated = snapshot.hasData && snapshot.data != null;
+        if (alreadyRated && !item.isRated) {
+          item.rating = snapshot.data!.rating;
+          item.isRated = true;
+        }
+
         return Padding(
           padding: EdgeInsets.only(bottom: 12.h),
           child: Row(
@@ -219,13 +225,14 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   width: 55.w,
                   height: 55.h,
                   fit: BoxFit.cover,
-                  errorBuilder:
-                      (context, error, stackTrace) => Image.network(
-                        'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                        width: 55.w,
-                        height: 55.h,
-                        fit: BoxFit.cover,
-                      ),
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.network(
+                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                      width: 55.w,
+                      height: 55.h,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
               SizedBox(width: 12.w),
@@ -257,11 +264,14 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                               (context, _) =>
                                   const Icon(Icons.star, color: Colors.amber),
                           onRatingUpdate: (rating) async {
+                            await ProductReviewApi.postReview(
+                              item.productId,
+                              rating,
+                            );
                             setState(() {
                               item.rating = rating;
                               item.isRated = true;
                             });
-                            await _submitRating(item.productId, rating);
                           },
                         ),
                       ] else ...[
@@ -286,60 +296,6 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
         );
       },
     );
-  }
-
-  Future<void> _fetchItemRatingIfNeeded(OrderItem item) async {
-    if (item.isRated || item.rating > 0) return;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      if (token == null) return;
-
-      final url = Uri.parse(
-        "https://service-provider.runasp.net/api/Products/${item.productId}/reviews",
-      );
-      final response = await http.get(
-        url,
-        headers: {'Authorization': 'Bearer $token'},
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final fetchedRating = (data['rating'] as num?)?.toDouble() ?? 0.0;
-        if (fetchedRating > 0) {
-          setState(() {
-            item.rating = fetchedRating;
-            item.isRated = true;
-          });
-        }
-      }
-    } catch (e) {
-      print("⚠️ فشل تحميل تقييم المنتج: $e");
-    }
-  }
-
-  Future<void> _submitRating(int productId, double rating) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      if (token == null) return;
-
-      final url = Uri.parse(
-        "https://service-provider.runasp.net/api/Products/$productId/reviews",
-      );
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({"rating": rating, "comment": ""}),
-      );
-
-      print("⭐ تم إرسال التقييم: ${response.statusCode}");
-    } catch (e) {
-      print("❌ خطأ أثناء إرسال التقييم: $e");
-    }
   }
 
   Widget _buildDeliveryDetails(VendorOrderDetailsResponse order) {

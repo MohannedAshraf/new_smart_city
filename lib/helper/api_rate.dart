@@ -41,10 +41,11 @@ class ProductReviewApi {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode({"rating": rating, "comment": "No comment"}),
+      body: jsonEncode({"rating": rating, "comment": ""}),
     );
 
     if (response.statusCode != 200 && response.statusCode != 201) {
+      print("❌ RESPONSE BODY: ${response.body}");
       throw Exception("فشل في إرسال التقييم: ${response.statusCode}");
     }
   }

@@ -7,7 +7,6 @@ import 'package:citio/services/get_post.dart';
 import 'package:citio/services/get_socialmedia_user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:galleryimage/galleryimage.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:citio/main.dart';
 
 import 'package:flutter/material.dart';
@@ -64,7 +63,11 @@ class _SocialMediaState extends State<SocialMedia> {
     });
   }
 
-  Widget _buildPostUserWidget(Data post, double screenWidth, double screenHeight) {
+  Widget _buildPostUserWidget(
+    Data post,
+    double screenWidth,
+    double screenHeight,
+  ) {
     final userId = post.authorId ?? '';
     if (userCache.containsKey(userId)) {
       final user = userCache[userId]!;
@@ -100,7 +103,12 @@ class _SocialMediaState extends State<SocialMedia> {
     }
   }
 
-  Widget _buildPostWithUser(Data post, SocialmediaUser user, double screenWidth, double screenHeight) {
+  Widget _buildPostWithUser(
+    Data post,
+    SocialmediaUser user,
+    double screenWidth,
+    double screenHeight,
+  ) {
     print('Building post with id: ${post.id}');
 
     final imageUrls =
@@ -171,21 +179,23 @@ class _SocialMediaState extends State<SocialMedia> {
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
-                child: imageUrls.length == 1
-                    ? Image.network(
-                        imageUrls[0],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.broken_image),
-                      )
-                    : GalleryImage(
-                        imageUrls: imageUrls,
-                        numOfShowImages:
-                            imageUrls.length > 3 ? 3 : imageUrls.length,
-                        titleGallery: 'Citio',
-                        imageRadius: 8,
-                      ),
+                child:
+                    imageUrls.length == 1
+                        ? Image.network(
+                          imageUrls[0],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  const Icon(Icons.broken_image),
+                        )
+                        : GalleryImage(
+                          imageUrls: imageUrls,
+                          numOfShowImages:
+                              imageUrls.length > 3 ? 3 : imageUrls.length,
+                          titleGallery: 'Citio',
+                          imageRadius: 8,
+                        ),
               ),
             ),
           SizedBox(
@@ -275,46 +285,47 @@ class _SocialMediaState extends State<SocialMedia> {
         ),
         centerTitle: true,
       ),
-     body: isLoading
-    ? const Center(child: CircularProgressIndicator())
-    : RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            isLoading = true;
-            cachedPosts = null;
-            currentPage = 1;
-            hasMorePosts = true;
-          });
-          await _fetchPostsPage(page: currentPage);
-        },
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollInfo) {
-            if (hasMorePosts &&
-                !isLoadingMore &&
-                scrollInfo.metrics.pixels >=
-                    scrollInfo.metrics.maxScrollExtent - 100) {
-              _fetchPostsPage(page: currentPage);
-              return true;
-            }
-            return false;
-          },
-          child: ListView.builder(
-            itemCount: cachedPosts?.length ?? 0,
-            itemBuilder: (context, index) {
-              final post = cachedPosts![index];
-              return Card(
-                color: MyColors.white,
-                shadowColor: MyColors.white,
-                child: _buildPostUserWidget(
-                  post,
-                  screenWidth,
-                  screenHeight,
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    isLoading = true;
+                    cachedPosts = null;
+                    currentPage = 1;
+                    hasMorePosts = true;
+                  });
+                  await _fetchPostsPage(page: currentPage);
+                },
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (hasMorePosts &&
+                        !isLoadingMore &&
+                        scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent - 100) {
+                      _fetchPostsPage(page: currentPage);
+                      return true;
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    itemCount: cachedPosts?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final post = cachedPosts![index];
+                      return Card(
+                        color: MyColors.white,
+                        shadowColor: MyColors.white,
+                        child: _buildPostUserWidget(
+                          post,
+                          screenWidth,
+                          screenHeight,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
     );
   }
 
