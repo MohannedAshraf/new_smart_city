@@ -332,7 +332,9 @@ class HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              currentIndex == 3 ? Icons.view_compact_alt : Icons.view_compact_sharp,
+              currentIndex == 3
+                  ? Icons.view_compact_alt
+                  : Icons.view_compact_sharp,
             ),
             label: 'الخدمات ',
           ),

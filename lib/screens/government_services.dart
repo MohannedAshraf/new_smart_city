@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, library_private_types_in_public_api
 
+import 'dart:typed_data';
+
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/models/all_services_categories.dart';
 import 'package:citio/models/available_services.dart';
 import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_service_details.dart';
+import 'package:citio/services/get_gov_service_image.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +21,7 @@ class GovernmentServices extends StatefulWidget {
 
 class _GovernmentServicesState extends State<GovernmentServices> {
   int selectedIndex = 0;
-
+  Map<int, Uint8List?> imageCache = {};
   List<String> tabs = ['الكل'];
   List<AllServicesCategories> tabsList = [];
   List<AvailableServices> availableServices = [];
@@ -269,10 +272,43 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                   ),
                                 );
                               },
-                              icon:
-                                  Styles.govTabStyles[service
-                                      .category]?['icon'] ??
-                                  Icons.broken_image_rounded,
+                              imageIcon:
+                                  imageCache[availableServices[index].id] !=
+                                          null
+                                      ? Image.memory(
+                                        imageCache[availableServices[index]
+                                            .id]!,
+                                        fit: BoxFit.cover,
+                                        height: 60.h,
+                                        width: 60.w,
+                                      )
+                                      : FutureBuilder<Uint8List?>(
+                                        future: ServiceImage().getImage(
+                                          id: availableServices[index].id,
+                                        ),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return SizedBox(
+                                              width: 60.w,
+                                              height: 60.h,
+                                              child: const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            );
+                                          }
+
+                                          if (snapshot.hasData) {
+                                            imageCache[availableServices[index]
+                                                    .id] =
+                                                snapshot.data!;
+                                            return Image.memory(snapshot.data!);
+                                          }
+
+                                          return const Icon(Icons.broken_image);
+                                        },
+                                      ),
                               color:
                                   Styles.govTabStyles[service
                                       .category]?['color'] ??
@@ -371,7 +407,7 @@ class GovTabItem extends StatelessWidget {
 }
 
 class ServiceCard extends StatelessWidget {
-  final IconData icon;
+  final Widget? imageIcon;
   final Color color;
   final Color fontColor;
   final String category;
@@ -380,7 +416,7 @@ class ServiceCard extends StatelessWidget {
   final VoidCallback ontab;
   const ServiceCard({
     super.key,
-    required this.icon,
+    required this.imageIcon,
     required this.color,
     required this.category,
     required this.serviceName,
@@ -420,7 +456,16 @@ class ServiceCard extends StatelessWidget {
 
                 width: double.infinity,
                 height: 100.h,
-                child: Center(child: Icon(icon, size: 40.sp, color: fontColor)),
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    // borderRadius: BorderRadius.only(
+                    //   topLeft: Radius.circular(12.r),
+                    //   topRight: Radius.circular(12.r),
+                    // ),
+                    child: imageIcon,
+                  ),
+                ),
               ),
             ),
             Row(

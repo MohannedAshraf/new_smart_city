@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
@@ -7,6 +9,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -268,7 +272,7 @@ class _ApplyService extends State<ApplyService> {
             width: double.infinity,
             height: 70,
             child: ElevatedButton.icon(
-              onPressed: () {
+              onPressed: () async {
                 bool fieldsValid = validateFields();
                 bool filesValid = validateFiles();
 
@@ -283,17 +287,14 @@ class _ApplyService extends State<ApplyService> {
                     isButtonPressed = true;
                   });
 
-                  Future.delayed(const Duration(milliseconds: 200), () {
-                    setState(() {
-                      isButtonPressed = false;
-                    });
-                  });
+                  if (fieldsValid && filesValid && isChecked) {
+                    setState(() => isButtonPressed = true);
 
-                  ApplyGovernmentService().submit(
-                    serviceId: widget.id,
-                    serviceData: serviceData,
-                    files: uploadedFiles.values.toList(),
-                  );
+                    await Future.delayed(const Duration(milliseconds: 200));
+                    setState(() => isButtonPressed = false);
+
+                    showPaymentSheet();
+                  }
                 }
               },
               icon: Icon(
@@ -357,111 +358,98 @@ class _ApplyService extends State<ApplyService> {
     return isValid;
   }
 
-  void payment(BuildContext context) {
+  // Future<void> handlePaymentAndSubmit() async {
+  //   try {
+  //     final paymentMethod = await Stripe.instance.createPaymentMethod(
+  //       params: const PaymentMethodParams.card(
+  //         paymentMethodData: PaymentMethodData(
+  //           billingDetails: BillingDetails(), // optional
+  //         ),
+  //       ),
+  //     );
+
+  //     final paymentMethodId = paymentMethod.id;
+
+  //     ApplyGovernmentService().submit(
+  //       serviceId: widget.id,
+  //       serviceData: serviceData,
+  //       files: uploadedFiles.values.toList(),
+  //       paymentMethodID: paymentMethodId,
+  //     );
+  //   } catch (e) {
+  //     print('حدث خطأ أثناء الدفع: $e');
+  //     // يمكنك عرض رسالة للمستخدم
+  //   }
+  // }
+
+  CardFieldInputDetails? card;
+
+  void showPaymentSheet() {
     showModalBottomSheet(
       backgroundColor: MyColors.white,
+      context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      context: context,
       builder:
           (_) => Padding(
-            padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+            padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // TEST MODE Label
-                const SizedBox(height: 4),
-
-                // Title
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'ادخل بيانات الدفع',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                const Text(
+                  'أدخل بيانات البطاقة',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-
-                // Card Number Field
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Card number',
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.credit_card),
+                CardFormField(
+                  onCardChanged: (cardDetails) {
+                    setState(() {
+                      card = cardDetails;
+                    });
+                  },
+                  style: CardFormStyle(
+                    backgroundColor: MyColors.white,
+                    borderColor: Colors.grey,
+                    textColor: Colors.black,
+                    borderRadius: 8,
                   ),
-                ),
-                const SizedBox(height: 12),
-
-                // MM/YY + CVC
-                const Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'MM / YY',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'CVC',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Country / Region
-                DropdownButtonFormField<String>(
-                  value: 'United States',
-                  items:
-                      ['United States', 'Canada', 'Egypt']
-                          .map(
-                            (country) => DropdownMenuItem(
-                              value: country,
-                              child: Text(country),
-                            ),
-                          )
-                          .toList(),
-                  onChanged: (val) {},
-                  decoration: const InputDecoration(
-                    labelText: 'Country or region',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // ZIP Code
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: 'ZIP Code',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    print('تم ضغط');
 
-                // Pay Button
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
+                    if (card == null || !(card?.complete ?? false)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("يرجى إكمال بيانات البطاقة"),
+                        ),
+                      );
+                      return;
+                    }
+                    try {
+                      final paymentMethod = await Stripe.instance
+                          .createPaymentMethod(
+                            params: const PaymentMethodParams.card(
+                              paymentMethodData: PaymentMethodData(),
+                            ),
+                          );
+
+                      Navigator.pop(context);
+
+                      ApplyGovernmentService().submit(
+                        serviceId: widget.id,
+                        serviceData: serviceData,
+                        files: uploadedFiles.values.toList(),
+                        paymentMethodID: paymentMethod.id,
+                      );
+                    } catch (e) {
+                      print("Stripe error: $e");
+                    }
                   },
-                  icon: const Icon(Icons.lock, color: MyColors.white),
-                  label: const Text(
-                    "Pay \$10.00",
-                    style: TextStyle(color: MyColors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.dodgerBlue,
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
+                  child: const Text('إرسال ودفع'),
                 ),
               ],
             ),
