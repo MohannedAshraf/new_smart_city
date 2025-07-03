@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:intl/intl.dart';
 
 String _baseUrl = 'https://cms-reporting.runasp.net/';
@@ -16,7 +18,7 @@ class Issue {
 }
 
 class Values {
-  final int  id;
+  final int id;
   final String title;
   final String date;
   final String status;
