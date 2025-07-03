@@ -63,12 +63,20 @@ class RequiredFields {
   final String fileName;
   final String description;
   final String htmlType;
+  final int fieldDataId;
+  final String fieldValueString;
+  final int fieldValueInt;
+  final String valueType;
 
   RequiredFields({
     required this.id,
     required this.fileName,
     required this.description,
     required this.htmlType,
+    required this.fieldDataId,
+    required this.fieldValueString,
+    required this.fieldValueInt,
+    required this.valueType,
   });
 
   factory RequiredFields.fromJason(jsonData) {
@@ -77,6 +85,10 @@ class RequiredFields {
       fileName: jsonData['filedName'],
       description: jsonData['description'],
       htmlType: jsonData['htmlType'],
+      fieldDataId: jsonData['fieldDataId'],
+      fieldValueString: jsonData['fieldValueString'],
+      fieldValueInt: jsonData['fieldValueInt'],
+      valueType: jsonData['valueType'],
     );
   }
 }
