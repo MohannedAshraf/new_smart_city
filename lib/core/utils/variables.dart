@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class MyColors {
+  static const Color primary = Color(0xFF6200EE);
   static const Color star = Colors.amber;
   static const Color fadedInProgress = Color(0x1A007FFF);
   static const Color inProgress = Color(0xFF007FFF);
