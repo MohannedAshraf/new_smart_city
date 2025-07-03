@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:typed_data';
+
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/main.dart';
 import 'package:citio/models/most_requested_services.dart';
@@ -13,12 +15,13 @@ import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/screens/government_services.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/vendor_profile.dart';
+import 'package:citio/services/get_gov_service_image.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-String _baseUrl = 'https://service-provider.runasp.net';
+//String _baseUrl = 'https://service-provider.runasp.net';
 // ignore: must_be_immutable
 Map<String, String> iconsGov = {
   "إصدار جواز سفر": 'https://cdn-icons-png.flaticon.com/128/4774/4774004.png',
@@ -29,6 +32,7 @@ Map<String, String> iconsGov = {
   "تسجيل ضريبي": 'https://cdn-icons-png.flaticon.com/128/12692/12692536.png',
   "رخصة تجارية": 'https://cdn-icons-png.flaticon.com/128/1728/1728507.png',
 };
+Map<int, Uint8List?> imageCache = {};
 
 class BuildBoxes extends StatelessWidget {
   //BuildContext context;
@@ -137,9 +141,38 @@ class BuildBoxes extends StatelessWidget {
                       ),
                     ),
                 child: ServiceBox(
-                  icon:
-                      Styles.govTabStyles[items[index].category]?['icon'] ??
-                      Icons.broken_image_rounded,
+                  imageIcon:
+                      imageCache[items[index].id] != null
+                          ? Image.memory(
+                            imageCache[items[index].id]!,
+                            fit: BoxFit.cover,
+                            height: imageHeight,
+                            width: imageWidth,
+                          )
+                          : FutureBuilder<Uint8List?>(
+                            future: ServiceImage().getImage(
+                              id: items[index].id,
+                            ),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return SizedBox(
+                                  width: imageWidth,
+                                  height: imageHeight,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
+
+                              if (snapshot.hasData) {
+                                imageCache[items[index].id] = snapshot.data!;
+                                return Image.memory(snapshot.data!);
+                              }
+
+                              return const Icon(Icons.broken_image);
+                            },
+                          ),
                   iconColor:
                       Styles.govTabStyles[items[index]
                           .category]?['fontColor'] ??
@@ -278,7 +311,7 @@ class BuildProductsBoxes extends StatelessWidget {
                   title: items[index].name,
                   width: width,
                   details: items[index].discription,
-                  image: _baseUrl + items[index].image!,
+                  image: Urls.serviceProviderbaseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -401,7 +434,7 @@ class BuildVendorssBoxes extends StatelessWidget {
                   title: items[index].businessName,
                   width: width,
                   details: '${items[index].name}\n${items[index].type}',
-                  image: _baseUrl + items[index].image!,
+                  image: Urls.serviceProviderbaseUrl + items[index].image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -429,7 +462,7 @@ class ServiceBox extends StatelessWidget {
   final EdgeInsetsGeometry imagePadding;
   final double? titlefontSize;
   final int? maximumlines;
-  final IconData? icon;
+  final Widget? imageIcon;
   final Color? iconColor;
   final Color? backgroundColor;
   const ServiceBox({
@@ -444,7 +477,7 @@ class ServiceBox extends StatelessWidget {
     this.fit,
     this.titlefontSize,
     this.maximumlines,
-    this.icon,
+    this.imageIcon,
     this.iconColor,
     this.backgroundColor,
   });
@@ -477,18 +510,19 @@ class ServiceBox extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children:
-                    icon != null
+                    imageIcon != null
                         ? [
                           Container(
                             decoration: BoxDecoration(
-                              color: backgroundColor,
+                              color: MyColors.whiteSmoke,
                               borderRadius: BorderRadius.circular(15.r),
                             ),
 
                             width: imageWidth,
                             height: imageHeight,
-                            child: Center(
-                              child: Icon(icon, size: 20.sp, color: iconColor),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.r),
+                              child: imageIcon,
                             ),
                           ),
                         ]
@@ -558,24 +592,6 @@ class ServiceBox extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ServiceDetailsScreen extends StatelessWidget {
-  final String serviceName;
-  const ServiceDetailsScreen({super.key, required this.serviceName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(serviceName)),
-      body: Center(
-        child: Text(
-          'تفاصيل الخدمة: $serviceName',
-          style: TextStyle(fontSize: 20.sp),
-        ),
       ),
     );
   }

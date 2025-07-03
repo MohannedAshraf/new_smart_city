@@ -12,6 +12,7 @@ class ApplyGovernmentService {
     required int serviceId,
     required List<Map<String, dynamic>> serviceData,
     required List<PlatformFile> files,
+    required String paymentMethodID,
   }) async {
     try {
       final uri = Uri.parse('${Urls.governmentbaseUrl}/api/Requests/Submit');
