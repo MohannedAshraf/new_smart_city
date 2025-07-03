@@ -10,16 +10,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:dotted_border/dotted_border.dart';
 
-class ApplyService extends StatefulWidget {
+class ReApplyService extends StatefulWidget {
   final int id;
   final String title;
-  const ApplyService({super.key, required this.id, required this.title});
+  const ReApplyService({super.key, required this.id, required this.title});
 
   @override
-  _ApplyService createState() => _ApplyService();
+  _ReApplyService createState() => _ReApplyService();
 }
 
-class _ApplyService extends State<ApplyService> {
+class _ReApplyService extends State<ReApplyService> {
   bool isLoading = true;
   bool isChecked = false;
   bool showError = false;
@@ -32,9 +32,8 @@ class _ApplyService extends State<ApplyService> {
 
   Map<String, TextEditingController> controllers = {};
   Map<int, PlatformFile> uploadedFiles = {};
-
   List<bool> fieldsError = [];
-  Map<int, bool> filesError = {};
+  List<bool> filesError = [];
 
   @override
   void initState() {
@@ -51,7 +50,7 @@ class _ApplyService extends State<ApplyService> {
         widget.id,
       );
 
-      for (var field in fetchedFields) {
+      fetchedFields.forEach((field) {
         if (!controllers.containsKey(field.fileName)) {
           controllers[field.fileName] = TextEditingController();
           fieldsError.add(false);
@@ -63,10 +62,7 @@ class _ApplyService extends State<ApplyService> {
             'FieldValueDate': null,
           });
         }
-      }
-      for (var file in fetchedFiles) {
-        filesError[file.id] = false;
-      }
+      });
       setState(() {
         fields = fetchedFields;
         files = fetchedFiles;
@@ -175,7 +171,6 @@ class _ApplyService extends State<ApplyService> {
                       return CustomUploadBox(
                         file: uploadedFiles[file.id],
                         header: file.fileName,
-                        showError: filesError[file.id] ?? false,
                         onTap: () async {
                           FilePickerResult? result =
                               await FilePicker.platform.pickFiles();
@@ -185,11 +180,6 @@ class _ApplyService extends State<ApplyService> {
                               uploadedFiles[file.id] = result.files.first;
                             });
                           }
-                        },
-                        onRemove: () {
-                          setState(() {
-                            uploadedFiles.remove(file.id);
-                          });
                         },
                       );
                     }).toList(),
@@ -257,7 +247,7 @@ class _ApplyService extends State<ApplyService> {
     );
   }
 
-  Widget applyButton() {
+  Expanded applyButton() {
     return Expanded(
       child: Container(
         height: 90.h,
@@ -269,16 +259,15 @@ class _ApplyService extends State<ApplyService> {
             height: 70,
             child: ElevatedButton.icon(
               onPressed: () {
-                bool fieldsValid = validateFields();
-                bool filesValid = validateFiles();
-
                 if (!isChecked) {
                   setState(() {
                     showError = true;
                   });
-                }
-
-                if (fieldsValid && filesValid && isChecked) {
+                } else if (uploadedFiles.isEmpty) {
+                  setState(() {
+                    showUploadError = true;
+                  });
+                } else {
                   setState(() {
                     isButtonPressed = true;
                   });
@@ -294,6 +283,8 @@ class _ApplyService extends State<ApplyService> {
                     serviceData: serviceData,
                     files: uploadedFiles.values.toList(),
                   );
+                  payment(context);
+                  validateFields();
                 }
               },
               icon: Icon(
@@ -337,20 +328,6 @@ class _ApplyService extends State<ApplyService> {
         isValid = false;
       } else {
         fieldsError[i] = false;
-      }
-    }
-    setState(() {});
-    return isValid;
-  }
-
-  bool validateFiles() {
-    bool isValid = true;
-    // filesError = List.generate(files.length, (_) => false);
-
-    for (int i = 0; i < files.length; i++) {
-      if (!uploadedFiles.containsKey(files[i].id)) {
-        filesError[files[i].id] = true;
-        isValid = false;
       }
     }
     setState(() {});
@@ -708,7 +685,6 @@ class CustomUploadBox extends StatefulWidget {
   final bool showError;
   final PlatformFile? file;
   final VoidCallback? onTap;
-  final VoidCallback? onRemove;
 
   const CustomUploadBox({
     super.key,
@@ -716,7 +692,6 @@ class CustomUploadBox extends StatefulWidget {
     this.showError = false,
     this.file,
     this.onTap,
-    this.onRemove,
   });
 
   @override
@@ -754,73 +729,48 @@ class _CustomUploadBoxState extends State<CustomUploadBox> {
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
-          child: Stack(
-            children: [
-              DottedBorder(
-                color: widget.showError ? MyColors.ambulance : MyColors.gray,
-                strokeWidth: 1,
-                borderType: BorderType.RRect,
-                radius: Radius.circular(15.r),
-                dashPattern: const [6, 4],
-                child: GestureDetector(
-                  onTap: widget.onTap,
-                  child: Container(
-                    height: 120.h,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          widget.file != null
-                              ? Icons.picture_as_pdf
-                              : Icons.cloud_upload_outlined,
-                          color:
-                              widget.file != null
-                                  ? MyColors.grey
-                                  : MyColors.black,
-                          size: 36.sp,
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          widget.file != null
-                              ? 'تم تحميل ملف'
-                              : 'اضغط لرفع ملف',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: MyColors.black,
-                          ),
-                        ),
-                        SizedBox(height: 4.h),
-                        Text(
-                          widget.file != null
-                              ? widget.file!.name
-                              : 'لم يتم اختيار ملف',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: MyColors.grey,
-                          ),
-                        ),
-                      ],
+          child: DottedBorder(
+            color: MyColors.gray,
+            strokeWidth: 1,
+            borderType: BorderType.RRect,
+            radius: Radius.circular(15.r),
+            dashPattern: const [6, 4],
+            child: GestureDetector(
+              onTap: widget.onTap,
+              child: Container(
+                height: 120.h,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      widget.file != null
+                          ? Icons.picture_as_pdf
+                          : Icons.cloud_upload_outlined,
+                      color:
+                          widget.file != null ? MyColors.grey : MyColors.black,
+                      size: 36.sp,
                     ),
-                  ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      widget.file != null ? 'تم تحميل ملف' : 'اضغط لرفع ملف',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.black,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      widget.file != null
+                          ? widget.file!.name
+                          : 'لم يتم اختيار ملف',
+                      style: TextStyle(fontSize: 12.sp, color: MyColors.grey),
+                    ),
+                  ],
                 ),
               ),
-              if (widget.file != null)
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.onRemove?.call();
-                    },
-                    child: const Icon(
-                      Icons.close_outlined,
-                      color: MyColors.ambulance,
-                    ),
-                  ),
-                ),
-            ],
+            ),
           ),
         ),
       ],

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/core/utils/variables.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApplyGovernmentService {
   Future<dynamic> submit({
@@ -83,4 +83,29 @@ class ApplyGovernmentService {
       throw Exception('Request failed: $e');
     }
   }
+
+  // static Future<void> makePayment(MakeOrderModel model) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('token') ?? '';
+
+  //   final url = Uri.parse(
+  //     "apifathi",
+  //   );
+
+  //   final response = await http.post(
+  //     url,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //     body: jsonEncode(model.toJson()),
+  //   );
+
+  //   if (response.statusCode == 200 || response.statusCode == 201) {
+  //     print("✅ Cash order sent successfully");
+  //   } else {
+  //     print("❌ Failed to send cash order: ${response.body}");
+  //     throw Exception("Cash payment failed");
+  //   }
+  // }
 }
