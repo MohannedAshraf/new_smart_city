@@ -12,13 +12,11 @@ class NotificationApi {
       'https://notification-service.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io';
   static Uri getNotificationsUrl() => Uri.parse('$baseUrl/api/notifications');
 
-  // جلب التوكن من SharedPreferences
   static Future<String?> _getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
 
-  // دالة تجلب البيانات من الـ API وترجع List<NotificationModel>
   static Future<List<NotificationModel>> fetchNotifications() async {
     final url = getNotificationsUrl();
     final token = await _getToken();

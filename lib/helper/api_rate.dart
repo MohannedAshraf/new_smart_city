@@ -24,7 +24,6 @@ class ProductReviewApi {
       final data = json.decode(response.body);
       return ProductReview.fromJson(data);
     } else if (response.statusCode == 404) {
-      // المنتج غير مقيم بعد
       return null;
     } else {
       throw Exception("فشل في تحميل التقييم: ${response.statusCode}");
