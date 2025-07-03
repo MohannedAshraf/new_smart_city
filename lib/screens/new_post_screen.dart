@@ -3,14 +3,10 @@
 import 'dart:io';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_post_service.dart';
-import 'package:citio/models/my_socialmedia_user.dart';
-import 'package:citio/services/get_my_socialmedia_user.dart';
+import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:citio/models/socialmedia_user_minimal.dart';
-import 'package:citio/services/get_my_user_minimal.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPostScreen extends StatefulWidget {
   final SocialmediaUserMinimal user;
@@ -35,9 +31,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
   bool validatePost() {
     final captionLen = _captionController.text.trim().length;
     final imagesCount = _images.length;
-    if (captionLen < _minLength || captionLen > _maxLength) return false;
-    if (imagesCount < 1 || imagesCount > 5) return false;
-    return true;
+    return captionLen >= _minLength &&
+        captionLen <= _maxLength &&
+        imagesCount >= 1 &&
+        imagesCount <= 5;
   }
 
   void _showSnackBarMessage(String message) {
@@ -91,46 +88,40 @@ class _NewPostScreenState extends State<NewPostScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder:
-          (context) => Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text("التقاط صورة بالكاميرا"),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final picker = ImagePicker();
-                  final picked = await picker.pickImage(
-                    source: ImageSource.camera,
-                    imageQuality: 85,
-                  );
-                  if (picked != null) {
-                    if (_images.length + 1 > 5) {
-                      _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
-                      return;
-                    }
-                    setState(() => _images.add(picked));
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text("اختيار من المعرض"),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final picker = ImagePicker();
-                  final picked = await picker.pickMultiImage(imageQuality: 85);
-                  if (picked.isNotEmpty) {
-                    if (_images.length + picked.length > 5) {
-                      _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
-                      return;
-                    }
-                    setState(() => _images.addAll(picked));
-                  }
-                },
-              ),
-            ],
+      builder: (context) => Wrap(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text("التقاط صورة بالكاميرا"),
+            onTap: () async {
+              Navigator.pop(context);
+              final picker = ImagePicker();
+              final picked = await picker.pickImage(
+                source: ImageSource.camera,
+                imageQuality: 85,
+              );
+              if (picked != null && _images.length < 5) {
+                setState(() => _images.add(picked));
+              }
+            },
           ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text("اختيار من المعرض"),
+            onTap: () async {
+              Navigator.pop(context);
+              final picker = ImagePicker();
+              final picked = await picker.pickMultiImage(imageQuality: 85);
+              if (picked.isNotEmpty &&
+                  _images.length + picked.length <= 5) {
+                setState(() => _images.addAll(picked));
+              } else {
+                _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -141,9 +132,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   void _publishPost() async {
     if (!validatePost()) {
       if (_captionController.text.trim().length < _minLength) {
-        _showSnackBarMessage(
-          "عدد حروف المنشور غير كافيه! يجب أن يكون 3 حروف على الأقل",
-        );
+        _showSnackBarMessage("عدد حروف المنشور غير كافيه!");
         return;
       }
       if (_captionController.text.trim().length > _maxLength) {
@@ -154,28 +143,27 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _showSnackBarMessage("يجب إضافة صورة واحدة على الأقل");
         return;
       }
-      if (_images.length > 5) {
-        _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
-        return;
-      }
     }
 
     try {
+      setState(() => isSubmitting = true);
       final errorMsg = await ApiPostHelper.createNewPost(
         postCaption: _captionController.text.trim(),
         mediaFiles: _images,
       );
       if (errorMsg == null) {
-        _showSnackBarMessage("تم نشر المنشور بنجاح");
+        _showSnackBarMessage("✅ تم نشر المنشور بنجاح");
         _captionController.clear();
         setState(() => _images.clear());
       } else {
         print('❌ خطأ في النشر: $errorMsg');
-        _showSnackBarMessage("حدث خطأ أثناء نشر المنشور. حاول مرة أخرى");
+        _showSnackBarMessage("❌ حدث خطأ أثناء النشر. حاول مرة أخرى");
       }
     } catch (e) {
       print('❌ Exception: $e');
-      _showSnackBarMessage("حدث خطأ غير متوقع. حاول مرة أخرى");
+      _showSnackBarMessage("❌ حدث خطأ غير متوقع. حاول مرة أخرى");
+    } finally {
+      setState(() => isSubmitting = false);
     }
   }
 
@@ -184,26 +172,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
     super.initState();
     myUser = widget.user;
     isLoadingUser = false;
-  }
-
-  Future<void> _loadMyUser() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      if (token != null) {
-        final fetchedUser = await GetMyUserMinimalService().fetchMyUser(token);
-        setState(() {
-          myUser = widget.user;
-          isLoadingUser = false;
-        });
-      } else {
-        print("❌ No token found");
-        setState(() => isLoadingUser = false);
-      }
-    } catch (e) {
-      print("❌ Error loading user: $e");
-      setState(() => isLoadingUser = false);
-    }
   }
 
   @override
@@ -216,7 +184,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
           style: TextStyle(color: MyColors.black),
         ),
         backgroundColor: MyColors.white,
-        surfaceTintColor: MyColors.white,
         centerTitle: true,
         leading: const BackButton(color: MyColors.black),
       ),
@@ -228,24 +195,24 @@ class _NewPostScreenState extends State<NewPostScreen> {
             isLoadingUser
                 ? const Center(child: CircularProgressIndicator())
                 : Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 24.r,
-                      backgroundImage: NetworkImage(
-                        myUser.avatarUrl ?? 'https://via.placeholder.com/150',
+                    children: [
+                      CircleAvatar(
+                        radius: 24.r,
+                        backgroundImage: NetworkImage(
+                          myUser.avatarUrl ??
+                              'https://via.placeholder.com/150',
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      myUser.localUserName ?? '',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
+                      SizedBox(width: 12.w),
+                      Text(
+                        myUser.localUserName ?? '',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-
+                    ],
+                  ),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -273,8 +240,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     Wrap(
                       spacing: 8.w,
                       runSpacing: 8.h,
-                      children:
-                          _images.asMap().entries.map((entry) {
+                      children: _images
+                          .asMap()
+                          .entries
+                          .map((entry) {
                             final index = entry.key;
                             final image = entry.value;
                             return Stack(
@@ -292,30 +261,25 @@ class _NewPostScreenState extends State<NewPostScreen> {
                                   top: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap:
-                                        isSubmitting
-                                            ? null
-                                            : () => _removeImage(index),
+                                    onTap: isSubmitting
+                                        ? null
+                                        : () => _removeImage(index),
                                     child: CircleAvatar(
                                       radius: 10.r,
-                                      backgroundColor: Colors.black.withOpacity(
-                                        0.6,
-                                      ),
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 14.sp,
-                                        color: Colors.white,
-                                      ),
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.6),
+                                      child: Icon(Icons.close,
+                                          size: 14.sp, color: Colors.white),
                                     ),
                                   ),
                                 ),
                               ],
                             );
-                          }).toList(),
+                          })
+                          .toList(),
                     ),
                     SizedBox(height: 10.h),
                   ],
-                  SizedBox(height: 6.h),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
@@ -334,45 +298,46 @@ class _NewPostScreenState extends State<NewPostScreen> {
               onTap: isSubmitting ? null : _onAddImageTap,
               child: DottedBorderContainer(hasImage: _images.isNotEmpty),
             ),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: isSubmitting ? null : _publishPost,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      isPublishEnabled
-                          ? const Color.fromARGB(255, 27, 117, 9)
-                          : Colors.grey[300],
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                child:
-                    isSubmitting
-                        ? SizedBox(
-                          height: 24.h,
-                          width: 24.h,
-                          child: const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 3,
-                          ),
-                        )
-                        : Text(
-                          'نشر',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
-                            color:
-                                isPublishEnabled
-                                    ? Colors.white
-                                    : Colors.grey[700],
-                          ),
-                        ),
-              ),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+          child: SizedBox(
+            width: double.infinity,
+            height: 55.h,
+            child: ElevatedButton(
+              onPressed: isSubmitting ? null : _publishPost,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isPublishEnabled
+                    ? const Color.fromARGB(255, 27, 117, 9)
+                    : Colors.grey[300],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              child: isSubmitting
+                  ? const SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : Text(
+                      'نشر',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                        color: isPublishEnabled
+                            ? Colors.white
+                            : Colors.grey[700],
+                      ),
+                    ),
+            ),
+          ),
         ),
       ),
     );
