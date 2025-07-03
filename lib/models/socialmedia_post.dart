@@ -1,4 +1,3 @@
-// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'package:citio/core/utils/variables.dart';
 
@@ -11,10 +10,11 @@ class SocialmediaPost {
     required this.message,
   });
 
-  factory SocialmediaPost.fromJason(Map<String, dynamic> jsonData) {
+  factory SocialmediaPost.fromJson(
+      Map<String, dynamic> jsonData, String currentUserId) {
     return SocialmediaPost(
       data: (jsonData['data'] as List<dynamic>?)
-              ?.map((x) => Data.fromJson(x))
+              ?.map((x) => Data.fromJson(x, currentUserId))
               .toList() ??
           [],
       message: jsonData['message'] ?? '',
@@ -23,10 +23,10 @@ class SocialmediaPost {
 }
 
 class Data {
-  String? id;            // من _id
-  String? authorId;      // من author (بدل userId)
-  String? postCaption;   // من postCaption (بدل caption)
-  String? createdAt;     // من createdAt (بدل dateIssued)
+  String? id;
+  String? authorId;
+  String? postCaption;
+  String? createdAt;
   bool adminPost;
   List<Media>? media;
   List<String?>? tags;
@@ -47,7 +47,18 @@ class Data {
     this.userReaction,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) {
+  factory Data.fromJson(Map<String, dynamic> json, String currentUserId) {
+    String? detectedReaction;
+
+    if (json['impressionList'] != null) {
+      for (var item in json['impressionList']) {
+        if (item['userId'] == currentUserId) {
+          detectedReaction = item['impressionType'];
+          break;
+        }
+      }
+    }
+
     return Data(
       id: json['_id'] as String?,
       authorId: json['author'] as String?,
@@ -62,7 +73,7 @@ class Data {
           ? ImpressionsCount.fromJson(json['impressionsCount'])
           : null,
       saveCount: json['saveCount'] ?? 0,
-      userReaction: json['userReaction'], // حسب وجودها في JSON
+      userReaction: detectedReaction,
     );
   }
 }
