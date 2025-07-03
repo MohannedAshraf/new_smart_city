@@ -1,15 +1,20 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously
+
 import 'dart:io';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_post_service.dart';
+import 'package:citio/models/my_socialmedia_user.dart';
+import 'package:citio/services/get_my_socialmedia_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:citio/core/utils/variables.dart';
-import 'package:citio/core/widgets/user_avatar_with_name.dart';
-import 'package:citio/helper/api_profile.dart';
-import 'package:citio/models/profile_model.dart';
+import 'package:citio/models/socialmedia_user_minimal.dart';
+import 'package:citio/services/get_my_user_minimal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPostScreen extends StatefulWidget {
-  const NewPostScreen({super.key});
+  final SocialmediaUserMinimal user;
+  const NewPostScreen({super.key, required this.user});
 
   @override
   State<NewPostScreen> createState() => _NewPostScreenState();
@@ -21,8 +26,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final int _minLength = 3;
   List<XFile> _images = [];
 
-  ProfileModel? user;
-  bool isLoadingProfile = true;
+  late final SocialmediaUserMinimal myUser;
+  bool isLoadingUser = true;
   bool isSubmitting = false;
 
   bool get isPublishEnabled => validatePost();
@@ -165,11 +170,11 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _captionController.clear();
         setState(() => _images.clear());
       } else {
-        print('خطأ في النشر: $errorMsg');
+        print('❌ خطأ في النشر: $errorMsg');
         _showSnackBarMessage("حدث خطأ أثناء نشر المنشور. حاول مرة أخرى");
       }
     } catch (e) {
-      print('Exception in publishing post: $e');
+      print('❌ Exception: $e');
       _showSnackBarMessage("حدث خطأ غير متوقع. حاول مرة أخرى");
     }
   }
@@ -177,19 +182,27 @@ class _NewPostScreenState extends State<NewPostScreen> {
   @override
   void initState() {
     super.initState();
-    _loadUser();
+    myUser = widget.user;
+    isLoadingUser = false;
   }
 
-  Future<void> _loadUser() async {
+  Future<void> _loadMyUser() async {
     try {
-      final profile = await ApiProfileHelper.fetchProfile();
-      setState(() {
-        user = profile;
-        isLoadingProfile = false;
-      });
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token != null) {
+        final fetchedUser = await GetMyUserMinimalService().fetchMyUser(token);
+        setState(() {
+          myUser = widget.user;
+          isLoadingUser = false;
+        });
+      } else {
+        print("❌ No token found");
+        setState(() => isLoadingUser = false);
+      }
     } catch (e) {
-      print("\u26a0\ufe0f Failed to load profile: $e");
-      setState(() => isLoadingProfile = false);
+      print("❌ Error loading user: $e");
+      setState(() => isLoadingUser = false);
     }
   }
 
@@ -209,9 +222,27 @@ class _NewPostScreenState extends State<NewPostScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            isLoadingProfile
+            isLoadingUser
                 ? const Center(child: CircularProgressIndicator())
-                : UserAvatarWithName(user: user!),
+                : Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 24.r,
+                      backgroundImage: NetworkImage(
+                        myUser.avatarUrl ?? 'https://via.placeholder.com/150',
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      myUser.localUserName ?? '',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ],
+                ),
+
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -227,7 +258,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     maxLength: _maxLength,
                     maxLines: null,
                     onChanged: (_) => setState(() {}),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "فينا تفكر ....",
                       border: InputBorder.none,
                       counterText: '',
@@ -320,7 +351,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         ? SizedBox(
                           height: 24.h,
                           width: 24.h,
-                          child: CircularProgressIndicator(
+                          child: const CircularProgressIndicator(
                             color: Colors.white,
                             strokeWidth: 3,
                           ),
