@@ -42,7 +42,6 @@ class FeedbackApiService {
             'Content-Type': 'application/json',
           },
           validateStatus: (status) {
-            // نسمح بالتحكم في حالات الرد بدون رمي Exception مباشرة
             return status != null && status < 500;
           },
         ),
