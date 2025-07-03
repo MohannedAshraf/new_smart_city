@@ -10,7 +10,7 @@ import 'package:citio/services/get_socialmedia_user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:galleryimage/galleryimage.dart';
 import 'package:citio/main.dart';
-
+import 'package:citio/screens/new_post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -243,49 +243,49 @@ class _SocialMediaState extends State<SocialMedia> {
 
     return Scaffold(
       backgroundColor: MyColors.white,
-      appBar: AppBar(
-        backgroundColor: MyColors.white,
-        surfaceTintColor: MyColors.white,
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: MyColors.black),
+     
+appBar: AppBar(
+  backgroundColor: MyColors.white,
+  surfaceTintColor: MyColors.white,
+  automaticallyImplyLeading: true,
+  leading: IconButton(
+    icon: const Icon(Icons.arrow_back, color: MyColors.black),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const HomePage(initialIndex: 0),
+        ),
+      );
+    },
+  ),
+  toolbarHeight: 50.h,
+  title: Padding(
+    padding: EdgeInsets.symmetric(vertical: 12.h),
+    child: Row(
+      children: [
+        SizedBox(width: screenWidth * 0.13),
+        Text(
+          'آخر المشاركات',
+          style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+        ),
+        const Spacer(),
+        IconButton(
+          icon: const Icon(Icons.add, color: MyColors.gray), 
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => const HomePage(initialIndex: 0),
+                builder: (_) => const NewPostScreen(), 
               ),
             );
           },
         ),
-        toolbarHeight: 50.h,
-        title: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
-          child: Row(
-            children: [
-              SizedBox(width: screenWidth * 0.13),
-              Text(
-                'آخر المشاركات',
-                style: TextStyle(color: MyColors.black, fontSize: 20.sp),
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                    cachedPosts = null;
-                    currentPage = 1;
-                    hasMorePosts = true;
-                  });
-                  await _fetchPostsPage(page: currentPage);
-                },
-                icon: const Icon(Icons.refresh, color: MyColors.gray),
-              ),
-            ],
-          ),
-        ),
-        centerTitle: true,
-      ),
+      ],
+    ),
+  ),
+  centerTitle: true,
+),
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())

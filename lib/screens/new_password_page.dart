@@ -1,4 +1,7 @@
-import 'package:citio/screens/mylogin_page.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:citio/main.dart';
+import 'package:citio/helper/api_change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,23 +18,51 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   final confirmPasswordController = TextEditingController();
   bool isLoading = false;
 
-  void _resetPassword() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم تغيير كلمة المرور بنجاح'),
-          backgroundColor: Colors.green,
-        ),
+  Future<void> _resetPassword() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      final response = await ApiChangePassword.changePassword(
+        passwordController.text,
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MyloginPage()),
+
+      if (response.isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ تم تغيير كلمة المرور بنجاح'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('❌ فشل تغيير كلمة المرور'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ خطأ: $e'), backgroundColor: Colors.red),
       );
     }
+
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    OutlineInputBorder borderStyle = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: const BorderSide(color: Colors.blueAccent),
+    );
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -47,8 +78,11 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'كلمة المرور الجديدة',
+                decoration: InputDecoration(
+                  hintText: 'كلمة المرور الجديدة',
+                  border: borderStyle,
+                  // focusedBorder: borderStyle,
+                  //enabledBorder: borderStyle,
                 ),
                 validator: (value) {
                   if (value == null || value.length < 6) {
@@ -61,8 +95,11 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               TextFormField(
                 controller: confirmPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'تأكيد كلمة المرور',
+                decoration: InputDecoration(
+                  hintText: 'تأكيد كلمة المرور',
+                  border: borderStyle,
+                  //  focusedBorder: borderStyle,
+                  // enabledBorder: borderStyle,
                 ),
                 validator: (value) {
                   if (value != passwordController.text) {
@@ -79,6 +116,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                   onPressed: isLoading ? null : _resetPassword,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
                   ),
                   child:
                       isLoading
