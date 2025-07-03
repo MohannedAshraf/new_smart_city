@@ -40,7 +40,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: false, // شغل المعاينة على VS Code فقط
+      enabled: false, 
       builder: (context) => CityApp(seenOnboarding: seenOnboarding),
     ),
   );

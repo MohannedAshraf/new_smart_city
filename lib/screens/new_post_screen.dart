@@ -1,5 +1,5 @@
-// lib/screens/new_post_screen.dart
 import 'dart:io';
+import 'package:citio/helper/api_post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,16 +23,15 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   ProfileModel? user;
   bool isLoadingProfile = true;
+  bool isSubmitting = false;
 
   bool get isPublishEnabled => validatePost();
 
   bool validatePost() {
     final captionLen = _captionController.text.trim().length;
     final imagesCount = _images.length;
-
     if (captionLen < _minLength || captionLen > _maxLength) return false;
     if (imagesCount < 1 || imagesCount > 5) return false;
-
     return true;
   }
 
@@ -134,31 +133,38 @@ class _NewPostScreenState extends State<NewPostScreen> {
     setState(() => _images.removeAt(index));
   }
 
-  void _publishPost() {
+  void _publishPost() async {
     if (!validatePost()) {
-      if (_captionController.text.trim().length < _minLength) {
-        _showSnackBarMessage(
-          "عدد حروف المنشور غير كافيه! يجب أن يكون 3 حروف على الأقل",
-        );
-        return;
-      }
-      if (_captionController.text.trim().length > _maxLength) {
-        _showSnackBarMessage("نص المنشور لا يمكن أن يتجاوز 1000 حرف");
-        return;
-      }
-      if (_images.length < 1) {
-        _showSnackBarMessage("يجب إضافة صورة واحدة على الأقل");
-        return;
-      }
-      if (_images.length > 5) {
-        _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
-        return;
-      }
+      // نفس الرسائل اللي عندك...
+      // ...
+      return;
     }
 
-    // هنا تكتب كود تنفيذ النشر (API)
-    print('Caption: ${_captionController.text}');
-    print('Images: ${_images.length}');
+    setState(() => isSubmitting = true);
+
+    try {
+      final errorMsg = await ApiPostHelper.createNewPost(
+        postCaption: _captionController.text.trim(),
+        mediaFiles: _images,
+      );
+
+      if (errorMsg == null) {
+        _showSnackBarMessage("تم نشر المنشور بنجاح");
+        _captionController.clear();
+        setState(() => _images.clear());
+      } else {
+        // طباعة رسالة الخطأ كاملة
+        print('❌ خطأ في النشر: $errorMsg');
+        _showSnackBarMessage("حدث خطأ أثناء نشر المنشور. حاول مرة أخرى");
+      }
+    } catch (e, stackTrace) {
+      // طباعة الخطأ مع الـ stack trace لتشخيص أدق
+      print('🔥 Exception in publishing post: $e');
+      print('🔥 Stack trace:\n$stackTrace');
+      _showSnackBarMessage("حدث خطأ غير متوقع. حاول مرة أخرى");
+    } finally {
+      setState(() => isSubmitting = false);
+    }
   }
 
   @override
@@ -219,6 +225,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       border: InputBorder.none,
                       counterText: '',
                     ),
+                    enabled: !isSubmitting,
                   ),
                   if (_images.isNotEmpty) ...[
                     SizedBox(height: 10.h),
@@ -244,7 +251,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
                                   top: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap: () => _removeImage(index),
+                                    onTap:
+                                        isSubmitting
+                                            ? null
+                                            : () => _removeImage(index),
                                     child: CircleAvatar(
                                       radius: 10.r,
                                       backgroundColor: Colors.black.withOpacity(
@@ -280,14 +290,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
             ),
             SizedBox(height: 16.h),
             GestureDetector(
-              onTap: _onAddImageTap,
+              onTap: isSubmitting ? null : _onAddImageTap,
               child: DottedBorderContainer(hasImage: _images.isNotEmpty),
             ),
             const Spacer(),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _publishPost,
+                onPressed: isSubmitting ? null : _publishPost,
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       isPublishEnabled
@@ -298,14 +308,27 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-                child: Text(
-                  'نشر',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.sp,
-                    color: isPublishEnabled ? Colors.white : Colors.grey[700],
-                  ),
-                ),
+                child:
+                    isSubmitting
+                        ? SizedBox(
+                          height: 24.h,
+                          width: 24.h,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
+                        )
+                        : Text(
+                          'نشر',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                            color:
+                                isPublishEnabled
+                                    ? Colors.white
+                                    : Colors.grey[700],
+                          ),
+                        ),
               ),
             ),
           ],
