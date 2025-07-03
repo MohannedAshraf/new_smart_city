@@ -68,7 +68,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                 ),
                 SizedBox(height: 16.h),
                 _buildDeliveryDetails(order),
-                SizedBox(height: 150.h),
+                SizedBox(height: 100.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
