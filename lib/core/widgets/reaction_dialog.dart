@@ -10,27 +10,25 @@ class ReactionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black12)],
       ),
-      elevation: 8,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: reactionTypes.map((type) {
-            return InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () => Navigator.pop(context, type),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: ReactionIconMapper.getReactionIcon(type, size: 32),
-              ),
-            );
-          }).toList(),
-        ),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: reactionTypes.map((type) {
+          return InkWell(
+            borderRadius: BorderRadius.circular(30),
+            onTap: () => Navigator.pop(context, type),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: ReactionIconMapper.getReactionIcon(type, size: 32),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

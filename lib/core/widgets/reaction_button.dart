@@ -54,17 +54,15 @@ class _ReactionButtonState extends State<ReactionButton> {
     return GestureDetector(
       onTap: () async {
         if (_userReaction != null) {
-          // حذف الريأكت الحالي
           await _sendReaction('');
         } else {
-          // إضافة لايك
           await _sendReaction('like');
         }
       },
-      onLongPress: () async {
-        final selected = await showDialog<String>(
+      onLongPressStart: (details) async {
+        final selected = await showReactionDialogAtTap(
           context: context,
-          builder: (_) => const ReactionDialog(),
+          position: details.globalPosition,
         );
 
         if (selected != null) {
@@ -83,4 +81,32 @@ class _ReactionButtonState extends State<ReactionButton> {
       ),
     );
   }
+}
+
+/// Custom reaction dialog that appears at tap location
+Future<String?> showReactionDialogAtTap({
+  required BuildContext context,
+  required Offset position,
+}) {
+  return showGeneralDialog<String>(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'ReactionDialog',
+    barrierColor: Colors.black.withOpacity(0.05),
+    transitionDuration: const Duration(milliseconds: 200),
+    pageBuilder: (_, __, ___) {
+      return Stack(
+        children: [
+          Positioned(
+            left: MediaQuery.of(context).size.width / 2 - 120,
+            top: position.dy - 80,
+            child: Material(
+              color: Colors.transparent,
+              child: const ReactionDialog(),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
