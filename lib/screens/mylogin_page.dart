@@ -179,7 +179,7 @@ class _LoginPageState extends State<MyloginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ResetPasswordView(),
+                              builder: (context) => const ResetPasswordView(),
                             ),
                           );
                         },
