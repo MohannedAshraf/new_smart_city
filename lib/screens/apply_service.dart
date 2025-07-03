@@ -445,6 +445,7 @@ class _ApplyService extends State<ApplyService> {
                         files: uploadedFiles.values.toList(),
                         paymentMethodID: paymentMethod.id,
                       );
+                      print(paymentMethod.id);
                     } catch (e) {
                       print("Stripe error: $e");
                     }

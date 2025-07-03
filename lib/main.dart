@@ -27,7 +27,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Stripe.publishableKey = 'your_key';
+  Stripe.publishableKey =
+      "pk_test_51RLPpD4IqJm5QRclRVNpb2uYfWNndIr4CtugZBrr4nzJaJPiY4K5iQuTC3fPyoeHVikAhxI80eofzfV6a3EbhzJx00MUomlZ1X";
   await Stripe.instance.applySettings();
   await NotificationHelper.initialize();
   await Firebase.initializeApp();
