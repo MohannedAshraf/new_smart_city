@@ -1,16 +1,14 @@
-// lib/helper/api_post_helper.dart
-import 'dart:io';
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart'; // تأكد تضيف هذا الباكدج في pubspec.yaml
+import 'package:mime/mime.dart'; 
 
 class ApiPostHelper {
-  static const String _baseUrl = "http://graduation.amiralsayed.me/api/posts";
+  static const String _baseUrl = "https://graduation.amiralsayed.me/api/posts";
 
-  /// دالة رفع منشور جديد مع نص ووسائط
-  /// ترجع null لو النجاح أو رسالة خطأ لو فشل
   static Future<String?> createNewPost({
     required String postCaption,
     required List<XFile> mediaFiles,
@@ -51,7 +49,7 @@ class ApiPostHelper {
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return null; // نجاح
+        return null;
       } else {
         return 'خطأ ${response.statusCode}: ${response.body}';
       }

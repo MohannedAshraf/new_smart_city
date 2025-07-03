@@ -135,35 +135,42 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   void _publishPost() async {
     if (!validatePost()) {
-      // نفس الرسائل اللي عندك...
-      // ...
-      return;
+      if (_captionController.text.trim().length < _minLength) {
+        _showSnackBarMessage(
+          "عدد حروف المنشور غير كافيه! يجب أن يكون 3 حروف على الأقل",
+        );
+        return;
+      }
+      if (_captionController.text.trim().length > _maxLength) {
+        _showSnackBarMessage("نص المنشور لا يمكن أن يتجاوز 1000 حرف");
+        return;
+      }
+      if (_images.length < 1) {
+        _showSnackBarMessage("يجب إضافة صورة واحدة على الأقل");
+        return;
+      }
+      if (_images.length > 5) {
+        _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
+        return;
+      }
     }
-
-    setState(() => isSubmitting = true);
 
     try {
       final errorMsg = await ApiPostHelper.createNewPost(
         postCaption: _captionController.text.trim(),
         mediaFiles: _images,
       );
-
       if (errorMsg == null) {
         _showSnackBarMessage("تم نشر المنشور بنجاح");
         _captionController.clear();
         setState(() => _images.clear());
       } else {
-        // طباعة رسالة الخطأ كاملة
-        print('❌ خطأ في النشر: $errorMsg');
+        print('خطأ في النشر: $errorMsg');
         _showSnackBarMessage("حدث خطأ أثناء نشر المنشور. حاول مرة أخرى");
       }
-    } catch (e, stackTrace) {
-      // طباعة الخطأ مع الـ stack trace لتشخيص أدق
-      print('🔥 Exception in publishing post: $e');
-      print('🔥 Stack trace:\n$stackTrace');
+    } catch (e) {
+      print('Exception in publishing post: $e');
       _showSnackBarMessage("حدث خطأ غير متوقع. حاول مرة أخرى");
-    } finally {
-      setState(() => isSubmitting = false);
     }
   }
 
