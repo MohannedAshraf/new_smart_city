@@ -79,7 +79,6 @@ class _SocialMediaState extends State<SocialMedia> {
         future: GetSocialmediaUser().getSocialMediaUser(id: userId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            // تجاهل البوست عند الخطأ
             return const SizedBox.shrink();
           }
           if (!snapshot.hasData) {
