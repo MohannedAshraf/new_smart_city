@@ -85,7 +85,7 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
-              'هذا الستخدم لم يرسل أي طلب',
+              'هذا المستخدم لم يرسل أي طلب',
               style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
               maxLines: 2,
               textAlign: TextAlign.center,
