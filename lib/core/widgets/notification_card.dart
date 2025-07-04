@@ -4,7 +4,7 @@ import 'package:citio/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ مهم
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -65,49 +65,39 @@ class NotificationCard extends StatelessWidget {
         onTapMarkAsRead();
         showDialog(
           context: context,
-          builder: (context) => Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r), // ✅
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(20.w), // ✅
-              child: SingleChildScrollView(
-                child: Column(
+          builder:
+              (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.r),
+                ),
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    Icon(icon, color: MyColors.themecolor),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        notification.title,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                content: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(10.r), // ✅
-                          decoration: BoxDecoration(
-                            color: iconBgColor,
-                            borderRadius: BorderRadius.circular(10.r), // ✅
-                          ),
-                          child: Icon(
-                            icon,
-                            color: MyColors.themecolor,
-                            size: 28.sp, // ✅
-                          ),
-                        ),
-                        SizedBox(width: 12.w), // ✅
-                        Expanded(
-                          child: Text(
-                            notification.title,
-                            style: TextStyle(
-                              fontSize: 18.sp, // ✅
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h), // ✅
                     Text(
                       notification.body,
-                      style: TextStyle(fontSize: 15.sp), // ✅
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                    SizedBox(height: 16.h), // ✅
+                    SizedBox(height: 16.h),
                     Row(
                       children: [
                         Icon(
@@ -115,39 +105,69 @@ class NotificationCard extends StatelessWidget {
                           size: 16.sp,
                           color: Colors.grey[600],
                         ),
-                        SizedBox(width: 6.w), // ✅
+                        SizedBox(width: 6.w),
                         Text(
-                          notification.createdAt
-                              .toLocal()
-                              .toString()
-                              .split('.')[0],
+                          notification.createdAt.toLocal().toString().split(
+                            '.',
+                          )[0],
                           style: TextStyle(
-                            fontSize: 13.sp, // ✅
+                            fontSize: 13.sp,
                             color: Colors.grey[600],
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 24.h), // ✅
+                    SizedBox(height: 20.h),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton.icon(
-                          onPressed: () => Share.share(
-                            '${notification.title}\n\n${notification.body}',
-                          ),
-                          icon: Icon(Icons.share, size: 18.sp), // ✅
-                          label: Text(
-                            'مشاركة',
-                            style: TextStyle(fontSize: 14.sp), // ✅
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Colors.redAccent),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                            ),
+                            child: Text(
+                              'إلغاء',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(width: 8.w), // ✅
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text(
-                            'إغلاق',
-                            style: TextStyle(fontSize: 14.sp), // ✅
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              Share.share(
+                                '${notification.title}\n\n${notification.body}',
+                              );
+                            },
+                            icon: Icon(
+                              Icons.share,
+                              size: 18.sp,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'مشاركة',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColors.themecolor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                            ),
                           ),
                         ),
                       ],
@@ -155,31 +175,29 @@ class NotificationCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ),
         );
       },
       child: Card(
         color: notification.isRead ? Colors.white : const Color(0xFFF1F6FF),
-        margin: EdgeInsets.symmetric(vertical: 8.h), // ✅
+        margin: EdgeInsets.symmetric(vertical: 8.h),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r), // ✅
+          borderRadius: BorderRadius.circular(12.r),
         ),
         elevation: 0.5,
         child: Padding(
-          padding: EdgeInsets.all(16.w), // ✅
+          padding: EdgeInsets.all(16.w),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(10.r), // ✅
+                padding: EdgeInsets.all(10.r),
                 decoration: BoxDecoration(
                   color: iconBgColor,
-                  borderRadius: BorderRadius.circular(8.r), // ✅
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
-                child: Icon(icon, color: MyColors.themecolor, size: 24.sp), // ✅
+                child: Icon(icon, color: MyColors.themecolor, size: 24.sp),
               ),
-              SizedBox(width: 16.w), // ✅
+              SizedBox(width: 16.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +209,7 @@ class NotificationCard extends StatelessWidget {
                             notification.title,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16.sp, // ✅
+                              fontSize: 16.sp,
                             ),
                           ),
                         ),
@@ -206,21 +224,21 @@ class NotificationCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    SizedBox(height: 4.h), // ✅
+                    SizedBox(height: 4.h),
                     Text(
                       notification.body,
                       style: TextStyle(
-                        fontSize: 14.sp, // ✅
+                        fontSize: 14.sp,
                         color: Colors.grey.shade600,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 8.h), // ✅
+                    SizedBox(height: 8.h),
                     Text(
                       timeAgo,
                       style: TextStyle(
-                        fontSize: 12.sp, // ✅
+                        fontSize: 12.sp,
                         color: Colors.grey.shade500,
                       ),
                     ),
