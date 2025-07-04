@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:citio/helper/api_cash_payment.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckoutView extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -26,9 +27,20 @@ class _CheckoutViewState extends State<CheckoutView> {
   bool showCardForm = false;
   bool isEditingAddress = false;
 
-  TextEditingController addressController = TextEditingController(
-    text: "123 Main Street, New York, NY 10001",
-  );
+  TextEditingController addressController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedAddress();
+  }
+
+  Future<void> _loadSavedAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedAddress = prefs.getString('fullAddress') ?? "";
+    setState(() {
+      addressController.text = savedAddress;
+    });
+  }
 
   Future<void> handleCardPayment() async {
     if (_cardDetails == null || !_cardDetails!.complete) {

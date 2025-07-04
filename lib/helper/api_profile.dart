@@ -39,6 +39,16 @@ class ApiProfileHelper {
         }
       }
 
+      // ✅ تخزين العنوان الكامل
+      if (profile.address != null ||
+          profile.buildingNumber != null ||
+          profile.floorNumber != null) {
+        final fullAddress =
+            '${profile.address ?? ''}, ${profile.buildingNumber ?? ''}, ${profile.floorNumber ?? ''}';
+        await prefs.setString('fullAddress', fullAddress);
+        print("✅ Full address saved: $fullAddress");
+      }
+
       return profile;
     } else {
       throw Exception("فشل في تحميل البيانات");
