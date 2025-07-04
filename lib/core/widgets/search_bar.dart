@@ -21,8 +21,8 @@ class CustomSearchBar extends StatelessWidget {
       height: height,
       width: 200.w,
       child: TextField(
-        onSubmitted: (value) {
-          onSubmitted;
+        onChanged: (value) {
+          onSubmitted?.call(value); //
         },
         decoration: InputDecoration(
           //hintTextDirection: textDirectionToAxisDirection(textDirection),

@@ -97,7 +97,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   child: TabBar(
                     splashFactory: NoSplash.splashFactory,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    padding: EdgeInsets.fromLTRB(0, 0, 10.w, 0),
+                    padding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: MyColors.white,

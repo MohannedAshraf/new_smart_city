@@ -21,7 +21,13 @@ import 'package:dotted_border/dotted_border.dart';
 class ApplyService extends StatefulWidget {
   final int id;
   final String title;
-  const ApplyService({super.key, required this.id, required this.title});
+  final bool? isReApply;
+  const ApplyService({
+    super.key,
+    required this.id,
+    required this.title,
+    this.isReApply,
+  });
 
   @override
   _ApplyService createState() => _ApplyService();
@@ -499,7 +505,8 @@ class _ApplyService extends State<ApplyService> {
                                       context,
                                       MaterialPageRoute(
                                         builder:
-                                            (context) => GovernmentScreen(),
+                                            (context) =>
+                                                const GovernmentScreen(),
                                       ),
                                     ); //
                                   },

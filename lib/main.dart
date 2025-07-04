@@ -308,7 +308,7 @@ class HomePageState extends State<HomePage> {
         unselectedLabelStyle: TextStyle(fontSize: 14.sp),
         type: BottomNavigationBarType.fixed,
         backgroundColor: MyAppColors.specialbackground,
-        selectedItemColor: MyColors.dodgerBlue,
+        selectedItemColor: const Color(0XFF129990),
         unselectedItemColor: MyColors.gray,
         currentIndex: currentIndex,
         onTap: (index) {

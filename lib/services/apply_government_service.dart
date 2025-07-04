@@ -80,14 +80,14 @@ class ApplyGovernmentService {
 
       final streamedResponse = await req.send();
       final response = await http.Response.fromStream(streamedResponse);
-      print(response);
-      print(req.fields);
-      print('successssssssssssssssssssssssssssssss walllllaaaaaaaaaaa');
+      // print(response);
+      // print(req.fields);
+      // print('successssssssssssssssssssssssssssssss walllllaaaaaaaaaaa');
 
       if (response.statusCode == 200) {
-        print('successssssssssssssssssssssssssssssss');
-        print(req.fields);
-        print(req.files);
+        // print('successssssssssssssssssssssssssssssss');
+        // print(req.fields);
+        // print(req.files);
         final data = jsonDecode(response.body);
         return data;
       } else {

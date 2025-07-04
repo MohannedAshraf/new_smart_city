@@ -76,9 +76,9 @@ class _GovernmentServicesState extends State<GovernmentServices> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(10.w, 0.h, 19.w, 0.h),
+                    padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 10.h),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
@@ -99,28 +99,6 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               });
                             },
                           ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5.0.r),
-                                color: MyColors.whiteSmoke,
-                              ),
-                              margin: EdgeInsets.symmetric(
-                                horizontal: 8.w,
-                                vertical: 8.h,
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.filter_alt,
-                                  color: MyColors.gray,
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -175,9 +153,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                       filter = tabs[index];
                                       setState(() {
                                         if (index == 0) {
-                                          setState(() {
-                                            loadData();
-                                          });
+                                          loadData();
                                         } else {
                                           filterService(filter);
                                         }
@@ -275,12 +251,16 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                               imageIcon:
                                   imageCache[availableServices[index].id] !=
                                           null
-                                      ? Image.memory(
-                                        imageCache[availableServices[index]
-                                            .id]!,
-                                        fit: BoxFit.cover,
-                                        height: 60.h,
+                                      ? SizedBox(
                                         width: 60.w,
+                                        height: 60.h,
+                                        child: Image.memory(
+                                          imageCache[availableServices[index]
+                                              .id]!,
+                                          fit: BoxFit.cover,
+                                          // height: 60.h,
+                                          // width: 60.w,
+                                        ),
                                       )
                                       : FutureBuilder<Uint8List?>(
                                         future: ServiceImage().getImage(
@@ -303,7 +283,13 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                             imageCache[availableServices[index]
                                                     .id] =
                                                 snapshot.data!;
-                                            return Image.memory(snapshot.data!);
+                                            return SizedBox(
+                                              width: 60.w,
+                                              height: 60.h,
+                                              child: Image.memory(
+                                                snapshot.data!,
+                                              ),
+                                            );
                                           }
 
                                           return const Icon(Icons.broken_image);
