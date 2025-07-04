@@ -200,7 +200,7 @@ class _ApplyService extends State<ApplyService> {
                             if (pickedFile.size > 5 * 1024 * 1024) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  backgroundColor: MyColors.gray,
+                                  backgroundColor: MyColors.primary,
                                   content: Text(
                                     'لا يمكن أن يتجاوز حجم الملفات 5 ميجابايت',
                                     style: TextStyle(
@@ -444,84 +444,95 @@ class _ApplyService extends State<ApplyService> {
                           );
 
                       Navigator.pop(context);
-
-                      ApplyGovernmentService().submit(
-                        serviceId: widget.id,
-                        serviceData: serviceData,
-                        files: uploadedFiles.values.toList(),
-                        paymentMethodID: paymentMethod.id,
-                      );
                       print(
                         'youyouyouyouyouyouyouyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyr payment $paymentMethod.id',
                       );
 
-                      showDialog(
-                        context: context,
-                        builder:
-                            (_) => AlertDialog(
-                              backgroundColor: MyColors.white,
-                              title: const Text(
-                                "Citio",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: MyColors.dodgerBlue,
-                                ),
-                              ),
-                              content: const Text(
-                                "شكرًا لاستخدامكم تطبيق Citio.\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: MyColors.black,
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                GovernmentServiceDetails(
-                                                  id: widget.id,
-                                                ),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "تم",
-                                    style: TextStyle(
-                                      color: MyColors.dodgerBlue,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                      try {
+                        await ApplyGovernmentService().submit(
+                          serviceId: widget.id,
+                          serviceData: serviceData,
+                          files: uploadedFiles.values.toList(),
+                          paymentMethodID: paymentMethod.id,
+                        );
+                        showDialog(
+                          context: context,
+                          builder:
+                              (_) => AlertDialog(
+                                backgroundColor: MyColors.white,
+                                title: const Text(
+                                  "Citio",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: MyColors.dodgerBlue,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                const GovernmentScreen(),
-                                      ),
-                                    ); //
-                                  },
-                                  child: const Text(
-                                    "الذهاب إلى حكومتنا",
-                                    style: TextStyle(
-                                      color: MyColors.dodgerBlue,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                content: const Text(
+                                  "شكرًا لاستخدامكم تطبيق Citio.\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: MyColors.black,
                                   ),
                                 ),
-                              ],
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) =>
+                                                  GovernmentServiceDetails(
+                                                    id: widget.id,
+                                                  ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      "تم",
+                                      style: TextStyle(
+                                        color: MyColors.dodgerBlue,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) =>
+                                                  const GovernmentScreen(),
+                                        ),
+                                      ); //
+                                    },
+                                    child: const Text(
+                                      "الذهاب إلى حكومتنا",
+                                      style: TextStyle(
+                                        color: MyColors.dodgerBlue,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        );
+                      } catch (submitError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'فشل إرسال الطلب: ${submitError.toString()}',
                             ),
-                      );
+                            backgroundColor: MyColors.primary,
+                            duration: const Duration(seconds: 10),
+                          ),
+                        );
+                      }
                     } catch (e) {
                       print("Stripe error: $e");
                     }
