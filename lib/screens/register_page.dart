@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
               "تم إنشاء الحساب بنجاح",
               style: TextStyle(fontSize: 10),
             ),
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: Colors.green,
           ),
         );
 

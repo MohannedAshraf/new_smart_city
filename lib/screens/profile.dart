@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+
+import 'package:citio/helper/api_delete_acc.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
 import 'package:citio/models/profile_model.dart';
@@ -6,6 +8,7 @@ import 'package:citio/screens/edit_profile.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -38,10 +41,34 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _deleteProfile(BuildContext context) async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const MyloginPage()),
-    );
+    try {
+      final response = await ApiDeleteAccountHelper.deleteMyAccount();
+
+      if (response.isSuccess == true) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString("token", "");
+        await prefs.setString("refreshToken", "");
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("✅ تم حذف الحساب بنجاح")));
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const MyloginPage()),
+          (route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("❌ فشل حذف الحساب")));
+      }
+    } catch (e) {
+      print("❌ Error deleting account: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("❌ حصل خطأ: $e")));
+    }
   }
 
   @override
@@ -71,7 +98,6 @@ class _ProfileState extends State<Profile> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.w),
@@ -182,7 +208,7 @@ class _ProfileState extends State<Profile> {
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.logout, color: Colors.red),
                   label: Text(
-                    "تسجيل الخروج",
+                    "حذف الحساب",
                     style: TextStyle(color: Colors.red, fontSize: 14.sp),
                   ),
                   style: OutlinedButton.styleFrom(
