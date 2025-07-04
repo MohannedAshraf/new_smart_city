@@ -44,7 +44,7 @@ class PopUpDialog extends StatelessWidget {
           const Icon(Icons.info_outline, color: MyColors.primary),
           SizedBox(width: 8.w),
           Text(
-            'يجب عليك الانتقال لمجتمع المدينة',
+            'يجب الانتقال لمجتمع المدينة',
             style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
           ),
         ],

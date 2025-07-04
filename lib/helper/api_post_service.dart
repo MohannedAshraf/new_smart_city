@@ -1,10 +1,9 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:http/http.dart' as http;
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart'; 
+import 'package:mime/mime.dart';
 
 class ApiPostHelper {
   static const String _baseUrl = "https://graduation.amiralsayed.me/api/posts";
@@ -13,16 +12,22 @@ class ApiPostHelper {
     required String postCaption,
     required List<XFile> mediaFiles,
   }) async {
+  
+
     if (postCaption.length < 3 || postCaption.length > 1000) {
       return 'نص المنشور يجب أن يكون بين 3 و 1000 حرف';
     }
-    if (mediaFiles.isEmpty || mediaFiles.length > 5) {
-      return 'يجب إضافة 1 إلى 5 ملفات وسائط';
+
+    if (mediaFiles.length > 5) {
+      return 'يمكنك رفع 5 صور كحد أقصى';
     }
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
-    if (token == null) return "التوكن غير موجود";
+
+    if (token == null) {
+      return "التوكن غير موجود";
+    }
 
     try {
       final uri = Uri.parse(_baseUrl);
@@ -47,6 +52,7 @@ class ApiPostHelper {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return null;
