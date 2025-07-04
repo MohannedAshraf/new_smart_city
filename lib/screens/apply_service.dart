@@ -34,7 +34,7 @@ class _ApplyService extends State<ApplyService> {
 
   List<RequiredFields> fields = [];
   List<RequiredFiles> files = [];
-  List<Map<String, dynamic>> serviceData = [];
+  List<RequiredFields> serviceData = [];
 
   Map<String, TextEditingController> controllers = {};
   Map<int, PlatformFile> uploadedFiles = {};
@@ -61,13 +61,7 @@ class _ApplyService extends State<ApplyService> {
         if (!controllers.containsKey(field.fileName)) {
           controllers[field.fileName] = TextEditingController();
           fieldsError.add(false);
-          serviceData.add({
-            'FieldId': field.id,
-            'FieldValueString': null,
-            'FieldValueInt': null,
-            'FieldValueFloat': null,
-            'FieldValueDate': null,
-          });
+          serviceData.add(field);
         }
       }
       for (var file in fetchedFiles) {
@@ -121,7 +115,7 @@ class _ApplyService extends State<ApplyService> {
                 content:
                     fields.map<Widget>((field) {
                       int index = serviceData.indexWhere(
-                        (item) => item['FieldId'] == field.id,
+                        (item) => item.id == field.id,
                       );
 
                       if (field.htmlType == 'text') {
@@ -131,7 +125,7 @@ class _ApplyService extends State<ApplyService> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueString'] = value;
+                            serviceData[index].fieldValueString = value;
                           },
                         );
                       } else if (field.htmlType == 'date') {
@@ -140,7 +134,9 @@ class _ApplyService extends State<ApplyService> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            serviceData[index]['FieldValueDate'] = value;
+                            serviceData[index].fieldValueDate = DateTime.parse(
+                              value,
+                            );
                           },
                         );
                       } else if (field.htmlType == 'number') {
@@ -151,7 +147,7 @@ class _ApplyService extends State<ApplyService> {
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueInt'] = value;
+                            serviceData[index].fieldValueInt = int.parse(value);
                           },
                         );
                       } else if (field.htmlType == 'float') {
@@ -162,7 +158,9 @@ class _ApplyService extends State<ApplyService> {
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueFloat'] = value;
+                            serviceData[index].fieldValueFloat = double.parse(
+                              value,
+                            );
                           },
                         );
                       } else {
@@ -331,10 +329,10 @@ class _ApplyService extends State<ApplyService> {
     bool isValid = true;
     for (int i = 0; i < fields.length; i++) {
       var value =
-          serviceData[i]['FieldValueString'] ??
-          serviceData[i]['FieldValueInt'] ??
-          serviceData[i]['FieldValueFloat'] ??
-          serviceData[i]['FieldValueDate'];
+          serviceData[i].fieldValueString ??
+          serviceData[i].fieldValueInt ??
+          serviceData[i].fieldValueFloat ??
+          serviceData[i].fieldValueDate;
       if (value == null || value.toString().isEmpty) {
         fieldsError[i] = true;
         isValid = false;
@@ -447,7 +445,9 @@ class _ApplyService extends State<ApplyService> {
                         files: uploadedFiles.values.toList(),
                         paymentMethodID: paymentMethod.id,
                       );
-                      print(paymentMethod.id);
+                      print(
+                        'yoyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyr payment $paymentMethod.id',
+                      );
                     } catch (e) {
                       print("Stripe error: $e");
                     }
