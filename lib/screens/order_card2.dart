@@ -24,19 +24,19 @@ class OrderCard2 extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.26,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: MyAppColors.background,
+        color: MyColors.backgroundColor,
         boxShadow: const [
           BoxShadow(
             blurRadius: 14,
             spreadRadius: -8,
             offset: Offset(0, 6),
-            color: MyAppColors.shadow,
+            color: MyColors.shadow,
           ),
           BoxShadow(
             blurRadius: 9,
             spreadRadius: -7,
             offset: Offset(0, -4),
-            color: MyAppColors.shadow,
+            color: MyColors.shadow,
           ),
         ],
       ),
@@ -107,7 +107,7 @@ class OrderCard2 extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          const Divider(color: MyAppColors.gray),
+          const Divider(color: MyColors.gray),
           Row(
             children: [
               const Text(

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_element
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
 import 'package:citio/main.dart';

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, unused_field, deprecated_member_use, duplicate_ignore
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
@@ -14,15 +15,13 @@ import 'package:citio/models/most_recent_products.dart';
 import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/vendor.dart';
 import 'package:citio/screens/all_vendors_screen.dart';
-
 import 'package:citio/services/get_most_recent_products.dart';
-
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:citio/services/get_vendor.dart';
-
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 // ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
@@ -58,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        backgroundColor: MyColors.offWhite,
+        backgroundColor: MyColors.white,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -116,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 37,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: MyColors.buttonGreenShade,
+                                color: MyColors.primary,
                               ),
                               child: const Icon(
                                 Icons.add,

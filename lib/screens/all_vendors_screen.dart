@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, unused_local_variable
 
 import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/core/utils/mycolors.dart';
 
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/all_vendors.dart';

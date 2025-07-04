@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element, avoid_unnecessary_containers, library_private_types_in_public_api, prefer_const_constructors
 
 import 'package:citio/core/utils/assets_image.dart';
+import 'package:citio/core/utils/mycolors.dart';
 
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/category_tab_view.dart';

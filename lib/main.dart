@@ -121,9 +121,9 @@ class HomePageState extends State<HomePage> {
                 child: AppBar(
                   //automaticallyImplyLeading: true,
                   centerTitle: true,
-                  backgroundColor: MyAppColors.specialbackground,
-                  //foregroundColor: MyAppColors.specialbackground,
-                  surfaceTintColor: MyAppColors.specialbackground,
+                  backgroundColor: MyColors.specialbackground,
+                  //foregroundColor: MyColors.specialbackground,
+                  surfaceTintColor: MyColors.specialbackground,
                   elevation: 0,
                   title: Padding(
                     padding: EdgeInsets.fromLTRB(0.w, 16.h, 0.w, 16.h),
@@ -172,7 +172,7 @@ class HomePageState extends State<HomePage> {
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(
-                color: MyAppColors.specialbackground,
+                color: MyColors.specialbackground,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -307,8 +307,8 @@ class HomePageState extends State<HomePage> {
         selectedLabelStyle: TextStyle(fontSize: 16.sp),
         unselectedLabelStyle: TextStyle(fontSize: 14.sp),
         type: BottomNavigationBarType.fixed,
-        backgroundColor: MyAppColors.specialbackground,
-        selectedItemColor: const Color(0XFF129990),
+        backgroundColor: MyColors.specialbackground,
+        selectedItemColor: MyColors.primary,
         unselectedItemColor: MyColors.gray,
         currentIndex: currentIndex,
         onTap: (index) {

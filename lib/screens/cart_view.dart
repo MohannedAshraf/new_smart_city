@@ -144,20 +144,20 @@ class _CartViewState extends State<CartView> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
                 decoration: BoxDecoration(
-                  color: MyAppColors.background,
+                  color: MyColors.background,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -8,
                       offset: Offset(0, 6),
-                      color: MyAppColors.shadow,
+                      color: MyColors.shadow,
                     ),
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -8,
                       offset: Offset(0, -4),
-                      color: MyAppColors.shadow,
+                      color: MyColors.shadow,
                     ),
                   ],
                 ),
@@ -218,20 +218,20 @@ class _CartViewState extends State<CartView> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 decoration: BoxDecoration(
-                  color: MyAppColors.background,
+                  color: MyColors.background,
                   borderRadius: BorderRadius.circular(10.r),
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -8,
                       offset: Offset(0, 6),
-                      color: MyAppColors.shadow,
+                      color: MyColors.shadow,
                     ),
                     BoxShadow(
                       blurRadius: 4,
                       spreadRadius: -8,
                       offset: Offset(0, -4),
-                      color: MyAppColors.shadow,
+                      color: MyColors.shadow,
                     ),
                   ],
                 ),
@@ -323,7 +323,7 @@ class _CartViewState extends State<CartView> {
                     style: TextStyle(
                       fontSize: 25.sp,
                       fontWeight: FontWeight.bold,
-                      color: MyAppColors.background,
+                      color: MyColors.background,
                     ),
                   ),
                 ),

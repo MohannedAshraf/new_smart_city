@@ -2,6 +2,7 @@
 
 import 'dart:typed_data';
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/models/all_services_categories.dart';

@@ -33,19 +33,19 @@ class OrderCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.r),
-          color: MyAppColors.background,
+          color: MyColors.background,
           boxShadow: const [
             BoxShadow(
               blurRadius: 4,
               spreadRadius: -8,
               offset: Offset(0, 6),
-              color: MyAppColors.shadow,
+              color: MyColors.shadow,
             ),
             BoxShadow(
               blurRadius: 4,
               spreadRadius: -8,
               offset: Offset(0, -4),
-              color: MyAppColors.shadow,
+              color: MyColors.shadow,
             ),
           ],
         ),

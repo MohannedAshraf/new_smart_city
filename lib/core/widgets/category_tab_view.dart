@@ -68,7 +68,7 @@ class CategoryTabView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات غير متوفرة',
-              style: TextStyle(fontSize: 16.sp, color: MyAppColors.black),
+              style: TextStyle(fontSize: 16.sp, color: MyColors.black),
               textAlign: TextAlign.center,
             ),
           ),
@@ -77,7 +77,7 @@ class CategoryTabView extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Text(
               'الخدمات في هذه الفئة غير متوفرة حاليا',
-              style: TextStyle(fontSize: 16.sp, color: MyAppColors.gray),
+              style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
               maxLines: 2,
               textAlign: TextAlign.center,
             ),
@@ -160,7 +160,7 @@ class CategoryTabView extends StatelessWidget {
                               child: Text(
                                 products[index].name,
                                 style: TextStyle(
-                                  color: MyAppColors.black,
+                                  color: MyColors.black,
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -179,7 +179,7 @@ class CategoryTabView extends StatelessWidget {
                               child: Text(
                                 '${products[index].price}LE',
                                 style: TextStyle(
-                                  color: MyAppColors.black,
+                                  color: MyColors.black,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -201,7 +201,7 @@ class CategoryTabView extends StatelessWidget {
                             softWrap: true,
 
                             style: TextStyle(
-                              color: MyAppColors.black,
+                              color: MyColors.black,
                               fontSize: 13.sp,
                             ),
                           ),
