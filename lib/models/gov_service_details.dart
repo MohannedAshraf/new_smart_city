@@ -63,20 +63,47 @@ class RequiredFields {
   final String fileName;
   final String description;
   final String htmlType;
+  final int fieldDataId;
+  String? fieldValueString;
+  int? fieldValueInt;
+  double? fieldValueFloat;
+  DateTime? fieldValueDate;
+  String? valueType;
 
   RequiredFields({
     required this.id,
     required this.fileName,
     required this.description,
     required this.htmlType,
+    required this.fieldDataId,
+    this.fieldValueString,
+    this.fieldValueInt,
+    this.fieldValueFloat,
+    this.fieldValueDate,
+    required this.valueType,
   });
 
-  factory RequiredFields.fromJason(jsonData) {
+  factory RequiredFields.fromJason(Map<String, dynamic> json) {
     return RequiredFields(
-      id: jsonData['id'],
-      fileName: jsonData['filedName'],
-      description: jsonData['description'],
-      htmlType: jsonData['htmlType'],
+      id: json['id'] ?? 0,
+      fileName: json['filedName'] ?? '',
+      description: json['description'] ?? '',
+      htmlType: json['htmlType'] ?? '',
+      fieldDataId: json['fieldDataId'] ?? 0,
+      fieldValueString: json['fieldValueString'],
+      fieldValueInt:
+          json['fieldValueInt'] != null
+              ? int.tryParse(json['fieldValueInt'].toString())
+              : null,
+      fieldValueFloat:
+          json['fieldValueFloat'] != null
+              ? double.tryParse(json['fieldValueFloat'].toString())
+              : null,
+      fieldValueDate:
+          json['fieldValueDate'] != null
+              ? DateTime.tryParse(json['fieldValueDate'].toString())
+              : null,
+      valueType: json['valueType'] ?? '',
     );
   }
 }

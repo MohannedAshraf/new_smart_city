@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:citio/models/gov_service_details.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/core/utils/variables.dart';
@@ -12,7 +13,7 @@ import 'package:file_picker/file_picker.dart';
 class ApplyGovernmentService {
   Future<dynamic> submit({
     required int serviceId,
-    required List<Map<String, dynamic>> serviceData,
+    required List<RequiredFields> serviceData,
     required List<PlatformFile> files,
     required String paymentMethodID,
   }) async {
@@ -28,17 +29,20 @@ class ApplyGovernmentService {
       req.headers['Authorization'] = 'Bearer $token';
 
       req.fields['ServiceId'] = serviceId.toString();
-
+      req.fields['PaymentMethodId'] = paymentMethodID.toString();
       for (int i = 0; i < serviceData.length; i++) {
         final item = serviceData[i];
-        final type = item['FieldType'];
-        final value = item['FieldValue'];
+        final type = item.htmlType;
+        final value = item;
 
         ///
 
-        req.fields['ServiceData[$i].FieldId'] = item['FieldId'].toString();
+        req.fields['ServiceData[$i].FieldId'] = item.id.toString();
 
-        if (value == null) {
+        if (item.fieldValueString == null &&
+            item.fieldValueInt == null &&
+            item.fieldValueFloat == null &&
+            item.fieldValueDate == null) {
           if (type == 'number') {
             req.fields['ServiceData[$i].FieldValueInt'] = '0';
           } else if (type == 'float') {
@@ -49,14 +53,17 @@ class ApplyGovernmentService {
           }
         } else {
           if (type == 'number') {
-            req.fields['ServiceData[$i].FieldValueInt'] = value.toString();
+            req.fields['ServiceData[$i].FieldValueInt'] =
+                value.fieldValueInt.toString();
           } else if (type == 'float') {
-            req.fields['ServiceData[$i].FieldValueFloat'] = value.toString();
+            req.fields['ServiceData[$i].FieldValueFloat'] =
+                value.fieldValueFloat.toString();
           } else if (type == 'date') {
             req.fields['ServiceData[$i].FieldValueDate'] =
-                (value as DateTime).toIso8601String();
+                (value.fieldValueDate as DateTime).toIso8601String();
           } else {
-            req.fields['ServiceData[$i].FieldValueString'] = value.toString();
+            req.fields['ServiceData[$i].FieldValueString'] =
+                value.fieldValueString.toString();
           }
         }
       }
@@ -74,9 +81,13 @@ class ApplyGovernmentService {
       final streamedResponse = await req.send();
       final response = await http.Response.fromStream(streamedResponse);
       print(response);
+      print(req.fields);
+      print('successssssssssssssssssssssssssssssss walllllaaaaaaaaaaa');
 
       if (response.statusCode == 200) {
-        print('succes');
+        print('successssssssssssssssssssssssssssssss');
+        print(req.fields);
+        print(req.files);
         final data = jsonDecode(response.body);
         return data;
       } else {

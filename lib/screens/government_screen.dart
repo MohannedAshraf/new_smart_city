@@ -40,7 +40,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         backgroundColor: MyColors.offWhite,
         floatingActionButton: FloatingActionButton(
@@ -109,6 +109,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                       TabItem(title: 'تم حلها'),
                       TabItem(title: 'تحت المراجعة'),
                       TabItem(title: 'المرفوضة'),
+                      TabItem(title: 'المٌعدلة'),
                     ],
                   ),
                 ),
@@ -123,6 +124,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
             TabBarViewItem(title: 'Completed'),
             TabBarViewItem(title: 'Pending'),
             TabBarViewItem(title: 'Rejected'),
+            TabBarViewItem(title: 'Edited'),
           ],
         ),
       ),

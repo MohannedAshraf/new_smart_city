@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_emergency.dart';
 import 'package:citio/models/emergency_model.dart';
@@ -49,6 +50,7 @@ class EmergencyButton extends StatelessWidget {
             });
 
             return AlertDialog(
+              backgroundColor: MyColors.white,
               title: const Text("تأكيد البلاغ"),
               content: Text("سيتم إرسال البلاغ خلال $countdown ثانية..."),
               actions: [

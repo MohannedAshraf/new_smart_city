@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/generated/l10n.dart';
@@ -40,7 +42,7 @@ void main() async {
 
   runApp(
     DevicePreview(
-      enabled: false, 
+      enabled: false,
       builder: (context) => CityApp(seenOnboarding: seenOnboarding),
     ),
   );
@@ -283,9 +285,13 @@ class HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('تسجيل الخروج'),
-              onTap: () {
+              onTap: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString("token", "");
+                await prefs.setString("refreshToken", "");
+
                 Navigator.pop(context);
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const MyloginPage()),
                 );

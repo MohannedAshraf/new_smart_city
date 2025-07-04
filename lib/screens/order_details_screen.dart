@@ -1,16 +1,13 @@
-// ignore_for_file: deprecated_member_use, avoid_print, curly_braces_in_flow_control_structures, unused_import
+// ignore_for_file: deprecated_member_use, avoid_print, prefer_const_constructors, use_build_context_synchronously
 
-import 'dart:convert';
 import 'package:citio/helper/api_order_details.dart';
-import 'package:citio/helper/api_rate.dart';
-import 'package:citio/models/order_details_moel.dart';
-import 'package:citio/models/rate_model.dart';
+import 'package:citio/helper/api_rate_product.dart';
+import 'package:citio/models/order_details_model.dart';
+import 'package:citio/models/rate_product_model.dart';
 import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class OrderDetailsView extends StatefulWidget {
   final int orderId;
@@ -209,7 +206,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
       builder: (context, snapshot) {
         final alreadyRated = snapshot.hasData && snapshot.data != null;
         if (alreadyRated && !item.isRated) {
-          item.rating = snapshot.data!.rating;
+          item.rating = snapshot.data!.rating.toDouble();
           item.isRated = true;
         }
 
@@ -256,7 +253,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                           initialRating: 0,
                           minRating: 1,
                           direction: Axis.horizontal,
-                          allowHalfRating: true,
+                          allowHalfRating: false,
                           itemSize: 20.sp,
                           itemCount: 5,
                           unratedColor: Colors.grey.shade300,
@@ -264,14 +261,21 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                               (context, _) =>
                                   const Icon(Icons.star, color: Colors.amber),
                           onRatingUpdate: (rating) async {
-                            await ProductReviewApi.postReview(
-                              item.productId,
-                              rating,
-                            );
-                            setState(() {
-                              item.rating = rating;
-                              item.isRated = true;
-                            });
+                            try {
+                              await ProductReviewApi.postReview(
+                                item.productId,
+                                rating.toInt(),
+                              );
+                              setState(() {
+                                item.rating = rating;
+                                item.isRated = true;
+                              });
+                            } catch (e) {
+                              print("❌ Rating error: $e");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("فشل إرسال التقييم")),
+                              );
+                            }
                           },
                         ),
                       ] else ...[

@@ -17,7 +17,6 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   int itemCount = 1;
-  String selectedSize = 'Regular';
   late Future<ProductDetails> _productDetailsFuture;
 
   Color buttonColor = Colors.blue;
@@ -85,8 +84,18 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           }
 
           final product = snapshot.data!;
-          final oldPrice = product.price + 3;
-          final discount = ((1 - product.price / oldPrice) * 100).round();
+          final hasDiscount = product.discountPercentage > 0;
+          final discountedPrice =
+              hasDiscount
+                  ? product.price
+                  : product.price; // ممكن تعدلها لو السعر متغير
+          final oldPrice =
+              hasDiscount
+                  ? (product.price * 100) /
+                      (100 -
+                          product
+                              .discountPercentage) // الحساب العكسي للسعر قبل الخصم
+                  : product.price;
 
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -124,7 +133,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     const Spacer(),
                     Icon(Icons.star, color: Colors.orange, size: 20.sp),
                     SizedBox(width: 5.w),
-                    Text("4.8", style: TextStyle(fontSize: 14.sp)),
+                    Text(
+                      "${product.rating}",
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
                     Text(
                       " (120 تقييم)",
                       style: TextStyle(fontSize: 14.sp, color: Colors.grey),
@@ -135,27 +147,29 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 Row(
                   children: [
                     Text(
-                      "LE ${product.price.toStringAsFixed(2)}",
+                      "LE ${discountedPrice.toStringAsFixed(2)}",
                       style: TextStyle(
                         fontSize: 20.sp,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 15.w),
-                    Text(
-                      "LE${oldPrice.toStringAsFixed(2)}",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: Colors.grey,
-                        decoration: TextDecoration.lineThrough,
+                    if (hasDiscount) ...[
+                      SizedBox(width: 15.w),
+                      Text(
+                        "LE${oldPrice.toStringAsFixed(2)}",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10.w),
-                    Text(
-                      "$discount% OFF",
-                      style: TextStyle(fontSize: 14.sp, color: Colors.red),
-                    ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        "${product.discountPercentage.toStringAsFixed(0)}% OFF",
+                        style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                      ),
+                    ],
                   ],
                 ),
                 SizedBox(height: 10.h),
@@ -241,7 +255,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
                     /// ✅ زر Add to Cart
                     Expanded(
-                      flex: 2, // عشان ياخد مساحة أكبر من العداد
+                      flex: 2,
                       child: ElevatedButton.icon(
                         onPressed: () async {
                           try {
