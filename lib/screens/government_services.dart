@@ -53,7 +53,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.offWhite,
+      backgroundColor: MyColors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.h),
         child: AppBar(
@@ -381,7 +381,7 @@ class GovTabItem extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? MyColors.dodgerBlue : MyColors.whiteSmoke,
+          color: isSelected ? MyColors.primary : MyColors.whiteSmoke,
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Text(

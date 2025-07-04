@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,7 +24,7 @@ class CategoryCircle extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: radius,
-            backgroundColor: const Color(0xFF3D6643), // اللون الثابت
+            backgroundColor: MyColors.primary,
             backgroundImage: NetworkImage(
               'https://service-provider.runasp.net$imageUrl', // تحميل الصورة من الـ URL
             ),

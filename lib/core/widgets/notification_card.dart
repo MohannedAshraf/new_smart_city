@@ -162,7 +162,7 @@ class NotificationCard extends StatelessWidget {
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: MyColors.themecolor,
+                              backgroundColor: MyColors.primary,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.r),
                               ),

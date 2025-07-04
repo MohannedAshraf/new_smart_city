@@ -135,7 +135,7 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                             radius: 14.r,
                             child: Icon(
                               Icons.info,
-                              color: MyColors.dodgerBlue,
+                              color: MyColors.primary,
                               size: 28.sp,
                             ),
                           ),
@@ -285,7 +285,7 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: MyColors.dodgerBlue,
+                  backgroundColor: MyColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.r),
                   ),
@@ -309,7 +309,7 @@ class RequirmentItem extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
       child: Row(
         children: [
-          CircleAvatar(backgroundColor: MyColors.dodgerBlue, radius: 5.r),
+          CircleAvatar(backgroundColor: MyColors.primary, radius: 5.r),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
@@ -330,7 +330,7 @@ Padding requirmentItem(String text) {
     child: Row(
       children: [
         CircleAvatar(
-          backgroundColor: MyColors.dodgerBlue,
+          backgroundColor: MyColors.primary,
           radius: 5.r,
           child: Text(''),
         ),
@@ -355,7 +355,7 @@ Padding stepsItem(String text, String title, String num) {
     child: Row(
       children: [
         CircleAvatar(
-          backgroundColor: MyColors.dodgerBlue,
+          backgroundColor: MyColors.primary,
           radius: 16.r,
           child: Text(
             num,

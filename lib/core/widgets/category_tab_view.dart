@@ -59,7 +59,7 @@ class CategoryTabView extends StatelessWidget {
             radius: 45.r,
             child: Icon(
               Icons.inventory,
-              color: MyColors.fadedGrey,
+              color: const Color.fromARGB(26, 49, 7, 7),
               size: 40.sp,
             ),
           ),

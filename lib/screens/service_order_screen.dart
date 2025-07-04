@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field, deprecated_member_use
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -115,7 +116,7 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
         floatingActionButton: Container(
           width: 70.w,
           height: 50.h,
-          decoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: MyColors.primary, shape: BoxShape.circle),
           child: IconButton(
             onPressed: () {
               Navigator.push(

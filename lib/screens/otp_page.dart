@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, prefer_final_fields, use_build_context_synchronously
 
 import 'dart:async';
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_otp.dart';
 import 'package:citio/helper/api_reset_password.dart';
 import 'package:citio/screens/new_password_page.dart';
@@ -150,7 +151,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   activeFillColor: Colors.white,
                   selectedFillColor: Colors.white,
                   inactiveFillColor: Colors.white,
-                  activeColor: Colors.blue,
+                  activeColor: MyColors.primary,
                   selectedColor: Colors.orange,
                   inactiveColor: Colors.grey,
                 ),
@@ -169,7 +170,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       color:
-                          (_secondsLeft > 0) ? Colors.grey : Colors.blueAccent,
+                          (_secondsLeft > 0) ? Colors.grey : MyColors.primary,
                       decoration: TextDecoration.underline,
                     ),
                   ),
@@ -182,7 +183,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _submitOtp,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: MyColors.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),

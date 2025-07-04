@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
 
 import 'dart:io';
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
 import 'package:citio/models/add_issue_model.dart';
@@ -36,7 +37,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               ListTile(
                 leading: Icon(
                   Icons.camera_alt,
-                  color: Colors.blue,
+                  color:  MyColors.primary,
                   size: 22.sp,
                 ),
                 title: Text('الكاميرا', style: TextStyle(fontSize: 14.sp)),
@@ -356,7 +357,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade300,
+                          backgroundColor: MyColors.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(24.r),
                           ),
@@ -383,12 +384,12 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   MaterialPageRoute(builder: (_) => const IssueScreen()),
                 );
               },
-              icon: Icon(Icons.list_alt, size: 20.sp, color: Colors.blueAccent),
+              icon: Icon(Icons.list_alt, size: 20.sp, color: MyColors.primary),
               label: Text(
                 'عرض الشكاوى السابقة',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: Colors.blueAccent,
+                  color:  MyColors.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

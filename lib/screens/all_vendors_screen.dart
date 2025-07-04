@@ -411,7 +411,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                       children:
                           categories.keys.map((category) {
                             return FilterChip(
-                              selectedColor: MyColors.dodgerBlue,
+                              selectedColor: MyColors.primary,
                               shadowColor: MyColors.white,
                               disabledColor: MyColors.white,
                               backgroundColor: MyColors.white,
@@ -435,7 +435,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(
-                          MyColors.dodgerBlue,
+                          MyColors.primary,
                         ),
                         foregroundColor: WidgetStateProperty.all(
                           MyColors.white,

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, deprecated_member_use
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/cart_model.dart';
 import 'package:citio/helper/api_make_order.dart';
 import 'package:citio/models/make_order_model.dart';
@@ -204,7 +205,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               }
                             },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: MyColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
@@ -283,7 +284,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                           onPressed:
                               () => setState(() => isEditingAddress = false),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
+                            backgroundColor: MyColors.primary,
                           ),
                           child: const Text(
                             "حفظ",
@@ -318,6 +319,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                   TextButton(
                     onPressed: () => setState(() => isEditingAddress = true),
                     child: const Text("تعديل"),
+                    style: TextButton.styleFrom(
+                      foregroundColor: MyColors.primary,
+                    ),
                   ),
                 ],
               ),
@@ -411,6 +415,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("بطاقة الإتمان/الخصم"),
                 secondary: const Icon(Icons.credit_card),
+                 activeColor: MyColors.primary,
               ),
               RadioListTile<String>(
                 value: 'cash',
@@ -418,6 +423,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("الدفع عند الإستلام"),
                 secondary: const Icon(Icons.money),
+                 activeColor: MyColors.primary,
               ),
             ],
           ),
@@ -510,7 +516,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     CardFormField(
                       style: CardFormStyle(
                         backgroundColor: Colors.grey.shade100,
-                        borderColor: Colors.blue,
+                        borderColor: MyColors.primary,
                         textColor: Colors.black,
                         placeholderColor: Colors.grey,
                         borderRadius: 8,
@@ -525,7 +531,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : handleCardPayment,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: MyColors.primary,
                         ),
                         child:
                             isLoading

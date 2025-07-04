@@ -1,4 +1,5 @@
 // ignore_for_file: unused_field, use_build_context_synchronously
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_register.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
@@ -263,7 +264,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
+                          backgroundColor:  MyColors.primary,
                           padding: EdgeInsets.symmetric(vertical: 14.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
@@ -302,7 +303,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           child: const Text(
                             "تسجيل الدخول",
-                            style: TextStyle(color: Colors.blueAccent),
+                            style: TextStyle(color: MyColors.primary),
                           ),
                         ),
                       ],

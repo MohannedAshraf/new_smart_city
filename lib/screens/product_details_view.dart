@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_add_to_cart.dart';
 import 'package:citio/helper/api_product_details.dart';
 import 'package:citio/models/product_details_model.dart';
@@ -19,7 +20,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   int itemCount = 1;
   late Future<ProductDetails> _productDetailsFuture;
 
-  Color buttonColor = Colors.blue;
+  Color buttonColor = MyColors.primary;
   String buttonText = "أضف إلي العربة";
   IconData buttonIcon = Icons.add_shopping_cart;
 
@@ -40,7 +41,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
-        buttonColor = Colors.blue;
+        buttonColor = MyColors.primary;
         buttonText = "أضف إلي  العربة";
         buttonIcon = Icons.add_shopping_cart;
       });
@@ -55,7 +56,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
         width: 70.w,
         height: 50.h,
         decoration: const BoxDecoration(
-          color: Colors.blue,
+          color: MyColors.primary,
           shape: BoxShape.circle,
         ),
         child: IconButton(
@@ -204,7 +205,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             height: 40.h,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.blueAccent,
+                              color: MyColors.primary,
                             ),
                             child: IconButton(
                               icon: const Icon(
@@ -236,7 +237,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             height: 40.h,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.blueAccent,
+                              color: MyColors.primary,
                             ),
                             child: IconButton(
                               icon: const Icon(Icons.add, color: Colors.white),

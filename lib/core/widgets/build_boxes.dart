@@ -100,7 +100,7 @@ class BuildBoxes extends StatelessWidget {
                           TextSpan(
                             text: 'عرض الجميع',
                             style: TextStyle(
-                              color: const Color.fromARGB(255, 99, 167, 222),
+                              color: MyColors.primary,
                               fontSize: 12.sp,
                             ),
                             recognizer:
@@ -266,7 +266,7 @@ class BuildProductsBoxes extends StatelessWidget {
                           TextSpan(
                             text: 'عرض الجميع',
                             style: TextStyle(
-                              color: const Color.fromARGB(255, 99, 167, 222),
+                              color: MyColors.primary,
                               fontSize: 12.sp,
                             ),
                             recognizer:
@@ -392,7 +392,7 @@ class BuildVendorssBoxes extends StatelessWidget {
                           TextSpan(
                             text: 'عرض الجميع',
                             style: TextStyle(
-                              color: const Color.fromARGB(255, 99, 167, 222),
+                              color: MyColors.primary,
                               fontSize: 12.sp,
                             ),
                             recognizer:
@@ -582,10 +582,7 @@ class ServiceBox extends StatelessWidget {
                   child: Text(
                     maxLines: maximumlines ?? 2,
                     details,
-                    style: TextStyle(
-                      color: const Color.fromARGB(221, 59, 58, 58),
-                      fontSize: 12.0.sp,
-                    ),
+                    style: TextStyle(color: MyColors.gray, fontSize: 12.0.sp),
                     textAlign: TextAlign.start,
                   ),
                 ),

@@ -43,7 +43,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        backgroundColor: MyColors.offWhite,
+        backgroundColor: MyColors.white,
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.transparent,
           shape: RoundedRectangleBorder(
@@ -57,7 +57,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
               ),
             );
           },
-          backgroundColor: MyColors.dodgerBlue,
+          backgroundColor: MyColors.primary,
           child: Icon(Icons.add, color: MyColors.white, size: 30.sp),
         ),
         appBar: AppBar(
@@ -102,8 +102,8 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: MyColors.white,
-                    indicatorColor: MyColors.inProgress,
-                    labelColor: MyColors.inProgress,
+                    indicatorColor: MyColors.primary,
+                    labelColor: MyColors.primary,
                     unselectedLabelColor: MyColors.gray,
                     tabs: const [
                       TabItem(title: 'الجميع'),

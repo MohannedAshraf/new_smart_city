@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; 
@@ -164,7 +165,7 @@ class _NotificationsScreenState extends State<Notifications> {
             child: Text(
               'تحديد الكل كمقروء',
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: MyColors.primary,
                 fontWeight: FontWeight.w600,
                 fontSize: 14.sp, 
               ),

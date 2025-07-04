@@ -60,7 +60,7 @@ class _SocialMediaState extends State<SocialMedia> {
         if (mounted) {
           setState(() {
             myUserMinimal = user;
-            SocialMedia.cachedUserMinimal = user; // ✅ خزّنه كاش
+            SocialMedia.cachedUserMinimal = user; 
             isUserLoading = false;
           });
         }

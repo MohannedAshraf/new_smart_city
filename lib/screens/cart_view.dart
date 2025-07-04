@@ -166,7 +166,7 @@ class _CartViewState extends State<CartView> {
                     ElevatedButton(
                       onPressed: applyDiscount,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: MyColors.primary,
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.w,
                           vertical: 12.h,
@@ -202,7 +202,7 @@ class _CartViewState extends State<CartView> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.r),
                             borderSide: const BorderSide(
-                              color: Colors.blueAccent,
+                              color: MyColors.primary,
                             ),
                           ),
                         ),
@@ -300,12 +300,11 @@ class _CartViewState extends State<CartView> {
 
               SizedBox(height: 25.h),
 
-              // ✅ زر Checkout
               Container(
                 width: double.infinity,
                 height: 55.h,
                 decoration: BoxDecoration(
-                  color: Colors.blueAccent,
+                  color:MyColors.primary,
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: TextButton(

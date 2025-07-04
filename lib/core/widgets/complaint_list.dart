@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; 
@@ -58,11 +59,11 @@ class ComplaintList extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(Icons.pending_actions, size: 20.sp, color: Colors.blue),
+            Icon(Icons.pending_actions, size: 20.sp, color:MyColors.primary),
             SizedBox(width: 4.w),
             Text(
               'قيد الانتظار',
-              style: TextStyle(fontSize: 13.sp, color: Colors.blue),
+              style: TextStyle(fontSize: 13.sp, color: MyColors.primary),
             ),
           ],
         );

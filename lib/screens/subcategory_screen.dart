@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/category_circle.dart';
 import 'package:citio/core/widgets/product_card.dart';
 import 'package:citio/helper/api_product_under_sub.dart';
@@ -96,7 +97,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         width: 70.w,
         height: 50.h,
         decoration: const BoxDecoration(
-          color: Colors.blue,
+          color: MyColors.primary,
           shape: BoxShape.circle,
         ),
         child: IconButton(

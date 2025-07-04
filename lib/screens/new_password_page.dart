@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/main.dart';
 import 'package:citio/helper/api_change_password.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   Widget build(BuildContext context) {
     OutlineInputBorder borderStyle = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10.r),
-      borderSide: const BorderSide(color: Colors.blueAccent),
+      borderSide: const BorderSide(color: MyColors.primary),
     );
 
     return Scaffold(
@@ -115,7 +116,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _resetPassword,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor:  MyColors.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),

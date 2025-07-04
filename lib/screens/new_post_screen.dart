@@ -331,7 +331,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     isPublishEnabled
-                        ? const Color.fromARGB(255, 27, 117, 9)
+                        ? MyColors.primary
                         : Colors.grey[300],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),

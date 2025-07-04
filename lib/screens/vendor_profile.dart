@@ -74,8 +74,8 @@ class _VendorProfileState extends State<VendorProfile> {
                           isScrollable: true,
                           indicatorSize: TabBarIndicatorSize.label,
                           dividerColor: MyColors.white,
-                          indicatorColor: MyColors.inProgress,
-                          labelColor: MyColors.inProgress,
+                          indicatorColor: MyColors.primary,
+                          labelColor: MyColors.primary,
 
                           tabs: sub.map((i) => Tab(text: i.name)).toList(),
                         ),

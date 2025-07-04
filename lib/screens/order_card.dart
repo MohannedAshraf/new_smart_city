@@ -180,7 +180,7 @@ class OrderCard extends StatelessWidget {
       height: 20.h,
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.blueAccent,
+        color: MyColors.primary,
       ),
       child: IconButton(
         padding: EdgeInsets.zero,

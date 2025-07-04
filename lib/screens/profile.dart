@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_delete_acc.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
@@ -183,7 +184,7 @@ class _ProfileState extends State<Profile> {
                     style: TextStyle(color: Colors.white, fontSize: 15.sp),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor:  MyColors.primary,
                     padding: EdgeInsets.symmetric(vertical: 14.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),

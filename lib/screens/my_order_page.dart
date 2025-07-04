@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_myorder.dart';
 import 'package:citio/main.dart';
 import 'package:citio/models/myorder_model.dart';
@@ -102,7 +103,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       decoration: BoxDecoration(
-                        color: isSelected ? Colors.blue : Colors.grey.shade200,
+                        color: isSelected ?  MyColors.primary : Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       alignment: Alignment.center,
@@ -161,7 +162,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
         badgeColor = Colors.amber;
         break;
       case "processing":
-        badgeColor = Colors.blue;
+        badgeColor = MyColors.primary;
         break;
       case "delivered":
         badgeColor = Colors.green;

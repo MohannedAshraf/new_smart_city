@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 abstract class MyColors {
-  static const Color primary = Color(0xFF6200EE);
+  static const Color primary = Color(0xFF129990);
   static const Color star = Colors.amber;
   static const Color fadedInProgress = Color(0x1A007FFF);
   static const Color inProgress = Color(0xFF007FFF);
   static const Color rejected = Color(0xFFEE4B2B);
-  static const Color fadedRejected = Color(0x1AEE4B2B);
-  static const Color fadedAccepted = Color(0x1A009E60);
+  static const Color fadedRejected = Color.fromARGB(26, 206, 51, 20);
+  static const Color fadedAccepted = Color.fromARGB(26, 48, 126, 95);
   static const Color accepted = Color(0xFF009E60);
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
   static const Color ambulance = Color(0xFFE53935);
@@ -36,16 +36,15 @@ abstract class MyColors {
   static const Color green = Color(0xff149954);
   static const Color white = Color(0xffFFFFFF);
   static const Color forground = Color.fromARGB(255, 248, 183, 183);
-  static const Color gray = Color(0xff6E6A7C);
+  static const Color gray = Color.fromARGB(255, 87, 85, 96);
   static const Color grey = Color(0xff777777);
   static const Color fadedGrey = Color(0x1Acdcdcd);
-  static const Color black = Color(0xff24252C);
+  static const Color black = Color.fromARGB(255, 0, 0, 0);
   static const Color gray2 = Color(0xff00000040);
   static const Color mintgreen = Color.fromARGB(255, 193, 233, 213);
   static const Color homecolor = Color.fromARGB(255, 233, 189, 212);
   static const Color pink = Color(0xffFFE4F2);
 
-  // نسخ إضافية من بعض الألوان بأسماء مختلفة (حافظًا على التوافق)
   static const Color textformbordercolor = Color(0xffA8A8A9);
   static const Color textformcolor = Color(0xffF3F3F3);
   static const Color textcolor = Color(0xff676767);

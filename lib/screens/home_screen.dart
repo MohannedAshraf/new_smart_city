@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 // ignore: unused_element
 String _baseUrl = 'https://service-provider.runasp.net';
 
@@ -111,22 +110,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Container(
-                              width: 37,
-                              height: 37,
+                              width: 40,
+                              height: 40,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyColors.primary,
                               ),
                               child: const Icon(
                                 Icons.add,
-                                color: MyColors.buttonGreen,
+                                color: MyColors.white,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 7),
+                          const SizedBox(height: 10),
                           const Text(
                             'أضف شكوى',
-                            style: TextStyle(fontSize: 11, color: Colors.black),
+                            style: TextStyle(fontSize: 12, color: Colors.black),
                           ),
                           const SizedBox(height: 3),
                         ],

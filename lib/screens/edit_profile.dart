@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_edit_profile.dart';
 import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/profile.dart';
@@ -207,7 +208,7 @@ class _EditProfileState extends State<EditProfile> {
                         onTap: _showImageSourcePicker,
                         child: CircleAvatar(
                           radius: 16.r,
-                          backgroundColor: Colors.green,
+                          backgroundColor: MyColors.primary,
                           child: Icon(
                             Icons.camera_alt,
                             size: 16.sp,
@@ -275,7 +276,7 @@ class _EditProfileState extends State<EditProfile> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: MyColors.primary,
                       padding: EdgeInsets.symmetric(vertical: 16.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),

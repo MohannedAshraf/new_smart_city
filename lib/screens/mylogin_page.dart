@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
+import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_login.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
@@ -112,7 +113,7 @@ class _LoginPageState extends State<MyloginPage> {
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
+                          color:  MyColors.primary,
                         ),
                       ),
                       SizedBox(height: 8.h),
@@ -199,7 +200,7 @@ class _LoginPageState extends State<MyloginPage> {
                             "هل نسيت كلمة المرور؟",
                             style: TextStyle(
                               fontSize: 15,
-                              color: Colors.blueAccent,
+                              color: MyColors.primary,
                             ),
                           ),
                         ),
@@ -212,7 +213,7 @@ class _LoginPageState extends State<MyloginPage> {
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
+                            backgroundColor: MyColors.primary,
                             padding: EdgeInsets.symmetric(vertical: 16.h),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
@@ -252,7 +253,7 @@ class _LoginPageState extends State<MyloginPage> {
                               style: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.blueAccent,
+                                color: MyColors.primary,
                               ),
                             ),
                           ),

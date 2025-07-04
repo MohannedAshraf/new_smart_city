@@ -105,7 +105,7 @@ class _IssueScreenState extends State<IssueScreen> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: MyColors.themecolor,
+                color: MyColors.black,
                 size: 22.sp,
               ),
               onPressed: () {
@@ -155,8 +155,8 @@ class _IssueScreenState extends State<IssueScreen> {
                           isScrollable: false,
                           indicatorSize: TabBarIndicatorSize.label,
                           dividerColor: MyColors.white,
-                          indicatorColor: MyColors.inProgress,
-                          labelColor: MyColors.inProgress,
+                          indicatorColor: MyColors.primary,
+                          labelColor: MyColors.primary,
                           unselectedLabelColor: MyColors.gray,
                           tabs: [
                             TabItem(title: 'نشطة', count: active.length),
@@ -189,7 +189,7 @@ class _IssueScreenState extends State<IssueScreen> {
                   ),
           floatingActionButton: FloatingActionButton(
             shape: const CircleBorder(),
-            backgroundColor: MyColors.themecolor,
+            backgroundColor: MyColors.primary,
             onPressed: () {
               Navigator.push(
                 context,
