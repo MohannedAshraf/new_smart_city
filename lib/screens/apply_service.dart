@@ -470,7 +470,7 @@ class _ApplyService extends State<ApplyService> {
                               actions: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // يقفل الديالوج
+                                    Navigator.pop(context);
                                   },
                                   child: const Text(
                                     "تم",
@@ -482,7 +482,7 @@ class _ApplyService extends State<ApplyService> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context); // يقفل الديالوج
+                                    Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
