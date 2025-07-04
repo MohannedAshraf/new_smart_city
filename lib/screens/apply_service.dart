@@ -501,7 +501,7 @@ class _ApplyService extends State<ApplyService> {
                                         builder:
                                             (context) => GovernmentScreen(),
                                       ),
-                                    ); // أو أي صفحة حكومتنا
+                                    ); //
                                   },
                                   child: const Text(
                                     "الذهاب إلى حكومتنا",
@@ -521,7 +521,10 @@ class _ApplyService extends State<ApplyService> {
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(MyColors.white),
                   ),
-                  child: const Text('إرسال ودفع'),
+                  child: const Text(
+                    'إرسال ودفع',
+                    style: TextStyle(color: MyColors.black),
+                  ),
                 ),
               ],
             ),
