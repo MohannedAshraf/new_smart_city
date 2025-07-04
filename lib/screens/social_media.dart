@@ -17,8 +17,6 @@ import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:citio/services/get_my_user_minimal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final Uri _url = Uri.parse('https://x.com/home');
-
 class SocialMedia extends StatefulWidget {
   static SocialmediaUserMinimal? cachedUserMinimal;
   const SocialMedia({super.key});
