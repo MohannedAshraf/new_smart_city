@@ -39,7 +39,10 @@ class ApplyGovernmentService {
 
         req.fields['ServiceData[$i].FieldId'] = item.id.toString();
 
-        if (value == null) {
+        if (item.fieldValueString == null &&
+            item.fieldValueInt == null &&
+            item.fieldValueFloat == null &&
+            item.fieldValueDate == null) {
           if (type == 'number') {
             req.fields['ServiceData[$i].FieldValueInt'] = '0';
           } else if (type == 'float') {

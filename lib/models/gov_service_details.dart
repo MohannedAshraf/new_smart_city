@@ -68,7 +68,7 @@ class RequiredFields {
   int? fieldValueInt;
   double? fieldValueFloat;
   DateTime? fieldValueDate;
-  final String valueType;
+  String? valueType;
 
   RequiredFields({
     required this.id,
