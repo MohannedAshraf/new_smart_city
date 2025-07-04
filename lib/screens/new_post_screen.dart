@@ -33,27 +33,49 @@ class _NewPostScreenState extends State<NewPostScreen> {
     final imagesCount = _images.length;
     return captionLen >= _minLength &&
         captionLen <= _maxLength &&
-        imagesCount >= 1 &&
         imagesCount <= 5;
   }
 
   void _showSnackBarMessage(String message) {
+    Color backgroundColor;
+
+    if (message.contains("✅")) {
+      backgroundColor = Colors.green;
+    } else if (message.contains("❌")) {
+      backgroundColor = Colors.red;
+    } else if (message.contains("⚠️") ||
+        message.contains("تحذير") ||
+        message.contains("يمكنك") ||
+        message.contains("عدد") ||
+        message.contains("يجب")) {
+      backgroundColor = Colors.orange;
+    } else {
+      backgroundColor = Colors.blueGrey;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 50.h),
-        backgroundColor: Colors.orange.shade800,
+        margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 30.h),
+        backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
         duration: const Duration(seconds: 3),
         content: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.white),
+            Icon(
+              message.contains("✅")
+                  ? Icons.check_circle_outline
+                  : message.contains("❌")
+                  ? Icons.error_outline
+                  : Icons.warning_amber_rounded,
+              color: Colors.white,
+            ),
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
-                message,
+                message.replaceAll("✅", "").replaceAll("❌", "").trim(),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -64,7 +86,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
           ],
         ),
         action: SnackBarAction(
-          label: 'فهمت',
+          label: 'تأكيد',
           textColor: Colors.white,
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -88,40 +110,41 @@ class _NewPostScreenState extends State<NewPostScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) => Wrap(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: const Text("التقاط صورة بالكاميرا"),
-            onTap: () async {
-              Navigator.pop(context);
-              final picker = ImagePicker();
-              final picked = await picker.pickImage(
-                source: ImageSource.camera,
-                imageQuality: 85,
-              );
-              if (picked != null && _images.length < 5) {
-                setState(() => _images.add(picked));
-              }
-            },
+      builder:
+          (context) => Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text("التقاط صورة بالكاميرا"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final picker = ImagePicker();
+                  final picked = await picker.pickImage(
+                    source: ImageSource.camera,
+                    imageQuality: 85,
+                  );
+                  if (picked != null && _images.length < 5) {
+                    setState(() => _images.add(picked));
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text("اختيار من المعرض"),
+                onTap: () async {
+                  Navigator.pop(context);
+                  final picker = ImagePicker();
+                  final picked = await picker.pickMultiImage(imageQuality: 85);
+                  if (picked.isNotEmpty &&
+                      _images.length + picked.length <= 5) {
+                    setState(() => _images.addAll(picked));
+                  } else {
+                    _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
+                  }
+                },
+              ),
+            ],
           ),
-          ListTile(
-            leading: const Icon(Icons.photo_library),
-            title: const Text("اختيار من المعرض"),
-            onTap: () async {
-              Navigator.pop(context);
-              final picker = ImagePicker();
-              final picked = await picker.pickMultiImage(imageQuality: 85);
-              if (picked.isNotEmpty &&
-                  _images.length + picked.length <= 5) {
-                setState(() => _images.addAll(picked));
-              } else {
-                _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
-              }
-            },
-          ),
-        ],
-      ),
     );
   }
 
@@ -139,10 +162,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _showSnackBarMessage("نص المنشور لا يمكن أن يتجاوز 1000 حرف");
         return;
       }
-      if (_images.isEmpty) {
-        _showSnackBarMessage("يجب إضافة صورة واحدة على الأقل");
-        return;
-      }
     }
 
     try {
@@ -156,11 +175,9 @@ class _NewPostScreenState extends State<NewPostScreen> {
         _captionController.clear();
         setState(() => _images.clear());
       } else {
-        print('❌ خطأ في النشر: $errorMsg');
         _showSnackBarMessage("❌ حدث خطأ أثناء النشر. حاول مرة أخرى");
       }
     } catch (e) {
-      print('❌ Exception: $e');
       _showSnackBarMessage("❌ حدث خطأ غير متوقع. حاول مرة أخرى");
     } finally {
       setState(() => isSubmitting = false);
@@ -195,24 +212,23 @@ class _NewPostScreenState extends State<NewPostScreen> {
             isLoadingUser
                 ? const Center(child: CircularProgressIndicator())
                 : Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 24.r,
-                        backgroundImage: NetworkImage(
-                          myUser.avatarUrl ??
-                              'https://via.placeholder.com/150',
-                        ),
+                  children: [
+                    CircleAvatar(
+                      radius: 24.r,
+                      backgroundImage: NetworkImage(
+                        myUser.avatarUrl ?? 'https://via.placeholder.com/150',
                       ),
-                      SizedBox(width: 12.w),
-                      Text(
-                        myUser.localUserName ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.sp,
-                        ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      myUser.localUserName ?? '',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -229,7 +245,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     maxLines: null,
                     onChanged: (_) => setState(() {}),
                     decoration: const InputDecoration(
-                      hintText: "فينا تفكر ....",
+                      hintText: "بم تفكر ....",
                       border: InputBorder.none,
                       counterText: '',
                     ),
@@ -240,10 +256,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     Wrap(
                       spacing: 8.w,
                       runSpacing: 8.h,
-                      children: _images
-                          .asMap()
-                          .entries
-                          .map((entry) {
+                      children:
+                          _images.asMap().entries.map((entry) {
                             final index = entry.key;
                             final image = entry.value;
                             return Stack(
@@ -261,22 +275,26 @@ class _NewPostScreenState extends State<NewPostScreen> {
                                   top: 0,
                                   right: 0,
                                   child: GestureDetector(
-                                    onTap: isSubmitting
-                                        ? null
-                                        : () => _removeImage(index),
+                                    onTap:
+                                        isSubmitting
+                                            ? null
+                                            : () => _removeImage(index),
                                     child: CircleAvatar(
                                       radius: 10.r,
-                                      backgroundColor:
-                                          Colors.black.withOpacity(0.6),
-                                      child: Icon(Icons.close,
-                                          size: 14.sp, color: Colors.white),
+                                      backgroundColor: Colors.black.withOpacity(
+                                        0.6,
+                                      ),
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 14.sp,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
                             );
-                          })
-                          .toList(),
+                          }).toList(),
                     ),
                     SizedBox(height: 10.h),
                   ],
@@ -310,32 +328,35 @@ class _NewPostScreenState extends State<NewPostScreen> {
             child: ElevatedButton(
               onPressed: isSubmitting ? null : _publishPost,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isPublishEnabled
-                    ? const Color.fromARGB(255, 27, 117, 9)
-                    : Colors.grey[300],
+                backgroundColor:
+                    isPublishEnabled
+                        ? const Color.fromARGB(255, 27, 117, 9)
+                        : Colors.grey[300],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
-              child: isSubmitting
-                  ? const SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 3,
+              child:
+                  isSubmitting
+                      ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+                      )
+                      : Text(
+                        'نشر',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.sp,
+                          color:
+                              isPublishEnabled
+                                  ? Colors.white
+                                  : Colors.grey[700],
+                        ),
                       ),
-                    )
-                  : Text(
-                      'نشر',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.sp,
-                        color: isPublishEnabled
-                            ? Colors.white
-                            : Colors.grey[700],
-                      ),
-                    ),
             ),
           ),
         ),

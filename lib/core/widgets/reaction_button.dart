@@ -42,7 +42,6 @@ class _ReactionButtonState extends State<ReactionButton> {
 
     if (success != null) {
       setState(() {
-        // ✅ لو ضغط على نفس الريأكت، نرجع الشكل للديفولت
         if (_userReaction == reactionType) {
           _userReaction = null;
         } else {
@@ -59,7 +58,11 @@ class _ReactionButtonState extends State<ReactionButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await _sendReaction('like');
+        if (_userReaction != null) {
+          await _sendReaction(_userReaction!);
+        } else {
+          await _sendReaction('like');
+        }
       },
       onLongPressStart: (details) async {
         final selected = await showReactionDialogAtTap(
@@ -85,7 +88,6 @@ class _ReactionButtonState extends State<ReactionButton> {
   }
 }
 
-/// Custom reaction dialog that appears at tap location
 Future<String?> showReactionDialogAtTap({
   required BuildContext context,
   required Offset position,

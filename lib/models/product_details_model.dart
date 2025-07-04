@@ -8,6 +8,7 @@ class ProductDetails {
   final String vendorBusinessName;
   final double price;
   final int rating;
+  final double discountPercentage;
 
   ProductDetails({
     required this.id,
@@ -19,6 +20,7 @@ class ProductDetails {
     required this.vendorBusinessName,
     required this.price,
     required this.rating,
+    required this.discountPercentage,
   });
 
   factory ProductDetails.fromJson(Map<String, dynamic> json) {
@@ -31,7 +33,11 @@ class ProductDetails {
       vendorFullName: json['vendorFullName'],
       vendorBusinessName: json['vendorBusinessName'],
       price: (json['price'] as num).toDouble(),
-      rating: json['rating'],
+      rating:
+          json['rating'] is int
+              ? json['rating']
+              : (json['rating'] as num).round(),
+      discountPercentage: (json['discountPercentag'] ?? 0).toDouble(),
     );
   }
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/search_bar.dart';
 import 'package:citio/generated/l10n.dart';
@@ -283,9 +285,13 @@ class HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('تسجيل الخروج'),
-              onTap: () {
+              onTap: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString("token", "");
+                await prefs.setString("refreshToken", "");
+
                 Navigator.pop(context);
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const MyloginPage()),
                 );
@@ -302,7 +308,7 @@ class HomePageState extends State<HomePage> {
         unselectedLabelStyle: TextStyle(fontSize: 14.sp),
         type: BottomNavigationBarType.fixed,
         backgroundColor: MyAppColors.specialbackground,
-        selectedItemColor: MyColors.dodgerBlue,
+        selectedItemColor: const Color(0XFF129990),
         unselectedItemColor: MyColors.gray,
         currentIndex: currentIndex,
         onTap: (index) {

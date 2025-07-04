@@ -29,7 +29,8 @@ class VerifyOtpApi {
 
       return data;
     } else {
-      throw Exception("فشل في التحقق من الرمز: ${response.statusCode}");
+      // ❌ نرمي نص صريح فقط
+      throw "تحقق من الرمز";
     }
   }
 }
