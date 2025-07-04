@@ -34,8 +34,18 @@ class SocialMediaReactionsApi {
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
-        if (decoded['post']?['impressionsCount'] != null) {
-          return ImpressionsCount.fromJson(decoded['post']['impressionsCount']);
+        final countMap = decoded['post']?['impressionsCount'];
+        if (countMap != null) {
+          int total = 0;
+          for (var key in ['like', 'love', 'care', 'laugh', 'sad', 'hate']) {
+            total +=
+                (countMap[key] is num) ? (countMap[key] as num).toInt() : 0;
+          }
+          countMap['total'] = total;
+
+          print('✅ Computed total: $total');
+
+          return ImpressionsCount.fromJson(countMap);
         }
       } else {
         print('❌ Error ${response.statusCode}: ${response.body}');

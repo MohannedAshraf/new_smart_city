@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:citio/models/order_details_moel.dart';
+import 'package:citio/models/order_details_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

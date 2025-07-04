@@ -13,10 +13,14 @@ import 'package:citio/main.dart';
 import 'package:citio/screens/new_post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:citio/models/socialmedia_user_minimal.dart';
+import 'package:citio/services/get_my_user_minimal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Uri _url = Uri.parse('https://x.com/home');
 
 class SocialMedia extends StatefulWidget {
+  static SocialmediaUserMinimal? cachedUserMinimal;
   const SocialMedia({super.key});
 
   @override
@@ -24,6 +28,8 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
+  SocialmediaUserMinimal? myUserMinimal;
+  bool isUserLoading = true;
   List<Data>? cachedPosts;
   bool isLoading = true;
   bool isLoadingMore = false;
@@ -35,7 +41,37 @@ class _SocialMediaState extends State<SocialMedia> {
   @override
   void initState() {
     super.initState();
+
+    if (SocialMedia.cachedUserMinimal != null) {
+      myUserMinimal = SocialMedia.cachedUserMinimal;
+      isUserLoading = false;
+    } else {
+      _loadMyUser();
+    }
+
     _fetchPostsPage(page: currentPage);
+  }
+
+  Future<void> _loadMyUser() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      if (token != null) {
+        final user = await GetMyUserMinimalService().fetchMyUser(token);
+        if (mounted) {
+          setState(() {
+            myUserMinimal = user;
+            SocialMedia.cachedUserMinimal = user; // ✅ خزّنه كاش
+            isUserLoading = false;
+          });
+        }
+      } else {
+        setState(() => isUserLoading = false);
+      }
+    } catch (e) {
+      print("❌ Error loading minimal user: $e");
+      setState(() => isUserLoading = false);
+    }
   }
 
   Future<void> _fetchPostsPage({required int page}) async {
@@ -211,10 +247,9 @@ class _SocialMediaState extends State<SocialMedia> {
                 postId: post.id ?? '',
                 currentUserReaction: post.userReaction,
                 totalCount: post.impressionsCount?.total ?? 0,
-                onReacted: (reaction, total) {
+                onReacted: (reaction, _) {
                   setState(() {
                     post.userReaction = reaction;
-                    post.impressionsCount?.total = total;
                   });
                 },
               ),
@@ -243,49 +278,50 @@ class _SocialMediaState extends State<SocialMedia> {
 
     return Scaffold(
       backgroundColor: MyColors.white,
-     
-appBar: AppBar(
-  backgroundColor: MyColors.white,
-  surfaceTintColor: MyColors.white,
-  automaticallyImplyLeading: true,
-  leading: IconButton(
-    icon: const Icon(Icons.arrow_back, color: MyColors.black),
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const HomePage(initialIndex: 0),
-        ),
-      );
-    },
-  ),
-  toolbarHeight: 50.h,
-  title: Padding(
-    padding: EdgeInsets.symmetric(vertical: 12.h),
-    child: Row(
-      children: [
-        SizedBox(width: screenWidth * 0.13),
-        Text(
-          'آخر المشاركات',
-          style: TextStyle(color: MyColors.black, fontSize: 20.sp),
-        ),
-        const Spacer(),
-        IconButton(
-          icon: const Icon(Icons.add, color: MyColors.gray), 
+
+      appBar: AppBar(
+        backgroundColor: MyColors.white,
+        surfaceTintColor: MyColors.white,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: MyColors.black),
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (_) => const NewPostScreen(), 
+                builder: (_) => const HomePage(initialIndex: 0),
               ),
             );
           },
         ),
-      ],
-    ),
-  ),
-  centerTitle: true,
-),
+
+        toolbarHeight: 50.h,
+        title: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.h),
+          child: Row(
+            children: [
+              SizedBox(width: screenWidth * 0.13),
+              Text(
+                'آخر المشاركات',
+                style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.add, color: MyColors.gray),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => NewPostScreen(user: myUserMinimal!),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        centerTitle: true,
+      ),
       body:
           isLoading
               ? const Center(child: CircularProgressIndicator())

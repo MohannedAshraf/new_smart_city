@@ -42,9 +42,15 @@ class _ReactionButtonState extends State<ReactionButton> {
 
     if (success != null) {
       setState(() {
-        _userReaction = reactionType.isEmpty ? null : reactionType;
+        // ✅ لو ضغط على نفس الريأكت، نرجع الشكل للديفولت
+        if (_userReaction == reactionType) {
+          _userReaction = null;
+        } else {
+          _userReaction = reactionType;
+        }
         _totalCount = success.total ?? _totalCount;
       });
+
       widget.onReacted?.call(_userReaction ?? '', _totalCount);
     }
   }
@@ -53,11 +59,7 @@ class _ReactionButtonState extends State<ReactionButton> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if (_userReaction != null) {
-          await _sendReaction('');
-        } else {
-          await _sendReaction('like');
-        }
+        await _sendReaction('like');
       },
       onLongPressStart: (details) async {
         final selected = await showReactionDialogAtTap(
@@ -100,9 +102,9 @@ Future<String?> showReactionDialogAtTap({
           Positioned(
             left: MediaQuery.of(context).size.width / 2 - 120,
             top: position.dy - 80,
-            child: Material(
+            child: const Material(
               color: Colors.transparent,
-              child: const ReactionDialog(),
+              child: ReactionDialog(),
             ),
           ),
         ],

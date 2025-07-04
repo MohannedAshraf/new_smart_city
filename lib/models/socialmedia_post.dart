@@ -5,15 +5,15 @@ class SocialmediaPost {
   List<Data> data;
   String message;
 
-  SocialmediaPost({
-    required this.data,
-    required this.message,
-  });
+  SocialmediaPost({required this.data, required this.message});
 
   factory SocialmediaPost.fromJson(
-      Map<String, dynamic> jsonData, String currentUserId) {
+    Map<String, dynamic> jsonData,
+    String currentUserId,
+  ) {
     return SocialmediaPost(
-      data: (jsonData['data'] as List<dynamic>?)
+      data:
+          (jsonData['data'] as List<dynamic>?)
               ?.map((x) => Data.fromJson(x, currentUserId))
               .toList() ??
           [],
@@ -65,13 +65,15 @@ class Data {
       postCaption: json['postCaption'] as String?,
       createdAt: json['createdAt'] as String?,
       adminPost: json['adminPost'] ?? false,
-      media: (json['media'] as List<dynamic>?)
-          ?.map((item) => Media.fromJson(item))
-          .toList(),
+      media:
+          (json['media'] as List<dynamic>?)
+              ?.map((item) => Media.fromJson(item))
+              .toList(),
       tags: (json['tags'] as List<dynamic>?)?.cast<String?>(),
-      impressionsCount: json['impressionsCount'] != null
-          ? ImpressionsCount.fromJson(json['impressionsCount'])
-          : null,
+      impressionsCount:
+          json['impressionsCount'] != null
+              ? ImpressionsCount.fromJson(json['impressionsCount'])
+              : null,
       saveCount: json['saveCount'] ?? 0,
       userReaction: detectedReaction,
     );
@@ -88,9 +90,10 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> jsonData) {
     return Media(
       type: jsonData['type'] as String?,
-      url: jsonData['url'] != null
-          ? Urls.socialmediaBaseUrl + (jsonData['url'] as String)
-          : null,
+      url:
+          jsonData['url'] != null
+              ? Urls.socialmediaBaseUrl + (jsonData['url'] as String)
+              : null,
       sId: jsonData['_id'] as String?,
     );
   }
@@ -103,7 +106,6 @@ class ImpressionsCount {
   int? laugh;
   int? sad;
   int? hate;
-  int? total;
 
   ImpressionsCount({
     this.like,
@@ -112,19 +114,26 @@ class ImpressionsCount {
     this.laugh,
     this.sad,
     this.hate,
-    this.total,
   });
 
   factory ImpressionsCount.fromJson(Map<String, dynamic> jsonData) {
     return ImpressionsCount(
-      like: jsonData['like'] as int?,
-      love: jsonData['love'] as int?,
-      care: jsonData['care'] as int?,
-      laugh: jsonData['laugh'] as int?,
-      sad: jsonData['sad'] as int?,
-      hate: jsonData['hate'] as int?,
-      total: jsonData['total'] as int?,
+      like: jsonData['like'] as int? ?? 0,
+      love: jsonData['love'] as int? ?? 0,
+      care: jsonData['care'] as int? ?? 0,
+      laugh: jsonData['laugh'] as int? ?? 0,
+      sad: jsonData['sad'] as int? ?? 0,
+      hate: jsonData['hate'] as int? ?? 0,
     );
+  }
+
+  int get total {
+    return (like ?? 0) +
+        (love ?? 0) +
+        (care ?? 0) +
+        (laugh ?? 0) +
+        (sad ?? 0) +
+        (hate ?? 0);
   }
 }
 
