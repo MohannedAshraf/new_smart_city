@@ -30,7 +30,7 @@ class ServiceContainer extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: MyColors.white,
                   radius: 14.r,
-                  child: Icon(icon, color: MyColors.dodgerBlue, size: 28.sp),
+                  child: Icon(icon, color: MyColors.primary, size: 28.sp),
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
