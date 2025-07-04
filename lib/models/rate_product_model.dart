@@ -5,7 +5,7 @@ class ProductReview {
   final String userFullName;
   final String userEmail;
   final String vendorFullName;
-  final double rating;
+  final int rating;
   final String comment;
   final DateTime createdAt;
 
@@ -29,7 +29,7 @@ class ProductReview {
       userFullName: json['userFullName'],
       userEmail: json['userEmail'],
       vendorFullName: json['vendorFullName'],
-      rating: (json['rating'] as num).toDouble(),
+      rating: json['rating'] as int,
       comment: json['comment'],
       createdAt: DateTime.parse(json['createdAt']),
     );

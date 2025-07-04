@@ -7,7 +7,7 @@ import 'package:citio/screens/my_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:citio/helper/api_cash_payment.dart'; // أضفه مع باقي الـ imports
+import 'package:citio/helper/api_cash_payment.dart';
 
 class CheckoutView extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -24,6 +24,11 @@ class _CheckoutViewState extends State<CheckoutView> {
   String? paymentMethodId;
   bool isLoading = false;
   bool showCardForm = false;
+  bool isEditingAddress = false;
+
+  TextEditingController addressController = TextEditingController(
+    text: "123 Main Street, New York, NY 10001",
+  );
 
   Future<void> handleCardPayment() async {
     if (_cardDetails == null || !_cardDetails!.complete) {
@@ -46,7 +51,6 @@ class _CheckoutViewState extends State<CheckoutView> {
       );
 
       paymentMethodId = paymentMethod.id;
-      print("✅ paymentMethodId: $paymentMethodId");
 
       await sendOrder();
 
@@ -161,9 +165,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             ? null
                             : () async {
                               if (selectedPayment == 'card') {
-                                setState(() {
-                                  showCardForm = true;
-                                });
+                                setState(() => showCardForm = true);
                               } else {
                                 setState(() => isLoading = true);
                                 try {
@@ -189,7 +191,6 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 setState(() => isLoading = false);
                               }
                             },
-
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
@@ -215,97 +216,7 @@ class _CheckoutViewState extends State<CheckoutView> {
               ],
             ),
           ),
-
-          /// ✅ Card Form فوق الشاشة
-          if (showCardForm)
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Container(
-                  color: Colors.black.withOpacity(0.7),
-                  child: Center(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.only(
-                        left: 24.w,
-                        right: 24.w,
-                        top: 40.h,
-                        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 20.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "ادخل بيانات البطاقة",
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            CardFormField(
-                              style: CardFormStyle(
-                                backgroundColor: Colors.grey.shade100,
-                                borderColor: Colors.blue,
-                                textColor: Colors.black,
-                                placeholderColor: Colors.grey,
-                                borderRadius: 8,
-                              ),
-                              onCardChanged: (card) {
-                                _cardDetails = card;
-                              },
-                            ),
-                            SizedBox(height: 20.h),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: isLoading ? null : handleCardPayment,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                child:
-                                    isLoading
-                                        ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                        : Text(
-                                          "ادفع الآن",
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                              ),
-                            ),
-                            SizedBox(height: 10.h),
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  showCardForm = false;
-                                });
-                              },
-                              child: const Text(
-                                "إلغاء",
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          if (showCardForm) _buildCardFormOverlay(),
         ],
       ),
     );
@@ -313,34 +224,91 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   Widget _buildAddressSection() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
         color: Colors.white,
       ),
-      child: Row(
-        children: [
-          const Icon(Icons.location_on_outlined),
-          SizedBox(width: 8.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "عنوان التسليم",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.sp,
+      child:
+          isEditingAddress
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "تعديل العنوان",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 2.h),
-                const Text("123 Main Street\nNew York, NY 10001"),
-              ],
-            ),
-          ),
-          TextButton(onPressed: () {}, child: const Text("تعديل")),
-        ],
-      ),
+                  SizedBox(height: 10.h),
+                  TextField(
+                    controller: addressController,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 12.h,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed:
+                              () => setState(() => isEditingAddress = false),
+                          child: const Text("إلغاء"),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed:
+                              () => setState(() => isEditingAddress = false),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                          ),
+                          child: const Text(
+                            "حفظ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+              : Row(
+                children: [
+                  const Icon(Icons.location_on_outlined),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "عنوان التسليم",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                        SizedBox(height: 2.h),
+                        Text(addressController.text),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => setState(() => isEditingAddress = true),
+                    child: const Text("تعديل"),
+                  ),
+                ],
+              ),
     );
   }
 
@@ -354,7 +322,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         ),
         SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+          padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
@@ -388,7 +356,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                "X: ${item.quantity}",
+                                "qty: ${item.quantity}",
                                 style: TextStyle(fontSize: 15.sp),
                               ),
                             ],
@@ -418,7 +386,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         ),
         SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+          padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
@@ -428,22 +396,14 @@ class _CheckoutViewState extends State<CheckoutView> {
               RadioListTile<String>(
                 value: 'card',
                 groupValue: selectedPayment,
-                onChanged: (value) {
-                  setState(() {
-                    selectedPayment = value!;
-                  });
-                },
+                onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("بطاقة الإتمان/الخصم"),
                 secondary: const Icon(Icons.credit_card),
               ),
               RadioListTile<String>(
                 value: 'cash',
                 groupValue: selectedPayment,
-                onChanged: (value) {
-                  setState(() {
-                    selectedPayment = value!;
-                  });
-                },
+                onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("الدفع عند الإستلام"),
                 secondary: const Icon(Icons.money),
               ),
@@ -469,7 +429,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         ),
         SizedBox(height: 10.h),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+          padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.r),
@@ -501,6 +461,92 @@ class _CheckoutViewState extends State<CheckoutView> {
           style: bold ? const TextStyle(fontWeight: FontWeight.bold) : null,
         ),
       ],
+    );
+  }
+
+  Widget _buildCardFormOverlay() {
+    return Positioned.fill(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          color: Colors.black.withOpacity(0.7),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                left: 24.w,
+                right: 24.w,
+                top: 40.h,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Container(
+                padding: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "ادخل بيانات البطاقة",
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    CardFormField(
+                      style: CardFormStyle(
+                        backgroundColor: Colors.grey.shade100,
+                        borderColor: Colors.blue,
+                        textColor: Colors.black,
+                        placeholderColor: Colors.grey,
+                        borderRadius: 8,
+                      ),
+                      onCardChanged: (card) {
+                        _cardDetails = card;
+                      },
+                    ),
+                    SizedBox(height: 20.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: isLoading ? null : handleCardPayment,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                        ),
+                        child:
+                            isLoading
+                                ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                                : Text(
+                                  "ادفع الآن",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => showCardForm = false);
+                      },
+                      child: const Text(
+                        "إلغاء",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
