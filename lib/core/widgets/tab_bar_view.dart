@@ -134,8 +134,8 @@ class _CustomCardState extends State<CustomCard> {
                   ]
                   : [
                     const BoxShadow(
-                      color: MyColors.white,
-                      blurRadius: 3,
+                      color: MyColors.whiteSmoke,
+                      blurRadius: 2,
                       spreadRadius: 0,
                       offset: Offset(0, 1),
                     ),

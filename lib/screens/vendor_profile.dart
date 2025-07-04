@@ -37,7 +37,6 @@ class _VendorProfileState extends State<VendorProfile> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: MyColors.offWhite,
       body: Padding(
         padding: EdgeInsets.fromLTRB(0.w, 7.h, 0.w, 0.h),
         child: FutureBuilder<List<VendorSubcategory>>(
@@ -77,6 +76,7 @@ class _VendorProfileState extends State<VendorProfile> {
                           indicatorColor: MyColors.primary,
                           labelColor: MyColors.primary,
 
+                          padding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
                           tabs: sub.map((i) => Tab(text: i.name)).toList(),
                         ),
                       ),

@@ -10,7 +10,6 @@ import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/services/get_most_requested_products.dart';
 import 'package:citio/core/utils/assets_image.dart';
-import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/most_recent_products.dart';
 import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/vendor.dart';
@@ -110,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Container(
-                              width: 40,
-                              height: 40,
+                              width: 40.w,
+                              height: 40.h,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyColors.primary,
@@ -123,11 +122,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
+                          Text(
                             'أضف شكوى',
-                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.black,
+                            ),
                           ),
-                          const SizedBox(height: 3),
+                          //const SizedBox(height: 3),
                         ],
                       ),
                     ],

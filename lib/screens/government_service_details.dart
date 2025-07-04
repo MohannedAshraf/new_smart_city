@@ -69,12 +69,6 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
           final color =
               Styles.govTabStyles[service.category]?['color'] ??
               MyColors.whiteSmoke;
-          final icon =
-              Styles.govTabStyles[service.category]?['icon'] ??
-              Icons.broken_image_rounded;
-          final fontColor =
-              Styles.govTabStyles[service.category]?['fontColor'] ??
-              MyColors.black;
 
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

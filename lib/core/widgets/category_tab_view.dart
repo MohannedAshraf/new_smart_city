@@ -105,7 +105,7 @@ class CategoryTabView extends StatelessWidget {
       child: Card(
         color: MyColors.white,
         shadowColor: MyColors.whiteSmoke,
-        elevation: 0,
+        elevation: 0.5,
         child: Row(
           children: [
             Column(

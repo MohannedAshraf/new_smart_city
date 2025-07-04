@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/utils/variables.dart' show MyColors;
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_screen.dart';
