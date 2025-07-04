@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
+import 'package:citio/screens/government_screen.dart';
+import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/apply_government_service.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
@@ -34,7 +36,7 @@ class _ApplyService extends State<ApplyService> {
 
   List<RequiredFields> fields = [];
   List<RequiredFiles> files = [];
-  List<Map<String, dynamic>> serviceData = [];
+  List<RequiredFields> serviceData = [];
 
   Map<String, TextEditingController> controllers = {};
   Map<int, PlatformFile> uploadedFiles = {};
@@ -61,13 +63,7 @@ class _ApplyService extends State<ApplyService> {
         if (!controllers.containsKey(field.fileName)) {
           controllers[field.fileName] = TextEditingController();
           fieldsError.add(false);
-          serviceData.add({
-            'FieldId': field.id,
-            'FieldValueString': null,
-            'FieldValueInt': null,
-            'FieldValueFloat': null,
-            'FieldValueDate': null,
-          });
+          serviceData.add(field);
         }
       }
       for (var file in fetchedFiles) {
@@ -121,7 +117,7 @@ class _ApplyService extends State<ApplyService> {
                 content:
                     fields.map<Widget>((field) {
                       int index = serviceData.indexWhere(
-                        (item) => item['FieldId'] == field.id,
+                        (item) => item.id == field.id,
                       );
 
                       if (field.htmlType == 'text') {
@@ -131,7 +127,8 @@ class _ApplyService extends State<ApplyService> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueString'] = value;
+                            serviceData[index].fieldValueString = value;
+                            serviceData[index].valueType = 'string';
                           },
                         );
                       } else if (field.htmlType == 'date') {
@@ -140,7 +137,8 @@ class _ApplyService extends State<ApplyService> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            serviceData[index]['FieldValueDate'] = value;
+                            serviceData[index].fieldValueDate = value;
+                            serviceData[index].valueType = 'date';
                           },
                         );
                       } else if (field.htmlType == 'number') {
@@ -151,7 +149,8 @@ class _ApplyService extends State<ApplyService> {
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueInt'] = value;
+                            serviceData[index].fieldValueInt = int.parse(value);
+                            serviceData[index].valueType = 'int';
                           },
                         );
                       } else if (field.htmlType == 'float') {
@@ -162,7 +161,10 @@ class _ApplyService extends State<ApplyService> {
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index]['FieldValueFloat'] = value;
+                            serviceData[index].fieldValueFloat = double.parse(
+                              value,
+                            );
+                            serviceData[index].valueType = 'float';
                           },
                         );
                       } else {
@@ -185,7 +187,26 @@ class _ApplyService extends State<ApplyService> {
                         onTap: () async {
                           FilePickerResult? result =
                               await FilePicker.platform.pickFiles();
+                          if (result != null && result.files.isNotEmpty) {
+                            final pickedFile = result.files.first;
 
+                            if (pickedFile.size > 5 * 1024 * 1024) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: MyColors.gray,
+                                  content: Text(
+                                    'لا يمكن أن يتجاوز حجم الملفات 5 ميجابايت',
+                                    style: TextStyle(
+                                      color: MyColors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+                          }
                           if (result != null && result.files.isNotEmpty) {
                             setState(() {
                               uploadedFiles[file.id] = result.files.first;
@@ -331,10 +352,10 @@ class _ApplyService extends State<ApplyService> {
     bool isValid = true;
     for (int i = 0; i < fields.length; i++) {
       var value =
-          serviceData[i]['FieldValueString'] ??
-          serviceData[i]['FieldValueInt'] ??
-          serviceData[i]['FieldValueFloat'] ??
-          serviceData[i]['FieldValueDate'];
+          serviceData[i].fieldValueString ??
+          serviceData[i].fieldValueInt ??
+          serviceData[i].fieldValueFloat ??
+          serviceData[i].fieldValueDate;
       if (value == null || value.toString().isEmpty) {
         fieldsError[i] = true;
         isValid = false;
@@ -359,30 +380,6 @@ class _ApplyService extends State<ApplyService> {
     setState(() {});
     return isValid;
   }
-
-  // Future<void> handlePaymentAndSubmit() async {
-  //   try {
-  //     final paymentMethod = await Stripe.instance.createPaymentMethod(
-  //       params: const PaymentMethodParams.card(
-  //         paymentMethodData: PaymentMethodData(
-  //           billingDetails: BillingDetails(), // optional
-  //         ),
-  //       ),
-  //     );
-
-  //     final paymentMethodId = paymentMethod.id;
-
-  //     ApplyGovernmentService().submit(
-  //       serviceId: widget.id,
-  //       serviceData: serviceData,
-  //       files: uploadedFiles.values.toList(),
-  //       paymentMethodID: paymentMethodId,
-  //     );
-  //   } catch (e) {
-  //     print('حدث خطأ أثناء الدفع: $e');
-  //     // يمكنك عرض رسالة للمستخدم
-  //   }
-  // }
 
   CardFieldInputDetails? card;
 
@@ -447,7 +444,76 @@ class _ApplyService extends State<ApplyService> {
                         files: uploadedFiles.values.toList(),
                         paymentMethodID: paymentMethod.id,
                       );
-                      print(paymentMethod.id);
+                      print(
+                        'youyouyouyouyouyouyouyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyr payment $paymentMethod.id',
+                      );
+
+                      showDialog(
+                        context: context,
+                        builder:
+                            (_) => AlertDialog(
+                              backgroundColor: MyColors.white,
+                              title: const Text(
+                                "Citio",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: MyColors.dodgerBlue,
+                                ),
+                              ),
+                              content: const Text(
+                                "شكرًا لاستخدامكم تطبيق Citio.\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: MyColors.black,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                GovernmentServiceDetails(
+                                                  id: widget.id,
+                                                ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "تم",
+                                    style: TextStyle(
+                                      color: MyColors.dodgerBlue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => GovernmentScreen(),
+                                      ),
+                                    ); //
+                                  },
+                                  child: const Text(
+                                    "الذهاب إلى حكومتنا",
+                                    style: TextStyle(
+                                      color: MyColors.dodgerBlue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      );
                     } catch (e) {
                       print("Stripe error: $e");
                     }
@@ -455,7 +521,10 @@ class _ApplyService extends State<ApplyService> {
                   style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(MyColors.white),
                   ),
-                  child: const Text('إرسال ودفع'),
+                  child: const Text(
+                    'إرسال ودفع',
+                    style: TextStyle(color: MyColors.black),
+                  ),
                 ),
               ],
             ),
@@ -576,7 +645,7 @@ class DateTextField extends StatefulWidget {
   final String header;
   final bool showError;
   final TextEditingController? controller;
-  final void Function(String)? onDateSelected;
+  final void Function(DateTime)? onDateSelected;
 
   const DateTextField({
     super.key,
@@ -620,7 +689,7 @@ class _DateTextFieldState extends State<DateTextField> {
         widget.controller!.text = formattedDate;
 
         if (widget.onDateSelected != null) {
-          widget.onDateSelected!(formattedDate);
+          widget.onDateSelected!(picked);
         }
       });
     }
@@ -758,6 +827,7 @@ class _CustomUploadBoxState extends State<CustomUploadBox> {
                 dashPattern: const [6, 4],
                 child: GestureDetector(
                   onTap: widget.onTap,
+
                   child: Container(
                     height: 120.h,
                     width: double.infinity,
