@@ -6,6 +6,7 @@ import 'package:citio/core/utils/variables.dart' show MyColors;
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_screen.dart';
+import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/apply_government_service.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:file_picker/file_picker.dart';
@@ -461,7 +462,7 @@ class _ApplyService extends State<ApplyService> {
                                 ),
                               ),
                               content: const Text(
-                                "شكرًا لاستخدامكم تطبيق Citio.\n\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
+                                "شكرًا لاستخدامكم تطبيق Citio.\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: MyColors.black,
@@ -471,6 +472,17 @@ class _ApplyService extends State<ApplyService> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                GovernmentServiceDetails(
+                                                  id: widget.id,
+                                                ),
+                                      ),
+                                    );
                                   },
                                   child: const Text(
                                     "تم",
