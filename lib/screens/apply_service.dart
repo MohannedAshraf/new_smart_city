@@ -134,9 +134,7 @@ class _ApplyService extends State<ApplyService> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            serviceData[index].fieldValueDate = DateTime.parse(
-                              value,
-                            );
+                            serviceData[index].fieldValueDate = value;
                           },
                         );
                       } else if (field.htmlType == 'number') {
@@ -576,7 +574,7 @@ class DateTextField extends StatefulWidget {
   final String header;
   final bool showError;
   final TextEditingController? controller;
-  final void Function(String)? onDateSelected;
+  final void Function(DateTime)? onDateSelected;
 
   const DateTextField({
     super.key,
@@ -620,7 +618,7 @@ class _DateTextFieldState extends State<DateTextField> {
         widget.controller!.text = formattedDate;
 
         if (widget.onDateSelected != null) {
-          widget.onDateSelected!(formattedDate);
+          widget.onDateSelected!(picked);
         }
       });
     }
