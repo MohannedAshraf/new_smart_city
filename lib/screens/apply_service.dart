@@ -523,11 +523,22 @@ class _ApplyService extends State<ApplyService> {
                               ),
                         );
                       } catch (submitError) {
+                        String errorMessage = 'فشل إرسال الطلب. حاول مرة أخرى.';
+
+                        if (submitError.toString().contains('{')) {
+                          try {
+                            final parsedError = jsonDecode(
+                              submitError.toString(),
+                            );
+                            if (parsedError is Map &&
+                                parsedError.containsKey('message')) {
+                              errorMessage = parsedError['message'];
+                            }
+                          } catch (_) {}
+                        }
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(
-                              'فشل إرسال الطلب: ${submitError.toString()}',
-                            ),
+                            content: Text(errorMessage),
                             backgroundColor: MyColors.primary,
                             duration: const Duration(seconds: 10),
                           ),

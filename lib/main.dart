@@ -12,6 +12,7 @@ import 'package:citio/screens/welcome-page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/home_screen.dart';
 import 'screens/government_screen.dart';
@@ -166,35 +167,39 @@ class HomePageState extends State<HomePage> {
               : null,
       body: pages[currentIndex],
       drawer: Drawer(
-        backgroundColor: MyColors.offWhite,
+        backgroundColor: MyColors.white,
         child: ListView(
           padding: EdgeInsets.zero,
+
           children: [
             DrawerHeader(
+              padding: EdgeInsets.zero, //
+              margin: EdgeInsets.zero,
               decoration: const BoxDecoration(
                 color: MyColors.specialbackground,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
+                //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    'مدينتنا',
-                    style: TextStyle(
-                      color: MyColors.black,
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  SvgPicture.asset(
+                    'assets/icon/citio.svg',
+                    height: 130.h,
+                    width: 130.w,
+                    fit: BoxFit.cover,
                   ),
                   Text(
                     'مرحباً بكم!',
-                    style: TextStyle(color: MyColors.black, fontSize: 16.sp),
+                    style: TextStyle(color: MyColors.black, fontSize: 18.sp),
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('الرئيسية'),
+            const Divider(color: MyColors.ghostColor, thickness: .5, height: 0),
+
+            drawerTile(
+              icon: Icons.home,
+              title: 'الرئيسية',
               onTap: () {
                 setState(() {
                   currentIndex = 0;
@@ -202,9 +207,29 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.local_police_rounded),
-              title: const Text('حكومتنا'),
+            // Container(
+            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.home),
+            //     title: const Text('الرئيسية'),
+            //     onTap: () {
+            //       setState(() {
+            //         currentIndex = 0;
+            //       });
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.local_police_rounded,
+              title: 'حكومتنا',
               onTap: () {
                 setState(() {
                   currentIndex = 1;
@@ -212,9 +237,29 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.report),
-              title: const Text('المشاكل'),
+            // Container(
+            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.local_police_rounded),
+            //     title: const Text('حكومتنا'),
+            //     onTap: () {
+            //       setState(() {
+            //         currentIndex = 1;
+            //       });
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.report,
+              title: 'المشاكل',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -223,9 +268,33 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.view_compact_sharp),
-              title: const Text('الخدمات'),
+
+            // Container(
+            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.report),
+            //     title: const Text('المشاكل'),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const IssueScreen(),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.view_compact_sharp,
+              title: 'الخدمات',
               onTap: () {
                 setState(() {
                   currentIndex = 3;
@@ -233,9 +302,29 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.groups_outlined),
-              title: const Text('وسائل التواصل الاجتماعي'),
+            // Container(
+            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.view_compact_sharp),
+            //     title: const Text('الخدمات'),
+            //     onTap: () {
+            //       setState(() {
+            //         currentIndex = 3;
+            //       });
+            //       Navigator.pop(context);
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.groups_outlined,
+              title: 'وسائل التواصل الاجتماعي',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -244,9 +333,32 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.shopping_basket_outlined),
-              title: const Text('البائعين'),
+            // Container(
+            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.groups_outlined),
+            //     title: const Text('وسائل التواصل الاجتماعي'),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const SocialMedia(),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.shopping_basket_outlined,
+              title: 'البائعين',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -258,9 +370,32 @@ class HomePageState extends State<HomePage> {
               },
             ),
 
-            ListTile(
-              leading: const Icon(Icons.receipt_long_outlined),
-              title: const Text('طلباتي'),
+            // Container(
+            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.shopping_basket_outlined),
+            //     title: const Text('البائعين'),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const AllVendorsScreen(),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.receipt_long_outlined,
+              title: 'طلباتي',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -269,10 +404,32 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('الملف الشخصي'),
+            // Container(
+            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.receipt_long_outlined),
+            //     title: const Text('طلباتي'),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const MyOrdersPage(),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.person,
+              title: 'الملف الشخصي',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -281,10 +438,30 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('تسجيل الخروج'),
+            // Container(
+            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+            //   decoration: BoxDecoration(
+            //     border: Border.all(
+            //       color: MyColors.whiteSmoke,
+            //       width: .5,
+            //     ), // تغيير لون الحواف
+            //   ),
+            //   child: ListTile(
+            //     iconColor: MyColors.primary,
+            //     leading: const Icon(Icons.person),
+            //     title: const Text('الملف الشخصي'),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => const Profile()),
+            //       );
+            //     },
+            //   ),
+            // ),
+            drawerTile(
+              icon: Icons.logout,
+              title: 'تسجيل الخروج',
               onTap: () async {
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setString("token", "");
@@ -346,6 +523,25 @@ class HomePageState extends State<HomePage> {
             label: 'الخدمات ',
           ),
         ],
+      ),
+    );
+  }
+
+  Widget drawerTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: MyColors.whiteSmoke, width: .5),
+      ),
+
+      child: ListTile(
+        iconColor: MyColors.primary,
+        leading: Icon(icon),
+        title: Text(title),
+        onTap: onTap,
       ),
     );
   }
