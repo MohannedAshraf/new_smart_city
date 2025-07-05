@@ -90,7 +90,6 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: MyColors.offWhite,
       body: Padding(
         padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.w),
         child: Column(
@@ -135,7 +134,7 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                                 Colors.transparent,
                               ),
                               backgroundColor: WidgetStateProperty.all(
-                                MyColors.white,
+                                MyColors.whiteSmoke,
                               ),
                               textStyle: WidgetStateProperty.all(
                                 const TextStyle(color: MyColors.black),
