@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/myorder_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ class OrdersApiHelper {
     final queryParams =
         (status != null && status.isNotEmpty) ? '?Statuses=$status' : '';
     final url = Uri.parse(
-      'https://service-provider.runasp.net/api/Orders/users$queryParams',
+      '${Urls.serviceProviderbaseUrl}/api/Orders/users$queryParams',
     );
 
     print("🧪 Calling URL: $url");

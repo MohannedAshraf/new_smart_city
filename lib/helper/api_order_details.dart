@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/order_details_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,7 @@ class OrderDetailsApiHelper {
     if (token == null) throw Exception('Token not found');
 
     final url = Uri.parse(
-      'https://service-provider.runasp.net/api/Orders/orders/$orderId/vendors/$vendorId',
+      '${Urls.serviceProviderbaseUrl}/api/Orders/orders/$orderId/vendors/$vendorId',
     );
 
     final response = await http.get(

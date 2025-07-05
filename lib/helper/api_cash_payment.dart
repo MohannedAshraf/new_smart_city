@@ -3,6 +3,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/make_order_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +14,7 @@ class ApiCashPaymentHelper {
     final token = prefs.getString('token') ?? '';
 
     final url = Uri.parse(
-      "https://service-provider.runasp.net/api/Orders/Cash-payment",
+      "${Urls.serviceProviderbaseUrl}/api/Orders/Cash-payment",
     );
 
     final response = await http.post(

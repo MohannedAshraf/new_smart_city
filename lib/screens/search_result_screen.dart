@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/screens/service_order_screen.dart';
 import 'package:citio/screens/subcategory_screen.dart';
@@ -22,7 +23,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   List<SearchResultModel>? _results;
   bool _isLoading = true;
   String? _error;
-  static const baseImageUrl = "https://service-provider.runasp.net";
+  static const baseImageUrl = Urls.serviceProviderbaseUrl;
 
   late TextEditingController _controller;
 

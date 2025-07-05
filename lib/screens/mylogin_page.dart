@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/helper/api_login.dart';
@@ -85,7 +85,7 @@ class _LoginPageState extends State<MyloginPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        SystemNavigator.pop(); // خروج من التطبيق
+        SystemNavigator.pop();
         return false;
       },
       child: Scaffold(
@@ -113,7 +113,7 @@ class _LoginPageState extends State<MyloginPage> {
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
-                          color:  MyColors.primary,
+                          color: MyColors.primary,
                         ),
                       ),
                       SizedBox(height: 8.h),

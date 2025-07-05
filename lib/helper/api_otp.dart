@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/otp_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +9,7 @@ class VerifyOtpApi {
     required String email,
     required String otp,
   }) async {
-    final url = Uri.parse(
-      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Auth/verify-otp",
-    );
+    final url = Uri.parse("${Urls.cmsBaseUrl}/api/Auth/verify-otp");
 
     final response = await http.post(
       url,

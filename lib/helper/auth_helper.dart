@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHelper {
   static const String _refreshUrl =
-      'https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io//api/Account/refreshToken';
+      '${Urls.cmsBaseUrl}/api/Account/refreshToken';
 
   static Future<bool> refreshTokenIfNeeded() async {
     final prefs = await SharedPreferences.getInstance();

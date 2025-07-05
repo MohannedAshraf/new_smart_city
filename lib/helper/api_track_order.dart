@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/track_order_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,7 @@ class ApiTrackOrder {
     }
 
     final url = Uri.parse(
-      "https://service-provider.runasp.net/api/Orders/Details/$orderId",
+      "${Urls.serviceProviderbaseUrl}/api/Orders/Details/$orderId",
     );
 
     final response = await http.get(

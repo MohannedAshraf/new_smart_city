@@ -1,3 +1,5 @@
+import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_track_order.dart';
 import 'package:citio/models/track_order_model.dart';
 import 'package:flutter/material.dart';
@@ -93,12 +95,12 @@ class _TrackOrderViewState extends State<TrackOrderView> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: MyColors.primary,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   vendor.shipementStatus ?? "Pending",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.blue),
+                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
                 ),
               ),
             ],
@@ -131,7 +133,7 @@ class _TrackOrderViewState extends State<TrackOrderView> {
                   isDone
                       ? Colors.green
                       : isCurrent
-                      ? Colors.blue
+                      ? MyColors.primary
                       : Colors.grey.shade400;
 
               IconData icon =
@@ -157,20 +159,23 @@ class _TrackOrderViewState extends State<TrackOrderView> {
           SizedBox(height: 20.h),
 
           // Contact Button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () {
-                // ممكن تضيف launchPhoneCall هنا لو حبيت
-              },
-              icon: const Icon(Icons.phone),
-              label: const Text("Contact Provider"),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 14.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
+          Container(
+            decoration: BoxDecoration(
+              color: MyColors.primary,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: TextButton(
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "تواصل مع  البائع",
+                    style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                  ),
+                  SizedBox(width: 5.w),
+                  Icon(Icons.phone, color: Colors.white, size: 20.w),
+                ],
               ),
             ),
           ),
@@ -185,7 +190,7 @@ class _TrackOrderViewState extends State<TrackOrderView> {
         ClipRRect(
           borderRadius: BorderRadius.circular(6.r),
           child: Image.network(
-            "https://service-provider.runasp.net${item.productImageUrl}",
+            "${Urls.serviceProviderbaseUrl}${item.productImageUrl}",
             width: 40.w,
             height: 40.h,
             fit: BoxFit.cover,

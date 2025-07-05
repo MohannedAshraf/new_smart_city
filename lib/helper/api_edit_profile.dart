@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:citio/core/utils/variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String baseUrl =
-    "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io";
+const String baseUrl = Urls.cmsBaseUrl;
 
 class ApiUpdateProfile {
   static Future<bool> updateProfile({

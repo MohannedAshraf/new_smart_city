@@ -318,10 +318,10 @@ class _CheckoutViewState extends State<CheckoutView> {
                   ),
                   TextButton(
                     onPressed: () => setState(() => isEditingAddress = true),
-                    child: const Text("تعديل"),
                     style: TextButton.styleFrom(
                       foregroundColor: MyColors.primary,
                     ),
+                    child: const Text("تعديل"),
                   ),
                 ],
               ),
@@ -415,7 +415,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("بطاقة الإتمان/الخصم"),
                 secondary: const Icon(Icons.credit_card),
-                 activeColor: MyColors.primary,
+                activeColor: MyColors.primary,
               ),
               RadioListTile<String>(
                 value: 'cash',
@@ -423,7 +423,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 onChanged: (value) => setState(() => selectedPayment = value!),
                 title: const Text("الدفع عند الإستلام"),
                 secondary: const Icon(Icons.money),
-                 activeColor: MyColors.primary,
+                activeColor: MyColors.primary,
               ),
             ],
           ),

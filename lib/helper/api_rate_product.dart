@@ -1,13 +1,13 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/rate_product_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductReviewApi {
-  static const String baseUrl =
-      'https://service-provider.runasp.net/api/Products';
+  static const String baseUrl = '${Urls.serviceProviderbaseUrl}/api/Products';
 
   static Future<ProductReview?> getReview(int productId) async {
     final prefs = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_delete_acc.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
@@ -112,8 +113,7 @@ class _ProfileState extends State<Profile> {
                       (user?.imageUrl != null &&
                               user!.imageUrl!.trim().isNotEmpty)
                           ? NetworkImage(
-                            "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
-                            "${user!.imageUrl!.trim().startsWith('/') ? '' : '/'}${user!.imageUrl!.trim()}",
+                            "${Urls.cmsBaseUrl}${user!.imageUrl!.trim().startsWith('/') ? '' : '/'}${user!.imageUrl!.trim()}",
                           )
                           : const NetworkImage(
                             'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
@@ -184,7 +184,7 @@ class _ProfileState extends State<Profile> {
                     style: TextStyle(color: Colors.white, fontSize: 15.sp),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:  MyColors.primary,
+                    backgroundColor: MyColors.primary,
                     padding: EdgeInsets.symmetric(vertical: 14.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),

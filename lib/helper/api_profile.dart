@@ -1,12 +1,12 @@
 // ignore_for_file: unused_local_variable, avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/models/profile_model.dart';
 
-const String baseUrl =
-    "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io";
+const String baseUrl = Urls.cmsBaseUrl;
 
 class ApiProfileHelper {
   static Future<ProfileModel?> fetchProfile() async {

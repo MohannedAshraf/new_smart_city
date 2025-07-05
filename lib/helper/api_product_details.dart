@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/product_details_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -5,10 +6,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductDetailsService {
-  static const String imageBaseUrl = 'https://service-provider.runasp.net';
+  static const String imageBaseUrl = Urls.serviceProviderbaseUrl;
 
-  static const String baseUrl =
-      'https://service-provider.runasp.net/api/Products';
+  static const String baseUrl = '${Urls.serviceProviderbaseUrl}/api/Products';
 
   static Future<ProductDetails> fetchProductDetails(int id) async {
     final prefs = await SharedPreferences.getInstance();

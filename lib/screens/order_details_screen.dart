@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, avoid_print, prefer_const_constructors, use_build_context_synchronously
 
+import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/helper/api_rate_product.dart';
 import 'package:citio/models/order_details_model.dart';
@@ -81,7 +83,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 14.h),
-                      backgroundColor: Colors.blue,
+                      backgroundColor: MyColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
@@ -218,7 +220,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: Image.network(
-                  'https://service-provider.runasp.net${item.productImageUrl}',
+                  '${Urls.serviceProviderbaseUrl}${item.productImageUrl}',
                   width: 55.w,
                   height: 55.h,
                   fit: BoxFit.cover,
@@ -320,7 +322,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
           SizedBox(height: 12.h),
           Row(
             children: [
-              Icon(Icons.location_on, size: 18.sp, color: Colors.blue),
+              Icon(Icons.location_on, size: 18.sp, color: MyColors.primary),
               SizedBox(width: 8.w),
               Expanded(child: Text(order.userAddress)),
             ],
@@ -329,7 +331,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
             SizedBox(height: 10.h),
             Row(
               children: [
-                Icon(Icons.phone, size: 18.sp, color: Colors.blue),
+                Icon(Icons.phone, size: 18.sp, color: MyColors.primary),
                 SizedBox(width: 8.w),
                 Text(order.vendorPhone!),
               ],
@@ -339,7 +341,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
             SizedBox(height: 10.h),
             Row(
               children: [
-                Icon(Icons.timer, size: 18.sp, color: Colors.blue),
+                Icon(Icons.timer, size: 18.sp, color: MyColors.primary),
                 SizedBox(width: 8.w),
                 Text(order.estimatedDeliveryDate!),
               ],

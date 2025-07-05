@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/category_sub_category_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "https://service-provider.runasp.net/api";
+  static const String baseUrl = "${Urls.serviceProviderbaseUrl}/api";
 
   // الدالة لجلب قائمة الكاتيجوريز
   static Future<List<CategoryModel>> fetchCategories() async {

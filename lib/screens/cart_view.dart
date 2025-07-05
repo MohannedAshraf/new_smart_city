@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_cart.dart';
 import 'package:citio/helper/api_discount.dart';
 import 'package:citio/helper/api_edit_cart.dart';
@@ -86,7 +87,10 @@ class _CartViewState extends State<CartView> {
     }
 
     if (cart == null || cart!.items.isEmpty) {
-      return const Scaffold(body: Center(child: Text('العربة فارغة')));
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: Text('العربة فارغة')),
+      );
     }
 
     final items = cart!.items;
@@ -123,7 +127,7 @@ class _CartViewState extends State<CartView> {
                   orderprice: item.price,
                   quantity: item.quantity,
                   orderpic:
-                      "https://service-provider.runasp.net${item.mainImageUrl}",
+                      "${Urls.serviceProviderbaseUrl}${item.mainImageUrl}",
                   productId: item.productId,
                   onQuantityChanged: (newQty) async {
                     await EditCartService.editCartItem(
@@ -304,7 +308,7 @@ class _CartViewState extends State<CartView> {
                 width: double.infinity,
                 height: 55.h,
                 decoration: BoxDecoration(
-                  color:MyColors.primary,
+                  color: MyColors.primary,
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: TextButton(
