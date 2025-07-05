@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/make_order_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,11 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiMakeOrder {
   static Future<void> sendOrder(MakeOrderModel order) async {
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(
-      'token',
-    ); // تأكد إن دا نفس المفتاح المستخدم ف التخزين
+    final token = prefs.getString('token');
 
-    final uri = Uri.parse('https://service-provider.runasp.net/api/Orders');
+    final uri = Uri.parse('${Urls.serviceProviderbaseUrl}/api/Orders');
 
     try {
       final response = await http.post(

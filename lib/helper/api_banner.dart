@@ -1,12 +1,13 @@
 // File: api_banner.dart
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/models/banner_model.dart';
 
 class ApiTopBanners {
-  static const String baseUrl = 'https://service-provider.runasp.net';
+  static const String baseUrl = Urls.serviceProviderbaseUrl;
 
   static Future<List<BannerModel>> fetchTopBanners() async {
     final prefs = await SharedPreferences.getInstance();

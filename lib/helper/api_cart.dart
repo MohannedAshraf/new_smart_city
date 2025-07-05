@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:citio/models/cart_model.dart';
 
 class ApiCartModel {
-  static const String baseUrl = 'https://service-provider.runasp.net/api';
+  static const String baseUrl = '${Urls.serviceProviderbaseUrl}/api';
 
   static Future<CartModel> fetchCart() async {
     final url = Uri.parse('$baseUrl/Carts');

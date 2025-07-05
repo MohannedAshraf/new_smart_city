@@ -1,6 +1,7 @@
 // lib/helper/api_discount.dart
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/discount_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ class ApiDiscount {
     final token = prefs.getString("token");
 
     final url = Uri.parse(
-      "https://service-provider.runasp.net/api/Banners/GetDiscount?discountCode=$discountCode",
+      "${Urls.serviceProviderbaseUrl}/api/Banners/GetDiscount?discountCode=$discountCode",
     );
 
     final response = await http.get(

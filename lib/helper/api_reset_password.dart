@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/reset_password_model.dart';
 import 'package:http/http.dart' as http;
 
 class ResetPasswordApi {
   static Future<OtpResponse> sendVerificationOtp(String email) async {
     final url = Uri.parse(
-      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Auth/send-verification-otp",
+      "${Urls.serviceProviderbaseUrl}/api/Auth/send-verification-otp",
     );
 
     final response = await http.post(

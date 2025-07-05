@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/product_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductService {
-  static const String baseUrl = "https://service-provider.runasp.net";
+  static const String baseUrl = Urls.serviceProviderbaseUrl;
 
   static Future<List<Product>> fetchMostRequestedProducts() async {
     final prefs = await SharedPreferences.getInstance();

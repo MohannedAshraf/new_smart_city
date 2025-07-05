@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/add_to_cart_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddToCartService {
   static const String _baseUrl =
-      "https://service-provider.runasp.net/api/Carts/items";
+      "${Urls.serviceProviderbaseUrl}/api/Carts/items";
 
   static Future<AddToCartResponse> addToCart({
     required int productId,

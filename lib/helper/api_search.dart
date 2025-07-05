@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/search_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class ApiSearch {
-  static const String baseUrl =
-      "https://service-provider.runasp.net/api/Search";
+  static const String baseUrl = "${Urls.serviceProviderbaseUrl}/api/Search";
 
   static Future<List<SearchResultModel>> search(String term) async {
     final prefs = await SharedPreferences.getInstance();

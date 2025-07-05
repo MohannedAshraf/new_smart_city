@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/register_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,9 +13,7 @@ class ApiRegisterHelper {
     required String buildingNumber,
     required String floorNumber,
   }) async {
-    final url = Uri.parse(
-      "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io/api/Auth/register",
-    );
+    final url = Uri.parse("${Urls.cmsBaseUrl}/api/Auth/register");
 
     try {
       final response = await http.post(

@@ -1,13 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'package:citio/core/utils/variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/product_under_sub_model.dart';
 
 class ApiProductUnderSub {
-  static const String baseUrl = 'https://service-provider.runasp.net/api';
-  static const String imageBaseUrl = 'https://service-provider.runasp.net';
+  static const String baseUrl = '${Urls.serviceProviderbaseUrl}/api';
+  static const String imageBaseUrl = Urls.serviceProviderbaseUrl;
 
   static Future<List<ProductUnderSubModel>> fetchProductsBySubCategory(
     int subCategoryId,
