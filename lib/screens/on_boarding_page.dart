@@ -20,7 +20,7 @@ class _StartPageState extends State<StartPage> {
   }
 
   Future<void> checkTokenAndNavigate() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
     final success = await AuthHelper.refreshTokenIfNeeded();
 
     if (!mounted) return;

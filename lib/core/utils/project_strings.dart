@@ -474,4 +474,7 @@ class AppStrings {
   static const String profile = 'الملف الشخصي';
   static const String logout = 'تسجيل الخروج';
   static const String community = 'المجتمع';
+  static const String confirmDeleteTitle = "confirmDeleteTitle";
+  static const String confirmDeleteMessage = "confirmDeleteMessage";
+  static const String confirmDeleteButton = "confirmDeleteButton";
 }

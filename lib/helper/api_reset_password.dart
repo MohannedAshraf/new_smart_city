@@ -5,9 +5,7 @@ import 'package:http/http.dart' as http;
 
 class ResetPasswordApi {
   static Future<OtpResponse> sendVerificationOtp(String email) async {
-    final url = Uri.parse(
-      "${Urls.serviceProviderbaseUrl}/api/Auth/send-verification-otp",
-    );
+    final url = Uri.parse("${Urls.cmsBaseUrl}/api/Auth/send-verification-otp");
 
     final response = await http.post(
       url,
