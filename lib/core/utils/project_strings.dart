@@ -455,4 +455,14 @@ class AppStrings {
       "الخدمات في هذه الفئة غير متوفرة حاليا";
   static const String serviceDetails = 'تفاصيل الخدمة';
   static const String ratings = 'تقييما';
+
+
+  static const String socialInitLoading = 'جارٍ تجهيز حساب السوشيال الخاص بك...';
+  static const String socialInitError = 'حدث خطأ أثناء تجهيز حساب السوشيال. حاول مرة أخرى.';
+  static const String retry = 'إعادة المحاولة';
+  static const String missingToken = 'Missing token.';
+  static const String unexpectedServerMessage = 'Unexpected server message.';
+  static const String serverErrorPrefix = 'Server error: ';
+  static const String timingPrefix = '⏱️ تم التهيئة في ';
+  static const String errorPrefix = '❌ خطأ بعد ';
 }
