@@ -38,7 +38,7 @@ class Request {
 }
 
 String getTimeAgo(String dateString) {
-  final date = DateTime.parse(dateString);
+  final date = DateTime.parse(dateString).toLocal();
   final now = DateTime.now();
   final diff = now.difference(date);
 

@@ -207,26 +207,7 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            // Container(
-            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.home),
-            //     title: const Text('الرئيسية'),
-            //     onTap: () {
-            //       setState(() {
-            //         currentIndex = 0;
-            //       });
-            //       Navigator.pop(context);
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.local_police_rounded,
               title: 'حكومتنا',
@@ -237,26 +218,7 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            // Container(
-            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.local_police_rounded),
-            //     title: const Text('حكومتنا'),
-            //     onTap: () {
-            //       setState(() {
-            //         currentIndex = 1;
-            //       });
-            //       Navigator.pop(context);
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.report,
               title: 'المشاكل',
@@ -269,29 +231,6 @@ class HomePageState extends State<HomePage> {
               },
             ),
 
-            // Container(
-            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.report),
-            //     title: const Text('المشاكل'),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => const IssueScreen(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
             drawerTile(
               icon: Icons.view_compact_sharp,
               title: 'الخدمات',
@@ -302,26 +241,7 @@ class HomePageState extends State<HomePage> {
                 Navigator.pop(context);
               },
             ),
-            // Container(
-            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.view_compact_sharp),
-            //     title: const Text('الخدمات'),
-            //     onTap: () {
-            //       setState(() {
-            //         currentIndex = 3;
-            //       });
-            //       Navigator.pop(context);
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.groups_outlined,
               title: 'وسائل التواصل الاجتماعي',
@@ -333,29 +253,7 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            // Container(
-            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.groups_outlined),
-            //     title: const Text('وسائل التواصل الاجتماعي'),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => const SocialMedia(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.shopping_basket_outlined,
               title: 'البائعين',
@@ -370,29 +268,6 @@ class HomePageState extends State<HomePage> {
               },
             ),
 
-            // Container(
-            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.shopping_basket_outlined),
-            //     title: const Text('البائعين'),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => const AllVendorsScreen(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
             drawerTile(
               icon: Icons.receipt_long_outlined,
               title: 'طلباتي',
@@ -404,29 +279,7 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            // Container(
-            //   //margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.receipt_long_outlined),
-            //     title: const Text('طلباتي'),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => const MyOrdersPage(),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.person,
               title: 'الملف الشخصي',
@@ -438,27 +291,7 @@ class HomePageState extends State<HomePage> {
                 );
               },
             ),
-            // Container(
-            //   // margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
-            //   decoration: BoxDecoration(
-            //     border: Border.all(
-            //       color: MyColors.whiteSmoke,
-            //       width: .5,
-            //     ), // تغيير لون الحواف
-            //   ),
-            //   child: ListTile(
-            //     iconColor: MyColors.primary,
-            //     leading: const Icon(Icons.person),
-            //     title: const Text('الملف الشخصي'),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => const Profile()),
-            //       );
-            //     },
-            //   ),
-            // ),
+
             drawerTile(
               icon: Icons.logout,
               title: 'تسجيل الخروج',
