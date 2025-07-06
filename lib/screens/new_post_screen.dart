@@ -226,7 +226,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   ),
                   SizedBox(width: width * 0.03),
                   Text(
-                    myUser.localUserName ?? '',
+                    myUser.localUserName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: width * 0.04,

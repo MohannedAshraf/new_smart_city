@@ -164,8 +164,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       focusedBorder: myBorder(),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty)
+                      if (value == null || value.isEmpty) {
                         return AppStrings.enterPassword;
+                      }
                       if (value.length < 6) return AppStrings.passwordTooShort;
                       return null;
                     },

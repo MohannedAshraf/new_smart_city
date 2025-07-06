@@ -1,3 +1,4 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
 
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ abstract class MyColors {
   static const Color emergencybuttonscolor = Color(0x803D6643);
   static const Color cardfontcolor = Colors.white;
   static const Color backgroundColor = Color(0xffF3F5F4);
-    static const Color background = Color(0xffF3F5F4);
+  static const Color background = Color(0xffF3F5F4);
 
   static const Color red = Color(0xffE4312B);
   static const Color green = Color(0xff149954);

@@ -39,9 +39,9 @@ class _TrackOrderViewState extends State<TrackOrderView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           AppStrings.trackOrderTitle,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -50,7 +50,7 @@ class _TrackOrderViewState extends State<TrackOrderView> {
           isLoading
               ? const Center(child: CircularProgressIndicator())
               : orderDetails == null
-              ? Center(child: Text(AppStrings.failedToLoadOrder))
+              ? const Center(child: Text(AppStrings.failedToLoadOrder))
               : ListView.builder(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.04,

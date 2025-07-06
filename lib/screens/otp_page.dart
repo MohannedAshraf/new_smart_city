@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_otp.dart';
 import 'package:citio/helper/api_reset_password.dart';

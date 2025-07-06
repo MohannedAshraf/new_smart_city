@@ -456,13 +456,22 @@ class AppStrings {
   static const String serviceDetails = 'تفاصيل الخدمة';
   static const String ratings = 'تقييما';
 
-
-  static const String socialInitLoading = 'جارٍ تجهيز حساب السوشيال الخاص بك...';
-  static const String socialInitError = 'حدث خطأ أثناء تجهيز حساب السوشيال. حاول مرة أخرى.';
+  static const String socialInitLoading =
+      'جارٍ تجهيز حساب السوشيال الخاص بك...';
+  static const String socialInitError =
+      'حدث خطأ أثناء تجهيز حساب السوشيال. حاول مرة أخرى.';
   static const String retry = 'إعادة المحاولة';
   static const String missingToken = 'Missing token.';
   static const String unexpectedServerMessage = 'Unexpected server message.';
   static const String serverErrorPrefix = 'Server error: ';
   static const String timingPrefix = '⏱️ تم التهيئة في ';
   static const String errorPrefix = '❌ خطأ بعد ';
+  static const String welcome = 'مرحباً بكم!';
+  static const String home = 'الرئيسية';
+  static const String government = 'حكومتنا';
+  static const String socialMedia = 'وسائل التواصل الاجتماعي';
+  static const String myOrders = 'طلباتي';
+  static const String profile = 'الملف الشخصي';
+  static const String logout = 'تسجيل الخروج';
+  static const String community = 'المجتمع';
 }

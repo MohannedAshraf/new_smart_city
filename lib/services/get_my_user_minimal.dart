@@ -1,5 +1,7 @@
 // services/get_my_user_minimal.dart
 
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:citio/models/socialmedia_user_minimal.dart';

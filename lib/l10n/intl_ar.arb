@@ -450,7 +450,18 @@
   "noServicesInCategory": "الخدمات في هذه الفئة غير متوفرة حاليا",
   "serviceDetails": "تفاصيل الخدمة"
 
-
+ "home": "الرئيسية",
+  "government": "حكومتنا",
+  "issues": "المشاكل",
+  "services": "الخدمات",
+  "socialMedia": "وسائل التواصل الاجتماعي",
+  "vendors": "البائعين",
+  "myOrders": "طلباتي",
+  "profile": "الملف الشخصي",
+  "logout": "تسجيل الخروج",
+  "whatDoYouWant": "ماذا تريد",
+  "community": "المجتمع",
+  "welcome": "مرحباً بكم!"
 
 
 

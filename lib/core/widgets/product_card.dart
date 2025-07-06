@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';

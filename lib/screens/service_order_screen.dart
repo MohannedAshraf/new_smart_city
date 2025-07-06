@@ -3,7 +3,6 @@ import 'package:citio/core/utils/project_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/helper/api_banner.dart';
 import 'package:citio/helper/api_most_product.dart';
 import 'package:citio/helper/api_service.dart';

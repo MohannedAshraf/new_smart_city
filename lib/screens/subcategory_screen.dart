@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/category_circle.dart';

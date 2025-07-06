@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_reset_password.dart';
@@ -5,7 +7,6 @@ import 'package:citio/screens/mylogin_page.dart';
 import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:citio/core/utils/app_strings.dart';
 
 class ResetPasswordView extends StatefulWidget {
   const ResetPasswordView({super.key});

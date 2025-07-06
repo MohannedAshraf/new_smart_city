@@ -3,7 +3,6 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
-import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/helper/api_rate_product.dart';
 import 'package:citio/models/order_details_model.dart';

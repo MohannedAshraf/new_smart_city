@@ -99,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.police,
                         emergencyServiceId: '3',
                       ),
+                      // ignore: prefer_const_constructors
                       SizedBox(width: 30),
                       Column(
                         children: [

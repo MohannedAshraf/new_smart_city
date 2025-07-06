@@ -1,32 +1,33 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/widgets/search_bar.dart';
-import 'package:citio/generated/l10n.dart';
-import 'package:citio/screens/all_vendors_screen.dart';
-import 'package:citio/screens/my_order_page.dart';
-import 'package:citio/screens/mylogin_page.dart';
-import 'package:citio/screens/on_boarding_page.dart';
-import 'package:citio/screens/social_media.dart';
-import 'package:citio/screens/socialmedia_initializer_screen.dart';
-import 'package:citio/screens/welcome-page.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/home_screen.dart';
-import 'screens/government_screen.dart';
-import 'screens/service_order_screen.dart';
-import 'screens/first_issue_screen.dart';
-import 'screens/notifications.dart';
-import 'screens/profile.dart';
-import 'services/fcm_service.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'services/notification_helper.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'core/utils/mycolors.dart';
+import 'core/widgets/search_bar.dart';
+import 'screens/all_vendors_screen.dart';
+import 'screens/government_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/my_order_page.dart';
+import 'screens/mylogin_page.dart';
+import 'screens/notifications.dart';
+import 'screens/on_boarding_page.dart';
+import 'screens/profile.dart';
+import 'screens/service_order_screen.dart';
+import 'screens/social_media.dart';
+import 'screens/socialmedia_initializer_screen.dart';
+import 'screens/first_issue_screen.dart';
+import 'screens/welcome-page.dart';
+import 'services/fcm_service.dart';
+import 'services/notification_helper.dart';
+import 'generated/l10n.dart';
+import 'package:citio/core/utils/project_strings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,37 +58,29 @@ class CityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(400, 800), // مقاس التصميم الأساسي (زي Pixel 3)
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp(
-          locale: const Locale('ar'),
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          debugShowCheckedModeBanner: false,
-          home: seenOnboarding ? const StartPage() : const SliderScreen(),
-          theme: ThemeData(
-            hoverColor: Colors.transparent,
-            splashFactory: NoSplash.splashFactory,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
-            scaffoldBackgroundColor: Colors.white,
-          ),
-        );
-      },
+    return MaterialApp(
+      locale: const Locale('ar'),
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+      debugShowCheckedModeBanner: false,
+      home: seenOnboarding ? const StartPage() : const SliderScreen(),
+      theme: ThemeData(
+        hoverColor: Colors.transparent,
+        splashFactory: NoSplash.splashFactory,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
+      ),
     );
   }
 }
 
-// كلاس HomePage زي ما هو، بدون تغيير
 class HomePage extends StatefulWidget {
   final int initialIndex;
   const HomePage({super.key, this.initialIndex = 0});
@@ -102,9 +95,9 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    loadSocialUserStatus();
     super.initState();
     currentIndex = widget.initialIndex;
+    loadSocialUserStatus();
   }
 
   Future<void> loadSocialUserStatus() async {
@@ -127,47 +120,43 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
     return Scaffold(
       appBar:
           currentIndex == 0
               ? PreferredSize(
-                preferredSize: Size.fromHeight(60.h),
+                preferredSize: Size.fromHeight(mq.size.height * 0.08),
                 child: AppBar(
                   centerTitle: true,
                   backgroundColor: MyColors.specialbackground,
                   elevation: 0,
                   title: Padding(
-                    padding: EdgeInsets.fromLTRB(0.w, 16.h, 0.w, 16.h),
-                    child: Column(
+                    padding: EdgeInsets.symmetric(
+                      vertical: mq.size.height * 0.015,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: CustomSearchBar(
-                                height: 40.h,
-                                borderRadius: 25.r,
-                                hintText: 'ماذا تريد',
+                        Expanded(
+                          child: CustomSearchBar(
+                            height: mq.size.height * 0.05,
+                            borderRadius: mq.size.height * 0.03,
+                            hintText: AppStrings.whatDoYouWant,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const Notifications(),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Notifications(),
-                                  ),
-                                );
-                              },
-                              icon: const Icon(
-                                Icons.notifications_none_outlined,
-                                color: MyColors.gray,
-                              ),
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                            ),
-                          ],
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.notifications_none_outlined,
+                            color: MyColors.gray,
+                          ),
                         ),
                       ],
                     ),
@@ -179,11 +168,8 @@ class HomePageState extends State<HomePage> {
       drawer: Drawer(
         backgroundColor: MyColors.white,
         child: ListView(
-          padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              padding: EdgeInsets.zero,
-              margin: EdgeInsets.zero,
               decoration: const BoxDecoration(
                 color: MyColors.specialbackground,
               ),
@@ -191,138 +177,126 @@ class HomePageState extends State<HomePage> {
                 children: [
                   SvgPicture.asset(
                     'assets/icon/citio.svg',
-                    height: 130.h,
-                    width: 130.w,
+                    height: mq.size.height * 0.135,
+                    width: mq.size.width * 0.3,
                     fit: BoxFit.cover,
                   ),
                   Text(
-                    'مرحباً بكم!',
-                    style: TextStyle(color: MyColors.black, fontSize: 18.sp),
+                    AppStrings.welcome,
+                    style: TextStyle(
+                      color: MyColors.black,
+                      fontSize: mq.size.width * 0.043,
+                    ),
                   ),
                 ],
               ),
             ),
-            const Divider(color: MyColors.ghostColor, thickness: .5, height: 0),
+            const Divider(
+              color: MyColors.ghostColor,
+              thickness: 0.6,
+              height: 0,
+            ),
             drawerTile(
               icon: Icons.home,
-              title: 'الرئيسية',
+              title: AppStrings.home,
               onTap: () {
-                setState(() {
-                  currentIndex = 0;
-                });
+                setState(() => currentIndex = 0);
                 Navigator.pop(context);
               },
             ),
             drawerTile(
               icon: Icons.local_police_rounded,
-              title: 'حكومتنا',
+              title: AppStrings.government,
               onTap: () {
-                setState(() {
-                  currentIndex = 1;
-                });
+                setState(() => currentIndex = 1);
                 Navigator.pop(context);
               },
             ),
             drawerTile(
               icon: Icons.report,
-              title: 'المشاكل',
+              title: AppStrings.issues,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const IssueScreen()),
+                  MaterialPageRoute(builder: (_) => const IssueScreen()),
                 );
               },
             ),
             drawerTile(
               icon: Icons.view_compact_sharp,
-              title: 'الخدمات',
+              title: AppStrings.services,
               onTap: () {
-                setState(() {
-                  currentIndex = 3;
-                });
+                setState(() => currentIndex = 3);
                 Navigator.pop(context);
               },
             ),
             drawerTile(
               icon: Icons.groups_outlined,
-              title: 'وسائل التواصل الاجتماعي',
+              title: AppStrings.socialMedia,
               onTap: () async {
-                Navigator.pop(context); // اغلق الـ drawer أولاً
-
+                Navigator.pop(context);
                 final prefs = await SharedPreferences.getInstance();
                 final isInitialized =
                     prefs.getBool('isSocialUserInitialized') ?? false;
-
-                if (isInitialized) {
-                  // لو الحساب متهيأ، روح على صفحة السوشيال مباشرة
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SocialMedia(),
-                    ),
-                  );
-                } else {
-                  // لو الحساب مش متهيأ، روح على شاشة التحضير
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => const SocialmediaInitializerScreen(),
-                    ),
-                  );
-                }
-              },
-            ),
-            drawerTile(
-              icon: Icons.shopping_basket_outlined,
-              title: 'البائعين',
-              onTap: () {
-                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AllVendorsScreen(),
+                    builder:
+                        (_) =>
+                            isInitialized
+                                ? const SocialMedia()
+                                : const SocialmediaInitializerScreen(),
                   ),
                 );
               },
             ),
             drawerTile(
-              icon: Icons.receipt_long_outlined,
-              title: 'طلباتي',
+              icon: Icons.shopping_basket_outlined,
+              title: AppStrings.vendors,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const MyOrdersPage()),
+                  MaterialPageRoute(builder: (_) => const AllVendorsScreen()),
+                );
+              },
+            ),
+            drawerTile(
+              icon: Icons.receipt_long_outlined,
+              title: AppStrings.myOrders,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MyOrdersPage()),
                 );
               },
             ),
             drawerTile(
               icon: Icons.person,
-              title: 'الملف الشخصي',
+              title: AppStrings.profile,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Profile()),
+                  MaterialPageRoute(builder: (_) => const Profile()),
                 );
               },
             ),
             drawerTile(
               icon: Icons.logout,
-              title: 'تسجيل الخروج',
+              title: AppStrings.logout,
               onTap: () async {
                 final prefs = await SharedPreferences.getInstance();
                 await prefs.setString("token", "");
                 await prefs.setString("refreshToken", "");
                 await prefs.setBool('isSocialUserInitialized', false);
                 SocialMedia.cachedUserMinimal = null;
-
                 Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const MyloginPage()),
+                  MaterialPageRoute(builder: (_) => const MyloginPage()),
                 );
               },
             ),
@@ -330,38 +304,32 @@ class HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedIconTheme: IconThemeData(size: 30.sp),
-        unselectedIconTheme: IconThemeData(size: 25.sp),
-        selectedLabelStyle: TextStyle(fontSize: 16.sp),
-        unselectedLabelStyle: TextStyle(fontSize: 14.sp),
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: MyColors.specialbackground,
+        currentIndex: currentIndex,
         selectedItemColor: MyColors.primary,
         unselectedItemColor: MyColors.gray,
-        currentIndex: currentIndex,
+        backgroundColor: MyColors.specialbackground,
+        type: BottomNavigationBarType.fixed,
+        selectedIconTheme: IconThemeData(size: mq.size.width * 0.075),
+        unselectedIconTheme: IconThemeData(size: mq.size.width * 0.065),
+        selectedLabelStyle: TextStyle(fontSize: mq.size.width * 0.04),
+        unselectedLabelStyle: TextStyle(fontSize: mq.size.width * 0.035),
         onTap: (index) async {
           if (index == 2) {
             final prefs = await SharedPreferences.getInstance();
             final isInitialized =
                 prefs.getBool('isSocialUserInitialized') ?? false;
-
-            if (isInitialized) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const SocialMedia()),
-              );
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const SocialmediaInitializerScreen(),
-                ),
-              );
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (_) =>
+                        isInitialized
+                            ? const SocialMedia()
+                            : const SocialmediaInitializerScreen(),
+              ),
+            );
           } else {
-            setState(() {
-              currentIndex = index;
-            });
+            setState(() => currentIndex = index);
           }
         },
         items: [
@@ -369,7 +337,7 @@ class HomePageState extends State<HomePage> {
             icon: Icon(
               currentIndex == 0 ? Icons.home_filled : Icons.home_outlined,
             ),
-            label: 'الرئيسية',
+            label: AppStrings.home,
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -377,13 +345,13 @@ class HomePageState extends State<HomePage> {
                   ? Icons.local_police_rounded
                   : Icons.local_police_outlined,
             ),
-            label: 'حكومتنا',
+            label: AppStrings.government,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               currentIndex == 2 ? Icons.language : Icons.language_outlined,
             ),
-            label: 'المجتمع',
+            label: AppStrings.community,
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -391,7 +359,7 @@ class HomePageState extends State<HomePage> {
                   ? Icons.view_compact_alt
                   : Icons.view_compact_sharp,
             ),
-            label: 'الخدمات ',
+            label: AppStrings.services,
           ),
         ],
       ),
@@ -405,7 +373,7 @@ class HomePageState extends State<HomePage> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: MyColors.whiteSmoke, width: .5),
+        border: Border.all(color: MyColors.whiteSmoke, width: 0.5),
       ),
       child: ListTile(
         iconColor: MyColors.primary,
