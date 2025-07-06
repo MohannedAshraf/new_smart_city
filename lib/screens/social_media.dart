@@ -13,7 +13,6 @@ import 'package:galleryimage/galleryimage.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/new_post_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:citio/services/get_my_user_minimal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -137,7 +136,7 @@ class _SocialMediaState extends State<SocialMedia> {
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
     return Padding(
-      padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
+      padding: EdgeInsets.fromLTRB(7, 20, 20, 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,7 +151,7 @@ class _SocialMediaState extends State<SocialMedia> {
                       : AppStrings.noAvatarUrl,
                 ),
               ),
-              SizedBox(width: 10.w),
+              SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,16 +159,16 @@ class _SocialMediaState extends State<SocialMedia> {
                     Text(
                       user.name,
                       style: TextStyle(
-                        fontSize: 13.sp,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
                       ),
                     ),
                     Text(
                       getTimeAgo(post.createdAt ?? ''),
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color.fromRGBO(134, 133, 133, 1),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromRGBO(134, 133, 133, 1),
                       ),
                     ),
                   ],
@@ -177,14 +176,11 @@ class _SocialMediaState extends State<SocialMedia> {
               ),
               if (post.adminPost)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 8.h,
-                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: MyColors.ambulance,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     (post.tags != null && post.tags!.isNotEmpty)
@@ -201,32 +197,30 @@ class _SocialMediaState extends State<SocialMedia> {
 
           if (imageUrls.isNotEmpty)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.h),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
-                child:
-                    imageUrls.length == 1
-                        ? Image.network(
-                          imageUrls[0],
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          errorBuilder:
-                              (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image),
-                        )
-                        : GalleryImage(
-                          imageUrls: imageUrls,
-                          numOfShowImages:
-                              imageUrls.length > 3 ? 3 : imageUrls.length,
-                          titleGallery: AppStrings.appGalleryTitle,
-                          imageRadius: 8,
-                        ),
+                borderRadius: BorderRadius.circular(12),
+                child: imageUrls.length == 1
+                    ? Image.network(
+                        imageUrls[0],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.broken_image),
+                      )
+                    : GalleryImage(
+                        imageUrls: imageUrls,
+                        numOfShowImages:
+                            imageUrls.length > 3 ? 3 : imageUrls.length,
+                        titleGallery: AppStrings.appGalleryTitle,
+                        imageRadius: 8,
+                      ),
               ),
             ),
 
           SizedBox(
             width: screenWidth - 10,
-            height: 2.h,
+            height: 2,
             child: const ColoredBox(color: MyColors.fadedGrey),
           ),
 
@@ -281,15 +275,15 @@ class _SocialMediaState extends State<SocialMedia> {
             );
           },
         ),
-        toolbarHeight: 50.h,
+        toolbarHeight: 50, // Removed .h, fixed value
         title: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
               SizedBox(width: screenWidth * 0.13),
               Text(
                 AppStrings.latestPosts,
-                style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+                style: const TextStyle(color: MyColors.black, fontSize: 20),
               ),
               const Spacer(),
               IconButton(
@@ -308,47 +302,46 @@ class _SocialMediaState extends State<SocialMedia> {
         ),
         centerTitle: true,
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : RefreshIndicator(
-                onRefresh: () async {
-                  setState(() {
-                    isLoading = true;
-                    cachedPosts = null;
-                    currentPage = 1;
-                    hasMorePosts = true;
-                  });
-                  await _fetchPostsPage(page: currentPage);
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+                  isLoading = true;
+                  cachedPosts = null;
+                  currentPage = 1;
+                  hasMorePosts = true;
+                });
+                await _fetchPostsPage(page: currentPage);
+              },
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollInfo) {
+                  if (hasMorePosts &&
+                      !isLoadingMore &&
+                      scrollInfo.metrics.pixels >=
+                          scrollInfo.metrics.maxScrollExtent - 100) {
+                    _fetchPostsPage(page: currentPage);
+                    return true;
+                  }
+                  return false;
                 },
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollInfo) {
-                    if (hasMorePosts &&
-                        !isLoadingMore &&
-                        scrollInfo.metrics.pixels >=
-                            scrollInfo.metrics.maxScrollExtent - 100) {
-                      _fetchPostsPage(page: currentPage);
-                      return true;
-                    }
-                    return false;
+                child: ListView.builder(
+                  itemCount: cachedPosts?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final post = cachedPosts![index];
+                    return Card(
+                      color: MyColors.white,
+                      shadowColor: MyColors.white,
+                      child: _buildPostUserWidget(
+                        post,
+                        screenWidth,
+                        screenHeight,
+                      ),
+                    );
                   },
-                  child: ListView.builder(
-                    itemCount: cachedPosts?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final post = cachedPosts![index];
-                      return Card(
-                        color: MyColors.white,
-                        shadowColor: MyColors.white,
-                        child: _buildPostUserWidget(
-                          post,
-                          screenWidth,
-                          screenHeight,
-                        ),
-                      );
-                    },
-                  ),
                 ),
               ),
+            ),
     );
   }
 
@@ -367,12 +360,12 @@ class _SocialMediaState extends State<SocialMedia> {
             if (count != null)
               Text(
                 count.toString(),
-                style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+                style: const TextStyle(color: MyColors.gray, fontSize: 10),
               )
             else if (label != null)
               Text(
                 label,
-                style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+                style: const TextStyle(color: MyColors.gray, fontSize: 10),
               ),
           ],
         ),
