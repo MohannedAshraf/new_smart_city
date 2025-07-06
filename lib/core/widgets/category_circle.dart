@@ -1,10 +1,10 @@
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryCircle extends StatelessWidget {
-  final String name; // اسم الكاتيجوري من الـ API
-  final String imageUrl; // رابط الصورة من الـ API
+  final String name;
+  final String imageUrl;
   final bool isSelected;
   final double radius;
 
@@ -18,32 +18,41 @@ class CategoryCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      margin: const EdgeInsets.only(left: 10),
+      margin: EdgeInsets.only(left: screenWidth * 0.025),
       child: Column(
         children: [
           CircleAvatar(
             radius: radius,
             backgroundColor: MyColors.primary,
-            backgroundImage: NetworkImage(
-              'https://service-provider.runasp.net$imageUrl', // تحميل الصورة من الـ URL
-            ),
+            backgroundImage:
+                imageUrl.isNotEmpty
+                    ? NetworkImage('${Urls.serviceProviderbaseUrl}$imageUrl')
+                    : null,
             child:
-                imageUrl
-                        .isEmpty // إذا كانت الصورة فارغة، نعرض الأيقونة
-                    ? const Icon(Icons.category, color: Colors.white)
+                imageUrl.isEmpty
+                    ? Icon(
+                      Icons.category,
+                      color: Colors.white,
+                      size: screenWidth * 0.06,
+                    )
                     : null,
           ),
-          SizedBox(height: 5.h),
-          Text(
-            name, // الاسم اللي جاي من الـ API
-            style: TextStyle(
-              color:
-                  isSelected
-                      ? Colors.red
-                      : Colors.black, // تغيير لون النص إذا كانت مختارة
-              fontWeight: FontWeight.bold,
-              fontSize: 12.sp,
+          SizedBox(height: screenHeight * 0.005),
+          SizedBox(
+            width: screenWidth * 0.22,
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: isSelected ? Colors.red : Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: screenWidth * 0.03,
+              ),
             ),
           ),
         ],

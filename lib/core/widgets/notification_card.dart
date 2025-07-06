@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -44,7 +44,6 @@ class NotificationCard extends StatelessWidget {
 
   String _formatTimeAgo(DateTime dateTime) {
     final difference = DateTime.now().difference(dateTime);
-
     if (difference.inMinutes < 60) {
       return 'منذ ${difference.inMinutes} دقيقة';
     } else if (difference.inHours < 24) {
@@ -59,6 +58,8 @@ class NotificationCard extends StatelessWidget {
     final icon = _getIcon(notification.category);
     final iconBgColor = _getIconBackgroundColor(notification.category);
     final timeAgo = _formatTimeAgo(notification.createdAt);
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return GestureDetector(
       onTap: () {
@@ -68,18 +69,18 @@ class NotificationCard extends StatelessWidget {
           builder:
               (context) => AlertDialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(width * 0.04),
                 ),
                 backgroundColor: Colors.white,
                 title: Row(
                   children: [
                     Icon(icon, color: MyColors.themecolor),
-                    SizedBox(width: 8.w),
+                    SizedBox(width: width * 0.02),
                     Expanded(
                       child: Text(
                         notification.title,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: width * 0.045,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -93,31 +94,31 @@ class NotificationCard extends StatelessWidget {
                     Text(
                       notification.body,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: width * 0.038,
                         color: Colors.grey[700],
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: height * 0.02),
                     Row(
                       children: [
                         Icon(
                           Icons.access_time,
-                          size: 16.sp,
+                          size: width * 0.04,
                           color: Colors.grey[600],
                         ),
-                        SizedBox(width: 6.w),
+                        SizedBox(width: width * 0.015),
                         Text(
                           notification.createdAt.toLocal().toString().split(
                             '.',
                           )[0],
                           style: TextStyle(
-                            fontSize: 13.sp,
+                            fontSize: width * 0.035,
                             color: Colors.grey[600],
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: height * 0.025),
                     Row(
                       children: [
                         Expanded(
@@ -126,21 +127,25 @@ class NotificationCard extends StatelessWidget {
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Colors.redAccent),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
+                                borderRadius: BorderRadius.circular(
+                                  width * 0.03,
+                                ),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                              padding: EdgeInsets.symmetric(
+                                vertical: height * 0.012,
+                              ),
                             ),
                             child: Text(
-                              'إلغاء',
+                              AppStrings.cancel,
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: width * 0.035,
                                 color: Colors.redAccent,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: width * 0.03),
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () {
@@ -150,13 +155,13 @@ class NotificationCard extends StatelessWidget {
                             },
                             icon: Icon(
                               Icons.share,
-                              size: 18.sp,
+                              size: width * 0.045,
                               color: Colors.white,
                             ),
                             label: Text(
-                              'مشاركة',
+                              AppStrings.share,
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: width * 0.035,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -164,9 +169,13 @@ class NotificationCard extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: MyColors.primary,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
+                                borderRadius: BorderRadius.circular(
+                                  width * 0.03,
+                                ),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
+                              padding: EdgeInsets.symmetric(
+                                vertical: height * 0.012,
+                              ),
                             ),
                           ),
                         ),
@@ -179,25 +188,29 @@ class NotificationCard extends StatelessWidget {
       },
       child: Card(
         color: notification.isRead ? Colors.white : const Color(0xFFF1F6FF),
-        margin: EdgeInsets.symmetric(vertical: 8.h),
+        margin: EdgeInsets.symmetric(vertical: height * 0.01),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(width * 0.03),
         ),
         elevation: 0.5,
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(width * 0.04),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(10.r),
+                padding: EdgeInsets.all(width * 0.025),
                 decoration: BoxDecoration(
                   color: iconBgColor,
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(width * 0.025),
                 ),
-                child: Icon(icon, color: MyColors.themecolor, size: 24.sp),
+                child: Icon(
+                  icon,
+                  color: MyColors.themecolor,
+                  size: width * 0.06,
+                ),
               ),
-              SizedBox(width: 16.w),
+              SizedBox(width: width * 0.04),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,14 +222,14 @@ class NotificationCard extends StatelessWidget {
                             notification.title,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16.sp,
+                              fontSize: width * 0.04,
                             ),
                           ),
                         ),
                         if (!notification.isRead)
                           Container(
-                            width: 8.w,
-                            height: 8.w,
+                            width: width * 0.02,
+                            height: width * 0.02,
                             decoration: const BoxDecoration(
                               color: Colors.red,
                               shape: BoxShape.circle,
@@ -224,21 +237,21 @@ class NotificationCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: height * 0.005),
                     Text(
                       notification.body,
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: width * 0.038,
                         color: Colors.grey.shade600,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: height * 0.01),
                     Text(
                       timeAgo,
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: width * 0.03,
                         color: Colors.grey.shade500,
                       ),
                     ),

@@ -4,7 +4,6 @@ import 'package:citio/helper/auth_helper.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -29,20 +28,25 @@ class _StartPageState extends State<StartPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => success ? const HomePage() : const MyloginPage(),
+        builder: (_) => success ? const HomePage() : const MyloginPage(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: MyColors.backgroundColor,
       body: Center(
         child: Container(
-          width: 250.w,
-          height: 250.h,
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          width: screen.width * 0.6,
+          height: screen.width * 0.6,
+          margin: EdgeInsets.symmetric(
+            horizontal: screen.width * 0.05,
+            vertical: screen.height * 0.05,
+          ),
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(MyAssetsImage.city),

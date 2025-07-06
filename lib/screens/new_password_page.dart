@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/main.dart';
 import 'package:citio/helper/api_change_password.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NewPasswordPage extends StatefulWidget {
   const NewPasswordPage({super.key});
@@ -32,7 +32,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       if (response.isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('✅ تم تغيير كلمة المرور بنجاح'),
+            content: Text(AppStrings.passwordChangedSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -43,14 +43,17 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('❌ فشل تغيير كلمة المرور'),
+            content: Text(AppStrings.passwordChangedFailed),
             backgroundColor: Colors.red,
           ),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('❌ خطأ: $e'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text('${AppStrings.passwordError}$e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
 
@@ -59,73 +62,75 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     OutlineInputBorder borderStyle = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
+      borderRadius: BorderRadius.circular(width * 0.025),
       borderSide: const BorderSide(color: MyColors.primary),
     );
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('كلمة المرور الجديدة'),
+        title: const Text(AppStrings.newPasswordTitle),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 20.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: width * 0.05,
+          vertical: height * 0.02,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(height: 30.h),
+              SizedBox(height: height * 0.04),
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: 'كلمة المرور الجديدة',
+                  hintText: AppStrings.newPasswordHint,
                   border: borderStyle,
-                  // focusedBorder: borderStyle,
-                  //enabledBorder: borderStyle,
                 ),
                 validator: (value) {
                   if (value == null || value.length < 6) {
-                    return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                    return AppStrings.passwordTooShort;
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: height * 0.025),
               TextFormField(
                 controller: confirmPasswordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: 'تأكيد كلمة المرور',
+                  hintText: AppStrings.confirmPasswordHint,
                   border: borderStyle,
-                  //  focusedBorder: borderStyle,
-                  // enabledBorder: borderStyle,
                 ),
                 validator: (value) {
                   if (value != passwordController.text) {
-                    return 'كلمة المرور غير متطابقة';
+                    return AppStrings.passwordNotMatch;
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: height * 0.04),
               SizedBox(
                 width: double.infinity,
-                height: 50.h,
+                height: height * 0.065,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _resetPassword,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:  MyColors.primary,
+                    backgroundColor: MyColors.primary,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(width * 0.025),
                     ),
                   ),
                   child:
                       isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
-                            "تغيير كلمة المرور",
+                            AppStrings.changePassword,
                             style: TextStyle(color: Colors.white),
                           ),
                 ),

@@ -5,56 +5,66 @@ import 'package:material_symbols_icons/symbols.dart';
 
 class ReactionIconMapper {
   static Widget getReactionIcon(String? type, {double size = 24}) {
-    switch (type) {
-      case 'like':
-        return _buildIcon(
-          icon: Symbols.thumb_up, // Thumbs up for "like"
-          color: Colors.blue, // Classic blue for like
-          size: size,
-          shadowColor: Colors.blueAccent,
-        );
-      case 'love':
-        return _buildIcon(
-          icon: Symbols.favorite, // Heart for "love"
-          color: Colors.red, // Red for love
-          size: size,
-          shadowColor: Colors.redAccent,
-        );
-      case 'care':
-        return _buildIcon(
-          icon: Symbols.volunteer_activism, // Hands holding heart for "care"
-          color: Colors.orange, // Warm orange for care
-          size: size,
-          shadowColor: Colors.orangeAccent,
-        );
-      case 'laugh':
-        return _buildIcon(
-          icon: Symbols.sentiment_very_satisfied, // Laughing face
-          color: Colors.yellow.shade700, // Bright yellow for laugh
-          size: size,
-          shadowColor: Colors.yellow.shade300,
-        );
-      case 'sad':
-        return _buildIcon(
-          icon: Symbols.sentiment_dissatisfied, // Sad face
-          color: Colors.blueGrey, // Blue-grey for sadness
-          size: size,
-          shadowColor: Colors.blueGrey.shade200,
-        );
-      case 'hate':
-        return _buildIcon(
-          icon: Symbols.heart_broken, // Broken heart for hate
-          color: const Color.fromARGB(255, 1, 0, 3), // Deep purple for hate
-          size: size,
-          shadowColor: Colors.deepPurpleAccent,
-        );
-      default:
-        return Icon(
-          Symbols.emoji_emotions, // Default smiley
-          color: Colors.grey.shade500,
-          size: size,
-        );
-    }
+    // استخدام media query بدل الحجم الثابت
+    return Builder(
+      builder: (context) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final scaledSize = screenWidth * 0.06; // يعادل تقريبًا 24
+
+        final iconSize = size != 24 ? size : scaledSize;
+
+        switch (type) {
+          case 'like':
+            return _buildIcon(
+              icon: Symbols.thumb_up,
+              color: Colors.blue,
+              size: iconSize,
+              shadowColor: Colors.blueAccent,
+            );
+          case 'love':
+            return _buildIcon(
+              icon: Symbols.favorite,
+              color: Colors.red,
+              size: iconSize,
+              shadowColor: Colors.redAccent,
+            );
+          case 'care':
+            return _buildIcon(
+              icon: Symbols.volunteer_activism,
+              color: Colors.orange,
+              size: iconSize,
+              shadowColor: Colors.orangeAccent,
+            );
+          case 'laugh':
+            return _buildIcon(
+              icon: Symbols.sentiment_very_satisfied,
+              color: Colors.yellow.shade700,
+              size: iconSize,
+              shadowColor: Colors.yellow.shade300,
+            );
+          case 'sad':
+            return _buildIcon(
+              icon: Symbols.sentiment_dissatisfied,
+              color: Colors.blueGrey,
+              size: iconSize,
+              shadowColor: Colors.blueGrey.shade200,
+            );
+          case 'hate':
+            return _buildIcon(
+              icon: Symbols.heart_broken,
+              color: const Color.fromARGB(255, 1, 0, 3),
+              size: iconSize,
+              shadowColor: Colors.deepPurpleAccent,
+            );
+          default:
+            return Icon(
+              Symbols.emoji_emotions,
+              color: Colors.grey.shade500,
+              size: iconSize,
+            );
+        }
+      },
+    );
   }
 
   static Widget _buildIcon({

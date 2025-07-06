@@ -1,9 +1,9 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_track_order.dart';
 import 'package:citio/models/track_order_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TrackOrderView extends StatefulWidget {
   final int orderId;
@@ -34,9 +34,15 @@ class _TrackOrderViewState extends State<TrackOrderView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("تتبع الطلب", style: TextStyle(color: Colors.black)),
+        title: Text(
+          AppStrings.trackOrderTitle,
+          style: const TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
@@ -44,19 +50,26 @@ class _TrackOrderViewState extends State<TrackOrderView> {
           isLoading
               ? const Center(child: CircularProgressIndicator())
               : orderDetails == null
-              ? const Center(child: Text("فشل تحميل الطلب"))
+              ? Center(child: Text(AppStrings.failedToLoadOrder))
               : ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.04,
+                  vertical: screenHeight * 0.02,
+                ),
                 itemCount: orderDetails!.vendorGroups.length,
                 itemBuilder: (context, index) {
                   final vendor = orderDetails!.vendorGroups[index];
-                  return _buildOrderCard(vendor);
+                  return _buildOrderCard(vendor, screenWidth, screenHeight);
                 },
               ),
     );
   }
 
-  Widget _buildOrderCard(VendorGroup vendor) {
+  Widget _buildOrderCard(
+    VendorGroup vendor,
+    double screenWidth,
+    double screenHeight,
+  ) {
     const List<String> statusSteps = [
       "Ordered",
       "Preparing",
@@ -72,11 +85,14 @@ class _TrackOrderViewState extends State<TrackOrderView> {
     currentStepIndex = currentStepIndex == -1 ? 0 : currentStepIndex;
 
     return Container(
-      margin: EdgeInsets.only(bottom: 24.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      margin: EdgeInsets.only(bottom: screenHeight * 0.03),
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.02,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(screenWidth * 0.04),
         boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
         ],
@@ -89,38 +105,47 @@ class _TrackOrderViewState extends State<TrackOrderView> {
             children: [
               Text(
                 vendor.businessName,
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: screenWidth * 0.045,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.025,
+                  vertical: screenHeight * 0.005,
+                ),
                 decoration: BoxDecoration(
                   color: MyColors.primary,
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.05),
                 ),
                 child: Text(
-                  vendor.shipementStatus ?? "Pending",
-                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                  vendor.shipementStatus ?? AppStrings.pendingStatus,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.03,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 4.h),
+          SizedBox(height: screenHeight * 0.005),
           Text(
-            "Est. delivery: ${vendor.estimatedDeliveryDate ?? 'غير متوفر'}",
-            style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+            "${AppStrings.estimatedDelivery}: ${vendor.estimatedDeliveryDate ?? AppStrings.noEstimation}",
+            style: TextStyle(fontSize: screenWidth * 0.032, color: Colors.grey),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: screenHeight * 0.02),
 
           // Products
           ...vendor.items.map(
             (item) => Padding(
-              padding: EdgeInsets.only(bottom: 10.h),
-              child: _buildItemRow(item),
+              padding: EdgeInsets.only(bottom: screenHeight * 0.012),
+              child: _buildItemRow(item, screenWidth, screenHeight),
             ),
           ),
 
-          SizedBox(height: 12.h),
+          SizedBox(height: screenHeight * 0.015),
 
           // Timeline
           Row(
@@ -145,24 +170,27 @@ class _TrackOrderViewState extends State<TrackOrderView> {
 
               return Column(
                 children: [
-                  Icon(icon, color: color, size: 28.sp),
-                  SizedBox(height: 6.h),
+                  Icon(icon, color: color, size: screenWidth * 0.07),
+                  SizedBox(height: screenHeight * 0.007),
                   Text(
                     statusSteps[index],
-                    style: TextStyle(fontSize: 11.sp, color: color),
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.028,
+                      color: color,
+                    ),
                   ),
                 ],
               );
             }),
           ),
 
-          SizedBox(height: 20.h),
+          SizedBox(height: screenHeight * 0.025),
 
           // Contact Button
           Container(
             decoration: BoxDecoration(
               color: MyColors.primary,
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(screenWidth * 0.03),
             ),
             child: TextButton(
               onPressed: () {},
@@ -170,11 +198,18 @@ class _TrackOrderViewState extends State<TrackOrderView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "تواصل مع  البائع",
-                    style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                    AppStrings.contactVendor,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.045,
+                    ),
                   ),
-                  SizedBox(width: 5.w),
-                  Icon(Icons.phone, color: Colors.white, size: 20.w),
+                  SizedBox(width: screenWidth * 0.015),
+                  Icon(
+                    Icons.phone,
+                    color: Colors.white,
+                    size: screenWidth * 0.05,
+                  ),
                 ],
               ),
             ),
@@ -184,19 +219,19 @@ class _TrackOrderViewState extends State<TrackOrderView> {
     );
   }
 
-  Widget _buildItemRow(Item item) {
+  Widget _buildItemRow(Item item, double screenWidth, double screenHeight) {
     return Row(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(6.r),
+          borderRadius: BorderRadius.circular(screenWidth * 0.015),
           child: Image.network(
             "${Urls.serviceProviderbaseUrl}${item.productImageUrl}",
-            width: 40.w,
-            height: 40.h,
+            width: screenWidth * 0.1,
+            height: screenWidth * 0.1,
             fit: BoxFit.cover,
           ),
         ),
-        SizedBox(width: 12.w),
+        SizedBox(width: screenWidth * 0.03),
         Expanded(
           child: Text(
             item.nameAr,
@@ -204,7 +239,7 @@ class _TrackOrderViewState extends State<TrackOrderView> {
           ),
         ),
         Text(
-          "Qty: ${item.quantity}",
+          "${AppStrings.quantity} ${item.quantity}",
           style: const TextStyle(color: Colors.grey),
         ),
       ],

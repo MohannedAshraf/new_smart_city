@@ -1,8 +1,12 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomSearchBar extends StatelessWidget {
+  final double borderRadius;
+  final String hintText;
+  final double height;
+  final void Function(dynamic)? onSubmitted;
+
   const CustomSearchBar({
     super.key,
     required this.borderRadius,
@@ -10,35 +14,38 @@ class CustomSearchBar extends StatelessWidget {
     required this.height,
     this.onSubmitted,
   });
-  final double borderRadius;
-  final String hintText;
-  final double height;
-  final void Function(dynamic)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return SizedBox(
       height: height,
-      width: 200.w,
+      width: screenWidth * 0.5, // بديل عن 200.w
       child: TextField(
-        onChanged: (value) {
-          onSubmitted?.call(value); //
-        },
+        onChanged: (value) => onSubmitted?.call(value),
         decoration: InputDecoration(
-          //hintTextDirection: textDirectionToAxisDirection(textDirection),
-          hintText: hintText,
+          hintText: hintText, // مثال: AppStrings.searchHint
           alignLabelWithHint: true,
           contentPadding: EdgeInsets.zero,
           isDense: true,
-          hintStyle: const TextStyle(height: 1.0, color: MyColors.gray),
-          prefixIcon: const Icon(Icons.search, color: MyColors.gray),
+          hintStyle: TextStyle(
+            height: 1.0,
+            color: MyColors.gray,
+            fontSize: screenWidth * 0.035, // تقريباً 14
+          ),
+          prefixIcon: Icon(
+            Icons.search,
+            color: MyColors.gray,
+            size: screenWidth * 0.05,
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: MyColors.whiteSmoke),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
             borderSide: const BorderSide(color: MyColors.whiteSmoke),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
           filled: true,
           fillColor: MyColors.whiteSmoke,

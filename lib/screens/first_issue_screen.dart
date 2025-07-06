@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use, avoid_print
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/complaint_list.dart';
 import 'package:citio/core/widgets/rated_complaint_list.dart';
 import 'package:citio/core/widgets/new_tab_item.dart';
@@ -10,7 +11,6 @@ import 'package:citio/screens/add_issue_screen.dart';
 import 'package:citio/services/get_issues.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 
 class IssueScreen extends StatefulWidget {
   const IssueScreen({super.key});
@@ -24,6 +24,13 @@ class _IssueScreenState extends State<IssueScreen> {
   List<Values> resolved = [];
   List<Values> inprogress = [];
   bool isLoading = true;
+
+  // دوال لحساب الأبعاد بالعرض والارتفاع بالنسبة للميديا كويري
+  double wp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.width * (percentage / 100);
+
+  double hp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.height * (percentage / 100);
 
   @override
   void initState() {
@@ -75,7 +82,7 @@ class _IssueScreenState extends State<IssueScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("🚨 حدثت مشكلة في السيرفر. هيتم حلها في أقرب وقت."),
+            content: Text(AppStrings.serverError),
             backgroundColor: Colors.red,
           ),
         );
@@ -106,7 +113,7 @@ class _IssueScreenState extends State<IssueScreen> {
               icon: Icon(
                 Icons.arrow_back,
                 color: MyColors.black,
-                size: 22.sp,
+                size: wp(context, 5.5), // تقريبا 22.sp
               ),
               onPressed: () {
                 Navigator.pushReplacement(
@@ -120,10 +127,10 @@ class _IssueScreenState extends State<IssueScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'المشاكل',
+                  AppStrings.issues,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 24.sp,
+                    fontSize: wp(context, 6), // تقريباً 24.sp
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -138,18 +145,18 @@ class _IssueScreenState extends State<IssueScreen> {
                   : Column(
                     children: [
                       Divider(
-                        height: 1.h,
-                        thickness: 0.6.h,
+                        height: hp(context, 0.15), // 1.h تقريبا
+                        thickness: hp(context, 0.1), // 0.6.h تقريباً
                         color: Colors.black12,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 5.w,
-                          vertical: 5.h,
+                          horizontal: wp(context, 1.5), // 5.w
+                          vertical: hp(context, 1), // 5.h
                         ),
                         child: TabBar(
                           splashFactory: NoSplash.splashFactory,
-                          overlayColor: WidgetStateProperty.all(
+                          overlayColor: MaterialStateProperty.all(
                             Colors.transparent,
                           ),
                           isScrollable: false,
@@ -159,18 +166,24 @@ class _IssueScreenState extends State<IssueScreen> {
                           labelColor: MyColors.primary,
                           unselectedLabelColor: MyColors.gray,
                           tabs: [
-                            TabItem(title: 'نشطة', count: active.length),
                             TabItem(
-                              title: 'تحت المراجعة',
+                              title: AppStrings.active,
+                              count: active.length,
+                            ),
+                            TabItem(
+                              title: AppStrings.inReview,
                               count: inprogress.length,
                             ),
-                            TabItem(title: 'المقبولة', count: resolved.length),
+                            TabItem(
+                              title: AppStrings.accepted,
+                              count: resolved.length,
+                            ),
                           ],
                         ),
                       ),
                       Divider(
-                        height: 1.h,
-                        thickness: 0.5.h,
+                        height: hp(context, 0.15), // 1.h
+                        thickness: hp(context, 0.1), // 0.5.h
                         color: Colors.black12,
                       ),
                       Expanded(
@@ -200,7 +213,7 @@ class _IssueScreenState extends State<IssueScreen> {
                 loadIssues();
               });
             },
-            child: Icon(Icons.add, size: 20.sp, color: Colors.white),
+            child: Icon(Icons.add, size: wp(context, 4.5), color: Colors.white),
           ),
         ),
       ),

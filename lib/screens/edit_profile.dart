@@ -3,12 +3,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_edit_profile.dart';
 import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
@@ -31,6 +32,12 @@ class _EditProfileState extends State<EditProfile> {
   File? _imageFile;
   String? savedImageUrl;
   bool _isSaving = false;
+
+  double wp(BuildContext context, double percent) =>
+      MediaQuery.of(context).size.width * percent / 100;
+
+  double hp(BuildContext context, double percent) =>
+      MediaQuery.of(context).size.height * percent / 100;
 
   @override
   void initState() {
@@ -77,16 +84,16 @@ class _EditProfileState extends State<EditProfile> {
       context: context,
       builder:
           (_) => AlertDialog(
-            title: const Text("هل أنت متأكد؟"),
-            content: const Text("هل تريد حذف الصورة الشخصية الحالية؟"),
+            title: const Text(AppStrings.deleteImageConfirmTitle),
+            content: const Text(AppStrings.deleteImageConfirmContent),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text("إلغاء"),
+                child: const Text(AppStrings.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text("نعم، حذف"),
+                child: const Text(AppStrings.delete),
               ),
             ],
           ),
@@ -101,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("تم حذف الصورة الشخصية ✅"),
+          content: Text(AppStrings.imageDeleted),
           backgroundColor: Colors.green,
         ),
       );
@@ -119,7 +126,7 @@ class _EditProfileState extends State<EditProfile> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text("التقاط صورة بالكاميرا"),
+                title: const Text(AppStrings.takePhoto),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.camera);
@@ -127,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text("اختيار من المعرض"),
+                title: const Text(AppStrings.pickFromGallery),
                 onTap: () {
                   Navigator.pop(context);
                   _pickImage(ImageSource.gallery);
@@ -146,26 +153,27 @@ class _EditProfileState extends State<EditProfile> {
     TextInputType keyboardType = TextInputType.text,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: hp(context, 1.2)),
       child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
         validator: (value) {
           if (value == null || value.trim().isEmpty)
-            return 'من فضلك املأ هذا الحقل';
-          if (isEmail && !value.contains('@'))
-            return 'برجاء إدخال بريد إلكتروني صحيح';
+            return AppStrings.fillField;
+          if (isEmail && !value.contains('@')) return AppStrings.invalidEmail;
           return null;
         },
-        style: TextStyle(fontSize: 14.sp),
+        style: TextStyle(fontSize: wp(context, 3.5)),
         decoration: InputDecoration(
           hintText: hint,
-          prefixIcon: Icon(icon, size: 20.sp),
+          prefixIcon: Icon(icon, size: wp(context, 4.5)),
           contentPadding: EdgeInsets.symmetric(
-            vertical: 12.h,
-            horizontal: 16.w,
+            vertical: hp(context, 1.5),
+            horizontal: wp(context, 4),
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(wp(context, 3)),
+          ),
         ),
       ),
     );
@@ -174,44 +182,51 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("تعديل البيانات"), centerTitle: true),
+      appBar: AppBar(
+        title: const Text(AppStrings.editProfile),
+        centerTitle: true,
+      ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: wp(context, 5)),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: 20.h),
+                SizedBox(height: hp(context, 3)),
                 Stack(
                   children: [
                     CircleAvatar(
-                      radius: 60.r,
+                      radius: wp(context, 15),
                       backgroundImage:
                           _imageFile != null
                               ? FileImage(_imageFile!)
                               : (savedImageUrl != null &&
                                   savedImageUrl!.isNotEmpty)
                               ? NetworkImage(
-                                "https://central-user-management.agreeabledune-30ad0cb8.uaenorth.azurecontainerapps.io"
-                                "${savedImageUrl!.startsWith('/') ? '' : '/'}${savedImageUrl!}",
+                                Urls.cmsBaseUrl +
+                                    (savedImageUrl!.startsWith('/')
+                                        ? ''
+                                        : '/') +
+                                    savedImageUrl!,
                               )
                               : const NetworkImage(
-                                'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                              ),
+                                    'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
+                                  )
+                                  as ImageProvider,
                     ),
                     Positioned(
                       bottom: 0,
-                      right: 4.w,
+                      right: wp(context, 1),
                       child: GestureDetector(
                         onTap: _showImageSourcePicker,
                         child: CircleAvatar(
-                          radius: 16.r,
+                          radius: wp(context, 4),
                           backgroundColor: MyColors.primary,
                           child: Icon(
                             Icons.camera_alt,
-                            size: 16.sp,
+                            size: wp(context, 4),
                             color: Colors.white,
                           ),
                         ),
@@ -225,30 +240,30 @@ class _EditProfileState extends State<EditProfile> {
                     onPressed: _confirmRemoveProfileImage,
                     icon: const Icon(Icons.delete_forever, color: Colors.red),
                     label: const Text(
-                      'إزالة الصورة',
+                      AppStrings.removeImage,
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: 16.h),
+                SizedBox(height: hp(context, 2)),
                 _buildFormField(
-                  hint: "الإسم",
+                  hint: AppStrings.nameHint,
                   icon: Icons.person,
                   controller: nameController,
                 ),
                 _buildFormField(
-                  hint: "رقم الهاتف",
+                  hint: AppStrings.phoneHint,
                   icon: Icons.phone,
                   controller: phoneController,
                   keyboardType: TextInputType.phone,
                 ),
                 _buildFormField(
-                  hint: "البريد الإلكتروني",
+                  hint: AppStrings.emailHint,
                   icon: Icons.email,
                   controller: emailController,
                   isEmail: true,
                 ),
                 _buildFormField(
-                  hint: "العنوان",
+                  hint: AppStrings.addressHint,
                   icon: Icons.location_on,
                   controller: addressController,
                 ),
@@ -256,30 +271,30 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     Expanded(
                       child: _buildFormField(
-                        hint: "المبنى",
+                        hint: AppStrings.buildingHint,
                         icon: Icons.apartment,
                         controller: buildingController,
                       ),
                     ),
-                    SizedBox(width: 10.w),
+                    SizedBox(width: wp(context, 2)),
                     Expanded(
                       child: _buildFormField(
-                        hint: "الدور",
+                        hint: AppStrings.floorHint,
                         icon: Icons.stairs,
                         controller: floorController,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: hp(context, 3)),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.primary,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      padding: EdgeInsets.symmetric(vertical: hp(context, 2)),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(wp(context, 3)),
                       ),
                     ),
                     onPressed:
@@ -303,12 +318,12 @@ class _EditProfileState extends State<EditProfile> {
                                 if (success == true) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("✅ تم حفظ التعديلات بنجاح"),
+                                      content: Text(AppStrings.saveSuccess),
                                       backgroundColor: Colors.green,
                                     ),
                                   );
                                   await Future.delayed(
-                                    const Duration(milliseconds: 800),
+                                    const Duration(milliseconds: 600),
                                   );
                                   Navigator.pushReplacement(
                                     context,
@@ -319,7 +334,7 @@ class _EditProfileState extends State<EditProfile> {
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("❌ فشل في حفظ التعديلات"),
+                                      content: Text(AppStrings.saveFail),
                                       backgroundColor: Colors.red,
                                     ),
                                   );
@@ -329,23 +344,23 @@ class _EditProfileState extends State<EditProfile> {
                     child:
                         _isSaving
                             ? SizedBox(
-                              height: 20.h,
-                              width: 20.w,
+                              height: hp(context, 3),
+                              width: wp(context, 3),
                               child: const CircularProgressIndicator(
                                 color: Colors.white,
                                 strokeWidth: 2,
                               ),
                             )
                             : Text(
-                              "حفظ التعديلات",
+                              AppStrings.saveChanges,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16.sp,
+                                fontSize: wp(context, 4),
                               ),
                             ),
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: hp(context, 1.5)),
               ],
             ),
           ),

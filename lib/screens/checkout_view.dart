@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously, deprecated_member_use
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/cart_model.dart';
 import 'package:citio/helper/api_make_order.dart';
 import 'package:citio/models/make_order_model.dart';
@@ -149,8 +151,11 @@ class _CheckoutViewState extends State<CheckoutView> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "الدفع ",
-          style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.bold),
+          AppStrings.checkout,
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.height * 0.035,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: const BackButton(),
       ),
@@ -185,7 +190,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   await sendOrder();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("✅ تم إرسال الطلب"),
+                                      content: Text(AppStrings.paymentSuccess),
                                     ),
                                   );
                                   Navigator.push(
@@ -197,7 +202,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text("❌ فشل إرسال الطلب: $e"),
+                                      content: Text(
+                                        "${AppStrings.paymentFailed} $e",
+                                      ),
                                     ),
                                   );
                                 }
@@ -215,10 +222,11 @@ class _CheckoutViewState extends State<CheckoutView> {
                             ? const CircularProgressIndicator(
                               color: Colors.white,
                             )
-                            : const Text(
-                              "تأكيد الطلب",
+                            : Text(
+                              AppStrings.confirmOrder,
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize:
+                                    MediaQuery.of(context).size.height * 0.022,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -236,10 +244,12 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   Widget _buildAddressSection() {
+    final size = MediaQuery.of(context).size;
+
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(size.width * 0.03),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(size.width * 0.03),
         color: Colors.white,
       ),
       child:
@@ -248,37 +258,37 @@ class _CheckoutViewState extends State<CheckoutView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "تعديل العنوان",
+                    AppStrings.editAddress,
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: size.height * 0.02,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: size.height * 0.01),
                   TextField(
                     controller: addressController,
                     maxLines: 1,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 12.h,
+                        horizontal: size.width * 0.03,
+                        vertical: size.height * 0.015,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(size.width * 0.02),
                       ),
                     ),
                   ),
-                  SizedBox(height: 12.h),
+                  SizedBox(height: size.height * 0.015),
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
                           onPressed:
                               () => setState(() => isEditingAddress = false),
-                          child: const Text("إلغاء"),
+                          child: const Text(AppStrings.cancel),
                         ),
                       ),
-                      SizedBox(width: 12.w),
+                      SizedBox(width: size.width * 0.03),
                       Expanded(
                         child: ElevatedButton(
                           onPressed:
@@ -287,7 +297,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             backgroundColor: MyColors.primary,
                           ),
                           child: const Text(
-                            "حفظ",
+                            AppStrings.save,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -299,19 +309,19 @@ class _CheckoutViewState extends State<CheckoutView> {
               : Row(
                 children: [
                   const Icon(Icons.location_on_outlined),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: size.width * 0.02),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "عنوان التسليم",
+                          AppStrings.deliveryAddress,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15.sp,
+                            fontSize: size.height * 0.018,
                           ),
                         ),
-                        SizedBox(height: 2.h),
+                        SizedBox(height: size.height * 0.005),
                         Text(addressController.text),
                       ],
                     ),
@@ -321,7 +331,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     style: TextButton.styleFrom(
                       foregroundColor: MyColors.primary,
                     ),
-                    child: const Text("تعديل"),
+                    child: const Text(AppStrings.edit),
                   ),
                 ],
               ),
@@ -329,37 +339,44 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   Widget _buildItemsSection() {
+    final size = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "العناصر المطلوبة",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          AppStrings.requestedItems,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: size.height * 0.025,
+          ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: size.height * 0.01),
         Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(size.width * 0.03),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(size.width * 0.025),
           ),
           child: Column(
             children:
                 widget.cartItems.map((item) {
                   return Container(
-                    margin: EdgeInsets.symmetric(vertical: 6.h),
+                    margin: EdgeInsets.symmetric(vertical: size.height * 0.007),
                     child: Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(8.r),
+                          borderRadius: BorderRadius.circular(
+                            size.width * 0.02,
+                          ),
                           child: Image.network(
-                            "https://service-provider.runasp.net${item.mainImageUrl}",
-                            width: 60.w,
-                            height: 60.h,
+                            "${Urls.serviceProviderbaseUrl}${item.mainImageUrl}",
+                            width: size.width * 0.15,
+                            height: size.width * 0.15,
                             fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(width: 12.w),
+                        SizedBox(width: size.width * 0.03),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,10 +387,10 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 4.h),
+                              SizedBox(height: size.height * 0.005),
                               Text(
-                                "qty: ${item.quantity}",
-                                style: TextStyle(fontSize: 15.sp),
+                                "${AppStrings.quantity}${item.quantity}",
+                                style: TextStyle(fontSize: size.height * 0.018),
                               ),
                             ],
                           ),
@@ -393,19 +410,24 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   Widget _buildPaymentMethodSection() {
+    final size = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "طريقة الدفع",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          AppStrings.paymentMethod,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: size.height * 0.025,
+          ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: size.height * 0.01),
         Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(size.width * 0.03),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(size.width * 0.025),
           ),
           child: Column(
             children: [
@@ -413,7 +435,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 value: 'card',
                 groupValue: selectedPayment,
                 onChanged: (value) => setState(() => selectedPayment = value!),
-                title: const Text("بطاقة الإتمان/الخصم"),
+                title: const Text(AppStrings.creditCard),
                 secondary: const Icon(Icons.credit_card),
                 activeColor: MyColors.primary,
               ),
@@ -421,7 +443,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 value: 'cash',
                 groupValue: selectedPayment,
                 onChanged: (value) => setState(() => selectedPayment = value!),
-                title: const Text("الدفع عند الإستلام"),
+                title: const Text(AppStrings.cashOnDelivery),
                 secondary: const Icon(Icons.money),
                 activeColor: MyColors.primary,
               ),
@@ -438,27 +460,32 @@ class _CheckoutViewState extends State<CheckoutView> {
     double tax,
     double total,
   ) {
+    final size = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "ملخص الطلب",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          AppStrings.orderSummary,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: size.height * 0.025,
+          ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: size.height * 0.01),
         Container(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(size.width * 0.03),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: BorderRadius.circular(size.width * 0.025),
           ),
           child: Column(
             children: [
-              rowText("المجموع الفرعي", subtotal),
-              rowText("الضريبة", deliveryFee),
-              rowText("التوصيل", tax),
-              Divider(height: 20.h),
-              rowText("المجموع", total, bold: true),
+              rowText(AppStrings.subTotal, subtotal),
+              rowText(AppStrings.tax, deliveryFee),
+              rowText(AppStrings.delivery, tax),
+              Divider(height: size.height * 0.02),
+              rowText(AppStrings.total, total, bold: true),
             ],
           ),
         ),
@@ -483,6 +510,8 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   Widget _buildCardFormOverlay() {
+    final size = MediaQuery.of(context).size;
+
     return Positioned.fill(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -491,28 +520,28 @@ class _CheckoutViewState extends State<CheckoutView> {
           child: Center(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(
-                left: 24.w,
-                right: 24.w,
-                top: 40.h,
+                left: size.width * 0.06,
+                right: size.width * 0.06,
+                top: size.height * 0.05,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 24,
               ),
               child: Container(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(size.width * 0.05),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: BorderRadius.circular(size.width * 0.04),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "ادخل بيانات البطاقة",
+                      AppStrings.enterCardInfo,
                       style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: size.height * 0.025,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: size.height * 0.025),
                     CardFormField(
                       style: CardFormStyle(
                         backgroundColor: Colors.grey.shade100,
@@ -525,7 +554,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         _cardDetails = card;
                       },
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: size.height * 0.025),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -539,22 +568,22 @@ class _CheckoutViewState extends State<CheckoutView> {
                                   color: Colors.white,
                                 )
                                 : Text(
-                                  "ادفع الآن",
+                                  AppStrings.payNow,
                                   style: TextStyle(
-                                    fontSize: 16.sp,
+                                    fontSize: size.height * 0.022,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
                                 ),
                       ),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: size.height * 0.015),
                     TextButton(
                       onPressed: () {
                         setState(() => showCardForm = false);
                       },
                       child: const Text(
-                        "إلغاء",
+                        AppStrings.cancel,
                         style: TextStyle(color: Colors.blue),
                       ),
                     ),

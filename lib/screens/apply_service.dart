@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
@@ -88,17 +89,24 @@ class _ApplyService extends State<ApplyService> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.h),
+        preferredSize: Size.fromHeight(
+          media.height * 0.075,
+        ), // تقريبًا 60 من 800
         child: AppBar(
           backgroundColor: MyColors.white,
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: Text(
-            'لطلب ${widget.title}',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            AppStrings.apply(widget.title),
+            style: TextStyle(
+              fontSize: media.width * 0.05, // تقريبًا 20 من 400
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
         ),
@@ -111,16 +119,21 @@ class _ApplyService extends State<ApplyService> {
   }
 
   Widget buildForm() {
+    final media = MediaQuery.of(context).size;
+
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h),
+        padding: EdgeInsets.symmetric(vertical: media.height * 0.01),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              padding: EdgeInsets.symmetric(
+                horizontal: media.width * 0.05,
+                vertical: media.height * 0.008,
+              ),
               child: ServiceContainer(
                 icon: Icons.person,
-                title: 'المعلومات الشخصية',
+                title: AppStrings.personalInfoTitle,
                 content:
                     fields.map<Widget>((field) {
                       int index = serviceData.indexWhere(
@@ -181,10 +194,13 @@ class _ApplyService extends State<ApplyService> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+              padding: EdgeInsets.symmetric(
+                horizontal: media.width * 0.05,
+                vertical: media.height * 0.008,
+              ),
               child: ServiceContainer(
                 icon: Icons.file_upload,
-                title: 'الوثائق المطلوبة',
+                title: AppStrings.requiredDocumentsTitle,
                 content:
                     files.map<Widget>((file) {
                       return CustomUploadBox(
@@ -199,13 +215,13 @@ class _ApplyService extends State<ApplyService> {
 
                             if (pickedFile.size > 5 * 1024 * 1024) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(
                                   backgroundColor: MyColors.primary,
                                   content: Text(
-                                    'لا يمكن أن يتجاوز حجم الملفات 5 ميجابايت',
+                                    AppStrings.fileSizeExceeded,
                                     style: TextStyle(
                                       color: MyColors.white,
-                                      fontSize: 14,
+                                      fontSize: media.width * 0.035,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -213,10 +229,8 @@ class _ApplyService extends State<ApplyService> {
                               );
                               return;
                             }
-                          }
-                          if (result != null && result.files.isNotEmpty) {
                             setState(() {
-                              uploadedFiles[file.id] = result.files.first;
+                              uploadedFiles[file.id] = pickedFile;
                             });
                           }
                         },
@@ -230,7 +244,7 @@ class _ApplyService extends State<ApplyService> {
               ),
             ),
             Row(children: [akcCheckBox()]),
-            SizedBox(height: 13.h),
+            SizedBox(height: media.height * 0.015),
             Row(children: [applyButton()]),
           ],
         ),
@@ -239,15 +253,23 @@ class _ApplyService extends State<ApplyService> {
   }
 
   Expanded akcCheckBox() {
+    final media = MediaQuery.of(context).size;
+
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(media.width * 0.05),
         ),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20.w, 5.h, 20.w, 5.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.05,
+            media.height * 0.01,
+            media.width * 0.05,
+            media.height * 0.01,
+          ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Checkbox(
                 checkColor: MyColors.white,
@@ -260,13 +282,16 @@ class _ApplyService extends State<ApplyService> {
                   });
                 },
               ),
-              SizedBox(width: 7.w),
+              SizedBox(width: media.width * 0.02),
               Expanded(
                 child: Stack(
                   children: [
                     Text(
-                      'أُقر بأن جميع المعلومات المقدمة دقيقة وأوافق على معالجة بياناتي الشخصية لهذا الطلب.',
-                      style: TextStyle(color: MyColors.gray, fontSize: 14.sp),
+                      AppStrings.confirmationStatement,
+                      style: TextStyle(
+                        color: MyColors.gray,
+                        fontSize: media.width * 0.035,
+                      ),
                     ),
                     if (showError)
                       Positioned(
@@ -276,7 +301,7 @@ class _ApplyService extends State<ApplyService> {
                           '*',
                           style: TextStyle(
                             color: MyColors.ambulance,
-                            fontSize: 20.sp,
+                            fontSize: media.width * 0.05,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -292,15 +317,22 @@ class _ApplyService extends State<ApplyService> {
   }
 
   Widget applyButton() {
+    final media = MediaQuery.of(context).size;
+
     return Expanded(
       child: Container(
-        height: 90.h,
+        height: media.height * 0.1,
         color: MyColors.white,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(19.w, 15.h, 19.w, 15.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.05,
+            media.height * 0.015,
+            media.width * 0.05,
+            media.height * 0.015,
+          ),
           child: SizedBox(
             width: double.infinity,
-            height: 70,
+            height: media.height * 0.08,
             child: ElevatedButton.icon(
               onPressed: () async {
                 bool fieldsValid = validateFields();
@@ -313,29 +345,21 @@ class _ApplyService extends State<ApplyService> {
                 }
 
                 if (fieldsValid && filesValid && isChecked) {
-                  setState(() {
-                    isButtonPressed = true;
-                  });
-
-                  if (fieldsValid && filesValid && isChecked) {
-                    setState(() => isButtonPressed = true);
-
-                    await Future.delayed(const Duration(milliseconds: 200));
-                    setState(() => isButtonPressed = false);
-
-                    showPaymentSheet();
-                  }
+                  setState(() => isButtonPressed = true);
+                  await Future.delayed(const Duration(milliseconds: 200));
+                  setState(() => isButtonPressed = false);
+                  showPaymentSheet();
                 }
               },
               icon: Icon(
                 Icons.send,
-                size: 20.sp,
+                size: media.width * 0.05,
                 color: isButtonPressed ? MyColors.white : MyColors.grey,
               ),
               label: Text(
-                ' إرسال الطلب ',
+                AppStrings.sendRequest,
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: media.width * 0.045,
                   fontWeight: FontWeight.bold,
                   color: isButtonPressed ? MyColors.white : MyColors.grey,
                 ),
@@ -391,6 +415,8 @@ class _ApplyService extends State<ApplyService> {
   CardFieldInputDetails? card;
 
   void showPaymentSheet() {
+    final media = MediaQuery.of(context).size;
+
     showModalBottomSheet(
       backgroundColor: MyColors.white,
       context: context,
@@ -400,15 +426,18 @@ class _ApplyService extends State<ApplyService> {
       ),
       builder:
           (_) => Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(media.width * 0.04),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'أدخل بيانات البطاقة',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Text(
+                  AppStrings.enterCardInfo,
+                  style: TextStyle(
+                    fontSize: media.width * 0.045,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: media.height * 0.02),
                 CardFormField(
                   onCardChanged: (cardDetails) {
                     setState(() {
@@ -422,19 +451,18 @@ class _ApplyService extends State<ApplyService> {
                     borderRadius: 8,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: media.height * 0.025),
                 ElevatedButton(
                   onPressed: () async {
-                    print('تم ضغط');
-
                     if (card == null || !(card?.complete ?? false)) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("يرجى إكمال بيانات البطاقة"),
+                          content: Text(AppStrings.cardIncomplete),
                         ),
                       );
                       return;
                     }
+
                     try {
                       final paymentMethod = await Stripe.instance
                           .createPaymentMethod(
@@ -444,9 +472,6 @@ class _ApplyService extends State<ApplyService> {
                           );
 
                       Navigator.pop(context);
-                      print(
-                        'youyouyouyouyouyouyouyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyr payment $paymentMethod.id',
-                      );
 
                       try {
                         await ApplyGovernmentService().submit(
@@ -455,6 +480,7 @@ class _ApplyService extends State<ApplyService> {
                           files: uploadedFiles.values.toList(),
                           paymentMethodID: paymentMethod.id,
                         );
+
                         showDialog(
                           context: context,
                           builder:
@@ -469,7 +495,7 @@ class _ApplyService extends State<ApplyService> {
                                   ),
                                 ),
                                 content: const Text(
-                                  "شكرًا لاستخدامكم تطبيق Citio.\nتم إرسال طلبكم بنجاح. يمكنكم متابعة جميع طلباتكم الحكومية من صفحة 'حكومتنا'.",
+                                  AppStrings.requestSent,
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: MyColors.black,
@@ -484,15 +510,14 @@ class _ApplyService extends State<ApplyService> {
                                         context,
                                         MaterialPageRoute(
                                           builder:
-                                              (context) =>
-                                                  GovernmentServiceDetails(
-                                                    id: widget.id,
-                                                  ),
+                                              (_) => GovernmentServiceDetails(
+                                                id: widget.id,
+                                              ),
                                         ),
                                       );
                                     },
                                     child: const Text(
-                                      "تم",
+                                      AppStrings.done,
                                       style: TextStyle(
                                         color: MyColors.dodgerBlue,
                                         fontWeight: FontWeight.bold,
@@ -506,13 +531,12 @@ class _ApplyService extends State<ApplyService> {
                                         context,
                                         MaterialPageRoute(
                                           builder:
-                                              (context) =>
-                                                  const GovernmentScreen(),
+                                              (_) => const GovernmentScreen(),
                                         ),
-                                      ); //
+                                      );
                                     },
                                     child: const Text(
-                                      "الذهاب إلى حكومتنا",
+                                      AppStrings.goToGov,
                                       style: TextStyle(
                                         color: MyColors.dodgerBlue,
                                         fontWeight: FontWeight.bold,
@@ -523,7 +547,7 @@ class _ApplyService extends State<ApplyService> {
                               ),
                         );
                       } catch (submitError) {
-                        String errorMessage = 'فشل إرسال الطلب. حاول مرة أخرى.';
+                        String errorMessage = AppStrings.submitFailed;
 
                         if (submitError.toString().contains('{')) {
                           try {
@@ -536,6 +560,7 @@ class _ApplyService extends State<ApplyService> {
                             }
                           } catch (_) {}
                         }
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(errorMessage),
@@ -552,7 +577,7 @@ class _ApplyService extends State<ApplyService> {
                     backgroundColor: WidgetStatePropertyAll(MyColors.white),
                   ),
                   child: const Text(
-                    'إرسال ودفع',
+                    AppStrings.submitAndPay,
                     style: TextStyle(color: MyColors.black),
                   ),
                 ),
@@ -593,11 +618,18 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            media.height * 0.01,
+            media.width * 0.04,
+            media.height * 0.005,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -606,21 +638,29 @@ class CustomTextField extends StatelessWidget {
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16.sp,
+                    fontSize: media.width * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   header,
-                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                  style: TextStyle(
+                    fontSize: media.width * 0.035,
+                    color: MyColors.black,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            0,
+            media.width * 0.025,
+            media.height * 0.015,
+          ),
           child: TextField(
             controller: controller,
             textAlignVertical: TextAlignVertical.top,
@@ -642,23 +682,31 @@ class CustomTextField extends StatelessWidget {
                 LengthLimitingTextInputFormatter(fixedLength!),
             ],
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 8.h),
+              contentPadding: EdgeInsets.fromLTRB(
+                media.width * 0.03,
+                media.height * 0.015,
+                media.width * 0.03,
+                media.height * 0.01,
+              ),
               fillColor: MyColors.white,
               filled: true,
-              hintText: hintText,
-              hintStyle: TextStyle(color: MyColors.grey, fontSize: 16.sp),
+              hintText: hintText, // ممكن تستخدم: AppStrings.enterText
+              hintStyle: TextStyle(
+                color: MyColors.grey,
+                fontSize: media.width * 0.04,
+              ),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide.none,
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(
                   color: showError ? Colors.red : MyColors.gray,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
+                borderRadius: BorderRadius.circular(15),
                 borderSide: BorderSide(
                   color: showError ? Colors.red : MyColors.dodgerBlue,
                 ),
@@ -718,71 +766,79 @@ class _DateTextFieldState extends State<DateTextField> {
         String formattedDate = DateFormat('MM/dd/yy').format(picked);
         widget.controller!.text = formattedDate;
 
-        if (widget.onDateSelected != null) {
-          widget.onDateSelected!(picked);
-        }
+        widget.onDateSelected?.call(picked);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.showError)
-                    Text(
-                      ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  Text(
-                    widget.header,
-                    style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            media.height * 0.01,
+            media.width * 0.04,
+            media.height * 0.005,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.showError)
+                Text(
+                  ' *',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: media.width * 0.04,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
+                ),
+              Text(
+                widget.header,
+                style: TextStyle(
+                  fontSize: media.width * 0.035,
+                  color: MyColors.black,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            media.height * 0.01,
+            media.width * 0.025,
+            media.height * 0.015,
+          ),
           child: SizedBox(
-            height: 45.h,
+            height: media.height * 0.06,
             child: TextField(
               controller: widget.controller,
               readOnly: true,
               onTap: () => _selectDate(context),
               decoration: InputDecoration(
-                hintText: 'mm/dd/yy',
-                hintStyle: const TextStyle(
-                  fontSize: 16,
+                hintText: AppStrings.dateHint,
+                hintStyle: TextStyle(
+                  fontSize: media.width * 0.035,
                   fontWeight: FontWeight.w600,
                 ),
                 suffixIcon: const Icon(Icons.calendar_today),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.gray,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide(
                     color: widget.showError ? Colors.red : MyColors.dodgerBlue,
                   ),
@@ -819,11 +875,18 @@ class CustomUploadBox extends StatefulWidget {
 class _CustomUploadBoxState extends State<CustomUploadBox> {
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 15.w, 4.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            media.height * 0.01,
+            media.width * 0.04,
+            media.height * 0.005,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -832,34 +895,41 @@ class _CustomUploadBoxState extends State<CustomUploadBox> {
                   ' *',
                   style: TextStyle(
                     color: Colors.red,
-                    fontSize: 16.sp,
+                    fontSize: media.width * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               Expanded(
                 child: Text(
                   widget.header,
-                  style: TextStyle(fontSize: 14.sp, color: MyColors.black),
+                  style: TextStyle(
+                    fontSize: media.width * 0.035,
+                    color: MyColors.black,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 12.h),
+          padding: EdgeInsets.fromLTRB(
+            media.width * 0.025,
+            media.height * 0.01,
+            media.width * 0.025,
+            media.height * 0.015,
+          ),
           child: Stack(
             children: [
               DottedBorder(
                 color: widget.showError ? MyColors.ambulance : MyColors.gray,
                 strokeWidth: 1,
                 borderType: BorderType.RRect,
-                radius: Radius.circular(15.r),
+                radius: const Radius.circular(15),
                 dashPattern: const [6, 4],
                 child: GestureDetector(
                   onTap: widget.onTap,
-
                   child: Container(
-                    height: 120.h,
+                    height: media.height * 0.16,
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: Column(
@@ -873,27 +943,29 @@ class _CustomUploadBoxState extends State<CustomUploadBox> {
                               widget.file != null
                                   ? MyColors.grey
                                   : MyColors.black,
-                          size: 36.sp,
+                          size: media.width * 0.08,
                         ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: media.height * 0.01),
                         Text(
                           widget.file != null
-                              ? 'تم تحميل ملف'
-                              : 'اضغط لرفع ملف',
-                          style: const TextStyle(
+                              ? AppStrings.fileUploaded
+                              : AppStrings.uploadFile,
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: MyColors.black,
+                            fontSize: media.width * 0.035,
                           ),
                         ),
-                        SizedBox(height: 4.h),
+                        SizedBox(height: media.height * 0.005),
                         Text(
                           widget.file != null
                               ? widget.file!.name
-                              : 'لم يتم اختيار ملف',
+                              : AppStrings.noFileSelected,
                           style: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: media.width * 0.03,
                             color: MyColors.grey,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),

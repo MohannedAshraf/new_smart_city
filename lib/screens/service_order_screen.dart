@@ -1,21 +1,21 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_final_fields, unused_field, deprecated_member_use
-import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/screens/product_details_view.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/helper/api_banner.dart';
-import 'package:citio/models/banner_model.dart';
-import 'package:citio/models/search_model.dart';
-import 'package:citio/screens/cart_view.dart';
-import 'package:citio/screens/search_result_screen.dart';
-import 'package:citio/core/widgets/category_circle.dart';
-import 'package:citio/core/widgets/product_card.dart';
 import 'package:citio/helper/api_most_product.dart';
+import 'package:citio/helper/api_service.dart';
+import 'package:citio/models/banner_model.dart';
 import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_model.dart';
-import 'package:citio/helper/api_service.dart';
+import 'package:citio/screens/product_details_view.dart';
+import 'package:citio/screens/cart_view.dart';
+import 'package:citio/screens/search_result_screen.dart';
 import 'package:citio/screens/subcategory_screen.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:citio/core/widgets/category_circle.dart';
+import 'package:citio/core/widgets/product_card.dart';
 
 class ServiceOrderScreen extends StatefulWidget {
   const ServiceOrderScreen({super.key});
@@ -28,38 +28,48 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
   int? selectedCategoryIndex;
   late TextEditingController _controller;
   List<CategoryModel>? _categories;
-  bool _isLoadingCategories = true;
-  String? _error;
   List<BannerModel>? _banners;
+  bool _isLoadingCategories = true;
   bool _isLoadingBanners = true;
-  String? _bannerError;
-  List<SearchResultModel>? _searchResults;
-  bool _isSearching = false;
-  String? _searchError;
+  String? _error, _bannerError;
   DateTime? lastBackPressTime;
 
   @override
   void initState() {
     super.initState();
+    _controller = TextEditingController();
     _loadCategories();
     _loadBanners();
-    _controller = TextEditingController();
   }
 
-  Future<bool> _onWillPop() async {
-    final now = DateTime.now();
-    if (lastBackPressTime == null ||
-        now.difference(lastBackPressTime!) > const Duration(seconds: 2)) {
-      lastBackPressTime = now;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('اضغط مرة أخرى للخروج'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return false;
+  Future<void> _loadCategories() async {
+    try {
+      final data = await ApiService.fetchCategories();
+      setState(() {
+        _categories = data;
+        _isLoadingCategories = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoadingCategories = false;
+      });
     }
-    return true;
+  }
+
+  Future<void> _loadBanners() async {
+    try {
+      final data = await ApiTopBanners.fetchTopBanners();
+      setState(() {
+        _banners = data;
+        _isLoadingBanners = false;
+      });
+    } catch (e) {
+      setState(() {
+        _bannerError = e.toString();
+        _isLoadingBanners = false;
+      });
+    }
   }
 
   void _performSearch() {
@@ -72,107 +82,94 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
     }
   }
 
-  Future<void> _loadBanners() async {
-    try {
-      final banners = await ApiTopBanners.fetchTopBanners();
-      setState(() {
-        _banners = banners;
-        _isLoadingBanners = false;
-      });
-    } catch (e) {
-      setState(() {
-        _bannerError = e.toString();
-        _isLoadingBanners = false;
-      });
+  Future<bool> _onWillPop() async {
+    final now = DateTime.now();
+    if (lastBackPressTime == null ||
+        now.difference(lastBackPressTime!) > Duration(seconds: 2)) {
+      lastBackPressTime = now;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AppStrings.pressAgainToExit)));
+      return false;
     }
-  }
-
-  Future<void> _loadCategories() async {
-    try {
-      final categories = await ApiService.fetchCategories();
-      setState(() {
-        _categories = categories;
-        _isLoadingCategories = false;
-      });
-    } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _isLoadingCategories = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
         floatingActionButton: Container(
-          width: 70.w,
-          height: 50.h,
-          decoration: BoxDecoration(color: MyColors.primary, shape: BoxShape.circle),
+          width: media.width * 0.15,
+          height: media.height * 0.07,
+          decoration: BoxDecoration(
+            color: MyColors.primary,
+            shape: BoxShape.circle,
+          ),
           child: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CartView()),
-              );
-            },
-            icon: Icon(
-              Icons.shopping_bag_sharp,
-              color: Colors.white,
-              size: 30.sp,
-            ),
+            icon: Icon(Icons.shopping_bag, color: Colors.white),
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CartView()),
+                ),
           ),
         ),
-        appBar: AppBar(
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          title: const Text("طلب الخدمات"),
-        ),
+        appBar: AppBar(title: Text(AppStrings.serviceOrder), centerTitle: true),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.0.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                  child: MySearchBar(
-                    controller: _controller,
-                    onSearch: _performSearch,
-                  ),
+          padding: EdgeInsets.symmetric(horizontal: media.width * 0.03),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: media.height * 0.02),
+              _buildSearchBar(media),
+              SizedBox(height: media.height * 0.02),
+              _buildCategories(),
+              if (selectedCategoryIndex != null) _buildSubCategories(),
+              SizedBox(height: media.height * 0.02),
+              _isLoadingBanners
+                  ? Center(child: CircularProgressIndicator())
+                  : _bannerError != null
+                  ? Center(child: Text(AppStrings.bannerLoadError))
+                  : BannerSliderWidget(banners: _banners!),
+              SizedBox(height: media.height * 0.02),
+              Text(
+                AppStrings.bestRated,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: media.width * 0.06,
                 ),
-                SizedBox(height: 20.h),
-                _buildCategories(),
-                if (selectedCategoryIndex != null) _buildSubCategories(),
-                SizedBox(height: 30.h),
-                _isLoadingBanners
-                    ? const Center(child: CircularProgressIndicator())
-                    : _bannerError != null
-                    ? Center(
-                      child: Text('❌ خطأ في تحميل الإعلانات: $_bannerError'),
-                    )
-                    : BannerSliderWidget(banners: _banners!),
-                SizedBox(height: 20.h),
-                Text(
-                  "أفضل التقييمات",
-                  style: TextStyle(
-                    fontSize: 25.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                MostRequestedProductsView(),
-              ],
-            ),
+              ),
+              MostRequestedProductsView(),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchBar(Size media) {
+    return SizedBox(
+      height: media.height * 0.06,
+      child: TextField(
+        controller: _controller,
+        onSubmitted: (_) => _performSearch(),
+        decoration: InputDecoration(
+          hintText: AppStrings.searchHint,
+          prefixIcon: InkWell(
+            onTap: _performSearch,
+            child: Icon(Icons.search, size: media.width * 0.06),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: media.width * 0.04,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          filled: true,
+          fillColor: Colors.white,
         ),
       ),
     );
@@ -180,37 +177,34 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
 
   Widget _buildCategories() {
     if (_isLoadingCategories) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator());
     } else if (_error != null) {
-      return Center(child: Text('حدث خطأ: $_error'));
+      return Center(child: Text(AppStrings.categoryLoadError));
     } else if (_categories == null || _categories!.isEmpty) {
-      return const Center(child: Text('لا توجد فئات متاحة'));
-    } else {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(_categories!.length, (index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (selectedCategoryIndex == index) {
-                    selectedCategoryIndex = null;
-                  } else {
-                    selectedCategoryIndex = index;
-                  }
-                });
-              },
-              child: CategoryCircle(
-                name: _categories![index].nameAr,
-                imageUrl: _categories![index].imageUrl,
-                isSelected: selectedCategoryIndex == index,
-                radius: 30.r,
-              ),
-            );
-          }),
-        ),
-      );
+      return Center(child: Text(AppStrings.noCategories));
     }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(_categories!.length, (index) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedCategoryIndex =
+                    (selectedCategoryIndex == index) ? null : index;
+              });
+            },
+            child: CategoryCircle(
+              name: _categories![index].nameAr,
+              imageUrl: _categories![index].imageUrl,
+              isSelected: selectedCategoryIndex == index,
+              radius: 30,
+            ),
+          );
+        }),
+      ),
+    );
   }
 
   Widget _buildSubCategories() {
@@ -220,20 +214,21 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+          return Center(child: Text(AppStrings.subCategoryLoadError));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('لا توجد تصنيفات فرعية'));
-        } else {
-          final subCategories = snapshot.data!;
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(subCategories.length, (index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
+          return Center(child: Text(AppStrings.noSubCategories));
+        }
+
+        final subCats = snapshot.data!;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(subCats.length, (index) {
+              return GestureDetector(
+                onTap:
+                    () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder:
@@ -242,18 +237,16 @@ class _ServiceOrderScreenState extends State<ServiceOrderScreen> {
                               selectedSubCategoryIndex: index,
                             ),
                       ),
-                    );
-                  },
-                  child: CategoryCircle(
-                    name: subCategories[index].nameAr,
-                    imageUrl: subCategories[index].imageUrl,
-                    radius: 25.r,
-                  ),
-                );
-              }),
-            ),
-          );
-        }
+                    ),
+                child: CategoryCircle(
+                  name: subCats[index].nameAr,
+                  imageUrl: subCats[index].imageUrl,
+                  radius: 25,
+                ),
+              );
+            }),
+          ),
+        );
       },
     );
   }
@@ -271,26 +264,31 @@ class MySearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return SizedBox(
-      height: 42.h, // تقليل ارتفاع السيرش بار
+      height: media.height * 0.055,
       child: TextField(
         controller: controller,
         onSubmitted: (_) => onSearch(),
-        style: TextStyle(fontSize: 14.sp), // تصغير حجم الخط
+        style: TextStyle(fontSize: media.width * 0.035),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 16.w),
-          hintText: 'ماذا تريد ',
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: media.width * 0.04,
+          ),
+          hintText: AppStrings.searchHint,
           prefixIcon: InkWell(
             onTap: onSearch,
-            child: Icon(Icons.search, size: 20.sp),
+            child: Icon(Icons.search, size: media.width * 0.06),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey), // بوردر غامق
-            borderRadius: BorderRadius.circular(20.0.r),
+            borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.circular(20),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black87),
-            borderRadius: BorderRadius.circular(20.0.r),
+            borderRadius: BorderRadius.circular(20),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -313,24 +311,27 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Column(
       children: [
         CarouselSlider(
           items:
               widget.banners.map((banner) {
                 return ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: BorderRadius.circular(8),
                   child: GestureDetector(
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => ProductDetailsView(
-                                  productId: banner.productId,
-                                ),
-                          ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => ProductDetailsView(
+                                productId: banner.productId,
+                              ),
                         ),
+                      );
+                    },
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
@@ -343,13 +344,13 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                                   const Icon(Icons.broken_image),
                         ),
                         Positioned(
-                          bottom: 10.h,
-                          left: 10.w,
+                          bottom: media.height * 0.01,
+                          left: media.width * 0.02,
                           child: Container(
                             color: Colors.black54,
                             padding: EdgeInsets.symmetric(
-                              horizontal: 8.w,
-                              vertical: 8.h,
+                              horizontal: media.width * 0.02,
+                              vertical: media.height * 0.01,
                             ),
                             child: Text(
                               banner.description,
@@ -363,7 +364,7 @@ class _BannerSliderWidgetState extends State<BannerSliderWidget> {
                 );
               }).toList(),
           options: CarouselOptions(
-            height: 190.0.h,
+            height: media.height * 0.23,
             autoPlay: true,
             enlargeCenterPage: true,
             onPageChanged: (index, reason) {
@@ -397,6 +398,8 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return FutureBuilder<List<Product>>(
       future: _products,
       builder: (context, snapshot) {
@@ -406,39 +409,41 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
-                '❌ حصل خطأ أثناء تحميل المنتجات: ${snapshot.error}',
+                '${AppStrings.productLoadError} ${snapshot.error}',
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.red),
               ),
             );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('لا يوجد منتجات متاحة حالياً.'));
+            return Center(child: Text(AppStrings.noProductshere));
           }
 
           final products = snapshot.data!;
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              // ✅ نحدد عدد الأعمدة بناءً على العرض
               int crossAxisCount;
               double width = constraints.maxWidth;
 
               if (width >= 900) {
-                crossAxisCount = 4; // large tablet
+                crossAxisCount = 4;
               } else if (width >= 600) {
-                crossAxisCount = 3; // small tablet
+                crossAxisCount = 3;
               } else {
-                crossAxisCount = 2; // phone
+                crossAxisCount = 2;
               }
 
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: media.width * 0.025,
+                  vertical: media.height * 0.015,
+                ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: 10.w,
-                  mainAxisSpacing: 10.h,
+                  crossAxisSpacing: media.width * 0.02,
+                  mainAxisSpacing: media.height * 0.015,
                   childAspectRatio: 0.58,
                 ),
                 itemCount: products.length,
@@ -461,7 +466,7 @@ class _MostRequestedProductsViewState extends State<MostRequestedProductsView> {
           print('📍 Stack trace: $stackTrace');
           return Center(
             child: Text(
-              'حدث خطأ غير متوقع 😢',
+              AppStrings.unexpectedError,
               style: const TextStyle(color: Colors.red),
             ),
           );

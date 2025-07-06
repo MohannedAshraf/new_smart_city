@@ -1,6 +1,5 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTextButton extends StatelessWidget {
   const MyTextButton({
@@ -13,14 +12,19 @@ class MyTextButton extends StatelessWidget {
   final String text;
   final Widget? newscreen;
   final VoidCallback? onPressed;
+
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height * 0.065;
+    final double topMargin = MediaQuery.of(context).size.height * 0.025;
+    final double fontSize = MediaQuery.of(context).size.width * 0.06;
+
     return Container(
-      height: 50.h,
-      margin: EdgeInsets.only(top: 20.h),
+      height: height,
+      margin: EdgeInsets.only(top: topMargin),
       decoration: BoxDecoration(
         color: MyColors.gray,
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
         child: TextButton(
@@ -36,9 +40,9 @@ class MyTextButton extends StatelessWidget {
             }
           },
           child: Text(
-            text,
+            text, // 🔁 يمكن إضافته في AppStrings
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: MyColors.white,
             ),

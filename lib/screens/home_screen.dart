@@ -1,6 +1,8 @@
-// ignore_for_file: avoid_print, unused_field, deprecated_member_use, duplicate_ignore
+// ignore_for_file: avoid_print, unused_field, deprecated_member_use, duplicate_ignore, library_private_types_in_public_api
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/build_boxes.dart';
 import 'package:citio/core/widgets/emergency_button.dart';
 import 'package:citio/models/most_requested_products.dart';
@@ -19,10 +21,8 @@ import 'package:citio/services/get_most_requested_services.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// ignore: unused_element
-String _baseUrl = 'https://service-provider.runasp.net';
+String _baseUrl = Urls.serviceProviderbaseUrl;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       lastBackPressTime = now;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('اضغط مرة أخرى للخروج'),
+          content: Text(AppStrings.pressAgainToExit),
           duration: Duration(seconds: 2),
         ),
       );
@@ -52,6 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -65,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 45,
                     children: [
                       const EmergencyButton(
                         color: MyColors.ambulanceShade,
@@ -73,27 +75,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icons.local_hospital,
                           color: MyColors.ambulance,
                         ),
-                        emname: 'الإسعاف',
+                        emname: AppStrings.ambulance1,
                         emergencyServiceId: '1',
                       ),
+                      const SizedBox(width: 30),
                       const EmergencyButton(
                         color: MyColors.firefighterShade,
+
                         emicon: Icon(
                           Icons.fire_truck,
                           color: MyColors.firefighter,
                         ),
-                        emname: 'المطافئ',
+                        emname: AppStrings.fireFighter1,
                         emergencyServiceId: '2',
                       ),
+                      const SizedBox(width: 30),
                       const EmergencyButton(
                         color: MyColors.policeShade,
                         emicon: Icon(
                           Icons.local_police,
                           color: MyColors.police,
                         ),
-                        emname: 'الشرطة',
+                        emname: AppStrings.police,
                         emergencyServiceId: '3',
                       ),
+                      SizedBox(width: 30),
                       Column(
                         children: [
                           InkWell(
@@ -109,8 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Container(
-                              width: 40.w,
-                              height: 40.h,
+                              width: screenWidth * 0.1,
+                              height: screenWidth * 0.1,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyColors.primary,
@@ -121,45 +127,43 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: screenHeight * 0.02),
                           Text(
-                            'أضف شكوى',
+                            AppStrings.addComplaint1,
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: screenWidth * 0.035,
                               color: Colors.black,
                             ),
                           ),
-                          //const SizedBox(height: 3),
                         ],
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 20.0),
+              SizedBox(height: screenHeight * 0.02),
               const CarouselWithIndicators(),
-              const SizedBox(height: 20.0),
+              SizedBox(height: screenHeight * 0.02),
               FutureBuilder<List<MostRequested>>(
                 future: MostRequestedServices().getMostRequestedServices(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<MostRequested> services = snapshot.data!;
                     return BuildBoxes(
-                      title: 'الخدمات الحكومية',
-                      items: services,
+                      title: AppStrings.governmentServices1,
+                      items: snapshot.data!,
                       destination: const GovernmentServices(),
                       fit: BoxFit.cover,
-                      height: 175,
-                      imageHeight: 50,
+                      height: screenHeight * 0.32,
+                      imageHeight: screenHeight * 0.07,
                       imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
-                      imageWidth: 50,
-                      width: 160,
+                      imageWidth: screenWidth * 0.13,
+                      width: screenWidth * 0.43,
                       maximumlines: 3,
                     );
                   } else {
-                    return const SizedBox(
-                      height: 140,
-                      child: Center(child: CircularProgressIndicator()),
+                    return SizedBox(
+                      height: screenHeight * 0.17,
+                      child: const Center(child: CircularProgressIndicator()),
                     );
                   }
                 },
@@ -168,24 +172,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: MostRequestedProducts().getMostRequestedProduct(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<MostRequestedProduct> products = snapshot.data!;
                     return BuildProductsBoxes(
-                      title: 'المنتجات',
-                      items: products,
-                      titlefontSize: 12,
+                      title: AppStrings.products1,
+                      items: snapshot.data!,
+                      titlefontSize: screenWidth * 0.03,
                       destination: const ServiceOrderScreen(),
-                      fit: BoxFit.cover,
-                      height: 175,
+                      fit: BoxFit.fill,
+                      height: screenHeight * 0.27,
                       maximumLines: 3,
-                      imageHeight: 70,
+                      imageHeight: screenHeight * 0.09,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 190,
-                      width: 190,
+                      imageWidth: screenWidth * 0.5,
+                      width: screenWidth * 0.5,
                     );
                   } else {
-                    return const SizedBox(
-                      height: 150,
-                      child: Center(child: CircularProgressIndicator()),
+                    return SizedBox(
+                      height: screenHeight * 0.19,
+                      child: const Center(child: CircularProgressIndicator()),
                     );
                   }
                 },
@@ -194,24 +197,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: GetVendor().getVendor(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<Vendor> vendors = snapshot.data!;
                     return BuildVendorssBoxes(
-                      title: 'البائعين',
-                      items: vendors,
-                      titlefontSize: 12,
+                      title: AppStrings.vendors1,
+                      items: snapshot.data!,
+                      titlefontSize: screenWidth * 0.03,
                       destination: const AllVendorsScreen(),
                       fit: BoxFit.cover,
-                      height: 160,
+                      height: screenHeight * 0.27,
                       maximumLines: 3,
-                      imageHeight: 70,
+                      imageHeight: screenHeight * 0.09,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      imageWidth: 180,
-                      width: 180,
+                      imageWidth: screenWidth * 0.48,
+                      width: screenWidth * 0.48,
                     );
                   } else {
-                    return const SizedBox(
-                      height: 160,
-                      child: Center(child: CircularProgressIndicator()),
+                    return SizedBox(
+                      height: screenHeight * 0.2,
+                      child: const Center(child: CircularProgressIndicator()),
                     );
                   }
                 },
@@ -230,32 +232,7 @@ class CarouselWithIndicators extends StatefulWidget {
   const CarouselWithIndicators({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CarouselWithIndicatorsState createState() => _CarouselWithIndicatorsState();
-}
-
-class MySearchBar extends StatelessWidget {
-  const MySearchBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'ماذا تريد ',
-        prefixIcon: const Icon(Icons.search),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: MyColors.ghostColor),
-          borderRadius: BorderRadius.circular(25.0.r),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25.0.r),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-      ),
-    );
-  }
 }
 
 class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
@@ -263,6 +240,8 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return FutureBuilder<List<MostRecentProduct>>(
       future: MostRecentProducts().getMostRecentProduct(),
       builder: (context, snapshot) {
@@ -275,19 +254,19 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
               CarouselSlider(
                 items: cards,
                 options: CarouselOptions(
-                  height: 150.0.h,
+                  height: screenHeight * 0.2,
                   autoPlay: true,
                   enlargeCenterPage: true,
                   onPageChanged:
                       (index, reason) => setState(() => _currentIndex = index),
                 ),
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 10),
             ],
           );
         } else {
           return SizedBox(
-            height: 150.h,
+            height: screenHeight * 0.2,
             child: const Center(child: CircularProgressIndicator()),
           );
         }
@@ -296,11 +275,33 @@ class _CarouselWithIndicatorsState extends State<CarouselWithIndicators> {
   }
 
   List<ImageCard> generateCards(List<MostRecentProduct> data) {
-    List<ImageCard> cards = [];
-    for (MostRecentProduct p in data) {
-      cards.add(ImageCard(data: p));
-    }
-    return cards;
+    return data.map((p) => ImageCard(data: p)).toList();
+  }
+}
+
+class MySearchBar extends StatelessWidget {
+  const MySearchBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = MediaQuery.of(context).size.width * 0.07;
+
+    return TextField(
+      decoration: InputDecoration(
+        hintText: AppStrings.whatDoYouWant,
+        prefixIcon: const Icon(Icons.search),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: MyColors.ghostColor),
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
+          borderSide: const BorderSide(color: Colors.grey),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+      ),
+    );
   }
 }
 
@@ -310,6 +311,9 @@ class ImageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap:
           () => Navigator.push(
@@ -320,41 +324,33 @@ class ImageCard extends StatelessWidget {
             ),
           ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0.r),
+        borderRadius: BorderRadius.circular(screenWidth * 0.025),
         child: Stack(
           children: [
             Image.network(
               _baseUrl + data.image!,
               fit: BoxFit.cover,
               width: double.infinity,
-              errorBuilder: (
-                BuildContext context,
-                Object error,
-                StackTrace? stackTrace,
-              ) {
-                return SizedBox(
-                  height: 150.h,
-                  child: const Image(
-                    image: AssetImage(MyAssetsImage.brokenImage),
+              errorBuilder:
+                  (_, __, ___) => SizedBox(
+                    height: screenHeight * 0.2,
+                    child: const Image(
+                      image: AssetImage(MyAssetsImage.brokenImage),
+                    ),
                   ),
-                );
-              },
             ),
             Positioned(
-              bottom: 20.0.h,
-              left: 10.0.w,
+              bottom: screenHeight * 0.03,
+              left: screenWidth * 0.03,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 10.0.w,
-                  vertical: 5.0.h,
+                  horizontal: screenWidth * 0.03,
+                  vertical: screenHeight * 0.01,
                 ),
-                // ignore: deprecated_member_use
                 color: Colors.transparent,
                 child: StrokeText(
-                  height: 10.h,
-                  width: 10.w,
                   text: data.name,
-                  textSize: 14.sp,
+                  textSize: screenWidth * 0.035,
                   textColor: MyColors.white,
                   strokeColor: MyColors.black,
                 ),
@@ -373,10 +369,12 @@ class Indicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size.width * 0.02;
+
     return Container(
-      width: 8.0.w,
-      height: 8.0.h,
-      margin: EdgeInsets.symmetric(horizontal: 4.0.w),
+      width: size,
+      height: size,
+      margin: EdgeInsets.symmetric(horizontal: size / 2),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isActive ? Colors.green : Colors.grey,
@@ -385,11 +383,16 @@ class Indicator extends StatelessWidget {
   }
 }
 
-class StrokeText extends StatefulWidget {
+class StrokeText extends StatelessWidget {
+  final String? text;
+  final double? textSize;
+  final Color? textColor;
+  final Color? strokeColor;
+  final double? letterSpacing;
+  final double? strokeWidth;
+
   const StrokeText({
     super.key,
-    this.width,
-    this.height,
     this.text,
     this.textSize,
     this.textColor,
@@ -398,48 +401,32 @@ class StrokeText extends StatefulWidget {
     this.strokeWidth,
   });
 
-  final double? width;
-  final double? height;
-  final String? text;
-  final double? textSize;
-  final Color? textColor;
-  final Color? strokeColor;
-  final double? letterSpacing;
-  final double? strokeWidth;
-
-  @override
-  State<StrokeText> createState() => _StrokeTextState();
-}
-
-class _StrokeTextState extends State<StrokeText> {
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Implement the stroke
         Text(
+          text ?? '',
           maxLines: 2,
           textAlign: TextAlign.left,
-          widget.text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16.sp,
-            letterSpacing: widget.letterSpacing ?? 0,
+            fontSize: textSize ?? 16,
+            letterSpacing: letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
             foreground:
                 Paint()
                   ..style = PaintingStyle.stroke
-                  ..strokeWidth = widget.strokeWidth ?? 3
-                  ..color = widget.strokeColor ?? Colors.black,
+                  ..strokeWidth = strokeWidth ?? 3
+                  ..color = strokeColor ?? Colors.black,
           ),
         ),
-        // The text inside
         Text(
-          widget.text ?? '',
+          text ?? '',
           style: TextStyle(
-            fontSize: widget.textSize ?? 16.sp,
-            letterSpacing: widget.letterSpacing ?? 0,
+            fontSize: textSize ?? 16,
+            letterSpacing: letterSpacing ?? 0,
             fontWeight: FontWeight.bold,
-            color: widget.textColor ?? Colors.white,
+            color: textColor ?? Colors.white,
           ),
         ),
       ],

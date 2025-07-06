@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:citio/services/get_my_user_minimal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:citio/core/utils/project_strings.dart';
 
 class SocialMedia extends StatefulWidget {
   static SocialmediaUserMinimal? cachedUserMinimal;
@@ -40,14 +41,12 @@ class _SocialMediaState extends State<SocialMedia> {
   @override
   void initState() {
     super.initState();
-
     if (SocialMedia.cachedUserMinimal != null) {
       myUserMinimal = SocialMedia.cachedUserMinimal;
       isUserLoading = false;
     } else {
       _loadMyUser();
     }
-
     _fetchPostsPage(page: currentPage);
   }
 
@@ -60,7 +59,7 @@ class _SocialMediaState extends State<SocialMedia> {
         if (mounted) {
           setState(() {
             myUserMinimal = user;
-            SocialMedia.cachedUserMinimal = user; 
+            SocialMedia.cachedUserMinimal = user;
             isUserLoading = false;
           });
         }
@@ -75,15 +74,10 @@ class _SocialMediaState extends State<SocialMedia> {
 
   Future<void> _fetchPostsPage({required int page}) async {
     if (!hasMorePosts || isLoadingMore) return;
-
-    setState(() {
-      isLoadingMore = true;
-    });
-
+    setState(() => isLoadingMore = true);
     try {
       final postsResult = await GetPost().getPosts(page: page);
       final newPosts = postsResult.data;
-
       if (newPosts.isEmpty) {
         hasMorePosts = false;
       } else {
@@ -93,7 +87,6 @@ class _SocialMediaState extends State<SocialMedia> {
     } catch (e) {
       print('❌ Error loading page $page: $e');
     }
-
     setState(() {
       isLoading = false;
       isLoadingMore = false;
@@ -113,9 +106,7 @@ class _SocialMediaState extends State<SocialMedia> {
       return FutureBuilder<SocialmediaUser>(
         future: GetSocialmediaUser().getSocialMediaUser(id: userId),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const SizedBox.shrink();
-          }
+          if (snapshot.hasError) return const SizedBox.shrink();
           if (!snapshot.hasData) {
             return Container(
               color: MyColors.fadedGrey,
@@ -128,9 +119,7 @@ class _SocialMediaState extends State<SocialMedia> {
           final user = snapshot.data!;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!userCache.containsKey(userId)) {
-              setState(() {
-                userCache[userId] = user;
-              });
+              setState(() => userCache[userId] = user);
             }
           });
           return _buildPostWithUser(post, user, screenWidth, screenHeight);
@@ -145,16 +134,14 @@ class _SocialMediaState extends State<SocialMedia> {
     double screenWidth,
     double screenHeight,
   ) {
-    print('Building post with id: ${post.id}');
-
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
-
     return Padding(
       padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // User Info
           Row(
             children: [
               CircleAvatar(
@@ -162,7 +149,7 @@ class _SocialMediaState extends State<SocialMedia> {
                 backgroundImage: NetworkImage(
                   (user.avatar != null && user.avatar!.isNotEmpty)
                       ? Urls.socialmediaBaseUrl + user.avatar!
-                      : 'https://cdn-icons-png.flaticon.com/128/11820/11820229.png',
+                      : AppStrings.noAvatarUrl,
                 ),
               ),
               SizedBox(width: 10.w),
@@ -208,8 +195,10 @@ class _SocialMediaState extends State<SocialMedia> {
                 ),
             ],
           ),
+
           const SizedBox(height: 8),
           Text(post.postCaption ?? '', softWrap: true),
+
           if (imageUrls.isNotEmpty)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
@@ -229,16 +218,18 @@ class _SocialMediaState extends State<SocialMedia> {
                           imageUrls: imageUrls,
                           numOfShowImages:
                               imageUrls.length > 3 ? 3 : imageUrls.length,
-                          titleGallery: 'Citio',
+                          titleGallery: AppStrings.appGalleryTitle,
                           imageRadius: 8,
                         ),
               ),
             ),
+
           SizedBox(
             width: screenWidth - 10,
             height: 2.h,
             child: const ColoredBox(color: MyColors.fadedGrey),
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -247,9 +238,7 @@ class _SocialMediaState extends State<SocialMedia> {
                 currentUserReaction: post.userReaction,
                 totalCount: post.impressionsCount?.total ?? 0,
                 onReacted: (reaction, _) {
-                  setState(() {
-                    post.userReaction = reaction;
-                  });
+                  setState(() => post.userReaction = reaction);
                 },
               ),
               _buildReactionColumn(
@@ -260,7 +249,7 @@ class _SocialMediaState extends State<SocialMedia> {
               _buildReactionColumn(
                 icon: FluentIcons.share_48_regular,
                 count: null,
-                label: 'مشاركة',
+                label: AppStrings.postShared,
                 hoverColor: Colors.blue.withOpacity(0.3),
               ),
             ],
@@ -277,7 +266,6 @@ class _SocialMediaState extends State<SocialMedia> {
 
     return Scaffold(
       backgroundColor: MyColors.white,
-
       appBar: AppBar(
         backgroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
@@ -293,7 +281,6 @@ class _SocialMediaState extends State<SocialMedia> {
             );
           },
         ),
-
         toolbarHeight: 50.h,
         title: Padding(
           padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -301,7 +288,7 @@ class _SocialMediaState extends State<SocialMedia> {
             children: [
               SizedBox(width: screenWidth * 0.13),
               Text(
-                'آخر المشاركات',
+                AppStrings.latestPosts,
                 style: TextStyle(color: MyColors.black, fontSize: 20.sp),
               ),
               const Spacer(),

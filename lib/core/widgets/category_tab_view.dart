@@ -1,12 +1,13 @@
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/utils/project_strings.dart'; // ← هنا موجود AppStrings
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-String _baseUrl = 'https://service-provider.runasp.net';
+String _baseUrl = Urls.serviceProviderbaseUrl;
 
 class CategoryTabView extends StatelessWidget {
   final String vendorId;
@@ -25,61 +26,61 @@ class CategoryTabView extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData) {
-          if (snapshot.data!.isNotEmpty) {
-            List<VendorSubcategoryProducts> products = snapshot.data!;
-            return ListView.builder(
-              padding: EdgeInsets.all(8.r),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0.h),
-                  child: productCard(products, index, context),
-                );
-              },
-            );
-          } else {
-            return emptyCategory();
-          }
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          List<VendorSubcategoryProducts> products = snapshot.data!;
+          return ListView.builder(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.01,
+                ),
+                child: productCard(products, index, context),
+              );
+            },
+          );
         } else {
-          return emptyCategory();
+          return emptyCategory(context);
         }
       },
     );
   }
 
-  Center emptyCategory() {
+  Center emptyCategory(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundColor: MyColors.white,
-            radius: 45.r,
+            radius: width * 0.12,
             child: Icon(
               Icons.inventory,
               color: const Color.fromARGB(26, 49, 7, 7),
-              size: 40.sp,
+              size: width * 0.1,
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: height * 0.03),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: width * 0.08),
             child: Text(
-              'الخدمات غير متوفرة',
-              style: TextStyle(fontSize: 16.sp, color: MyColors.black),
+              AppStrings.noServices,
+              style: TextStyle(fontSize: width * 0.045, color: MyColors.black),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: height * 0.015),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: width * 0.08),
             child: Text(
-              'الخدمات في هذه الفئة غير متوفرة حاليا',
-              style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
+              AppStrings.noServicesInCategory,
+              style: TextStyle(fontSize: width * 0.04, color: MyColors.gray),
+              textAlign: TextAlign.center,
               maxLines: 2,
-              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -90,15 +91,17 @@ class CategoryTabView extends StatelessWidget {
   GestureDetector productCard(
     List<VendorSubcategoryProducts> products,
     int index,
-    context,
+    BuildContext context,
   ) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (context) => ProductDetailsView(productId: products[index].id),
+            builder: (_) => ProductDetailsView(productId: products[index].id),
           ),
         );
       },
@@ -108,108 +111,62 @@ class CategoryTabView extends StatelessWidget {
         elevation: 0.5,
         child: Row(
           children: [
-            Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20.r)),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.w,
-                      vertical: 8.h,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.network(
-                          width: 80.w,
-                          height: 80.h,
-
-                          _baseUrl + products[index].image!,
-                          fit: BoxFit.contain,
-                          errorBuilder: (
-                            BuildContext context,
-                            Object error,
-                            StackTrace? stackTrace,
-                          ) {
-                            return SizedBox(
-                              height: 80.h,
-                              width: 80.w,
-                              child: const Image(
-                                image: AssetImage(MyAssetsImage.brokenImage),
-                              ),
-                            );
-                          },
+            Padding(
+              padding: EdgeInsets.all(width * 0.02),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(width * 0.05),
+                child: Image.network(
+                  _baseUrl + products[index].image!,
+                  width: width * 0.22,
+                  height: height * 0.12,
+                  fit: BoxFit.contain,
+                  errorBuilder:
+                      (context, error, stackTrace) => SizedBox(
+                        width: width * 0.22,
+                        height: height * 0.12,
+                        child: const Image(
+                          image: AssetImage(MyAssetsImage.brokenImage),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
                 ),
-              ],
+              ),
             ),
             Expanded(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
-                              child: Text(
-                                products[index].name,
-                                style: TextStyle(
-                                  color: MyColors.black,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 3,
-                              ),
-                            ),
-                          ],
-                        ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: height * 0.01),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      products[index].name,
+                      style: TextStyle(
+                        color: MyColors.black,
+                        fontSize: width * 0.04,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 10.h),
-                              child: Text(
-                                '${products[index].price}LE',
-                                style: TextStyle(
-                                  color: MyColors.black,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      maxLines: 3,
+                    ),
+                    SizedBox(height: height * 0.005),
+                    Text(
+                      '${products[index].price} LE',
+                      style: TextStyle(
+                        fontSize: width * 0.035,
+                        fontWeight: FontWeight.bold,
+                        color: MyColors.black,
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(8.w, 0.h, 8.w, 10.h),
-                          child: Text(
-                            products[index].description!,
-                            maxLines: 6,
-                            softWrap: true,
-
-                            style: TextStyle(
-                              color: MyColors.black,
-                              fontSize: 13.sp,
-                            ),
-                          ),
-                        ),
+                    ),
+                    SizedBox(height: height * 0.01),
+                    Text(
+                      products[index].description ?? '',
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: width * 0.034,
+                        color: MyColors.black,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

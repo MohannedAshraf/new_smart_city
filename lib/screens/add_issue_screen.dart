@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
 import 'package:citio/models/add_issue_model.dart';
@@ -25,10 +26,14 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   bool _isLoading = false;
 
   Future<void> _pickImage() async {
+    final mediaQuery = MediaQuery.of(context);
+    final double iconSize = mediaQuery.size.width * 0.05; // تقريبًا زي 22.sp
+    final double fontSize = mediaQuery.size.width * 0.035; // تقريبًا زي 14.sp
+
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // ثابت
       ),
       builder: (context) {
         return SafeArea(
@@ -37,10 +42,13 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               ListTile(
                 leading: Icon(
                   Icons.camera_alt,
-                  color:  MyColors.primary,
-                  size: 22.sp,
+                  color: MyColors.primary,
+                  size: iconSize,
                 ),
-                title: Text('الكاميرا', style: TextStyle(fontSize: 14.sp)),
+                title: Text(
+                  'الكاميرا', // تقدر تغيرها إلى AppStrings.cameraText إذا أضفتها
+                  style: TextStyle(fontSize: fontSize),
+                ),
                 onTap: () async {
                   Navigator.pop(context);
                   final pickedFile = await ImagePicker().pickImage(
@@ -52,10 +60,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo, color: Colors.green, size: 22.sp),
+                leading: Icon(Icons.photo, color: Colors.green, size: iconSize),
                 title: Text(
-                  'اختيار من المعرض',
-                  style: TextStyle(fontSize: 14.sp),
+                  'اختيار من المعرض', // تقدر تغيرها إلى AppStrings.galleryText إذا أضفتها
+                  style: TextStyle(fontSize: fontSize),
                 ),
                 onTap: () async {
                   Navigator.pop(context);
@@ -79,12 +87,18 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   }
 
   void _previewImage(File imageFile) {
+    final double radius =
+        MediaQuery.of(context).size.width * 0.03; // تقريبًا زي 12.r
+
     showDialog(
       context: context,
       builder:
           (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius),
+            ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(radius),
               child: Image.file(imageFile, fit: BoxFit.contain),
             ),
           ),
@@ -92,13 +106,16 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   }
 
   void _sendComplaint() async {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     final description = _controller.text.trim();
     if (description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "من فضلك اكتب وصف الشكوى",
-            style: TextStyle(fontSize: 14.sp),
+            AppStrings.complaintDescriptionEmpty,
+            style: TextStyle(fontSize: screenWidth * 0.035),
           ),
         ),
       );
@@ -112,12 +129,12 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         builder:
             (context) => AlertDialog(
               title: Text(
-                "صلاحية الموقع مطلوبة",
-                style: TextStyle(fontSize: 16.sp),
+                AppStrings.locationPermissionRequiredTitle,
+                style: TextStyle(fontSize: screenWidth * 0.04),
               ),
               content: Text(
-                "يجب السماح للتطبيق بالوصول إلى الموقع لإرسال الشكوى.",
-                style: TextStyle(fontSize: 14.sp),
+                AppStrings.locationPermissionRequiredBody,
+                style: TextStyle(fontSize: screenWidth * 0.035),
               ),
               actions: [
                 TextButton(
@@ -127,13 +144,16 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     if (newStatus.isGranted) _sendComplaint();
                   },
                   child: Text(
-                    "سماح بالموقع",
-                    style: TextStyle(fontSize: 14.sp),
+                    AppStrings.allowLocation,
+                    style: TextStyle(fontSize: screenWidth * 0.035),
                   ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text("إلغاء", style: TextStyle(fontSize: 14.sp)),
+                  child: Text(
+                    AppStrings.cancel,
+                    style: TextStyle(fontSize: screenWidth * 0.035),
+                  ),
                 ),
               ],
             ),
@@ -167,9 +187,12 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
           SnackBar(
             duration: const Duration(seconds: 5),
             behavior: SnackBarBehavior.floating,
-            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            margin: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.04,
+              vertical: screenHeight * 0.015,
+            ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: BorderRadius.circular(screenWidth * 0.03),
             ),
             backgroundColor: Colors.green.shade600,
             content: Row(
@@ -177,31 +200,41 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               children: [
                 Expanded(
                   child: Text(
-                    "✅ تم إرسال الشكوى بنجاح، شكرًا لمساهمتك!",
-                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                    AppStrings.complaintSuccessMessage,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.032,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 TextButton.icon(
                   onPressed: () {
                     final shareText =
-                        "لقد قمت بتقديم شكوى في تطبيق المدينة: $description";
+                        "${AppStrings.shareTextPrefix}$description";
                     Share.share(shareText);
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.green.shade800,
                     padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 6.h,
+                      horizontal: screenWidth * 0.03,
+                      vertical: screenHeight * 0.01,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.05),
                     ),
                   ),
-                  icon: Icon(Icons.share, size: 16.sp, color: Colors.white),
+                  icon: Icon(
+                    Icons.share,
+                    size: screenWidth * 0.04,
+                    color: Colors.white,
+                  ),
                   label: Text(
-                    "مشاركة",
-                    style: TextStyle(color: Colors.white, fontSize: 13.sp),
+                    AppStrings.shareComplaint,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.032,
+                    ),
                   ),
                 ),
               ],
@@ -212,8 +245,8 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              "فشل في إرسال الشكوى",
-              style: TextStyle(fontSize: 14.sp),
+              AppStrings.complaintFailed,
+              style: TextStyle(fontSize: screenWidth * 0.035),
             ),
           ),
         );
@@ -222,14 +255,17 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "🚨 حدثت مشكلة أثناء إرسال الشكوى. الرجاء المحاولة لاحقًا.",
-            style: TextStyle(fontSize: 14.sp),
+            AppStrings.complaintError,
+            style: TextStyle(fontSize: screenWidth * 0.035),
           ),
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          margin: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.04,
+            vertical: screenHeight * 0.015,
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(screenWidth * 0.03),
           ),
         ),
       );
@@ -246,7 +282,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         leading: const BackButton(),
-        title: Text("شكوى جديدة", style: TextStyle(fontSize: 18.sp)),
+        title: Text(
+          AppStrings.newComplaintTitle,
+          style: TextStyle(fontSize: 18.sp),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.w),
@@ -273,7 +312,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     maxLength: 500,
                     onChanged: (_) => setState(() {}),
                     decoration: InputDecoration(
-                      hintText: "وصف المشكلة..؟",
+                      hintText: AppStrings.descriptionHint,
                       hintStyle: TextStyle(fontSize: 14.sp),
                       border: InputBorder.none,
                       counterText: "",
@@ -335,7 +374,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                           color: Colors.black,
                         ),
                         label: Text(
-                          "إضافة صورة",
+                          AppStrings.addImage,
                           style: TextStyle(
                             fontSize: 14.sp,
                             color: Colors.black,
@@ -350,7 +389,7 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                           size: 18.sp,
                         ),
                         label: Text(
-                          "إرسال",
+                          AppStrings.send,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14.sp,
@@ -386,10 +425,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               },
               icon: Icon(Icons.list_alt, size: 20.sp, color: MyColors.primary),
               label: Text(
-                'عرض الشكاوى السابقة',
+                AppStrings.previousComplaints,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color:  MyColors.primary,
+                  color: MyColors.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

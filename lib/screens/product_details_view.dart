@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/app_strings.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_add_to_cart.dart';
 import 'package:citio/helper/api_product_details.dart';
 import 'package:citio/models/product_details_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({super.key, required this.productId});
@@ -21,7 +22,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   late Future<ProductDetails> _productDetailsFuture;
 
   Color buttonColor = MyColors.primary;
-  String buttonText = "أضف إلي العربة";
+  String buttonText = AppStrings.addToCart;
   IconData buttonIcon = Icons.add_shopping_cart;
 
   @override
@@ -42,7 +43,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         buttonColor = MyColors.primary;
-        buttonText = "أضف إلي  العربة";
+        buttonText = AppStrings.addToCart;
         buttonIcon = Icons.add_shopping_cart;
       });
     });
@@ -50,11 +51,18 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
+    final height = size.height;
+
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text("تفاصيل المنتج ")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(AppStrings.productDetails),
+      ),
       floatingActionButton: Container(
-        width: 70.w,
-        height: 50.h,
+        width: width * 0.18,
+        height: height * 0.07,
         decoration: const BoxDecoration(
           color: MyColors.primary,
           shape: BoxShape.circle,
@@ -69,7 +77,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: 30.sp,
+            size: width * 0.07,
           ),
         ),
       ),
@@ -79,176 +87,157 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("حدث خطأ: ${snapshot.error}"));
+            return Center(
+              child: Text("${AppStrings.errorOccurred}: ${snapshot.error}"),
+            );
           } else if (!snapshot.hasData) {
-            return const Center(child: Text("لم يتم العثور على المنتج"));
+            return const Center(child: Text(AppStrings.notFound));
           }
 
           final product = snapshot.data!;
           final hasDiscount = product.discountPercentage > 0;
-          final discountedPrice =
-              hasDiscount
-                  ? product.price
-                  : product.price; // ممكن تعدلها لو السعر متغير
+          final discountedPrice = product.price;
           final oldPrice =
               hasDiscount
-                  ? (product.price * 100) /
-                      (100 -
-                          product
-                              .discountPercentage) // الحساب العكسي للسعر قبل الخصم
+                  ? (product.price * 100) / (100 - product.discountPercentage)
                   : product.price;
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: width * 0.04),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10.h),
+                SizedBox(height: height * 0.01),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(width * 0.05),
                   child: Image.network(
                     '${ProductDetailsService.imageBaseUrl}${product.mainImageUrl}',
-                    height: 250.h,
+                    height: height * 0.3,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 15.h),
+                SizedBox(height: height * 0.02),
                 Text(
                   product.nameAr,
                   style: TextStyle(
-                    fontSize: 22.sp,
+                    fontSize: width * 0.06,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: height * 0.01),
                 Row(
                   children: [
                     Text(
                       product.vendorBusinessName,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: width * 0.045,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),
-                    Icon(Icons.star, color: Colors.orange, size: 20.sp),
-                    SizedBox(width: 5.w),
+                    Icon(Icons.star, color: Colors.orange, size: width * 0.05),
+                    SizedBox(width: width * 0.015),
                     Text(
                       "${product.rating}",
-                      style: TextStyle(fontSize: 14.sp),
+                      style: TextStyle(fontSize: width * 0.035),
                     ),
                     Text(
-                      " (120 تقييم)",
-                      style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                      " (120 ${AppStrings.ratingText1})",
+                      style: TextStyle(
+                        fontSize: width * 0.035,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: height * 0.01),
                 Row(
                   children: [
                     Text(
                       "LE ${discountedPrice.toStringAsFixed(2)}",
                       style: TextStyle(
-                        fontSize: 20.sp,
+                        fontSize: width * 0.05,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     if (hasDiscount) ...[
-                      SizedBox(width: 15.w),
+                      SizedBox(width: width * 0.03),
                       Text(
                         "LE${oldPrice.toStringAsFixed(2)}",
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: width * 0.04,
                           color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
-                      SizedBox(width: 10.w),
+                      SizedBox(width: width * 0.02),
                       Text(
                         "${product.discountPercentage.toStringAsFixed(0)}% OFF",
-                        style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                        style: TextStyle(
+                          fontSize: width * 0.035,
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: height * 0.01),
                 Text(
-                  "الوصف",
+                  AppStrings.description,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: width * 0.045,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   product.description,
-                  style: TextStyle(fontSize: 14.sp, color: Colors.black87),
+                  style: TextStyle(
+                    fontSize: width * 0.04,
+                    color: Colors.black87,
+                  ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: height * 0.025),
 
-                /// ✅ عدد المنتجات + زر الإضافة
+                /// ✅ العداد + زر الإضافة
                 Row(
                   children: [
                     /// ✅ العداد
                     Expanded(
                       flex: 1,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                              vertical: 5.h,
-                              horizontal: 5.w,
-                            ),
-                            width: 40.w,
-                            height: 40.h,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: MyColors.primary,
-                            ),
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                if (itemCount > 1) {
-                                  setState(() {
-                                    itemCount--;
-                                  });
-                                }
-                              },
-                            ),
+                          _quantityButton(
+                            width,
+                            height,
+                            icon: Icons.remove,
+                            onPressed: () {
+                              if (itemCount > 1) {
+                                setState(() {
+                                  itemCount--;
+                                });
+                              }
+                            },
                           ),
                           Text(
                             '$itemCount',
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: width * 0.030,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                              vertical: 5.h,
-                              horizontal: 5.w,
-                            ),
-                            width: 40.w,
-                            height: 40.h,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: MyColors.primary,
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.add, color: Colors.white),
-                              onPressed: () {
-                                if (itemCount < 10) {
-                                  setState(() {
-                                    itemCount++;
-                                  });
-                                }
-                              },
-                            ),
+                          _quantityButton(
+                            width,
+                            height,
+                            icon: Icons.add,
+                            onPressed: () {
+                              if (itemCount < 10) {
+                                setState(() {
+                                  itemCount++;
+                                });
+                              }
+                            },
                           ),
                         ],
                       ),
@@ -264,27 +253,35 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                               productId: product.id,
                               quantity: itemCount,
                             );
-                            updateButton(Colors.green, "تم", Icons.check);
+                            updateButton(
+                              Colors.green,
+                              AppStrings.added,
+                              Icons.check,
+                            );
                           } catch (e) {
-                            updateButton(Colors.red, "فشل", Icons.error);
+                            updateButton(
+                              Colors.red,
+                              AppStrings.failed,
+                              Icons.error,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: buttonColor,
                           padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 14.h,
+                            vertical: height * 0.018,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
+                            borderRadius: BorderRadius.circular(width * 0.025),
                           ),
                         ),
                         icon: Icon(buttonIcon, color: Colors.white),
                         label: Text(
                           buttonText,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
+                            fontSize: width * 0.04,
                           ),
                         ),
                       ),
@@ -292,11 +289,32 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   ],
                 ),
 
-                SizedBox(height: 30.h),
+                SizedBox(height: height * 0.04),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _quantityButton(
+    double width,
+    double height, {
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: width * 0.02),
+      width: width * 0.1,
+      height: width * 0.1,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: MyColors.primary,
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: Colors.white, size: width * 0.05),
+        onPressed: onPressed,
       ),
     );
   }

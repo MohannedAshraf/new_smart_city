@@ -1,57 +1,70 @@
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ServiceContainer extends StatelessWidget {
   final IconData icon;
   final String title;
   final List<Widget> content;
+
   const ServiceContainer({
     super.key,
     required this.icon,
     required this.title,
     required this.content,
   });
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(screenWidth * 0.05),
       ),
-      // width: MediaQuery.of(context).size.width - 30,
-      //height: 200,
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 16.h, 16.w, 12.h),
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.025,
+              screenWidth * 0.04,
+              screenWidth * 0.04,
+              screenWidth * 0.03,
+            ),
             child: Row(
               children: [
                 CircleAvatar(
                   backgroundColor: MyColors.white,
-                  radius: 14.r,
-                  child: Icon(icon, color: MyColors.primary, size: 28.sp),
+                  radius: screenWidth * 0.035,
+                  child: Icon(
+                    icon,
+                    color: MyColors.primary,
+                    size: screenWidth * 0.07,
+                  ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: screenWidth * 0.02),
                 Expanded(
                   child: Text(
+                    title, // يمكنك استبداله لاحقًا بـ AppStrings.title
                     maxLines: 1,
-                    title,
-
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: 18.sp,
+                      fontSize: screenWidth * 0.045,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
-                    //maxLines: 2,
                   ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(19.w, 0.h, 19.w, 20.h),
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.05,
+              0,
+              screenWidth * 0.05,
+              screenWidth * 0.05,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: content,

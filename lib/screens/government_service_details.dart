@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/service_container.dart';
 import 'package:citio/models/gov_service_details.dart';
@@ -10,7 +11,6 @@ import 'package:citio/screens/apply_service.dart';
 import 'package:citio/services/get_gov_service_image.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentServiceDetails extends StatefulWidget {
   final int id;
@@ -30,12 +30,18 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
     _serviceFuture = MostRequestedServices().getServiceDetails(widget.id);
   }
 
+  double wp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.width * (percentage / 100);
+
+  double hp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.height * (percentage / 100);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.offWhite,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.h),
+        preferredSize: Size.fromHeight(hp(context, 10)), // حوالي 80px
         child: AppBar(
           backgroundColor: MyColors.white,
           surfaceTintColor: MyColors.white,
@@ -46,8 +52,11 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
               return Text(
                 snapshot.hasData
                     ? snapshot.data!.serviceName
-                    : 'جاري التحميل...',
-                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                    : AppStrings.loading,
+                style: TextStyle(
+                  fontSize: wp(context, 5),
+                  fontWeight: FontWeight.bold,
+                ),
               );
             },
           ),
@@ -60,9 +69,11 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+            return Center(
+              child: Text('${AppStrings.errorOccurred5}${snapshot.error}'),
+            );
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('لا توجد بيانات للخدمة'));
+            return const Center(child: Text(AppStrings.noData5));
           }
 
           final service = snapshot.data!;
@@ -71,14 +82,17 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
               MyColors.whiteSmoke;
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            padding: EdgeInsets.symmetric(
+              horizontal: wp(context, 5),
+              vertical: hp(context, 2),
+            ),
             child: Column(
               children: [
                 Container(
-                  height: 200.h,
+                  height: hp(context, 25),
                   decoration: BoxDecoration(
                     color: color,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(wp(context, 5)),
                   ),
                   child: Center(
                     child: FutureBuilder<Uint8List?>(
@@ -87,8 +101,8 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return SizedBox(
-                            width: 80.w,
-                            height: 80.h,
+                            width: wp(context, 20),
+                            height: hp(context, 10),
                             child: const Center(
                               child: CircularProgressIndicator(),
                             ),
@@ -97,27 +111,27 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
 
                         if (snapshot.hasData) {
                           return SizedBox(
-                            width: 80.w,
-                            height: 80.h,
+                            width: wp(context, 20),
+                            height: hp(context, 10),
                             child: Image.memory(snapshot.data!),
                           );
                         }
 
                         return SizedBox(
-                          width: 80.w,
-                          height: 80.h,
+                          width: wp(context, 20),
+                          height: hp(context, 10),
                           child: const Icon(Icons.broken_image),
                         );
                       },
                     ),
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: hp(context, 1.5)),
                 Container(
-                  padding: EdgeInsets.all(16.w),
+                  padding: EdgeInsets.all(wp(context, 5)),
                   decoration: BoxDecoration(
                     color: MyColors.white,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(wp(context, 5)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,37 +140,37 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                         children: [
                           CircleAvatar(
                             backgroundColor: MyColors.white,
-                            radius: 14.r,
+                            radius: wp(context, 3.5),
                             child: Icon(
                               Icons.info,
                               color: MyColors.primary,
-                              size: 28.sp,
+                              size: wp(context, 7),
                             ),
                           ),
-                          SizedBox(width: 8.w),
+                          SizedBox(width: wp(context, 2)),
                           Expanded(
                             child: Text(
-                              'تفاصيل هذه الخدمة',
+                              AppStrings.serviceDetailsTitle,
                               style: TextStyle(
-                                fontSize: 18.sp,
+                                fontSize: wp(context, 4.5),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: hp(context, 1)),
                       Text(
                         service.description ?? '',
                         style: TextStyle(
-                          fontSize: 15.sp,
+                          fontSize: wp(context, 4),
                           color: Colors.black87,
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: hp(context, 1.5)),
                 ServiceContainer(
                   icon: Icons.assignment,
                   title: 'الوثائق المطلوبة',
@@ -167,65 +181,65 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                               .toList()
                           : [
                             Text(
-                              'لا توجد مستندات مطلوبة',
+                              AppStrings.noDocumentsRequired,
                               style: TextStyle(
-                                fontSize: 16.sp,
+                                fontSize: wp(context, 4),
                                 color: Colors.black54,
                               ),
                             ),
                           ],
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: hp(context, 1.5)),
                 Container(
                   decoration: BoxDecoration(
                     color: MyColors.white,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(wp(context, 5)),
                   ),
-                  padding: EdgeInsets.all(16.w),
+                  padding: EdgeInsets.all(wp(context, 5)),
                   child: Row(
                     children: [
                       CircleAvatar(
                         backgroundColor: MyColors.white,
-                        radius: 14.r,
+                        radius: wp(context, 3.5),
                         child: Icon(
                           Icons.access_time_filled,
                           color: const Color(0xFFE79420),
-                          size: 28.sp,
+                          size: wp(context, 7),
                         ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: wp(context, 2)),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'مدة التنفيذ',
+                              AppStrings.executionDuration,
                               style: TextStyle(
-                                fontSize: 18.sp,
+                                fontSize: wp(context, 4.5),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              'الوقت المتوقع لإتمام العملية',
-                              style: TextStyle(fontSize: 16.sp),
+                              AppStrings.expectedTime,
+                              style: TextStyle(fontSize: wp(context, 4)),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(10.w),
-                        width: 140.w,
-                        height: 80.h,
+                        padding: EdgeInsets.all(wp(context, 2)),
+                        width: wp(context, 35),
+                        height: hp(context, 10),
                         decoration: BoxDecoration(
                           color: const Color(0xFFE79420).withOpacity(.1),
-                          borderRadius: BorderRadius.circular(20.r),
+                          borderRadius: BorderRadius.circular(wp(context, 5)),
                         ),
                         child: Center(
                           child: Text(
-                            service.time ?? 'مدة التنفيذ غير متوفرة',
+                            service.time ?? AppStrings.durationUnavailable,
                             style: TextStyle(
                               color: const Color(0xFFE79420),
-                              fontSize: 15.sp,
+                              fontSize: wp(context, 4),
                             ),
                             textAlign: TextAlign.center,
                             maxLines: 3,
@@ -235,7 +249,7 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: hp(context, 3)),
               ],
             ),
           );
@@ -248,10 +262,15 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
           final service = snapshot.data!;
           return Container(
             color: MyColors.white,
-            padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 16.h),
+            padding: EdgeInsets.fromLTRB(
+              wp(context, 5),
+              hp(context, 1.5),
+              wp(context, 5),
+              hp(context, 2),
+            ),
             child: SizedBox(
               width: double.infinity,
-              height: 50.h,
+              height: hp(context, 6),
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -267,13 +286,13 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                 },
                 icon: Icon(
                   Icons.description,
-                  size: 20.sp,
+                  size: wp(context, 4),
                   color: MyColors.white,
                 ),
                 label: Text(
-                  'اطلب هذه الخدمة',
+                  AppStrings.requestService,
                   style: TextStyle(
-                    fontSize: 17.sp,
+                    fontSize: wp(context, 4.5),
                     fontWeight: FontWeight.bold,
                     color: MyColors.white,
                   ),
@@ -281,7 +300,7 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: MyColors.primary,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.r),
+                    borderRadius: BorderRadius.circular(wp(context, 3)),
                   ),
                 ),
               ),
@@ -297,18 +316,32 @@ class RequirmentItem extends StatelessWidget {
   final String text;
   const RequirmentItem({super.key, required this.text});
 
+  double wp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.width * (percentage / 100);
+
+  double hp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.height * (percentage / 100);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+      padding: EdgeInsets.fromLTRB(
+        wp(context, 5),
+        hp(context, 1.5),
+        wp(context, 5),
+        hp(context, 2),
+      ),
       child: Row(
         children: [
-          CircleAvatar(backgroundColor: MyColors.primary, radius: 5.r),
-          SizedBox(width: 8.w),
+          CircleAvatar(
+            backgroundColor: MyColors.primary,
+            radius: wp(context, 1.5),
+          ),
+          SizedBox(width: wp(context, 2)),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(color: Colors.black87, fontSize: 16.sp),
+              style: TextStyle(color: Colors.black87, fontSize: wp(context, 4)),
               textAlign: TextAlign.justify,
             ),
           ),
@@ -318,22 +351,24 @@ class RequirmentItem extends StatelessWidget {
   }
 }
 
-Padding requirmentItem(String text) {
+Padding requirmentItem(String text, BuildContext context) {
+  double wp(double p) => MediaQuery.of(context).size.width * (p / 100);
+  double hp(double p) => MediaQuery.of(context).size.height * (p / 100);
+
   return Padding(
-    padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+    padding: EdgeInsets.fromLTRB(wp(5), hp(1.5), wp(5), hp(2)),
     child: Row(
       children: [
         CircleAvatar(
           backgroundColor: MyColors.primary,
-          radius: 5.r,
+          radius: wp(1.5),
           child: Text(''),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: wp(2)),
         Expanded(
           child: Text(
             text,
-
-            style: TextStyle(color: Colors.black87, fontSize: 16.sp),
+            style: TextStyle(color: Colors.black87, fontSize: wp(4)),
             textAlign: TextAlign.justify,
             //maxLines: 2,
           ),
@@ -343,14 +378,17 @@ Padding requirmentItem(String text) {
   );
 }
 
-Padding stepsItem(String text, String title, String num) {
+Padding stepsItem(String text, String title, String num, BuildContext context) {
+  double wp(double p) => MediaQuery.of(context).size.width * (p / 100);
+  double hp(double p) => MediaQuery.of(context).size.height * (p / 100);
+
   return Padding(
-    padding: EdgeInsets.fromLTRB(19.w, 8.h, 19.w, 12.h),
+    padding: EdgeInsets.fromLTRB(wp(5), hp(1.5), wp(5), hp(2)),
     child: Row(
       children: [
         CircleAvatar(
           backgroundColor: MyColors.primary,
-          radius: 16.r,
+          radius: wp(4),
           child: Text(
             num,
             style: const TextStyle(
@@ -359,7 +397,7 @@ Padding stepsItem(String text, String title, String num) {
             ),
           ),
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: wp(2)),
         Expanded(
           child: Column(
             children: [
@@ -367,10 +405,9 @@ Padding stepsItem(String text, String title, String num) {
                 children: [
                   Text(
                     title,
-
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: 18.sp,
+                      fontSize: wp(4.5),
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.justify,
@@ -378,7 +415,6 @@ Padding stepsItem(String text, String title, String num) {
                   ),
                 ],
               ),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -386,7 +422,7 @@ Padding stepsItem(String text, String title, String num) {
                     child: Text(
                       text,
                       maxLines: 3,
-                      style: TextStyle(color: Colors.black87, fontSize: 16.sp),
+                      style: TextStyle(color: Colors.black87, fontSize: wp(4)),
                       textAlign: TextAlign.justify,
                       //maxLines: 2,
                     ),

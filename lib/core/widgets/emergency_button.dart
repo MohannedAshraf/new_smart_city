@@ -1,13 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_emergency.dart';
 import 'package:citio/models/emergency_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({
@@ -29,17 +27,21 @@ class EmergencyButton extends StatelessWidget {
     bool isCancelled = false;
     BuildContext outerContext = context;
 
+    // نصوص ثابتة - لإضافتها في ملف strings لاحقًا
+    const String confirmTitle = "تأكيد البلاغ";
+    const String cancelText = "إلغاء";
+    const String successMessage = "تم إرسال البلاغ بنجاح";
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
           builder: (context, setState) {
-            // شغّل المؤقت هنا داخل الـ StatefulBuilder
             timer ??= Timer.periodic(const Duration(seconds: 1), (t) {
               if (countdown == 1 && !isCancelled) {
                 t.cancel();
-                Navigator.of(dialogContext).pop(); // Close dialog
+                Navigator.of(dialogContext).pop();
                 _sendEmergencyRequest(outerContext);
               }
               if (!isCancelled) {
@@ -51,7 +53,7 @@ class EmergencyButton extends StatelessWidget {
 
             return AlertDialog(
               backgroundColor: MyColors.white,
-              title: const Text("تأكيد البلاغ"),
+              title: const Text(confirmTitle),
               content: Text("سيتم إرسال البلاغ خلال $countdown ثانية..."),
               actions: [
                 TextButton(
@@ -60,7 +62,7 @@ class EmergencyButton extends StatelessWidget {
                     timer?.cancel();
                     Navigator.of(dialogContext).pop();
                   },
-                  child: const Text("إلغاء"),
+                  child: const Text(cancelText),
                 ),
               ],
             );
@@ -95,22 +97,29 @@ class EmergencyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double iconSize = MediaQuery.of(context).size.width * 0.10;
+    double spacing = MediaQuery.of(context).size.height * 0.012;
+    double fontSize = MediaQuery.of(context).size.width * 0.030;
+
     return GestureDetector(
       onTap: () => _showCountdownDialog(context),
       child: Column(
         children: [
           InkWell(
             onTap: () => _showCountdownDialog(context),
-            borderRadius: BorderRadius.circular(40.r),
+            borderRadius: BorderRadius.circular(iconSize),
             child: Container(
-              width: 40.w,
-              height: 40.h,
+              width: iconSize,
+              height: iconSize,
               decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               child: emicon,
             ),
           ),
-          SizedBox(height: 10.h),
-          Text(emname, style: TextStyle(fontSize: 12.sp, color: Colors.black)),
+          SizedBox(height: spacing),
+          Text(
+            emname,
+            style: TextStyle(fontSize: fontSize, color: Colors.black),
+          ),
         ],
       ),
     );

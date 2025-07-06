@@ -1,17 +1,17 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_login.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:citio/services/fcm_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart'; // مهم للخروج من التطبيق
+import 'package:flutter/services.dart';
 
 class MyloginPage extends StatefulWidget {
   const MyloginPage({super.key});
@@ -55,7 +55,6 @@ class _LoginPageState extends State<MyloginPage> {
           print("❌ فشل في تحميل البروفايل: $e");
         }
 
-        print('✅Token ${result.token!}');
         await FCMService().initFCM();
 
         Navigator.pushReplacement(
@@ -76,13 +75,17 @@ class _LoginPageState extends State<MyloginPage> {
 
   OutlineInputBorder myBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(12),
       borderSide: const BorderSide(color: Color.fromARGB(255, 207, 207, 207)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final screenHeight = size.height;
+    final screenWidth = size.width;
+
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -94,7 +97,7 @@ class _LoginPageState extends State<MyloginPage> {
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 24.h),
+              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.03),
               child: Form(
                 key: _formKey,
                 autovalidateMode:
@@ -102,32 +105,42 @@ class _LoginPageState extends State<MyloginPage> {
                         ? AutovalidateMode.always
                         : AutovalidateMode.disabled,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SvgPicture.asset("assets/icon/citio.svg", height: 120.h),
-                      SizedBox(height: 16.h),
+                      SvgPicture.asset(
+                        "assets/icon/citio.svg",
+                        height: screenHeight * 0.15,
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
                       Text(
-                        "مرحباً بعودتك",
+                        AppStrings.welcomeBack,
                         style: TextStyle(
-                          fontSize: 24.sp,
+                          fontSize: screenWidth * 0.06,
                           fontWeight: FontWeight.bold,
                           color: MyColors.primary,
                         ),
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: screenHeight * 0.01),
                       Text(
-                        "سجّل الدخول لإدارة خدمات المدينة",
-                        style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                        AppStrings.loginSubText,
+                        style: TextStyle(
+                          fontSize: screenWidth * 0.042,
+                          color: Colors.grey,
+                        ),
                       ),
-                      SizedBox(height: 24.h),
+                      SizedBox(height: screenHeight * 0.03),
 
                       // Email
                       TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
-                          hintText: "البريد الإلكتروني",
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                          ),
+                          hintText: AppStrings.emailHint,
                           prefixIcon: const Icon(
                             Icons.email,
                             color: Colors.grey,
@@ -138,19 +151,24 @@ class _LoginPageState extends State<MyloginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'يرجى إدخال البريد الإلكتروني';
+                            return AppStrings.loginEmailRequired;
                           }
                           return null;
                         },
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: screenHeight * 0.02),
 
                       // Password
                       TextFormField(
                         controller: passwordController,
+
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
-                          hintText: "كلمة المرور",
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10,
+                          ),
+                          hintText: AppStrings.passwordHint,
                           prefixIcon: const Icon(
                             Icons.lock,
                             color: Colors.grey,
@@ -174,17 +192,16 @@ class _LoginPageState extends State<MyloginPage> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'يرجى إدخال كلمة المرور';
+                            return AppStrings.loginPasswordRequired;
                           }
                           if (value.length < 6) {
-                            return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                            return AppStrings.loginPasswordTooShort;
                           }
                           return null;
                         },
                       ),
-                      SizedBox(height: 8.h),
+                      SizedBox(height: screenHeight * 0.01),
 
-                      // Forgot password
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
@@ -197,7 +214,7 @@ class _LoginPageState extends State<MyloginPage> {
                             );
                           },
                           child: const Text(
-                            "هل نسيت كلمة المرور؟",
+                            AppStrings.forgotPassword,
                             style: TextStyle(
                               fontSize: 15,
                               color: MyColors.primary,
@@ -206,7 +223,7 @@ class _LoginPageState extends State<MyloginPage> {
                         ),
                       ),
 
-                      SizedBox(height: 8.h),
+                      SizedBox(height: screenHeight * 0.01),
 
                       // Login Button
                       SizedBox(
@@ -214,30 +231,33 @@ class _LoginPageState extends State<MyloginPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: MyColors.primary,
-                            padding: EdgeInsets.symmetric(vertical: 16.h),
+                            padding: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.018,
+                            ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           onPressed: () => loginUser(context),
                           child: Text(
-                            _isLoading ? "جاري التحقق..." : "تسجيل الدخول",
+                            _isLoading
+                                ? AppStrings.loggingIn
+                                : AppStrings.loginButton,
                             style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: screenWidth * 0.045,
                               color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: screenHeight * 0.02),
 
-                      // Register Option
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "ليس لديك حساب؟",
-                            style: TextStyle(fontSize: 16.sp),
+                            AppStrings.noAccount,
+                            style: TextStyle(fontSize: screenWidth * 0.045),
                           ),
                           TextButton(
                             onPressed: () {
@@ -249,9 +269,9 @@ class _LoginPageState extends State<MyloginPage> {
                               );
                             },
                             child: Text(
-                              "افتح حساب",
+                              AppStrings.register,
                               style: TextStyle(
-                                fontSize: 15.sp,
+                                fontSize: screenWidth * 0.042,
                                 fontWeight: FontWeight.bold,
                                 color: MyColors.primary,
                               ),
@@ -259,12 +279,14 @@ class _LoginPageState extends State<MyloginPage> {
                           ),
                         ],
                       ),
-
-                      SizedBox(height: 12.h),
+                      SizedBox(height: screenHeight * 0.01),
                       Text(
-                        " Powered by Citio\n version 2.1.0",
+                        AppStrings.loginPoweredBy,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 15.sp),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: screenWidth * 0.038,
+                        ),
                       ),
                     ],
                   ),

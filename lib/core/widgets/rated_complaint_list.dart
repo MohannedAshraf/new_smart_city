@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_rating_issue.dart';
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -15,50 +15,60 @@ class RatedComplaintList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.01,
+      ),
       itemCount: issues.length,
       itemBuilder: (context, index) {
         final issue = issues[index];
 
         return SizedBox(
-          height: 150.h,
+          height: screenHeight * 0.19,
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.r),
+              borderRadius: BorderRadius.circular(screenWidth * 0.04),
             ),
-            margin: EdgeInsets.symmetric(vertical: 8.h),
+            margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
             color: Colors.white,
             child: Padding(
-              padding: EdgeInsets.all(24.w),
+              padding: EdgeInsets.all(screenWidth * 0.06),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8.r),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.02),
                     child:
                         issue.image != null
                             ? Image.network(
                               _baseUrl + issue.image!,
-                              width: 80.w,
-                              height: 80.h,
+                              width: screenWidth * 0.2,
+                              height: screenWidth * 0.2,
                               fit: BoxFit.cover,
                               errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image, size: 40.sp),
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size: screenWidth * 0.1,
+                                  ),
                             )
                             : Image.network(
                               'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                              width: 80.w,
-                              height: 80.h,
+                              width: screenWidth * 0.2,
+                              height: screenWidth * 0.2,
                               fit: BoxFit.cover,
                               errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      Icon(Icons.broken_image, size: 40.sp),
+                                  (context, error, stackTrace) => Icon(
+                                    Icons.broken_image,
+                                    size: screenWidth * 0.1,
+                                  ),
                             ),
                   ),
-                  SizedBox(width: 16.w),
+                  SizedBox(width: screenWidth * 0.04),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,32 +76,35 @@ class RatedComplaintList extends StatelessWidget {
                         Text(
                           issue.title,
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: screenWidth * 0.037,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h),
+                        SizedBox(height: screenHeight * 0.006),
                         Text(
                           issue.description ?? '',
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: screenWidth * 0.035,
                             color: const Color.fromARGB(255, 0, 3, 5),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 6.h),
+                        SizedBox(height: screenHeight * 0.006),
                         Text(
-                          'تم حلها',
-                          style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+                          AppStrings.solved,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.035,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: screenWidth * 0.02),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: GestureDetector(
@@ -105,7 +118,9 @@ class RatedComplaintList extends StatelessWidget {
                           builder:
                               (context) => AlertDialog(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderRadius: BorderRadius.circular(
+                                    screenWidth * 0.04,
+                                  ),
                                 ),
                                 backgroundColor: Colors.white,
                                 title: Row(
@@ -114,11 +129,11 @@ class RatedComplaintList extends StatelessWidget {
                                       Icons.star,
                                       color: MyColors.primary,
                                     ),
-                                    SizedBox(width: 8.w),
+                                    SizedBox(width: screenWidth * 0.02),
                                     Text(
-                                      "تقييم المشكلة",
+                                      AppStrings.rate,
                                       style: TextStyle(
-                                        fontSize: 18.sp,
+                                        fontSize: screenWidth * 0.045,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -128,46 +143,52 @@ class RatedComplaintList extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      "من فضلك قيّم الخدمة التي قُدمت لك:",
-                                      style: TextStyle(fontSize: 14.sp),
+                                      AppStrings.pleaseRate,
+                                      style: TextStyle(
+                                        fontSize: screenWidth * 0.035,
+                                      ),
                                     ),
-                                    SizedBox(height: 12.h),
+                                    SizedBox(height: screenHeight * 0.015),
                                     RatingBar.builder(
                                       initialRating: 0,
                                       minRating: 1,
                                       direction: Axis.horizontal,
                                       allowHalfRating: false,
                                       itemCount: 5,
-                                      itemSize: 30.sp,
+                                      itemSize: screenWidth * 0.07,
                                       itemPadding: EdgeInsets.symmetric(
-                                        horizontal: 4.w,
+                                        horizontal: screenWidth * 0.01,
                                       ),
                                       itemBuilder:
                                           (context, _) => Icon(
                                             Icons.star,
                                             color: MyColors.primary,
-                                            size: 24.sp,
+                                            size: screenWidth * 0.06,
                                           ),
                                       onRatingUpdate: (rating) {
                                         selectedRating = rating;
                                       },
                                     ),
-                                    SizedBox(height: 16.h),
+                                    SizedBox(height: screenHeight * 0.02),
                                     TextField(
                                       controller: commentController,
                                       maxLines: 3,
                                       decoration: InputDecoration(
-                                        hintText: "اكتب تعليقك هنا...",
-                                        hintStyle: TextStyle(fontSize: 14.sp),
+                                        hintText: AppStrings.writeComment,
+                                        hintStyle: TextStyle(
+                                          fontSize: screenWidth * 0.035,
+                                        ),
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
-                                            12.r,
+                                            screenWidth * 0.03,
                                           ),
                                         ),
-                                        contentPadding: EdgeInsets.all(12.w),
+                                        contentPadding: EdgeInsets.all(
+                                          screenWidth * 0.03,
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(height: 20.h),
+                                    SizedBox(height: screenHeight * 0.025),
                                     Row(
                                       children: [
                                         Expanded(
@@ -181,38 +202,41 @@ class RatedComplaintList extends StatelessWidget {
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(10.r),
+                                                    BorderRadius.circular(
+                                                      screenWidth * 0.03,
+                                                    ),
                                               ),
                                               padding: EdgeInsets.symmetric(
-                                                vertical: 8.h,
+                                                vertical: screenHeight * 0.015,
                                               ),
                                             ),
                                             child: Text(
-                                              'إلغاء',
+                                              AppStrings.cancel,
                                               style: TextStyle(
-                                                fontSize: 14.sp,
+                                                fontSize: screenWidth * 0.035,
                                                 color: Colors.redAccent,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 12.w),
+                                        SizedBox(width: screenWidth * 0.03),
                                         Expanded(
                                           child: ElevatedButton(
                                             onPressed: () async {
                                               final comment =
                                                   commentController.text.trim();
-
                                               if (selectedRating == 0.0) {
                                                 ScaffoldMessenger.of(
                                                   context,
                                                 ).showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      "من فضلك اختر تقييم قبل الإرسال ⭐",
+                                                      AppStrings
+                                                          .selectRatingFirst,
                                                       style: TextStyle(
-                                                        fontSize: 14.sp,
+                                                        fontSize:
+                                                            screenWidth * 0.035,
                                                       ),
                                                     ),
                                                     backgroundColor: Colors.red,
@@ -241,9 +265,11 @@ class RatedComplaintList extends StatelessWidget {
                                                   ).showSnackBar(
                                                     SnackBar(
                                                       content: Text(
-                                                        "تم إرسال تقييمك بنجاح ✅",
+                                                        AppStrings.ratingSent,
                                                         style: TextStyle(
-                                                          fontSize: 14.sp,
+                                                          fontSize:
+                                                              screenWidth *
+                                                              0.035,
                                                         ),
                                                       ),
                                                       backgroundColor:
@@ -261,9 +287,12 @@ class RatedComplaintList extends StatelessWidget {
                                                                 .message
                                                                 .isNotEmpty
                                                             ? response.message
-                                                            : "فشل في إرسال التقييم",
+                                                            : AppStrings
+                                                                .ratingFailed,
                                                         style: TextStyle(
-                                                          fontSize: 14.sp,
+                                                          fontSize:
+                                                              screenWidth *
+                                                              0.035,
                                                         ),
                                                       ),
                                                       backgroundColor:
@@ -277,9 +306,10 @@ class RatedComplaintList extends StatelessWidget {
                                                 ).showSnackBar(
                                                   SnackBar(
                                                     content: Text(
-                                                      "حدث خطأ أثناء الإرسال: $e",
+                                                      "\${AppStrings.of(context).ratingError} \$e",
                                                       style: TextStyle(
-                                                        fontSize: 14.sp,
+                                                        fontSize:
+                                                            screenWidth * 0.035,
                                                       ),
                                                     ),
                                                     backgroundColor: Colors.red,
@@ -291,16 +321,18 @@ class RatedComplaintList extends StatelessWidget {
                                               backgroundColor: MyColors.primary,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(10.r),
+                                                    BorderRadius.circular(
+                                                      screenWidth * 0.03,
+                                                    ),
                                               ),
                                               padding: EdgeInsets.symmetric(
-                                                vertical: 8.h,
+                                                vertical: screenHeight * 0.015,
                                               ),
                                             ),
                                             child: Text(
-                                              'إرسال',
+                                              AppStrings.send,
                                               style: TextStyle(
-                                                fontSize: 14.sp,
+                                                fontSize: screenWidth * 0.035,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -317,12 +349,16 @@ class RatedComplaintList extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.star, size: 20.sp, color: Colors.grey),
-                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.star,
+                            size: screenWidth * 0.05,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(width: screenWidth * 0.01),
                           Text(
-                            "Rate",
+                            AppStrings.rate,
                             style: TextStyle(
-                              fontSize: 13.sp,
+                              fontSize: screenWidth * 0.034,
                               color: Colors.grey,
                             ),
                           ),

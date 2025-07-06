@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_delete_acc.dart';
 import 'package:citio/helper/api_profile.dart';
@@ -9,7 +10,6 @@ import 'package:citio/models/profile_model.dart';
 import 'package:citio/screens/edit_profile.dart';
 import 'package:citio/screens/mylogin_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
@@ -51,9 +51,9 @@ class _ProfileState extends State<Profile> {
         await prefs.setString("token", "");
         await prefs.setString("refreshToken", "");
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("✅ تم حذف الحساب بنجاح")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text(AppStrings.accountDeleted)),
+        );
 
         Navigator.pushAndRemoveUntil(
           context,
@@ -63,18 +63,21 @@ class _ProfileState extends State<Profile> {
       } else {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text("❌ فشل حذف الحساب")));
+        ).showSnackBar(const SnackBar(content: Text(AppStrings.deleteFailed)));
       }
     } catch (e) {
       print("❌ Error deleting account: $e");
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("❌ حصل خطأ: $e")));
+      ).showSnackBar(SnackBar(content: Text("${AppStrings.errorOccurred}$e")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -94,7 +97,7 @@ class _ProfileState extends State<Profile> {
         backgroundColor: const Color(0xFFF5F5F5),
         elevation: 0,
         title: const Text(
-          "الملف الشخصي",
+          AppStrings.profileTitle,
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -102,13 +105,13 @@ class _ProfileState extends State<Profile> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(width * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: CircleAvatar(
-                  radius: 55.r,
+                  radius: width * 0.15,
                   backgroundImage:
                       (user?.imageUrl != null &&
                               user!.imageUrl!.trim().isNotEmpty)
@@ -120,74 +123,80 @@ class _ProfileState extends State<Profile> {
                           ),
                 ),
               ),
-              SizedBox(height: 13.h),
+              SizedBox(height: height * 0.015),
               Center(
                 child: Column(
                   children: [
                     Text(
-                      user?.fullName ?? "بدون اسم",
+                      user?.fullName ?? AppStrings.noName,
                       style: TextStyle(
-                        fontSize: 26.sp,
+                        fontSize: width * 0.065,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: height * 0.005),
                     Text(
-                      'مستخدم',
-                      style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                      AppStrings.user,
+                      style: TextStyle(
+                        fontSize: width * 0.04,
+                        color: Colors.grey,
+                      ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: height * 0.02),
               _profileItem(
                 icon: Icons.phone,
                 color: Colors.blue,
-                label: 'رقم الهاتف',
-                value: user?.phoneNumber ?? "غير متوفر",
+                label: AppStrings.phoneNumber,
+                value: user?.phoneNumber ?? AppStrings.unknown,
               ),
               _divider(),
               _profileItem(
                 icon: Icons.email,
                 color: Colors.green,
-                label: 'البريد الإلكتروني',
-                value: user?.email ?? "غير متوفر",
+                label: AppStrings.email,
+                value: user?.email ?? AppStrings.unknown,
               ),
               _divider(),
               _profileItem(
                 icon: Icons.location_on,
                 color: Colors.purple,
-                label: 'العنوان',
-                value: user?.address ?? "غير متوفر",
+                label: AppStrings.address,
+                value: user?.address ?? AppStrings.unknown,
               ),
               _divider(),
               _profileItem(
                 icon: Icons.apartment,
                 color: Colors.orange,
-                label: 'Building',
+                label: AppStrings.building,
                 value: user?.buildingNumber ?? "-",
               ),
               _divider(),
               _profileItem(
                 icon: Icons.stairs,
                 color: Colors.teal,
-                label: 'الدور',
+                label: AppStrings.floor,
                 value: user?.floorNumber ?? "-",
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: height * 0.03),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.edit, color: Colors.white),
                   label: Text(
-                    "تعديل البيانات",
-                    style: TextStyle(color: Colors.white, fontSize: 15.sp),
+                    AppStrings.editData,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: width * 0.045,
+                    ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColors.primary,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    padding: EdgeInsets.symmetric(vertical: height * 0.02),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   onPressed: () async {
@@ -203,20 +212,20 @@ class _ProfileState extends State<Profile> {
                   },
                 ),
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: height * 0.015),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.logout, color: Colors.red),
                   label: Text(
-                    "حذف الحساب",
-                    style: TextStyle(color: Colors.red, fontSize: 14.sp),
+                    AppStrings.deleteAccount,
+                    style: TextStyle(color: Colors.red, fontSize: width * 0.04),
                   ),
                   style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    padding: EdgeInsets.symmetric(vertical: height * 0.02),
                     side: const BorderSide(color: Colors.red),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   onPressed: () => _deleteProfile(context),
@@ -235,15 +244,18 @@ class _ProfileState extends State<Profile> {
     required String value,
     required Color color,
   }) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: height * 0.012),
       child: Row(
         children: [
           CircleAvatar(
             backgroundColor: color.withOpacity(0.1),
             child: Icon(icon, color: color),
           ),
-          SizedBox(width: 15.w),
+          SizedBox(width: width * 0.04),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,16 +263,16 @@ class _ProfileState extends State<Profile> {
                 Text(
                   label.toUpperCase(),
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: width * 0.03,
                     color: Colors.grey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: height * 0.004),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: 15.sp,
+                    fontSize: width * 0.04,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -273,8 +285,9 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget _divider() {
+    final height = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(vertical: height * 0.005),
       child: const Divider(height: 1, color: Colors.grey),
     );
   }

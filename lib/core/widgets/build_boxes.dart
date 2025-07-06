@@ -20,7 +20,6 @@ import 'package:citio/services/get_gov_service_image.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //String _baseUrl = 'https://service-provider.runasp.net';
 // ignore: must_be_immutable
@@ -36,18 +35,14 @@ Map<String, String> iconsGov = {
 Map<int, Uint8List?> imageCache = {};
 
 class BuildBoxes extends StatelessWidget {
-  //BuildContext context;
   final List<MostRequested> items;
   final String title;
   final double width;
-  // final String details;
   final double height;
-
   final double imageHeight;
   final double imageWidth;
   final BoxFit fit;
   final EdgeInsetsGeometry imagePadding;
-  // final int itemCount;
   final Widget destination;
   final double? titlefontSize;
   final int? maximumlines;
@@ -56,67 +51,62 @@ class BuildBoxes extends StatelessWidget {
     super.key,
     required this.title,
     required this.items,
-    // required this.details,
     required this.destination,
     required this.fit,
     required this.height,
-
     required this.imageHeight,
     required this.imagePadding,
     required this.imageWidth,
-    //  required this.itemCount,
     required this.width,
     this.titlefontSize,
     this.maximumlines,
   });
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 15.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.02, // تقريبًا 8.w
+            screenHeight * 0.012, // 10.h
+            screenWidth * 0.04, // 15.w
+            screenHeight * 0.012,
+          ),
           child: Row(
             children: [
-              Column(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 20.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.05, // تقريبًا 20.sp
+                  fontWeight: FontWeight.bold,
+                ),
+                textDirection: TextDirection.rtl,
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              const Spacer(),
+              RichText(
+                text: TextSpan(
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'عرض الجميع',
-                            style: TextStyle(
-                              color: MyColors.primary,
-                              fontSize: 12.sp,
-                            ),
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (_) => const GovernmentServices(),
-                                      ),
-                                    );
-                                  },
-                          ),
-                        ],
+                    TextSpan(
+                      text: 'عرض الجميع',
+                      style: TextStyle(
+                        color: MyColors.primary,
+                        fontSize: screenWidth * 0.03, // 12.sp
                       ),
+                      recognizer:
+                          TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const GovernmentServices(),
+                                ),
+                              );
+                            },
                     ),
                   ],
                 ),
@@ -126,7 +116,6 @@ class BuildBoxes extends StatelessWidget {
         ),
         SizedBox(
           height: height,
-
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
@@ -137,7 +126,7 @@ class BuildBoxes extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) =>
+                            (_) =>
                                 GovernmentServiceDetails(id: items[index].id),
                       ),
                     ),
@@ -165,12 +154,10 @@ class BuildBoxes extends StatelessWidget {
                                   ),
                                 );
                               }
-
                               if (snapshot.hasData) {
                                 imageCache[items[index].id] = snapshot.data!;
                                 return Image.memory(snapshot.data!);
                               }
-
                               return const Icon(Icons.broken_image);
                             },
                           ),
@@ -184,8 +171,7 @@ class BuildBoxes extends StatelessWidget {
                   title: items[index].serviceName,
                   width: width,
                   details:
-                      'يستغرق استخراجه ${items[index].time} بتكلفة  ${items[index].fee} جنيهًا فقط لا غير',
-
+                      'يستغرق استخراجه ${items[index].time} بتكلفة ${items[index].fee} جنيهًا فقط لا غير',
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -196,94 +182,86 @@ class BuildBoxes extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 20.0.h),
+        SizedBox(height: screenHeight * 0.02), // تقريبًا 20.h
       ],
     );
   }
 }
 
 class BuildProductsBoxes extends StatelessWidget {
-  //BuildContext context;
   final List<MostRequestedProduct> items;
   final String title;
   final double width;
-  //final String details;
   final double height;
-
   final double imageHeight;
   final double imageWidth;
   final BoxFit fit;
   final EdgeInsetsGeometry imagePadding;
-  // final int itemCount;
   final Widget destination;
   final double? titlefontSize;
   final int? maximumLines;
+
   const BuildProductsBoxes({
     super.key,
     required this.title,
     required this.items,
-    // required this.details,
     required this.destination,
     required this.fit,
     required this.height,
-
     required this.imageHeight,
     required this.imagePadding,
     required this.imageWidth,
-    //  required this.itemCount,
     required this.width,
     this.titlefontSize,
     this.maximumLines,
   });
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.02,
+            screenHeight * 0.012,
+            screenWidth * 0.02,
+            screenHeight * 0.012,
+          ),
           child: Row(
             children: [
-              Column(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 20.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.05, // تقريبًا 20.sp
+                  fontWeight: FontWeight.bold,
+                ),
+                textDirection: TextDirection.rtl,
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              const Spacer(),
+              RichText(
+                text: TextSpan(
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'عرض الجميع',
-                            style: TextStyle(
-                              color: MyColors.primary,
-                              fontSize: 12.sp,
-                            ),
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (_) =>
-                                                const HomePage(initialIndex: 3),
-                                      ),
-                                    );
-                                  },
-                          ),
-                        ],
+                    TextSpan(
+                      text: 'عرض الجميع',
+                      style: TextStyle(
+                        color: MyColors.primary,
+                        fontSize: screenWidth * 0.03, // تقريبًا 12.sp
                       ),
+                      recognizer:
+                          TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (_) => const HomePage(initialIndex: 3),
+                                ),
+                              );
+                            },
                     ),
                   ],
                 ),
@@ -293,7 +271,6 @@ class BuildProductsBoxes extends StatelessWidget {
         ),
         SizedBox(
           height: height,
-
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
@@ -304,7 +281,7 @@ class BuildProductsBoxes extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) =>
+                            (_) =>
                                 ProductDetailsView(productId: items[index].id),
                       ),
                     ),
@@ -322,92 +299,85 @@ class BuildProductsBoxes extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 20.0.h),
+        SizedBox(height: screenHeight * 0.02), // تقريبًا 20.h
       ],
     );
   }
 }
 
 class BuildVendorssBoxes extends StatelessWidget {
-  //BuildContext context;
   final List<Vendor> items;
   final String title;
   final double width;
-  //final String details;
   final double height;
-
   final double imageHeight;
   final double imageWidth;
   final BoxFit fit;
   final EdgeInsetsGeometry imagePadding;
-  // final int itemCount;
   final Widget destination;
   final double? titlefontSize;
   final int? maximumLines;
+
   const BuildVendorssBoxes({
     super.key,
     required this.title,
     required this.items,
-    // required this.details,
     required this.destination,
     required this.fit,
     required this.height,
-
     required this.imageHeight,
     required this.imagePadding,
     required this.imageWidth,
-    //  required this.itemCount,
     required this.width,
     this.titlefontSize,
     this.maximumLines,
   });
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(8.w, 10.h, 8.w, 10.h),
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.02, // يعادل تقريبًا 8.w
+            screenHeight * 0.012, // تقريبًا 10.h
+            screenWidth * 0.02,
+            screenHeight * 0.012,
+          ),
           child: Row(
             children: [
-              Column(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 20.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textDirection: TextDirection.rtl,
-                  ),
-                ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.05, // تقريبًا 20.sp
+                  fontWeight: FontWeight.bold,
+                ),
+                textDirection: TextDirection.rtl,
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+              const Spacer(),
+              RichText(
+                text: TextSpan(
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'عرض الجميع',
-                            style: TextStyle(
-                              color: MyColors.primary,
-                              fontSize: 12.sp,
-                            ),
-                            recognizer:
-                                TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => destination,
-                                      ),
-                                    );
-                                  },
-                          ),
-                        ],
+                    TextSpan(
+                      text: 'عرض الجميع',
+                      style: TextStyle(
+                        color: MyColors.primary,
+                        fontSize: screenWidth * 0.03, // تقريبًا 12.sp
                       ),
+                      recognizer:
+                          TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => destination,
+                                ),
+                              );
+                            },
                     ),
                   ],
                 ),
@@ -417,25 +387,25 @@ class BuildVendorssBoxes extends StatelessWidget {
         ),
         SizedBox(
           height: height,
-
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
             itemBuilder: (context, index) {
+              final vendor = items[index];
               return GestureDetector(
-                onTap:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => VendorProfile(id: items[index].id),
-                      ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VendorProfile(id: vendor.id),
                     ),
+                  );
+                },
                 child: ServiceBox(
-                  title: items[index].businessName,
+                  title: vendor.businessName,
                   width: width,
-                  details: '${items[index].name}\n${items[index].type}',
-                  image: Urls.serviceProviderbaseUrl + items[index].image!,
+                  details: '${vendor.name}\n${vendor.type}',
+                  image: Urls.serviceProviderbaseUrl + vendor.image!,
                   imageHeight: imageHeight,
                   imageWidth: imageWidth,
                   fit: fit,
@@ -446,7 +416,7 @@ class BuildVendorssBoxes extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 20.0.h),
+        SizedBox(height: screenHeight * 0.02), // تقريبًا 20.h
       ],
     );
   }
@@ -466,6 +436,7 @@ class ServiceBox extends StatelessWidget {
   final Widget? imageIcon;
   final Color? iconColor;
   final Color? backgroundColor;
+
   const ServiceBox({
     super.key,
     required this.title,
@@ -485,12 +456,20 @@ class ServiceBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       width: width,
-      margin: EdgeInsets.fromLTRB(4.w, 2.h, 4.w, 2.h),
+      margin: EdgeInsets.fromLTRB(
+        screenWidth * 0.01, // تقريبًا 4.w
+        screenHeight * 0.005, // تقريبًا 2.h
+        screenWidth * 0.01,
+        screenHeight * 0.005,
+      ),
       decoration: BoxDecoration(
         color: MyColors.white,
-        borderRadius: BorderRadius.circular(12.0.r),
+        borderRadius: BorderRadius.circular(screenWidth * 0.03),
         boxShadow: const [
           BoxShadow(
             color: MyColors.whiteSmoke,
@@ -503,86 +482,96 @@ class ServiceBox extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.r),
-              topRight: Radius.circular(20.r),
+              topLeft: Radius.circular(screenWidth * 0.05),
+              topRight: Radius.circular(screenWidth * 0.05),
             ),
             child: Padding(
               padding: imagePadding,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children:
                     imageIcon != null
                         ? [
                           Container(
                             decoration: BoxDecoration(
                               color: MyColors.whiteSmoke,
-                              borderRadius: BorderRadius.circular(15.r),
+                              borderRadius: BorderRadius.circular(
+                                screenWidth * 0.04,
+                              ),
                             ),
-
-                            width: imageWidth,
-                            height: imageHeight,
+                            width: screenWidth * 0.3,
+                            height: screenHeight * 0.13,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15.r),
+                              borderRadius: BorderRadius.circular(
+                                screenWidth * 0.04,
+                              ),
                               child: imageIcon,
                             ),
                           ),
                         ]
                         : [
                           Image.network(
-                            width: imageWidth,
-                            height: imageHeight,
                             image!,
+                            width: screenWidth * 0.3,
+                            height: screenHeight * 0.13,
                             fit: fit,
-                            errorBuilder: (
-                              BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace,
-                            ) {
-                              return SizedBox(
-                                height: imageHeight,
-                                width: imageWidth,
-                                child: const Image(
-                                  image: AssetImage(MyAssetsImage.brokenImage),
+                            errorBuilder:
+                                (_, __, ___) => SizedBox(
+                                  width: screenWidth * 0.3,
+                                  height: screenHeight * 0.13,
+                                  child: const Image(
+                                    image: AssetImage(
+                                      MyAssetsImage.brokenImage,
+                                    ),
+                                  ),
                                 ),
-                              );
-                            },
                           ),
                         ],
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.03,
+              screenHeight * 0.01,
+              screenWidth * 0.03,
+              screenHeight * 0.005,
+            ),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    maxLines: 1,
                     title,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     softWrap: false,
                     style: TextStyle(
                       color: Colors.black87,
-                      fontSize: titlefontSize ?? 14.sp,
+                      fontSize: titlefontSize ?? screenWidth * 0.035,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.start,
-                    //maxLines: 2,
                   ),
                 ),
               ],
             ),
           ),
-
           Padding(
-            padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.03,
+              screenHeight * 0.005,
+              screenWidth * 0.03,
+              screenHeight * 0.01,
+            ),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
-                    maxLines: maximumlines ?? 2,
                     details,
-                    style: TextStyle(color: MyColors.gray, fontSize: 12.0.sp),
+                    maxLines: maximumlines ?? 2,
+                    style: TextStyle(
+                      color: MyColors.gray,
+                      fontSize: screenWidth * 0.03,
+                    ),
                     textAlign: TextAlign.start,
                   ),
                 ),

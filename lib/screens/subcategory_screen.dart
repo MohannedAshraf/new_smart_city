@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print
-
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/category_circle.dart';
 import 'package:citio/core/widgets/product_card.dart';
 import 'package:citio/helper/api_product_under_sub.dart';
@@ -9,7 +8,6 @@ import 'package:citio/models/category_sub_category_model.dart';
 import 'package:citio/models/product_under_sub_model.dart';
 import 'package:citio/screens/cart_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubCategoryScreen extends StatefulWidget {
   final int selectedCategoryIndex;
@@ -80,11 +78,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
       products = await ApiProductUnderSub.fetchProductsBySubCategory(
         subCategoryId,
       );
-      errorMessage = null; // reset error if success
+      errorMessage = null;
     } catch (e, s) {
       errorMessage = e.toString();
       print("Exception while fetching products: $e");
-      print(s); // Stack trace
+      print(s);
     } finally {
       setState(() => isLoadingProducts = false);
     }
@@ -92,10 +90,13 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       floatingActionButton: Container(
-        width: 70.w,
-        height: 50.h,
+        width: screenWidth * 0.18,
+        height: screenHeight * 0.07,
         decoration: const BoxDecoration(
           color: MyColors.primary,
           shape: BoxShape.circle,
@@ -110,42 +111,42 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
           icon: Icon(
             Icons.shopping_bag_sharp,
             color: Colors.white,
-            size: 30.sp,
+            size: screenWidth * 0.08,
           ),
         ),
       ),
-      // backgroundColor: const Color.fromARGB(255, 220, 226, 223),
-      appBar: AppBar(
-        title: const Text('الخدمات'),
-        centerTitle: true,
-        //  backgroundColor: const Color.fromARGB(255, 220, 226, 223),
-      ),
+      appBar: AppBar(title: const Text(AppStrings.services), centerTitle: true),
       body:
           errorMessage != null
-              ? Center(child: Text('حدث خطأ: $errorMessage'))
+              ? Center(child: Text('${AppStrings.errorOccurred} $errorMessage'))
               : isLoadingCategories
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10.h),
-                    _buildCategoryList(),
-                    SizedBox(height: 10.h),
-                    _buildSubCategoryList(),
-                    SizedBox(height: 20.h),
-                    isLoadingProducts
-                        ? const Center(child: CircularProgressIndicator())
-                        : products.isEmpty
-                        ? const Center(child: Text('لا توجد منتجات'))
-                        : _buildProductGrid(),
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.03,
+                    vertical: screenHeight * 0.02,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildCategoryList(screenWidth),
+                      SizedBox(height: screenHeight * 0.02),
+                      _buildSubCategoryList(screenWidth),
+                      SizedBox(height: screenHeight * 0.03),
+                      isLoadingProducts
+                          ? const Center(child: CircularProgressIndicator())
+                          : products.isEmpty
+                          ? const Center(child: Text(AppStrings.noProducts))
+                          : _buildProductGrid(),
+                    ],
+                  ),
                 ),
               ),
     );
   }
 
-  Widget _buildCategoryList() {
+  Widget _buildCategoryList(double screenWidth) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -164,7 +165,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
               name: category.nameAr,
               imageUrl: category.imageUrl,
               isSelected: selectedCategoryIndex == index,
-              radius: 30.r,
+              radius: screenWidth * 0.08,
             ),
           );
         }),
@@ -172,11 +173,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
     );
   }
 
-  Widget _buildSubCategoryList() {
+  Widget _buildSubCategoryList(double screenWidth) {
     return isLoadingSubCategories
         ? const Center(child: CircularProgressIndicator())
         : subCategories.isEmpty
-        ? const Center(child: Text('لا يوجد خدمات فرعية'))
+        ? const Center(child: Text(AppStrings.noSubServices))
         : SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -194,7 +195,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                   name: subCategory.nameAr,
                   imageUrl: subCategory.imageUrl,
                   isSelected: selectedSubCategoryIndex == index,
-                  radius: 25.r,
+                  radius: screenWidth * 0.07,
                 ),
               );
             }),
@@ -219,11 +220,11 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 10.w,
-            mainAxisSpacing: 10.h,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
             childAspectRatio: 0.65,
           ),
           itemCount: products.length,

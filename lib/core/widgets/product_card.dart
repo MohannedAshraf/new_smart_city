@@ -1,7 +1,6 @@
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/screens/product_details_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-//import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -23,6 +22,9 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -33,13 +35,12 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(top: 10.h),
+        margin: EdgeInsets.only(top: screenHeight * 0.012),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(screenWidth * 0.05),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              // ignore: deprecated_member_use
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 2,
               blurRadius: 5,
@@ -48,17 +49,21 @@ class ProductCard extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: EdgeInsets.only(bottom: 5.h, right: 5.w, left: 5.w),
+          padding: EdgeInsets.only(
+            bottom: screenHeight * 0.002,
+            right: screenWidth * 0.015,
+            left: screenWidth * 0.015,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 182,
-                height: 150.h,
+                height: screenHeight * 0.18,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.r),
-                    topRight: Radius.circular(10.r),
+                    topLeft: Radius.circular(screenWidth * 0.025),
+                    topRight: Radius.circular(screenWidth * 0.025),
                   ),
                   child: Image.network(
                     image,
@@ -72,9 +77,9 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: screenHeight * 0.003),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.0.h),
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.006),
                 child: Text(
                   productName,
                   overflow: TextOverflow.ellipsis,
@@ -82,18 +87,22 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.0.h),
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.006),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      description.isNotEmpty ? description : 'لا يوجد وصف',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                      description.isNotEmpty
+                          ? description
+                          : AppStrings.noDescription,
+                      style: TextStyle(
+                        fontSize: screenHeight * 0.015,
+                        color: Colors.grey,
+                      ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2, // عرض سطرين فقط
+                      maxLines: 2,
                     ),
-                    if (description.length >
-                        60) // شرط تقريبي لطول نص يحتاج لأكثر من سطرين
+                    if (description.length > 60)
                       InkWell(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -107,21 +116,22 @@ class ProductCard extends StatelessWidget {
                         },
                         child: Text(
                           '...',
-                          style: TextStyle(fontSize: 12.sp, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: screenHeight * 0.015,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                   ],
                 ),
               ),
-
               const Spacer(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.h),
+                padding: EdgeInsets.symmetric(horizontal: screenHeight * 0.006),
                 child: Row(
                   children: [
                     Text("$rating"),
                     const Icon(Icons.star, color: Colors.amber),
-
                     const Spacer(),
                     Text(
                       price,

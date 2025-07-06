@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabItem extends StatelessWidget {
   final String title;
@@ -9,7 +8,9 @@ class TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badgeSize = MediaQuery.of(context).size.width * 0.045;
+    final width = MediaQuery.of(context).size.width;
+    final badgeSize = width * 0.045;
+    final fontSize = width * 0.035;
 
     return Tab(
       child: Wrap(
@@ -19,7 +20,7 @@ class TabItem extends StatelessWidget {
           Text(
             title,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14.sp),
+            style: TextStyle(fontSize: fontSize),
           ),
           if (count > 0)
             Container(

@@ -1,10 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:citio/core/widgets/reaction_icon_mapper.dart';
 import 'package:citio/core/widgets/reaction_dialog.dart';
 import 'package:citio/services/socialmedia_reactions_api.dart';
-import 'package:citio/core/utils/variables.dart';
 
 class ReactionButton extends StatefulWidget {
   final String postId;
@@ -57,6 +57,8 @@ class _ReactionButtonState extends State<ReactionButton> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return GestureDetector(
       onTap: () async {
         if (_userReaction != null) {
@@ -77,11 +79,19 @@ class _ReactionButtonState extends State<ReactionButton> {
       },
       child: Row(
         children: [
-          ReactionIconMapper.getReactionIcon(_userReaction, size: 24),
-          SizedBox(width: 4.w),
+          ReactionIconMapper.getReactionIcon(
+            _userReaction,
+            size: screenWidth * 0.06,
+          ), // تقريبًا 24
+          SizedBox(width: screenWidth * 0.01), // تقريبًا 4
           Text(
-            '$_totalCount',
-            style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+            // استخرجنا النص:
+            // ignore: unnecessary_string_interpolations
+            '${_totalCount.toString()}',
+            style: TextStyle(
+              color: MyColors.gray,
+              fontSize: screenWidth * 0.025, // تقريبًا 10
+            ),
           ),
         ],
       ),

@@ -1,12 +1,11 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'dart:io';
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_post_service.dart';
 import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class NewPostScreen extends StatefulWidget {
@@ -44,24 +43,24 @@ class _NewPostScreenState extends State<NewPostScreen> {
       backgroundColor = Colors.green;
     } else if (message.contains("❌")) {
       backgroundColor = Colors.red;
-    } else if (message.contains("⚠️") ||
-        message.contains("تحذير") ||
-        message.contains("يمكنك") ||
-        message.contains("عدد") ||
-        message.contains("يجب")) {
-      backgroundColor = Colors.orange;
     } else {
-      backgroundColor = Colors.blueGrey;
+      backgroundColor = Colors.orange;
     }
+
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 30.h),
-        backgroundColor: backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
+        margin: EdgeInsets.fromLTRB(
+          width * 0.05,
+          height * 0.01,
+          width * 0.05,
+          height * 0.03,
         ),
+        backgroundColor: backgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         duration: const Duration(seconds: 3),
         content: Row(
           children: [
@@ -73,25 +72,23 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   : Icons.warning_amber_rounded,
               color: Colors.white,
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: width * 0.03),
             Expanded(
               child: Text(
                 message.replaceAll("✅", "").replaceAll("❌", "").trim(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                 ),
               ),
             ),
           ],
         ),
         action: SnackBarAction(
-          label: 'تأكيد',
+          label: AppStrings.confirm,
           textColor: Colors.white,
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
+          onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
         ),
       ),
     );
@@ -99,7 +96,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   void _onAddImageTap() {
     if (_images.length >= 5) {
-      _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
+      _showSnackBarMessage(AppStrings.maxImagesWarning);
     } else {
       _showImageSourceOptions();
     }
@@ -116,7 +113,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text("التقاط صورة بالكاميرا"),
+                title: const Text(AppStrings.camera),
                 onTap: () async {
                   Navigator.pop(context);
                   final picker = ImagePicker();
@@ -131,7 +128,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text("اختيار من المعرض"),
+                title: const Text(AppStrings.gallery),
                 onTap: () async {
                   Navigator.pop(context);
                   final picker = ImagePicker();
@@ -140,7 +137,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       _images.length + picked.length <= 5) {
                     setState(() => _images.addAll(picked));
                   } else {
-                    _showSnackBarMessage("يمكنك إضافة 5 صور فقط كحد أقصى");
+                    _showSnackBarMessage(AppStrings.maxImagesWarning);
                   }
                 },
               ),
@@ -156,11 +153,11 @@ class _NewPostScreenState extends State<NewPostScreen> {
   void _publishPost() async {
     if (!validatePost()) {
       if (_captionController.text.trim().length < _minLength) {
-        _showSnackBarMessage("عدد حروف المنشور غير كافيه!");
+        _showSnackBarMessage(AppStrings.captionTooShort);
         return;
       }
       if (_captionController.text.trim().length > _maxLength) {
-        _showSnackBarMessage("نص المنشور لا يمكن أن يتجاوز 1000 حرف");
+        _showSnackBarMessage(AppStrings.captionTooLong);
         return;
       }
     }
@@ -172,14 +169,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
         mediaFiles: _images,
       );
       if (errorMsg == null) {
-        _showSnackBarMessage("✅ تم نشر المنشور بنجاح");
+        _showSnackBarMessage(AppStrings.postSuccess);
         _captionController.clear();
         setState(() => _images.clear());
       } else {
-        _showSnackBarMessage("❌ حدث خطأ أثناء النشر. حاول مرة أخرى");
+        _showSnackBarMessage(AppStrings.postFail);
       }
-    } catch (e) {
-      _showSnackBarMessage("❌ حدث خطأ غير متوقع. حاول مرة أخرى");
+    } catch (_) {
+      _showSnackBarMessage(AppStrings.unexpectedError);
     } finally {
       setState(() => isSubmitting = false);
     }
@@ -194,11 +191,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: AppBar(
         title: const Text(
-          'إضافة منشور',
+          AppStrings.addPost,
           style: TextStyle(color: MyColors.black),
         ),
         backgroundColor: MyColors.white,
@@ -206,36 +206,40 @@ class _NewPostScreenState extends State<NewPostScreen> {
         leading: const BackButton(color: MyColors.black),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: width * 0.04,
+          vertical: height * 0.012,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            isLoadingUser
-                ? const Center(child: CircularProgressIndicator())
-                : Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 24.r,
-                      backgroundImage: NetworkImage(
-                        myUser.avatarUrl ?? 'https://via.placeholder.com/150',
-                      ),
+            if (isLoadingUser)
+              const Center(child: CircularProgressIndicator())
+            else
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: width * 0.06,
+                    backgroundImage: NetworkImage(
+                      myUser.avatarUrl ?? 'https://via.placeholder.com/150',
                     ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      myUser.localUserName ?? '',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      ),
+                  ),
+                  SizedBox(width: width * 0.03),
+                  Text(
+                    myUser.localUserName ?? '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: width * 0.04,
                     ),
-                  ],
-                ),
-            SizedBox(height: 16.h),
+                  ),
+                ],
+              ),
+            SizedBox(height: height * 0.02),
             Container(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(width * 0.03),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,17 +250,17 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     maxLines: null,
                     onChanged: (_) => setState(() {}),
                     decoration: const InputDecoration(
-                      hintText: "بم تفكر ....",
+                      hintText: AppStrings.captionHint,
                       border: InputBorder.none,
                       counterText: '',
                     ),
                     enabled: !isSubmitting,
                   ),
                   if (_images.isNotEmpty) ...[
-                    SizedBox(height: 10.h),
+                    SizedBox(height: height * 0.01),
                     Wrap(
-                      spacing: 8.w,
-                      runSpacing: 8.h,
+                      spacing: width * 0.02,
+                      runSpacing: height * 0.01,
                       children:
                           _images.asMap().entries.map((entry) {
                             final index = entry.key;
@@ -264,11 +268,11 @@ class _NewPostScreenState extends State<NewPostScreen> {
                             return Stack(
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.r),
+                                  borderRadius: BorderRadius.circular(8),
                                   child: Image.file(
                                     File(image.path),
-                                    width: 80.w,
-                                    height: 80.h,
+                                    width: width * 0.2,
+                                    height: width * 0.2,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -281,13 +285,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
                                             ? null
                                             : () => _removeImage(index),
                                     child: CircleAvatar(
-                                      radius: 10.r,
+                                      radius: width * 0.03,
                                       backgroundColor: Colors.black.withOpacity(
                                         0.6,
                                       ),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.close,
-                                        size: 14.sp,
+                                        size: 14,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -297,22 +301,19 @@ class _NewPostScreenState extends State<NewPostScreen> {
                             );
                           }).toList(),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: height * 0.01),
                   ],
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       '${_captionController.text.length}/$_maxLength',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.grey[700],
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[700]),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: height * 0.02),
             GestureDetector(
               onTap: isSubmitting ? null : _onAddImageTap,
               child: DottedBorderContainer(hasImage: _images.isNotEmpty),
@@ -322,19 +323,20 @@ class _NewPostScreenState extends State<NewPostScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+          padding: EdgeInsets.symmetric(
+            horizontal: width * 0.04,
+            vertical: height * 0.012,
+          ),
           child: SizedBox(
             width: double.infinity,
-            height: 55.h,
+            height: height * 0.07,
             child: ElevatedButton(
               onPressed: isSubmitting ? null : _publishPost,
               style: ElevatedButton.styleFrom(
                 backgroundColor:
-                    isPublishEnabled
-                        ? MyColors.primary
-                        : Colors.grey[300],
+                    isPublishEnabled ? MyColors.primary : Colors.grey[300],
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child:
@@ -348,10 +350,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         ),
                       )
                       : Text(
-                        'نشر',
+                        AppStrings.publish,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           color:
                               isPublishEnabled
                                   ? Colors.white
@@ -372,12 +374,14 @@ class DottedBorderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Container(
       width: double.infinity,
-      height: 120.h,
+      height: width * 0.3,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey, width: 1),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: Column(
@@ -386,12 +390,12 @@ class DottedBorderContainer extends StatelessWidget {
             Icon(Icons.camera_alt_outlined, size: 30, color: Colors.grey[600]),
             const SizedBox(height: 4),
             Text(
-              hasImage ? "إضافة صورة أخرى" : "إضافة صورة",
+              hasImage ? AppStrings.addAnotherImage : AppStrings.addImage,
               style: TextStyle(color: Colors.grey[700]),
             ),
-            Text(
-              "اضغط لاختيار صورة",
-              style: TextStyle(color: Colors.grey[500], fontSize: 12),
+            const Text(
+              AppStrings.tapToPickImage,
+              style: TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ],
         ),

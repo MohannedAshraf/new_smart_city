@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Categorysubcategory extends StatelessWidget {
-  const Categorysubcategory({
+class CategorySubcategory extends StatelessWidget {
+  const CategorySubcategory({
     super.key,
     required this.category,
     this.subcat,
@@ -31,7 +30,6 @@ class Categorysubcategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ضفناهم كلهم في List
     final List<String?> subcategories = [
       subcat,
       subcat1,
@@ -45,31 +43,66 @@ class Categorysubcategory extends StatelessWidget {
       subcat9,
     ];
 
-    return Container(
-      decoration: const BoxDecoration(),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(category),
-          SizedBox(height: 10.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+            child: Text(
+              category,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.01),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children:
                   subcategories
-                      .where((sub) => sub != null) // استبعدنا الـ null
+                      .where((sub) => sub != null)
                       .map(
-                        (sub) => Container(
-                          width: 110.w,
-                          height: 60.h,
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8.r),
+                        (sub) => Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.01,
                           ),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(sub!), // آمِن لأننا فلترنا null فوق
+                          child: SizedBox(
+                            width: screenWidth * 0.28,
+                            height: screenHeight * 0.06,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.grey.shade200,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                    screenWidth * 0.025,
+                                  ),
+                                  side: const BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('تم الضغط على: $sub'),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                sub!,
+                                style: TextStyle(
+                                  fontSize: screenWidth * 0.035,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
                         ),
                       )

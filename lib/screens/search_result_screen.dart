@@ -1,14 +1,12 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
-
-import 'package:citio/core/utils/variables.dart';
-import 'package:citio/screens/product_details_view.dart';
-import 'package:citio/screens/service_order_screen.dart';
-import 'package:citio/screens/subcategory_screen.dart';
-import 'package:citio/screens/vendor_profile.dart';
+import 'package:citio/core/utils/project_strings.dart' show AppStrings;
 import 'package:flutter/material.dart';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api_search.dart';
 import 'package:citio/models/search_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:citio/screens/product_details_view.dart';
+import 'package:citio/screens/subcategory_screen.dart';
+import 'package:citio/screens/service_order_screen.dart';
+import 'package:citio/screens/vendor_profile.dart';
 
 class SearchResultsPage extends StatefulWidget {
   final String keyword;
@@ -62,15 +60,23 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("نتائج البحث")),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(AppStrings.searchResults),
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: media.width * 0.04,
+          vertical: media.height * 0.015,
+        ),
         child: Column(
           children: [
             // ✅ شريط البحث
             SizedBox(
-              height: 42.h,
+              height: media.height * 0.055,
               child: TextField(
                 controller: _controller,
                 onSubmitted: (value) {
@@ -78,47 +84,47 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     _performSearch(value.trim());
                   }
                 },
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: media.width * 0.035),
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
-                    vertical: 0.h,
-                    horizontal: 16.w,
+                    horizontal: media.width * 0.04,
+                    vertical: 0,
                   ),
-                  hintText: 'ماذا تريد؟',
+                  hintText: AppStrings.searchHint,
                   prefixIcon: InkWell(
                     onTap: () {
                       if (_controller.text.trim().isNotEmpty) {
                         _performSearch(_controller.text.trim());
                       }
                     },
-                    child: Icon(Icons.search, size: 20.sp),
+                    child: Icon(Icons.search, size: media.width * 0.05),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(20.0.r),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.black87),
-                    borderRadius: BorderRadius.circular(20.0.r),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: media.height * 0.02),
 
             // ✅ محتوى نتائج البحث
             if (_isLoading)
-              Center(child: CircularProgressIndicator())
+              const Center(child: CircularProgressIndicator())
             else if (_error != null)
-              Center(child: Text('❌ خطأ: $_error'))
+              Center(child: Text('${AppStrings.error}: $_error'))
             else if (_results == null || _results!.isEmpty)
-              Center(child: Text("لا توجد نتائج"))
+              const Center(child: Text(AppStrings.noResults))
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: _results!.length,
                 itemBuilder: (context, index) {
                   final result = _results![index];
@@ -131,7 +137,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) => ProductDetailsView(
+                                (_) => ProductDetailsView(
                                   productId: int.parse(result.id),
                                 ),
                           ),
@@ -141,7 +147,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) => SubCategoryScreen(
+                                (_) => SubCategoryScreen(
                                   selectedSubCategoryIndex: int.parse(
                                     result.id,
                                   ),
@@ -153,28 +159,30 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ServiceOrderScreen(),
+                            builder: (_) => const ServiceOrderScreen(),
                           ),
                         );
                       } else if (type == 'vendor') {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VendorProfile(id: result.id),
+                            builder: (_) => VendorProfile(id: result.id),
                           ),
                         );
                       }
                     },
                     child: Card(
-                      margin: EdgeInsets.symmetric(vertical: 8.h),
+                      margin: EdgeInsets.symmetric(
+                        vertical: media.height * 0.012,
+                      ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 3,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 12.w,
-                          vertical: 12.h,
+                          horizontal: media.width * 0.03,
+                          vertical: media.height * 0.015,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,10 +190,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                             if (result.imageUrl != null &&
                                 result.imageUrl!.isNotEmpty)
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(8),
                                 child: Image.network(
                                   "$baseImageUrl${result.imageUrl!}",
-                                  height: 180.h,
+                                  height: media.height * 0.25,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
@@ -198,24 +206,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                               )
                             else
                               Container(
-                                height: 180.h,
+                                height: media.height * 0.25,
                                 color: Colors.grey[200],
                                 child: Center(
                                   child: Icon(
                                     Icons.image_not_supported,
-                                    size: 50.sp,
+                                    size: media.width * 0.13,
                                   ),
                                 ),
                               ),
-                            SizedBox(height: 10.h),
+                            SizedBox(height: media.height * 0.01),
                             Row(
                               children: [
                                 Expanded(
                                   child: Text(
-                                    result.nameAr ?? "بدون اسم",
+                                    result.nameAr ?? AppStrings.noName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16.sp,
+                                      fontSize: media.width * 0.04,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -223,23 +231,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                 if (result.type.toLowerCase() == "product")
                                   Text(
                                     result.price != null
-                                        ? "LE ${result.price!.toStringAsFixed(2)}"
+                                        ? "${AppStrings.currency} ${result.price!.toStringAsFixed(2)}"
                                         : "",
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: media.width * 0.035,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                               ],
                             ),
-                            SizedBox(height: 4.h),
+                            SizedBox(height: media.height * 0.005),
                             Row(
                               children: [
                                 Expanded(
                                   child: Text(
-                                    result.categoryNameAr ?? "بدون تصنيف",
+                                    result.categoryNameAr ??
+                                        AppStrings.noCategory,
                                     style: TextStyle(
-                                      fontSize: 13.sp,
+                                      fontSize: media.width * 0.032,
                                       color: Colors.grey[700],
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -250,7 +259,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                                   Text(
                                     result.businessName!,
                                     style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: media.width * 0.032,
                                       color: Colors.black54,
                                     ),
                                   ),

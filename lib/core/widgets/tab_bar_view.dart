@@ -1,18 +1,18 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
-
 import 'package:citio/models/request.dart';
 import 'package:citio/screens/apply_service.dart';
 import 'package:citio/services/get_requests_by_status.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabBarViewItem extends StatefulWidget {
   final String title;
 
   const TabBarViewItem({super.key, required this.title});
+
   @override
   _TabBarViewItemState createState() => _TabBarViewItemState();
 }
@@ -20,12 +20,15 @@ class TabBarViewItem extends StatefulWidget {
 class _TabBarViewItemState extends State<TabBarViewItem> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     Future<List<Request>> future;
     if (widget.title == 'الجميع') {
       future = RequestsByStatus().getAllRequests();
     } else {
       future = RequestsByStatus().getRequestsByStatus(status: widget.title);
     }
+
     return FutureBuilder<List<Request>>(
       future: future,
       builder: (context, snapshot) {
@@ -35,19 +38,15 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
         if (snapshot.hasData) {
           List<Request> requests = snapshot.data!;
           if (requests.isEmpty) {
-            return emptyCategory();
+            return emptyCategory(screenWidth);
           }
-
           return ListView.builder(
-            scrollDirection: Axis.vertical,
             itemCount: requests.length,
             itemBuilder: (context, index) {
-              // ignore: avoid_unnecessary_containers
-              return Container(
-                child: CustomCard(
-                  request: requests[index],
-                  cardTitle: widget.title,
-                ),
+              return CustomCard(
+                request: requests[index],
+                cardTitle: widget.title,
+                screenWidth: screenWidth,
               );
             },
           );
@@ -58,38 +57,43 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
     );
   }
 
-  Center emptyCategory() {
+  Center emptyCategory(double screenWidth) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundColor: MyColors.white,
-            radius: 45.r,
+            radius: screenWidth * 0.12,
             child: Icon(
               Icons.inventory,
               color: MyColors.fadedGrey,
-              size: 40.sp,
+              size: screenWidth * 0.1,
             ),
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: screenWidth * 0.05),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Text(
-              'لا يوجد طلبات حكومية حاليا',
-              style: TextStyle(fontSize: 16.sp, color: MyColors.black),
+              AppStrings.noGovRequests,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                color: MyColors.black,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: screenWidth * 0.025),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
             child: Text(
-              'هذا المستخدم لم يرسل أي طلب',
-              style: TextStyle(fontSize: 16.sp, color: MyColors.gray),
+              AppStrings.userHasNoRequests,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                color: MyColors.gray,
+              ),
+              textAlign: TextAlign.center,
               maxLines: 2,
-              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -98,11 +102,18 @@ class _TabBarViewItemState extends State<TabBarViewItem> {
   }
 }
 
-// ignore: must_be_immutable
 class CustomCard extends StatefulWidget {
-  CustomCard({required this.request, required this.cardTitle, super.key});
-  Request request;
-  String cardTitle;
+  final Request request;
+  final String cardTitle;
+  final double screenWidth;
+
+  const CustomCard({
+    super.key,
+    required this.request,
+    required this.cardTitle,
+    required this.screenWidth,
+  });
+
   @override
   _CustomCardState createState() => _CustomCardState();
 }
@@ -112,89 +123,76 @@ class _CustomCardState extends State<CustomCard> {
 
   @override
   Widget build(BuildContext context) {
+    final sw = widget.screenWidth;
+
     return MouseRegion(
       onEnter: (_) => setState(() => isHovered = true),
       onExit: (_) => setState(() => isHovered = false),
       child: AnimatedContainer(
-        margin: EdgeInsets.fromLTRB(15.w, 10.h, 15.w, 10.h),
+        margin: EdgeInsets.symmetric(
+          horizontal: sw * 0.04,
+          vertical: sw * 0.025,
+        ),
         duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(15.r),
-          boxShadow:
-              isHovered
-                  ? [
-                    const BoxShadow(
-                      color: MyColors.fadedGrey,
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                      offset: Offset(0, 4),
-                    ),
-                  ]
-                  : [
-                    const BoxShadow(
-                      color: MyColors.whiteSmoke,
-                      blurRadius: 2,
-                      spreadRadius: 0,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
+          borderRadius: BorderRadius.circular(sw * 0.04),
+          boxShadow: [
+            BoxShadow(
+              color: isHovered ? MyColors.fadedGrey : MyColors.whiteSmoke,
+              blurRadius: isHovered ? 10 : 2,
+              spreadRadius: isHovered ? 1 : 0,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: GestureDetector(
           onTap: () {},
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 7.h),
+          child: Padding(
+            padding: EdgeInsets.all(sw * 0.02),
             child: Row(
               children: [
-                // Icon Section
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10.h, 25.w),
+                      padding: EdgeInsets.only(
+                        right: sw * 0.025,
+                        bottom: sw * 0.06,
+                      ),
                       child: Container(
+                        width: sw * 0.13,
+                        height: sw * 0.13,
                         decoration: BoxDecoration(
                           color:
                               Styles.requestsStyle[widget
                                   .request
                                   .requestStatus]?['color'] ??
                               MyColors.gray,
-                          borderRadius: BorderRadius.circular(15.r),
+                          borderRadius: BorderRadius.circular(sw * 0.04),
                         ),
-                        width: 50.w,
-                        height: 50.h,
-                        child: Center(
-                          child: Icon(
-                            Styles.requestsStyle[widget
-                                    .request
-                                    .requestStatus]?['icon'] ??
-                                Icons.broken_image,
-                            size: 23,
-                            color:
-                                Styles.requestsStyle[widget
-                                    .request
-                                    .requestStatus]?['fontColor'] ??
-                                MyColors.fadedGrey,
-                          ),
+                        child: Icon(
+                          Styles.requestsStyle[widget
+                                  .request
+                                  .requestStatus]?['icon'] ??
+                              Icons.broken_image,
+                          size: sw * 0.06,
+                          color:
+                              Styles.requestsStyle[widget
+                                  .request
+                                  .requestStatus]?['fontColor'] ??
+                              MyColors.fadedGrey,
                         ),
                       ),
                     ),
                   ],
                 ),
-
-                // Spacer
-                SizedBox(width: 10.w),
-
-                // Text Content
+                SizedBox(width: sw * 0.025),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(4.w, 2.h, 15.w, 2.h),
+                    padding: EdgeInsets.only(right: sw * 0.02, left: sw * 0.04),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                               child: Text(
@@ -203,16 +201,15 @@ class _CustomCardState extends State<CustomCard> {
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: MyColors.fontcolor,
-                                  fontSize: 16.sp,
+                                  fontSize: sw * 0.045,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
                               padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 8.h,
+                                horizontal: sw * 0.03,
+                                vertical: sw * 0.02,
                               ),
                               decoration: BoxDecoration(
                                 color:
@@ -220,7 +217,7 @@ class _CustomCardState extends State<CustomCard> {
                                         .request
                                         .requestStatus]?['color'] ??
                                     MyColors.fadedGrey,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(sw * 0.05),
                               ),
                               child: Text(
                                 widget.request.requestStatus,
@@ -235,92 +232,59 @@ class _CustomCardState extends State<CustomCard> {
                             ),
                           ],
                         ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: sw * 0.01),
+                          child: Text(
+                            widget.request.responseText,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: sw * 0.037,
+                              color:
+                                  Styles.requestsStyle[widget
+                                      .request
+                                      .requestStatus]?['fontColor'] ??
+                                  MyColors.black,
+                            ),
+                          ),
+                        ),
                         Row(
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: Text(
-                                  widget.request.responseText,
-                                  style: TextStyle(
-                                    color:
-                                        Styles.requestsStyle[widget
-                                            .request
-                                            .requestStatus]?['fontColor'] ??
-                                        MyColors.black,
-                                    fontSize: 14,
-                                  ),
-                                  maxLines: 3,
-                                ),
+                            Text(
+                              widget.request.requestDate,
+                              style: TextStyle(
+                                color: const Color.fromRGBO(134, 133, 133, 1),
+                                fontSize: sw * 0.03,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 5.h),
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                Text(
-                                  widget.request.requestDate,
-                                  style: const TextStyle(
-                                    color: Color.fromRGBO(134, 133, 133, 1),
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                            const Spacer(),
+                            if (widget.request.requestStatus == 'Rejected')
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ApplyService(
+                                            id: widget.request.serviceId,
+                                            title: widget.request.serviceName,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  backgroundColor: MyColors.inProgress,
+                                  minimumSize: Size(sw * 0.24, sw * 0.09),
+                                ),
+                                child: Text(
+                                  AppStrings.resubmitRequest,
+                                  style: TextStyle(
+                                    fontSize: sw * 0.035,
+                                    color: MyColors.white,
                                   ),
                                 ),
-                              ],
-                            ),
-                            widget.request.requestStatus == 'Rejected'
-                                ? Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        height: 30.h,
-                                        width: 90.w,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (context) => ApplyService(
-                                                      id:
-                                                          widget
-                                                              .request
-                                                              .serviceId,
-                                                      title:
-                                                          widget
-                                                              .request
-                                                              .serviceName,
-                                                    ),
-                                              ),
-                                            );
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                WidgetStateProperty.all(
-                                                  MyColors.inProgress,
-                                                ),
-                                            padding: WidgetStateProperty.all(
-                                              EdgeInsets.zero,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            'اعادة الطلب',
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: MyColors.white,
-                                              fontSize: 13.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                : const SizedBox(),
+                              ),
                           ],
                         ),
                       ],

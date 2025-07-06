@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use, avoid_print, prefer_const_constructors, use_build_context_synchronously
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/helper/api_order_details.dart';
 import 'package:citio/helper/api_rate_product.dart';
 import 'package:citio/models/order_details_model.dart';
@@ -9,7 +11,6 @@ import 'package:citio/models/rate_product_model.dart';
 import 'package:citio/screens/track_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderDetailsView extends StatefulWidget {
   final int orderId;
@@ -28,10 +29,12 @@ class OrderDetailsView extends StatefulWidget {
 class _OrderDetailsViewState extends State<OrderDetailsView> {
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'تفاصيل الطلب',
+          AppStrings.orderDetails,
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -46,28 +49,30 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+            return Center(child: Text('${AppStrings.error} ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('لا توجد بيانات'));
+            return const Center(child: Text(AppStrings.noData));
           }
 
           final order = snapshot.data!;
           final orderInfo = order.vendorOrderDto;
 
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: screen.width * 0.04),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(orderInfo),
-                SizedBox(height: 16.h),
+                SizedBox(height: screen.height * 0.015),
+                _buildHeader(orderInfo, screen),
+                SizedBox(height: screen.height * 0.02),
                 _buildOrderedItems(
                   order.vendorOrderItemResponse,
                   orderInfo.orderStatus,
+                  screen,
                 ),
-                SizedBox(height: 16.h),
-                _buildDeliveryDetails(order),
-                SizedBox(height: 100.h),
+                SizedBox(height: screen.height * 0.02),
+                _buildDeliveryDetails(order, screen),
+                SizedBox(height: screen.height * 0.05),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -76,21 +81,22 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (context) =>
-                                  TrackOrderView(orderId: widget.orderId),
+                              (_) => TrackOrderView(orderId: widget.orderId),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
+                      padding: EdgeInsets.symmetric(
+                        vertical: screen.height * 0.02,
+                      ),
                       backgroundColor: MyColors.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
-                      'تتبع الطلب',
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                    child: const Text(
+                      AppStrings.trackOrder,
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),
@@ -102,7 +108,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
     );
   }
 
-  Widget _buildHeader(VendorOrderDto order) {
+  Widget _buildHeader(VendorOrderDto order, Size screen) {
     Color badgeColor;
     switch (order.orderStatus.toLowerCase()) {
       case "pending":
@@ -119,32 +125,41 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(
+        vertical: screen.height * 0.02,
+        horizontal: screen.width * 0.04,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "رقم الطلب: ${order.orderId}",
-            style: TextStyle(fontSize: 13.sp),
+            "${AppStrings.orderNumber} ${order.orderId}",
+            style: const TextStyle(fontSize: 13),
           ),
-          SizedBox(height: 6.h),
+          const SizedBox(height: 6),
           Row(
             children: [
               Text(
                 order.vendorName,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                padding: EdgeInsets.symmetric(
+                  horizontal: screen.width * 0.03,
+                  vertical: screen.height * 0.007,
+                ),
                 decoration: BoxDecoration(
                   color: badgeColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: badgeColor),
                 ),
                 child: Text(
@@ -157,22 +172,25 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8),
           Row(
             children: [
-              Text(
-                "إجمالي المبلغ: ",
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey),
+              const Text(
+                AppStrings.totalAmount,
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               Text(
-                "${order.totalAmount} جنيه",
-                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+                "${order.totalAmount} ${AppStrings.egp}",
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4),
           Text(
-            "تاريخ الطلب: ${order.orderDate.toLocal().toString().split(' ')[0]}",
+            "${AppStrings.orderDate} ${order.orderDate.toLocal().toString().split(' ')[0]}",
             style: const TextStyle(color: Colors.grey),
           ),
         ],
@@ -180,29 +198,36 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
     );
   }
 
-  Widget _buildOrderedItems(List<OrderItem> items, String orderStatus) {
+  Widget _buildOrderedItems(
+    List<OrderItem> items,
+    String orderStatus,
+    Size screen,
+  ) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(
+        vertical: screen.height * 0.02,
+        horizontal: screen.width * 0.04,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "المنتجات المطلوبة",
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          const Text(
+            AppStrings.orderedProducts,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 12.h),
-          for (var item in items) _buildItemRow(item, orderStatus),
+          const SizedBox(height: 12),
+          for (var item in items) _buildItemRow(item, orderStatus, screen),
         ],
       ),
     );
   }
 
-  Widget _buildItemRow(OrderItem item, String orderStatus) {
+  Widget _buildItemRow(OrderItem item, String orderStatus, Size screen) {
     return FutureBuilder<ProductReview?>(
       future: ProductReviewApi.getReview(item.productId),
       builder: (context, snapshot) {
@@ -213,28 +238,27 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
         }
 
         return Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
+          padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(8),
                 child: Image.network(
                   '${Urls.serviceProviderbaseUrl}${item.productImageUrl}',
-                  width: 55.w,
-                  height: 55.h,
+                  width: 55,
+                  height: 55,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.network(
-                      'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                      width: 55.w,
-                      height: 55.h,
-                      fit: BoxFit.cover,
-                    );
-                  },
+                  errorBuilder:
+                      (_, __, ___) => Image.network(
+                        AppStrings.fallbackImage,
+                        width: 55,
+                        height: 55,
+                        fit: BoxFit.cover,
+                      ),
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,58 +267,57 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                       item.nameAr,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 4.h),
+                    const SizedBox(height: 4),
                     Text(
-                      "الكمية: ${item.quantity}",
-                      style: TextStyle(fontSize: 12.sp),
+                      "${AppStrings.quantity1} ${item.quantity}",
+                      style: const TextStyle(fontSize: 12),
                     ),
-                    SizedBox(height: 4.h),
-                    if (orderStatus.toLowerCase() == "delivered") ...[
-                      if (!item.isRated) ...[
-                        RatingBar.builder(
-                          initialRating: 0,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: false,
-                          itemSize: 20.sp,
-                          itemCount: 5,
-                          unratedColor: Colors.grey.shade300,
-                          itemBuilder:
-                              (context, _) =>
-                                  const Icon(Icons.star, color: Colors.amber),
-                          onRatingUpdate: (rating) async {
-                            try {
-                              await ProductReviewApi.postReview(
-                                item.productId,
-                                rating.toInt(),
-                              );
-                              setState(() {
-                                item.rating = rating;
-                                item.isRated = true;
-                              });
-                            } catch (e) {
-                              print("❌ Rating error: $e");
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("فشل إرسال التقييم")),
-                              );
-                            }
-                          },
-                        ),
-                      ] else ...[
-                        Text(
-                          "تم التقييم بـ ${item.rating.toStringAsFixed(1)} نجوم",
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.green,
+                    const SizedBox(height: 4),
+                    if (orderStatus.toLowerCase() == "delivered")
+                      item.isRated
+                          ? Text(
+                            "${AppStrings.alreadyRated} ${item.rating.toStringAsFixed(1)} ${AppStrings.ratingUnit}",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.green,
+                            ),
+                          )
+                          : RatingBar.builder(
+                            initialRating: 0,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemSize: 20,
+                            itemCount: 5,
+                            unratedColor: Colors.grey.shade300,
+                            itemBuilder:
+                                (_, __) =>
+                                    const Icon(Icons.star, color: Colors.amber),
+                            onRatingUpdate: (rating) async {
+                              try {
+                                await ProductReviewApi.postReview(
+                                  item.productId,
+                                  rating.toInt(),
+                                );
+                                setState(() {
+                                  item.rating = rating;
+                                  item.isRated = true;
+                                });
+                              } catch (e) {
+                                print("❌ Rating error: $e");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(AppStrings.rateFailed),
+                                  ),
+                                );
+                              }
+                            },
                           ),
-                        ),
-                      ],
-                    ],
                   ],
                 ),
               ),
               Text(
-                "${item.price.toStringAsFixed(0)} جنيه",
+                "${item.price.toStringAsFixed(0)} ${AppStrings.egp}",
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
@@ -304,45 +327,48 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
     );
   }
 
-  Widget _buildDeliveryDetails(VendorOrderDetailsResponse order) {
+  Widget _buildDeliveryDetails(VendorOrderDetailsResponse order, Size screen) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(
+        vertical: screen.height * 0.02,
+        horizontal: screen.width * 0.04,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "تفاصيل التوصيل",
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          const Text(
+            AppStrings.deliveryDetails,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12),
           Row(
             children: [
-              Icon(Icons.location_on, size: 18.sp, color: MyColors.primary),
-              SizedBox(width: 8.w),
+              const Icon(Icons.location_on, size: 18, color: MyColors.primary),
+              const SizedBox(width: 8),
               Expanded(child: Text(order.userAddress)),
             ],
           ),
           if (order.vendorPhone != null) ...[
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Row(
               children: [
-                Icon(Icons.phone, size: 18.sp, color: MyColors.primary),
-                SizedBox(width: 8.w),
+                const Icon(Icons.phone, size: 18, color: MyColors.primary),
+                const SizedBox(width: 8),
                 Text(order.vendorPhone!),
               ],
             ),
           ],
           if (order.estimatedDeliveryDate != null) ...[
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             Row(
               children: [
-                Icon(Icons.timer, size: 18.sp, color: MyColors.primary),
-                SizedBox(width: 8.w),
+                const Icon(Icons.timer, size: 18, color: MyColors.primary),
+                const SizedBox(width: 8),
                 Text(order.estimatedDeliveryDate!),
               ],
             ),

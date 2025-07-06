@@ -1,7 +1,8 @@
 // ignore_for_file: deprecated_member_use, prefer_const_constructors, library_private_types_in_public_api
 
 import 'dart:typed_data';
-
+import 'package:citio/core/utils/project_strings.dart';
+import 'package:flutter/material.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/search_bar.dart';
@@ -11,8 +12,6 @@ import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/get_gov_service_image.dart';
 import 'package:citio/services/get_most_requested_services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentServices extends StatefulWidget {
   const GovernmentServices({super.key});
@@ -23,7 +22,7 @@ class GovernmentServices extends StatefulWidget {
 class _GovernmentServicesState extends State<GovernmentServices> {
   int selectedIndex = 0;
   Map<int, Uint8List?> imageCache = {};
-  List<String> tabs = ['الكل'];
+  List<String> tabs = [AppStrings.all];
   List<AllServicesCategories> tabsList = [];
   List<AvailableServices> availableServices = [];
   bool tabsAreLoading = true;
@@ -52,41 +51,48 @@ class _GovernmentServicesState extends State<GovernmentServices> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: MyColors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.h),
+        preferredSize: Size.fromHeight(screenHeight * 0.07),
         child: AppBar(
           backgroundColor: MyColors.white,
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
-          title: Text(
-            'الخدمات الحكومية',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-          ),
           centerTitle: true,
+          title: Text(
+            AppStrings.govServices,
+            style: TextStyle(
+              fontSize: screenWidth * 0.05,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0.w, 10.h, 0.w, 0.h),
+        padding: EdgeInsets.only(top: screenHeight * 0.01),
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(0.w, 0.h, 0.w, 8.h),
+              margin: EdgeInsets.only(bottom: screenHeight * 0.01),
               color: MyColors.white,
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 10.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05,
+                      vertical: screenHeight * 0.015,
+                    ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: CustomSearchBar(
-                            height: 45.h,
-                            borderRadius: 5.r,
-                            hintText: 'للبحث عن خدمة حكومية',
+                            height: screenHeight * 0.06,
+                            borderRadius: 5,
+                            hintText: AppStrings.searchGovService,
                             onSubmitted: (value) {
                               setState(() {
                                 if (currenttab == 0) {
@@ -107,7 +113,9 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 6.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.04,
+                      ),
                       child:
                           tabsAreLoading
                               ? Row(
@@ -115,16 +123,16 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                   4,
                                   (index) => Padding(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 6.h,
+                                      horizontal: screenWidth * 0.01,
                                     ),
                                     child: Container(
-                                      width: 80.w,
-                                      height: 35.h,
+                                      width: screenWidth * 0.18,
+                                      height: screenHeight * 0.045,
                                       decoration: BoxDecoration(
                                         color: MyColors.whiteSmoke,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: SizedBox(
                                           width: 18,
                                           height: 18,
@@ -142,10 +150,9 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 ),
                               )
                               : Row(
-                                children: List.generate(tabsList.length, (
-                                  index,
-                                ) {
-                                  return GovTabItem(
+                                children: List.generate(
+                                  tabsList.length,
+                                  (index) => GovTabItem(
                                     title: tabs[index],
                                     isSelected: selectedIndex == index,
                                     onTap: () {
@@ -159,11 +166,9 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                           filterService(filter);
                                         }
                                       });
-
-                                      //'مكان الfunction التانية يا لولو'
                                     },
-                                  );
-                                }),
+                                  ),
+                                ),
                               ),
                     ),
                   ),
@@ -172,7 +177,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(10.w, 0.h, 10.w, 0.h),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.025),
                 child:
                     servicesLoading
                         ? GridView.builder(
@@ -184,54 +189,14 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 mainAxisSpacing: 10,
                               ),
                           itemCount: 4,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                color: MyColors.white,
-                                borderRadius: BorderRadius.circular(12.r),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: MyColors.whiteSmoke,
-                                    blurRadius: 4.0,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 130.h,
-                                    decoration: BoxDecoration(
-                                      color: MyColors.whiteSmoke,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(12.r),
-                                        topRight: Radius.circular(12.r),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10.h),
-                                  Container(
-                                    height: 14.h,
-                                    width: 100.w,
-                                    color: MyColors.whiteSmoke,
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Container(
-                                    height: 12.h,
-                                    width: 140.w,
-                                    color: MyColors.whiteSmoke,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                          itemBuilder:
+                              (context, index) =>
+                                  PlaceholderCard(screenHeight: screenHeight),
                         )
                         : GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 0,
                                 childAspectRatio: 158 / 250,
                               ),
                           itemCount: availableServices.length,
@@ -250,49 +215,34 @@ class _GovernmentServicesState extends State<GovernmentServices> {
                                 );
                               },
                               imageIcon:
-                                  imageCache[availableServices[index].id] !=
-                                          null
-                                      ? SizedBox(
-                                        width: 60.w,
-                                        height: 60.h,
-                                        child: Image.memory(
-                                          imageCache[availableServices[index]
-                                              .id]!,
-                                          fit: BoxFit.cover,
-                                          // height: 60.h,
-                                          // width: 60.w,
-                                        ),
+                                  imageCache[service.id] != null
+                                      ? Image.memory(
+                                        imageCache[service.id]!,
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit.cover,
                                       )
                                       : FutureBuilder<Uint8List?>(
                                         future: ServiceImage().getImage(
-                                          id: availableServices[index].id,
+                                          id: service.id,
                                         ),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return SizedBox(
-                                              width: 60.w,
-                                              height: 60.h,
-                                              child: const Center(
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
                                             );
                                           }
-
                                           if (snapshot.hasData) {
-                                            imageCache[availableServices[index]
-                                                    .id] =
+                                            imageCache[service.id] =
                                                 snapshot.data!;
-                                            return SizedBox(
-                                              width: 60.w,
-                                              height: 60.h,
-                                              child: Image.memory(
-                                                snapshot.data!,
-                                              ),
+                                            return Image.memory(
+                                              snapshot.data!,
+                                              width: 60,
+                                              height: 60,
                                             );
                                           }
-
                                           return const Icon(Icons.broken_image);
                                         },
                                       ),
@@ -328,8 +278,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
   }
 
   void filterService(String category) {
-    final currentfilter = category;
-    MostRequestedServices().filterServices(currentfilter).then((fetchedItems) {
+    MostRequestedServices().filterServices(category).then((fetchedItems) {
       setState(() {
         availableServices.clear();
         availableServices.addAll(fetchedItems);
@@ -338,8 +287,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
   }
 
   void searchService(String keyWord) {
-    final search = keyWord;
-    MostRequestedServices().searchServices(search).then((fetchedItems) {
+    MostRequestedServices().searchServices(keyWord).then((fetchedItems) {
       setState(() {
         availableServices.clear();
         availableServices.addAll(fetchedItems);
@@ -348,9 +296,7 @@ class _GovernmentServicesState extends State<GovernmentServices> {
   }
 
   void searchFilteredService(String keyWord, String category) {
-    final currentfilter = category;
-    final search = keyWord;
-    MostRequestedServices().searchFilteredServices(search, currentfilter).then((
+    MostRequestedServices().searchFilteredServices(keyWord, category).then((
       fetchedItems,
     ) {
       setState(() {
@@ -358,6 +304,46 @@ class _GovernmentServicesState extends State<GovernmentServices> {
         availableServices.addAll(fetchedItems);
       });
     });
+  }
+}
+
+class PlaceholderCard extends StatelessWidget {
+  final double screenHeight;
+  const PlaceholderCard({super.key, required this.screenHeight});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            color: MyColors.whiteSmoke,
+            blurRadius: 4.0,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: screenHeight * 0.16,
+            decoration: const BoxDecoration(
+              color: MyColors.whiteSmoke,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(height: 14, width: 100, color: MyColors.whiteSmoke),
+          const SizedBox(height: 6),
+          Container(height: 12, width: 140, color: MyColors.whiteSmoke),
+        ],
+      ),
+    );
   }
 }
 
@@ -378,11 +364,11 @@ class GovTabItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? MyColors.primary : MyColors.whiteSmoke,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           title,
@@ -401,6 +387,7 @@ class ServiceCard extends StatelessWidget {
   final String serviceName;
   final String details;
   final VoidCallback ontab;
+
   const ServiceCard({
     super.key,
     required this.imageIcon,
@@ -411,18 +398,25 @@ class ServiceCard extends StatelessWidget {
     required this.details,
     required this.ontab,
   });
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: ontab,
       child: Container(
         width: double.infinity,
-
-        margin: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
-
+        margin: EdgeInsets.fromLTRB(
+          screenWidth * 0.015,
+          screenHeight * 0.01,
+          screenWidth * 0.015,
+          screenHeight * 0.01,
+        ),
         decoration: BoxDecoration(
           color: MyColors.white,
-          borderRadius: BorderRadius.circular(12.0.r),
+          borderRadius: BorderRadius.circular(screenWidth * 0.03),
           boxShadow: const [
             BoxShadow(
               color: MyColors.whiteSmoke,
@@ -435,21 +429,16 @@ class ServiceCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.r),
-                topRight: Radius.circular(12.r),
+                topLeft: Radius.circular(screenWidth * 0.03),
+                topRight: Radius.circular(screenWidth * 0.03),
               ),
               child: Container(
                 color: color,
-
                 width: double.infinity,
-                height: 100.h,
+                height: screenHeight * 0.13,
                 child: Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    // borderRadius: BorderRadius.only(
-                    //   topLeft: Radius.circular(12.r),
-                    //   topRight: Radius.circular(12.r),
-                    // ),
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
                     child: imageIcon,
                   ),
                 ),
@@ -458,16 +447,23 @@ class ServiceCard extends StatelessWidget {
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 0.h),
+                  padding: EdgeInsets.fromLTRB(
+                    screenWidth * 0.02,
+                    screenHeight * 0.01,
+                    screenWidth * 0.02,
+                    0,
+                  ),
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(6.w, 0.h, 6.w, 5.h),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.015,
+                    ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 8.h,
+                      horizontal: screenWidth * 0.03,
+                      vertical: screenHeight * 0.01,
                     ),
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.05),
                     ),
                     child: Text(category, style: TextStyle(color: fontColor)),
                   ),
@@ -475,7 +471,12 @@ class ServiceCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 4.h, 10.w, 2.h),
+              padding: EdgeInsets.fromLTRB(
+                screenWidth * 0.025,
+                screenHeight * 0.005,
+                screenWidth * 0.025,
+                screenHeight * 0.002,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -486,18 +487,22 @@ class ServiceCard extends StatelessWidget {
                       softWrap: false,
                       style: TextStyle(
                         color: Colors.black87,
-                        fontSize: 14.sp,
+                        fontSize: screenWidth * 0.035,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
-                      //maxLines: 2,
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.w, 2.h, 10.w, 10.h),
+              padding: EdgeInsets.fromLTRB(
+                screenWidth * 0.025,
+                screenHeight * 0.002,
+                screenWidth * 0.025,
+                screenHeight * 0.015,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -505,8 +510,8 @@ class ServiceCard extends StatelessWidget {
                       maxLines: 2,
                       details,
                       style: TextStyle(
-                        color: Color.fromARGB(221, 59, 58, 58),
-                        fontSize: 12.0.sp,
+                        color: const Color.fromARGB(221, 59, 58, 58),
+                        fontSize: screenWidth * 0.03,
                       ),
                       textAlign: TextAlign.start,
                     ),

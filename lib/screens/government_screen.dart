@@ -1,6 +1,7 @@
 // ignore_for_file: unused_element
 
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/tab_bar_view.dart';
 import 'package:citio/core/widgets/tab_item.dart';
 import 'package:citio/main.dart';
@@ -8,7 +9,6 @@ import 'package:citio/main.dart';
 import 'package:citio/screens/government_services.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GovernmentScreen extends StatefulWidget {
   const GovernmentScreen({super.key});
@@ -27,7 +27,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
       lastBackPressTime = now;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('اضغط مرة أخرى للخروج'),
+          content: Text(AppStrings.pressAgainToExit),
           duration: Duration(seconds: 2),
         ),
       );
@@ -35,6 +35,12 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
     }
     return true;
   }
+
+  double wp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.width * (percentage / 100);
+
+  double hp(BuildContext context, double percentage) =>
+      MediaQuery.of(context).size.height * (percentage / 100);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +52,9 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
         floatingActionButton: FloatingActionButton(
           splashColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.r),
+            borderRadius: BorderRadius.circular(
+              wp(context, 7.5),
+            ), // 30.r approx
           ),
           onPressed: () {
             Navigator.push(
@@ -57,7 +65,11 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
             );
           },
           backgroundColor: MyColors.primary,
-          child: Icon(Icons.add, color: MyColors.white, size: 30.sp),
+          child: Icon(
+            Icons.add,
+            color: MyColors.white,
+            size: wp(context, 7.5),
+          ), // 30.sp approx
         ),
         appBar: AppBar(
           leading: IconButton(
@@ -71,20 +83,23 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
               );
             },
           ),
-          toolbarHeight: 70.h,
+          toolbarHeight: hp(context, 9), // 70.h approx
           backgroundColor: MyColors.white,
-
           title: Padding(
-            padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
+            padding: EdgeInsets.fromLTRB(
+              0,
+              hp(context, 1.5),
+              0,
+              hp(context, 1.5),
+            ),
             child: Text(
-              'طلباتي الحكومية',
-              style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+              AppStrings.myGovernmentRequests,
+              style: TextStyle(color: MyColors.black, fontSize: wp(context, 5)),
             ),
           ),
           centerTitle: true,
-
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40.h),
+            preferredSize: Size.fromHeight(hp(context, 5)), // 40.h approx
             child: Column(
               children: [
                 const Divider(
@@ -97,7 +112,7 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                   child: TabBar(
                     splashFactory: NoSplash.splashFactory,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    padding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                    padding: EdgeInsets.symmetric(horizontal: wp(context, 2.5)),
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     dividerColor: MyColors.white,
@@ -105,11 +120,11 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
                     labelColor: MyColors.primary,
                     unselectedLabelColor: MyColors.gray,
                     tabs: const [
-                      TabItem(title: 'الجميع'),
-                      TabItem(title: 'تم حلها'),
-                      TabItem(title: 'تحت المراجعة'),
-                      TabItem(title: 'المرفوضة'),
-                      TabItem(title: 'المٌعدلة'),
+                      TabItem(title: AppStrings.all),
+                      TabItem(title: AppStrings.completed),
+                      TabItem(title: AppStrings.pending),
+                      TabItem(title: AppStrings.rejected),
+                      TabItem(title: AppStrings.edited),
                     ],
                   ),
                 ),
@@ -117,7 +132,6 @@ class _GovernmentScreenState extends State<GovernmentScreen> {
             ),
           ),
         ),
-
         body: const TabBarView(
           children: [
             TabBarViewItem(title: 'الجميع'),
