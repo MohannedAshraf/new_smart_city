@@ -1,15 +1,14 @@
-// ignore_for_file: unused_element, avoid_unnecessary_containers, library_private_types_in_public_api, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:citio/core/utils/assets_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
-
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/widgets/category_tab_view.dart';
 import 'package:citio/models/vendor.dart';
 import 'package:citio/models/vendor_subcategory.dart';
 import 'package:citio/services/get_vendor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VendorProfile extends StatefulWidget {
   final String id;
@@ -22,23 +21,27 @@ class VendorProfile extends StatefulWidget {
 class _VendorProfileState extends State<VendorProfile> {
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.white,
-        // foregroundColor: MyColors.white,
         surfaceTintColor: MyColors.white,
         title: Padding(
-          padding: EdgeInsets.fromLTRB(0.w, 12.h, 0.w, 12.h),
+          padding: EdgeInsets.symmetric(vertical: screenHeight * 0.015),
           child: Text(
-            'تفاصيل الخدمة',
-            style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+            AppStrings.serviceDetails,
+            style: TextStyle(
+              color: MyColors.black,
+              fontSize: screenWidth * 0.05,
+            ),
           ),
         ),
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0.w, 7.h, 0.w, 0.h),
+        padding: EdgeInsets.only(top: screenHeight * 0.01),
         child: FutureBuilder<List<VendorSubcategory>>(
           future: GetVendor().getVendorSubcategory(widget.id),
           builder: (context, snapshot) {
@@ -52,21 +55,20 @@ class _VendorProfileState extends State<VendorProfile> {
                       future: GetVendor().getVendorById(widget.id),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          Vendor vendor = snapshot.data!;
-                          return vendorCard(vendor);
+                          return vendorCard(snapshot.data!, screenWidth, screenHeight);
                         } else {
                           return SizedBox(
-                            height: 280.h,
-                            child: Center(child: CircularProgressIndicator()),
+                            height: screenHeight * 0.35,
+                            child: const Center(child: CircularProgressIndicator()),
                           );
                         }
                       },
                     ),
-                    SizedBox(height: 15.h),
+                    SizedBox(height: screenHeight * 0.02),
                     Container(
                       color: MyColors.white,
                       child: Transform.translate(
-                        offset: Offset(screenWidth * .12, 0),
+                        offset: Offset(screenWidth * 0.12, 0),
                         child: TabBar(
                           splashFactory: NoSplash.splashFactory,
                           overlayColor: WidgetStateProperty.all(Colors.white),
@@ -75,21 +77,19 @@ class _VendorProfileState extends State<VendorProfile> {
                           dividerColor: MyColors.white,
                           indicatorColor: MyColors.primary,
                           labelColor: MyColors.primary,
-
-                          padding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
+                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
                           tabs: sub.map((i) => Tab(text: i.name)).toList(),
                         ),
                       ),
                     ),
                     Expanded(
                       child: TabBarView(
-                        children:
-                            sub.map((i) {
-                              return CategoryTabView(
-                                categoryId: i.id,
-                                vendorId: widget.id,
-                              );
-                            }).toList(),
+                        children: sub.map((i) {
+                          return CategoryTabView(
+                            categoryId: i.id,
+                            vendorId: widget.id,
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],
@@ -104,133 +104,101 @@ class _VendorProfileState extends State<VendorProfile> {
     );
   }
 
-  Card vendorCard(Vendor vendor) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+  Card vendorCard(Vendor vendor, double screenWidth, double screenHeight) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: EdgeInsets.fromLTRB(20.w, 10.h, 20.w, 3.h),
+      margin: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.05,
+        vertical: screenHeight * 0.015,
+      ),
       child: SizedBox(
-        width: screenWidth * .9,
+        width: screenWidth * 0.9,
         height: screenHeight * 0.37,
         child: Column(
           children: [
             Stack(
               clipBehavior: Clip.none,
-              //alignment: Alignment.topRight,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.r),
-                    topRight: Radius.circular(20.r),
-                  ),
-                  child:
-                      vendor.coverImage != null
-                          ? Image.network(
-                            Urls.serviceProviderbaseUrl + vendor.coverImage!,
-                            // vendors[index].coverImage,
-                            width: double.infinity,
-                            height: screenHeight * 0.165,
-                            fit: BoxFit.cover,
-                            errorBuilder: (
-                              BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace,
-                            ) {
-                              return SizedBox(
-                                height: screenHeight * 0.165,
-                                width: double.infinity,
-                                child: const Image(
-                                  image: AssetImage(MyAssetsImage.brokenImage),
-                                ),
-                              );
-                            },
-                          )
-                          : Image.asset(
-                            width: double.infinity,
-                            height: screenHeight * 0.165,
-                            MyAssetsImage.brokenImage,
-                          ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  child: vendor.coverImage != null
+                      ? Image.network(
+                          Urls.serviceProviderbaseUrl + vendor.coverImage!,
+                          width: double.infinity,
+                          height: screenHeight * 0.165,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) {
+                            return SizedBox(
+                              height: screenHeight * 0.165,
+                              width: double.infinity,
+                              child: const Image(image: AssetImage(MyAssetsImage.brokenImage)),
+                            );
+                          },
+                        )
+                      : Image.asset(
+                          MyAssetsImage.brokenImage,
+                          width: double.infinity,
+                          height: screenHeight * 0.165,
+                        ),
                 ),
                 Positioned(
                   top: screenHeight * 0.11,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0.w, 8.h, 20.w, 20.h),
-                        child: CircleAvatar(
-                          radius: 32.r,
-
-                          backgroundImage:
-                              vendor.image != null
-                                  ? NetworkImage(
-                                    Urls.serviceProviderbaseUrl + vendor.image!,
-                                    // vendors[index].profileImage,
-                                  )
-                                  : const AssetImage(MyAssetsImage.brokenImage),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.w, 40.h, 20.w, 0.h),
-                  child: Text(
-                    vendor.businessName,
-                    style: TextStyle(
-                      color: MyColors.black,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: screenWidth * 0.05),
+                    child: CircleAvatar(
+                      radius: screenWidth * 0.085,
+                      backgroundImage: vendor.image != null
+                          ? NetworkImage(Urls.serviceProviderbaseUrl + vendor.image!)
+                          : const AssetImage(MyAssetsImage.brokenImage) as ImageProvider,
                     ),
                   ),
                 ),
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.w, 5.h, 20.w, 0.h),
-                        child: Text(
-                          vendor.type,
-                          style: TextStyle(
-                            color: MyColors.gray,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.w, 10.h, 20.w, 15.h),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.star, color: MyColors.star),
-                            SizedBox(width: 6.w),
-                            Text(vendor.rating.toStringAsFixed(2)),
-                            SizedBox(width: 6.w),
-                            Text(
-                              '(${vendor.numOfReviews.toString()} تقييما)',
-                              style: TextStyle(color: MyColors.gray),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+            Padding(
+              padding: EdgeInsets.only(top: screenHeight * 0.05, left: screenWidth * 0.05),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  vendor.businessName,
+                  style: TextStyle(
+                    color: MyColors.black,
+                    fontSize: screenWidth * 0.045,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
+              ),
             ),
-            //SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.only(top: screenHeight * 0.005, left: screenWidth * 0.05),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  vendor.type,
+                  style: TextStyle(
+                    color: MyColors.gray,
+                    fontSize: screenWidth * 0.037,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: screenHeight * 0.01, left: screenWidth * 0.05),
+              child: Row(
+                children: [
+                  const Icon(Icons.star, color: MyColors.star),
+                  SizedBox(width: screenWidth * 0.02),
+                  Text(vendor.rating.toStringAsFixed(2)),
+                  SizedBox(width: screenWidth * 0.02),
+                  Text(
+                    '(${vendor.numOfReviews} ${AppStrings.ratings})',
+                    style: const TextStyle(color: MyColors.gray),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
