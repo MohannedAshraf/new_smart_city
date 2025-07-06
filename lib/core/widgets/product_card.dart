@@ -35,7 +35,7 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(top: screenHeight * 0.012),
+        margin: EdgeInsets.only(top: screenHeight * 0.010),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(screenWidth * 0.05),
           color: Colors.white,
@@ -59,7 +59,7 @@ class ProductCard extends StatelessWidget {
             children: [
               SizedBox(
                 width: 182,
-                height: screenHeight * 0.18,
+                height: screenHeight * 0.16,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(screenWidth * 0.025),
@@ -96,7 +96,7 @@ class ProductCard extends StatelessWidget {
                           ? description
                           : AppStrings.noDescription,
                       style: TextStyle(
-                        fontSize: screenHeight * 0.015,
+                        fontSize: screenHeight * 0.01,
                         color: Colors.grey,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -117,7 +117,7 @@ class ProductCard extends StatelessWidget {
                         child: Text(
                           '...',
                           style: TextStyle(
-                            fontSize: screenHeight * 0.015,
+                            fontSize: screenHeight * 0.01,
                             color: Colors.grey,
                           ),
                         ),
