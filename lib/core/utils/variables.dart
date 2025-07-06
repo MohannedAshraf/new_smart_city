@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'mycolors.dart';
 
 abstract class Urls {
+  static const String SocialBaseUrl = 'https://graduation.amiralsayed.me/api/';
   static const String notificationBaseUrl =
       'https://api.citio.tech/gateway/notification-service';
 
@@ -18,8 +18,7 @@ abstract class Urls {
   static const String issueBaseUrl =
       'https://api.citio.tech/gateway/issuing-report';
 
-  static const String cmsBaseUrl =
-      'https://api.citio.tech/gateway/cms';
+  static const String cmsBaseUrl = 'https://api.citio.tech/gateway/cms';
 }
 
 abstract class Styles {
