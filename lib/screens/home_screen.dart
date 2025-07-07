@@ -65,7 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 color: MyColors.white,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+                  padding: EdgeInsets.fromLTRB(
+                    screenWidth * 0.04,
+                    16,
+                    screenWidth * 0.04,
+                    14,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -78,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.ambulance1,
                         emergencyServiceId: '1',
                       ),
-                      SizedBox(width: screenWidth * .09),
+                      SizedBox(width: screenWidth * .1),
                       const EmergencyButton(
                         color: MyColors.firefighterShade,
 
@@ -89,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.fireFighter1,
                         emergencyServiceId: '2',
                       ),
-                      SizedBox(width: screenWidth * .09),
+                      SizedBox(width: screenWidth * .1),
                       const EmergencyButton(
                         color: MyColors.policeShade,
                         emicon: Icon(
@@ -99,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.police,
                         emergencyServiceId: '3',
                       ),
-                      SizedBox(width: screenWidth * .09),
+                      SizedBox(width: screenWidth * .1),
                       Column(
                         children: [
                           InkWell(
