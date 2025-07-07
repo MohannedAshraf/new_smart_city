@@ -4,6 +4,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_register.dart';
 import 'package:citio/screens/mylogin_page.dart';
+import 'package:citio/screens/register_otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -53,10 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
       if (response.isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              AppStrings.accountCreated,
-              style: TextStyle(fontSize: 12),
-            ),
+            content: Text(AppStrings.otpSend, style: TextStyle(fontSize: 12)),
             backgroundColor: Colors.green,
           ),
         );
@@ -64,7 +62,10 @@ class _RegisterPageState extends State<RegisterPage> {
         await Future.delayed(const Duration(seconds: 1));
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const MyloginPage()),
+          MaterialPageRoute(
+            builder:
+                (_) => RegisterOtbScreen(email: emailController.toString()),
+          ),
         );
       } else {
         ScaffoldMessenger.of(

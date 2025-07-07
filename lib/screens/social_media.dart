@@ -148,7 +148,7 @@ class _SocialMediaState extends State<SocialMedia> {
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
     return Padding(
-      padding: EdgeInsets.fromLTRB(7, 20, 20, 7),
+      padding: const EdgeInsets.fromLTRB(7, 20, 20, 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -163,14 +163,14 @@ class _SocialMediaState extends State<SocialMedia> {
                       : AppStrings.noAvatarUrl,
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       user.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
@@ -317,9 +317,9 @@ class _SocialMediaState extends State<SocialMedia> {
           child: Row(
             children: [
               SizedBox(width: screenWidth * 0.13),
-              Text(
+              const Text(
                 AppStrings.latestPosts,
-                style: const TextStyle(color: MyColors.black, fontSize: 20),
+                style: TextStyle(color: MyColors.black, fontSize: 20),
               ),
               const Spacer(),
               IconButton(
