@@ -482,4 +482,5 @@ class AppStrings {
 
   //static const String cancel='الغاء';
   static const String paymentFailure = 'حدث خطأ أثناء الدفع';
+  static const String otpSend = " تم إرسال الرمز بنجاح";
 }
