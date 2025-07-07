@@ -430,7 +430,7 @@ class _ApplyService extends State<ApplyService> {
         return StatefulBuilder(
           builder:
               (context, setModalState) => FractionallySizedBox(
-                heightFactor: 0.5, // هنا خليتها نص الشاشة
+                heightFactor: 0.5,
                 child: SafeArea(
                   child: Padding(
                     // duration: const Duration(milliseconds: 300),
