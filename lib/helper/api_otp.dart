@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/otp_model.dart';
@@ -16,6 +18,10 @@ class VerifyOtpApi {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({"email": email, "otp": otp}),
     );
+    print("🔹 Response Status Code: ${response.statusCode}");
+    print("🔹 Response Body: ${response.body}");
+    print("🔹 URL: $url");
+    print("🔹 Request Body: ${jsonEncode({"email": email, "otp": otp})}");
 
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);

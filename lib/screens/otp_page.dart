@@ -5,6 +5,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_otp.dart';
 import 'package:citio/helper/api_reset_password.dart';
+import 'package:citio/main.dart';
 import 'package:citio/screens/new_password_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,8 +13,13 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerificationScreen extends StatefulWidget {
   final String email;
+  final String sourcePage;
 
-  const VerificationScreen({super.key, required this.email});
+  const VerificationScreen({
+    super.key,
+    required this.email,
+    required this.sourcePage,
+  });
 
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
@@ -92,10 +98,22 @@ class _VerificationScreenState extends State<VerificationScreen> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const NewPasswordPage()),
-      );
+      if (widget.sourcePage == 'register') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      } else if (widget.sourcePage == 'reset') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NewPasswordPage()),
+        );
+      } else if (widget.sourcePage == 'login') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      }
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

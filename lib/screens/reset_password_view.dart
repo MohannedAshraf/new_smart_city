@@ -160,6 +160,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                                       builder:
                                           (_) => VerificationScreen(
                                             email: emailController.text.trim(),
+                                            sourcePage: 'reset password',
                                           ),
                                     ),
                                   );
