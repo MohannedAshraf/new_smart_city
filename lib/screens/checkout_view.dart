@@ -8,7 +8,6 @@ import 'package:citio/helper/api_make_order.dart';
 import 'package:citio/models/make_order_model.dart';
 import 'package:citio/screens/my_order_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:citio/helper/api_cash_payment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,6 +30,7 @@ class _CheckoutViewState extends State<CheckoutView> {
   bool isEditingAddress = false;
 
   TextEditingController addressController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -56,9 +56,9 @@ class _CheckoutViewState extends State<CheckoutView> {
     setState(() => isLoading = true);
 
     try {
-      Stripe.publishableKey =
-          'pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg';
+      Stripe.publishableKey = 'pk_test_...'; // 🔐 مفتاحك هنا
       await Stripe.instance.applySettings();
+
       final paymentMethod = await Stripe.instance.createPaymentMethod(
         params: const PaymentMethodParams.card(
           paymentMethodData: PaymentMethodData(),
@@ -139,6 +139,7 @@ class _CheckoutViewState extends State<CheckoutView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     double subtotal = widget.cartItems.fold(
       0,
       (sum, item) => sum + (item.price * item.quantity),
@@ -153,7 +154,7 @@ class _CheckoutViewState extends State<CheckoutView> {
         title: Text(
           AppStrings.checkout,
           style: TextStyle(
-            fontSize: MediaQuery.of(context).size.height * 0.035,
+            fontSize: size.height * 0.035,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -162,21 +163,21 @@ class _CheckoutViewState extends State<CheckoutView> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(size.width * 0.04),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildAddressSection(),
-                SizedBox(height: 10.h),
-                _buildItemsSection(),
-                SizedBox(height: 10.h),
-                _buildPaymentMethodSection(),
-                SizedBox(height: 10.h),
-                _buildSummarySection(subtotal, deliveryFee, tax, total),
-                SizedBox(height: 20.h),
+                _buildAddressSection(size),
+                SizedBox(height: size.height * 0.02),
+                _buildItemsSection(size),
+                SizedBox(height: size.height * 0.02),
+                _buildPaymentMethodSection(size),
+                SizedBox(height: size.height * 0.02),
+                _buildSummarySection(size, subtotal, deliveryFee, tax, total),
+                SizedBox(height: size.height * 0.03),
                 SizedBox(
                   width: double.infinity,
-                  height: 50.h,
+                  height: size.height * 0.07,
                   child: ElevatedButton(
                     onPressed:
                         isLoading
@@ -214,7 +215,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColors.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(size.width * 0.025),
                       ),
                     ),
                     child:
@@ -225,27 +226,24 @@ class _CheckoutViewState extends State<CheckoutView> {
                             : Text(
                               AppStrings.confirmOrder,
                               style: TextStyle(
-                                fontSize:
-                                    MediaQuery.of(context).size.height * 0.022,
+                                fontSize: size.height * 0.022,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
                             ),
                   ),
                 ),
-                SizedBox(height: 40.h),
+                SizedBox(height: size.height * 0.04),
               ],
             ),
           ),
-          if (showCardForm) _buildCardFormOverlay(),
+          if (showCardForm) _buildCardFormOverlay(size),
         ],
       ),
     );
   }
 
-  Widget _buildAddressSection() {
-    final size = MediaQuery.of(context).size;
-
+  Widget _buildAddressSection(Size size) {
     return Container(
       padding: EdgeInsets.all(size.width * 0.03),
       decoration: BoxDecoration(
@@ -267,7 +265,6 @@ class _CheckoutViewState extends State<CheckoutView> {
                   SizedBox(height: size.height * 0.01),
                   TextField(
                     controller: addressController,
-                    maxLines: 1,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: size.width * 0.03,
@@ -317,8 +314,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                         Text(
                           AppStrings.deliveryAddress,
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: size.height * 0.018,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(height: size.height * 0.005),
@@ -338,17 +335,15 @@ class _CheckoutViewState extends State<CheckoutView> {
     );
   }
 
-  Widget _buildItemsSection() {
-    final size = MediaQuery.of(context).size;
-
+  Widget _buildItemsSection(Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.requestedItems,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: size.height * 0.025,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: size.height * 0.01),
@@ -409,17 +404,15 @@ class _CheckoutViewState extends State<CheckoutView> {
     );
   }
 
-  Widget _buildPaymentMethodSection() {
-    final size = MediaQuery.of(context).size;
-
+  Widget _buildPaymentMethodSection(Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.paymentMethod,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: size.height * 0.025,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: size.height * 0.01),
@@ -455,21 +448,20 @@ class _CheckoutViewState extends State<CheckoutView> {
   }
 
   Widget _buildSummarySection(
+    Size size,
     double subtotal,
     double deliveryFee,
     double tax,
     double total,
   ) {
-    final size = MediaQuery.of(context).size;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.orderSummary,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: size.height * 0.025,
+            fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: size.height * 0.01),
@@ -509,9 +501,7 @@ class _CheckoutViewState extends State<CheckoutView> {
     );
   }
 
-  Widget _buildCardFormOverlay() {
-    final size = MediaQuery.of(context).size;
-
+  Widget _buildCardFormOverlay(Size size) {
     return Positioned.fill(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -579,9 +569,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                     SizedBox(height: size.height * 0.015),
                     TextButton(
-                      onPressed: () {
-                        setState(() => showCardForm = false);
-                      },
+                      onPressed: () => setState(() => showCardForm = false),
                       child: const Text(
                         AppStrings.cancel,
                         style: TextStyle(color: Colors.blue),

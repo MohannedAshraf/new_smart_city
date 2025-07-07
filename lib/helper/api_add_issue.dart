@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:citio/core/utils/variables.dart';
 import 'package:citio/models/add_issue_model.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class ComplaintApiService {
     });
 
     final response = await dio.post(
-      "https://cms-reporting.runasp.net/api/MReport",
+      "${Urls.issueBaseUrl}/api/MReport",
       data: formData,
       options: Options(
         headers: {
