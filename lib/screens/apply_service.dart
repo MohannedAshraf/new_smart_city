@@ -418,7 +418,7 @@ class _ApplyService extends State<ApplyService> {
     final media = MediaQuery.of(context).size;
 
     bool isPaymentLoading = false;
-
+    final parentContext = context;
     showModalBottomSheet(
       backgroundColor: MyColors.white,
       context: context,
@@ -429,208 +429,229 @@ class _ApplyService extends State<ApplyService> {
       builder: (_) {
         return StatefulBuilder(
           builder:
-              (context, setModalState) => FractionallySizedBox(
-                heightFactor: 0.5,
-                child: SafeArea(
-                  child: Padding(
-                    // duration: const Duration(milliseconds: 300),
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      left: media.width * .04,
-                      right: media.width * 0.04,
-                      top: media.width * 0.04,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            AppStrings.enterCardInfo,
-                            style: TextStyle(
-                              fontSize: media.width * 0.045,
-                              fontWeight: FontWeight.bold,
+              (context, setModalState) => DraggableScrollableSheet(
+                initialChildSize: 0.5,
+                minChildSize: 0.3,
+                maxChildSize: 0.9,
+                expand: false,
+                builder: (context, scrollController) {
+                  return SafeArea(
+                    child: Padding(
+                      // duration: const Duration(milliseconds: 300),
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                        left: media.width * .04,
+                        right: media.width * 0.04,
+                        top: media.width * 0.04,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              AppStrings.enterCardInfo,
+                              style: TextStyle(
+                                fontSize: media.width * 0.045,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: media.height * 0.02),
-                          CardFormField(
-                            onCardChanged: (cardDetails) {
-                              setModalState(() {
-                                card = cardDetails;
-                              });
-                            },
-                            style: CardFormStyle(
-                              backgroundColor: MyColors.white,
-                              borderColor: Colors.grey,
-                              textColor: Colors.black,
-                              borderRadius: 8,
+                            SizedBox(height: media.height * 0.02),
+                            CardFormField(
+                              onCardChanged: (cardDetails) {
+                                setModalState(() {
+                                  card = cardDetails;
+                                });
+                              },
+                              style: CardFormStyle(
+                                backgroundColor: MyColors.white,
+                                borderColor: Colors.grey,
+                                textColor: Colors.black,
+                                borderRadius: 8,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: media.height * 0.025),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () async {
-                                  if (card == null ||
-                                      !(card?.complete ?? false)) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          AppStrings.cardIncomplete,
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  setModalState(() {
-                                    isPaymentLoading = true;
-                                  });
-
-                                  try {
-                                    final paymentMethod = await Stripe.instance
-                                        .createPaymentMethod(
-                                          params:
-                                              const PaymentMethodParams.card(
-                                                paymentMethodData:
-                                                    PaymentMethodData(),
-                                              ),
-                                        );
-
-                                    Navigator.pop(context);
-
-                                    await ApplyGovernmentService().submit(
-                                      serviceId: widget.id,
-                                      serviceData: serviceData,
-                                      files: uploadedFiles.values.toList(),
-                                      paymentMethodID: paymentMethod.id,
-                                    );
-
-                                    showDialog(
-                                      context: context,
-                                      builder:
-                                          (_) => AlertDialog(
-                                            backgroundColor: MyColors.white,
-                                            title: const Text(
-                                              "Citio",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: MyColors.dodgerBlue,
-                                              ),
-                                            ),
-                                            content: const Text(
-                                              AppStrings.requestSent,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: MyColors.black,
-                                              ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder:
-                                                          (_) =>
-                                                              GovernmentServiceDetails(
-                                                                id: widget.id,
-                                                              ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: const Text(
-                                                  AppStrings.done,
-                                                  style: TextStyle(
-                                                    color: MyColors.dodgerBlue,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder:
-                                                          (_) =>
-                                                              const GovernmentScreen(),
-                                                    ),
-                                                  );
-                                                },
-                                                child: const Text(
-                                                  AppStrings.goToGov,
-                                                  style: TextStyle(
-                                                    color: MyColors.dodgerBlue,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                            SizedBox(height: media.height * 0.025),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (card == null ||
+                                        !(card?.complete ?? false)) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            AppStrings.cardIncomplete,
                                           ),
-                                    );
-                                  } catch (e) {
+                                        ),
+                                      );
+                                      return;
+                                    }
+
                                     setModalState(() {
-                                      isPaymentLoading = false;
+                                      isPaymentLoading = true;
                                     });
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "${AppStrings.paymentFailure} : $e",
-                                        ),
-                                        backgroundColor: MyColors.primary,
-                                        duration: const Duration(seconds: 10),
-                                      ),
-                                    );
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: MyColors.primary,
-                                  minimumSize: Size(
-                                    media.width * 0.4,
-                                    media.height * 0.06,
-                                  ),
-                                ),
-                                child:
-                                    isPaymentLoading
-                                        ? const CircularProgressIndicator(
-                                          color: MyColors.white,
-                                        )
-                                        : const Text(
-                                          AppStrings.submitAndPay,
-                                          style: TextStyle(
-                                            color: MyColors.white,
+                                    try {
+                                      final paymentMethod = await Stripe
+                                          .instance
+                                          .createPaymentMethod(
+                                            params:
+                                                const PaymentMethodParams.card(
+                                                  paymentMethodData:
+                                                      PaymentMethodData(),
+                                                ),
+                                          );
+
+                                      await ApplyGovernmentService().submit(
+                                        serviceId: widget.id,
+                                        serviceData: serviceData,
+                                        files: uploadedFiles.values.toList(),
+                                        paymentMethodID: paymentMethod.id,
+                                      );
+
+                                      if (!mounted) return;
+                                      Navigator.pop(context);
+
+                                      showDialog(
+                                        context: parentContext,
+                                        builder:
+                                            (_) => AlertDialog(
+                                              backgroundColor: MyColors.white,
+                                              title: const Text(
+                                                "Citio",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20,
+                                                  color: MyColors.dodgerBlue,
+                                                ),
+                                              ),
+                                              content: const Text(
+                                                AppStrings.requestSent,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: MyColors.black,
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    // Navigator.pop(context);
+                                                    Navigator.of(
+                                                      parentContext,
+                                                    ).pop();
+                                                    // Navigator.pushReplacement(
+                                                    //   parentContext,
+                                                    //   MaterialPageRoute(
+                                                    //     builder:
+                                                    //         (_) =>
+                                                    //             GovernmentServiceDetails(
+                                                    //               id: widget.id,
+                                                    //             ),
+                                                    //   ),
+                                                    // );
+                                                  },
+
+                                                  child: const Text(
+                                                    AppStrings.done,
+                                                    style: TextStyle(
+                                                      color:
+                                                          MyColors.dodgerBlue,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    // Navigator.pop(context);
+                                                    Navigator.pushAndRemoveUntil(
+                                                      parentContext,
+                                                      MaterialPageRoute(
+                                                        builder:
+                                                            (_) =>
+                                                                const GovernmentScreen(),
+                                                      ),
+                                                      (route) => false,
+                                                    );
+                                                  },
+                                                  child: const Text(
+                                                    AppStrings.goToGov,
+                                                    style: TextStyle(
+                                                      color:
+                                                          MyColors.dodgerBlue,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                      );
+                                    } catch (e) {
+                                      if (!mounted) return;
+                                      setModalState(() {
+                                        isPaymentLoading = false;
+                                      });
+
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "${AppStrings.paymentFailure} : $e",
                                           ),
+                                          backgroundColor: MyColors.primary,
+                                          duration: const Duration(seconds: 10),
                                         ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: MyColors.white,
-                                  minimumSize: Size(
-                                    media.width * 0.4,
-                                    media.height * 0.06,
+                                      );
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MyColors.primary,
+                                    minimumSize: Size(
+                                      media.width * 0.4,
+                                      media.height * 0.06,
+                                    ),
+                                  ),
+                                  child:
+                                      isPaymentLoading
+                                          ? const CircularProgressIndicator(
+                                            color: MyColors.white,
+                                          )
+                                          : const Text(
+                                            AppStrings.submitAndPay,
+                                            style: TextStyle(
+                                              color: MyColors.white,
+                                            ),
+                                          ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MyColors.white,
+                                    minimumSize: Size(
+                                      media.width * 0.4,
+                                      media.height * 0.06,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    AppStrings.cancel,
+                                    style: TextStyle(color: MyColors.black),
                                   ),
                                 ),
-                                child: const Text(
-                                  AppStrings.cancel,
-                                  style: TextStyle(color: MyColors.black),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
         );
       },
