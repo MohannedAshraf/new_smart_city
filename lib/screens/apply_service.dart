@@ -369,7 +369,7 @@ class _ApplyService extends State<ApplyService> {
                 backgroundColor:
                     isButtonPressed ? MyColors.primary : MyColors.fadedGrey,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.r),
+                  borderRadius: BorderRadius.circular(14),
                 ),
               ),
             ),
