@@ -12,20 +12,21 @@ class Reactions extends StatelessWidget {
     required this.reactionIcon,
     required this.reactionHoverColor,
     this.reactionIconColor = MyColors.black,
+    this.onPressed,
     super.key,
   });
 
   final Icon reactionIcon;
   final Color reactionIconColor;
   final Color reactionHoverColor;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       hoverColor: reactionHoverColor,
-      onPressed:
-          () =>
-              showDialog(context: context, builder: (_) => const PopUpDialog()),
+      onPressed: onPressed ??
+          () => showDialog(context: context, builder: (_) => const PopUpDialog()),
       icon: reactionIcon,
       color: reactionIconColor,
     );
@@ -97,11 +98,10 @@ class PopUpDialog extends StatelessWidget {
               SizedBox(width: screenWidth * 0.03),
               Expanded(
                 child: ElevatedButton(
-                  onPressed:
-                      () => launchUrl(
-                        _cityWebsiteUrl,
-                        mode: LaunchMode.externalApplication,
-                      ),
+                  onPressed: () => launchUrl(
+                    _cityWebsiteUrl,
+                    mode: LaunchMode.externalApplication,
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: MyColors.primary,
                     shape: RoundedRectangleBorder(

@@ -12,6 +12,7 @@ abstract class MyColors {
   static const Color fadedAccepted = Color.fromARGB(26, 48, 126, 95);
   static const Color accepted = Color(0xFF009E60);
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
+    static const Color lightGrey = Color(0xFFF0F0F0);
   static const Color ambulance = Color(0xFFE53935);
   static const Color ambulanceShade = Color(0x4DE53935);
   static const Color firefighter = Color(0xFFD84315);

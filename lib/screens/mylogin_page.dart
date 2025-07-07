@@ -51,6 +51,7 @@ class _LoginPageState extends State<MyloginPage> {
         try {
           final profile = await ApiProfileHelper.fetchProfile();
           await prefs.setString('userId', profile!.id ?? '');
+          print('❤️Stored userId: ${profile.id}'); 
         } catch (e) {
           print("❌ فشل في تحميل البروفايل: $e");
         }
