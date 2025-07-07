@@ -417,6 +417,8 @@ class _ApplyService extends State<ApplyService> {
   void showPaymentSheet() {
     final media = MediaQuery.of(context).size;
 
+    bool isPaymentLoading = false;
+
     showModalBottomSheet(
       backgroundColor: MyColors.white,
       context: context,
@@ -424,166 +426,214 @@ class _ApplyService extends State<ApplyService> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder:
-          (_) => Padding(
-            padding: EdgeInsets.all(media.width * 0.04),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  AppStrings.enterCardInfo,
-                  style: TextStyle(
-                    fontSize: media.width * 0.045,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: media.height * 0.02),
-                CardFormField(
-                  onCardChanged: (cardDetails) {
-                    setState(() {
-                      card = cardDetails;
-                    });
-                  },
-                  style: CardFormStyle(
-                    backgroundColor: MyColors.white,
-                    borderColor: Colors.grey,
-                    textColor: Colors.black,
-                    borderRadius: 8,
-                  ),
-                ),
-                SizedBox(height: media.height * 0.025),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (card == null || !(card?.complete ?? false)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(AppStrings.cardIncomplete),
-                        ),
-                      );
-                      return;
-                    }
-
-                    try {
-                      final paymentMethod = await Stripe.instance
-                          .createPaymentMethod(
-                            params: const PaymentMethodParams.card(
-                              paymentMethodData: PaymentMethodData(),
+      builder: (_) {
+        return StatefulBuilder(
+          builder:
+              (context, setModalState) => FractionallySizedBox(
+                heightFactor: 0.5, // هنا خليتها نص الشاشة
+                child: SafeArea(
+                  child: AnimatedPadding(
+                    duration: const Duration(milliseconds: 300),
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                      left: media.width * .04,
+                      right: media.width * 0.04,
+                      top: media.width * 0.04,
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            AppStrings.enterCardInfo,
+                            style: TextStyle(
+                              fontSize: media.width * 0.045,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-
-                      Navigator.pop(context);
-
-                      try {
-                        await ApplyGovernmentService().submit(
-                          serviceId: widget.id,
-                          serviceData: serviceData,
-                          files: uploadedFiles.values.toList(),
-                          paymentMethodID: paymentMethod.id,
-                        );
-
-                        showDialog(
-                          context: context,
-                          builder:
-                              (_) => AlertDialog(
-                                backgroundColor: MyColors.white,
-                                title: const Text(
-                                  "Citio",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: MyColors.dodgerBlue,
-                                  ),
-                                ),
-                                content: const Text(
-                                  AppStrings.requestSent,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: MyColors.black,
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (_) => GovernmentServiceDetails(
-                                                id: widget.id,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      AppStrings.done,
-                                      style: TextStyle(
-                                        color: MyColors.dodgerBlue,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (_) => const GovernmentScreen(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      AppStrings.goToGov,
-                                      style: TextStyle(
-                                        color: MyColors.dodgerBlue,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                        );
-                      } catch (submitError) {
-                        String errorMessage = AppStrings.submitFailed;
-
-                        if (submitError.toString().contains('{')) {
-                          try {
-                            final parsedError = jsonDecode(
-                              submitError.toString(),
-                            );
-                            if (parsedError is Map &&
-                                parsedError.containsKey('message')) {
-                              errorMessage = parsedError['message'];
-                            }
-                          } catch (_) {}
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(errorMessage),
-                            backgroundColor: MyColors.primary,
-                            duration: const Duration(seconds: 10),
                           ),
-                        );
-                      }
-                    } catch (e) {
-                      print("Stripe error: $e");
-                    }
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(MyColors.white),
-                  ),
-                  child: const Text(
-                    AppStrings.submitAndPay,
-                    style: TextStyle(color: MyColors.black),
+                          SizedBox(height: media.height * 0.02),
+                          CardFormField(
+                            onCardChanged: (cardDetails) {
+                              setModalState(() {
+                                card = cardDetails;
+                              });
+                            },
+                            style: CardFormStyle(
+                              backgroundColor: MyColors.white,
+                              borderColor: Colors.grey,
+                              textColor: Colors.black,
+                              borderRadius: 8,
+                            ),
+                          ),
+                          SizedBox(height: media.height * 0.025),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () async {
+                                  if (card == null ||
+                                      !(card?.complete ?? false)) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          AppStrings.cardIncomplete,
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  setModalState(() {
+                                    isPaymentLoading = true;
+                                  });
+
+                                  try {
+                                    final paymentMethod = await Stripe.instance
+                                        .createPaymentMethod(
+                                          params:
+                                              const PaymentMethodParams.card(
+                                                paymentMethodData:
+                                                    PaymentMethodData(),
+                                              ),
+                                        );
+
+                                    Navigator.pop(context);
+
+                                    await ApplyGovernmentService().submit(
+                                      serviceId: widget.id,
+                                      serviceData: serviceData,
+                                      files: uploadedFiles.values.toList(),
+                                      paymentMethodID: paymentMethod.id,
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (_) => AlertDialog(
+                                            backgroundColor: MyColors.white,
+                                            title: const Text(
+                                              "Citio",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                                color: MyColors.dodgerBlue,
+                                              ),
+                                            ),
+                                            content: const Text(
+                                              AppStrings.requestSent,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: MyColors.black,
+                                              ),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (_) =>
+                                                              GovernmentServiceDetails(
+                                                                id: widget.id,
+                                                              ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  AppStrings.done,
+                                                  style: TextStyle(
+                                                    color: MyColors.dodgerBlue,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (_) =>
+                                                              const GovernmentScreen(),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text(
+                                                  AppStrings.goToGov,
+                                                  style: TextStyle(
+                                                    color: MyColors.dodgerBlue,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                    );
+                                  } catch (e) {
+                                    setModalState(() {
+                                      isPaymentLoading = false;
+                                    });
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "${AppStrings.paymentFailure} : $e",
+                                        ),
+                                        backgroundColor: MyColors.primary,
+                                        duration: const Duration(seconds: 10),
+                                      ),
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: MyColors.primary,
+                                  minimumSize: Size(
+                                    media.width * 0.4,
+                                    media.height * 0.06,
+                                  ),
+                                ),
+                                child:
+                                    isPaymentLoading
+                                        ? const CircularProgressIndicator(
+                                          color: MyColors.white,
+                                        )
+                                        : const Text(
+                                          AppStrings.submitAndPay,
+                                          style: TextStyle(
+                                            color: MyColors.white,
+                                          ),
+                                        ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: MyColors.white,
+                                  minimumSize: Size(
+                                    media.width * 0.4,
+                                    media.height * 0.06,
+                                  ),
+                                ),
+                                child: const Text(
+                                  AppStrings.cancel,
+                                  style: TextStyle(color: MyColors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+        );
+      },
     );
   }
 }

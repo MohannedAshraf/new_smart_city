@@ -174,6 +174,27 @@ class MostRequestedServices {
     return requestsList;
   }
 
+  Future<List<RequiredFields>> getAttachedFields(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Fields/Attached/Request/$id',
+      token: token,
+      // token: token
+    );
+    List<RequiredFields> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(RequiredFields.fromJason(data[i]));
+    }
+    return requestsList;
+  }
+
   Future<List<RequiredFiles>> getRequiredFiles(int id) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
@@ -185,6 +206,27 @@ class MostRequestedServices {
     // ignore: missing_required_param
     List<dynamic> data = await Api().get(
       url: '${Urls.governmentbaseUrl}/api/Files/Required/Service/$id',
+      token: token,
+      // token: token
+    );
+    List<RequiredFiles> requestsList = [];
+    for (int i = 0; i < data.length; i++) {
+      requestsList.add(RequiredFiles.fromJason(data[i]));
+    }
+    return requestsList;
+  }
+
+  Future<List<RequiredFiles>> getAttachedFiles(int id) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    // ignore: missing_required_param
+    List<dynamic> data = await Api().get(
+      url: '${Urls.governmentbaseUrl}/api/Files/Attached/Request/$id',
       token: token,
       // token: token
     );

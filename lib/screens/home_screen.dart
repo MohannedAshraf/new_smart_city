@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.ambulance1,
                         emergencyServiceId: '1',
                       ),
-                      const SizedBox(width: 30),
+                      SizedBox(width: screenWidth * .09),
                       const EmergencyButton(
                         color: MyColors.firefighterShade,
 
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.fireFighter1,
                         emergencyServiceId: '2',
                       ),
-                      const SizedBox(width: 30),
+                      SizedBox(width: screenWidth * .09),
                       const EmergencyButton(
                         color: MyColors.policeShade,
                         emicon: Icon(
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         emname: AppStrings.police,
                         emergencyServiceId: '3',
                       ),
-                      SizedBox(width: 30),
+                      SizedBox(width: screenWidth * .09),
                       Column(
                         children: [
                           InkWell(
@@ -115,8 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Container(
-                              width: screenWidth * 0.1,
-                              height: screenWidth * 0.1,
+                              width: screenWidth * 0.0988,
+                              height: screenWidth * 0.0988,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: MyColors.primary,
@@ -127,11 +127,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: screenHeight * 0.02),
+                          SizedBox(height: screenHeight * 0.009),
                           Text(
                             AppStrings.addComplaint1,
                             style: TextStyle(
-                              fontSize: screenWidth * 0.035,
+                              fontSize: screenWidth * 0.031,
                               color: Colors.black,
                             ),
                           ),
@@ -152,17 +152,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: AppStrings.governmentServices1,
                       items: snapshot.data!,
                       destination: const GovernmentServices(),
-                      fit: BoxFit.cover,
-                      height: screenHeight * 0.32,
-                      imageHeight: screenHeight * 0.07,
+                      fit: BoxFit.contain,
+                      height: screenHeight * 0.26,
+                      imageHeight: screenHeight * 0.075,
                       imagePadding: const EdgeInsets.fromLTRB(10, 10, 10, 4),
-                      imageWidth: screenWidth * 0.13,
-                      width: screenWidth * 0.43,
+                      imageWidth: screenWidth * 0.2,
+                      width: screenWidth * 0.5,
                       maximumlines: 3,
                     );
                   } else {
                     return SizedBox(
-                      height: screenHeight * 0.17,
+                      height: screenHeight * 0.26,
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }
@@ -177,17 +177,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       items: snapshot.data!,
                       titlefontSize: screenWidth * 0.03,
                       destination: const ServiceOrderScreen(),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       height: screenHeight * 0.27,
                       maximumLines: 3,
-                      imageHeight: screenHeight * 0.09,
+                      imageHeight: screenHeight * 0.087,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                       imageWidth: screenWidth * 0.5,
                       width: screenWidth * 0.5,
                     );
                   } else {
                     return SizedBox(
-                      height: screenHeight * 0.19,
+                      height: screenHeight * 0.27,
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       titlefontSize: screenWidth * 0.03,
                       destination: const AllVendorsScreen(),
                       fit: BoxFit.cover,
-                      height: screenHeight * 0.27,
+                      height: screenHeight * 0.25,
                       maximumLines: 3,
                       imageHeight: screenHeight * 0.09,
                       imagePadding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
@@ -212,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else {
                     return SizedBox(
-                      height: screenHeight * 0.2,
+                      height: screenHeight * 0.26,
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   }

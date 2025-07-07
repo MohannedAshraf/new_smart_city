@@ -134,7 +134,9 @@ class HomePageState extends State<HomePage> {
                 preferredSize: Size.fromHeight(60.h),
                 child: AppBar(
                   centerTitle: true,
-                  backgroundColor: MyColors.specialbackground,
+                  backgroundColor: MyColors.white,
+                  foregroundColor: MyColors.white,
+                  surfaceTintColor: MyColors.white,
                   elevation: 0,
                   title: Padding(
                     padding: EdgeInsets.fromLTRB(0.w, 16.h, 0.w, 16.h),
