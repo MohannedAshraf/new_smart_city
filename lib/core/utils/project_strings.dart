@@ -460,10 +460,7 @@ class AppStrings {
       'جارٍ تجهيز حساب السوشيال الخاص بك...';
   static const String socialInitError =
       'حدث خطأ أثناء تجهيز حساب السوشيال. حاول مرة أخرى.';
-  static const String socialInitLoading =
-      'جارٍ تجهيز حساب السوشيال الخاص بك...';
-  static const String socialInitError =
-      'حدث خطأ أثناء تجهيز حساب السوشيال. حاول مرة أخرى.';
+
   static const String retry = 'إعادة المحاولة';
   static const String missingToken = 'Missing token.';
   static const String unexpectedServerMessage = 'Unexpected server message.';

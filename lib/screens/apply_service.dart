@@ -432,8 +432,8 @@ class _ApplyService extends State<ApplyService> {
               (context, setModalState) => FractionallySizedBox(
                 heightFactor: 0.5, // هنا خليتها نص الشاشة
                 child: SafeArea(
-                  child: AnimatedPadding(
-                    duration: const Duration(milliseconds: 300),
+                  child: Padding(
+                    // duration: const Duration(milliseconds: 300),
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                       left: media.width * .04,
