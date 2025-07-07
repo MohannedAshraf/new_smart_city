@@ -136,7 +136,7 @@ class _SocialMediaState extends State<SocialMedia> {
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
     return Padding(
-      padding: EdgeInsets.fromLTRB(7, 20, 20, 7),
+      padding: const EdgeInsets.fromLTRB(7, 20, 20, 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -151,14 +151,14 @@ class _SocialMediaState extends State<SocialMedia> {
                       : AppStrings.noAvatarUrl,
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       user.name,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
@@ -176,8 +176,14 @@ class _SocialMediaState extends State<SocialMedia> {
               ),
               if (post.adminPost)
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 5,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: MyColors.ambulance,
                     borderRadius: BorderRadius.circular(20),
@@ -200,21 +206,23 @@ class _SocialMediaState extends State<SocialMedia> {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: imageUrls.length == 1
-                    ? Image.network(
-                        imageUrls[0],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.broken_image),
-                      )
-                    : GalleryImage(
-                        imageUrls: imageUrls,
-                        numOfShowImages:
-                            imageUrls.length > 3 ? 3 : imageUrls.length,
-                        titleGallery: AppStrings.appGalleryTitle,
-                        imageRadius: 8,
-                      ),
+                child:
+                    imageUrls.length == 1
+                        ? Image.network(
+                          imageUrls[0],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  const Icon(Icons.broken_image),
+                        )
+                        : GalleryImage(
+                          imageUrls: imageUrls,
+                          numOfShowImages:
+                              imageUrls.length > 3 ? 3 : imageUrls.length,
+                          titleGallery: AppStrings.appGalleryTitle,
+                          imageRadius: 8,
+                        ),
               ),
             ),
 
@@ -281,9 +289,9 @@ class _SocialMediaState extends State<SocialMedia> {
           child: Row(
             children: [
               SizedBox(width: screenWidth * 0.13),
-              Text(
+              const Text(
                 AppStrings.latestPosts,
-                style: const TextStyle(color: MyColors.black, fontSize: 20),
+                style: TextStyle(color: MyColors.black, fontSize: 20),
               ),
               const Spacer(),
               IconButton(
@@ -302,46 +310,47 @@ class _SocialMediaState extends State<SocialMedia> {
         ),
         centerTitle: true,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-              onRefresh: () async {
-                setState(() {
-                  isLoading = true;
-                  cachedPosts = null;
-                  currentPage = 1;
-                  hasMorePosts = true;
-                });
-                await _fetchPostsPage(page: currentPage);
-              },
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollInfo) {
-                  if (hasMorePosts &&
-                      !isLoadingMore &&
-                      scrollInfo.metrics.pixels >=
-                          scrollInfo.metrics.maxScrollExtent - 100) {
-                    _fetchPostsPage(page: currentPage);
-                    return true;
-                  }
-                  return false;
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    isLoading = true;
+                    cachedPosts = null;
+                    currentPage = 1;
+                    hasMorePosts = true;
+                  });
+                  await _fetchPostsPage(page: currentPage);
                 },
-                child: ListView.builder(
-                  itemCount: cachedPosts?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final post = cachedPosts![index];
-                    return Card(
-                      color: MyColors.white,
-                      shadowColor: MyColors.white,
-                      child: _buildPostUserWidget(
-                        post,
-                        screenWidth,
-                        screenHeight,
-                      ),
-                    );
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (hasMorePosts &&
+                        !isLoadingMore &&
+                        scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent - 100) {
+                      _fetchPostsPage(page: currentPage);
+                      return true;
+                    }
+                    return false;
                   },
+                  child: ListView.builder(
+                    itemCount: cachedPosts?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final post = cachedPosts![index];
+                      return Card(
+                        color: MyColors.white,
+                        shadowColor: MyColors.white,
+                        child: _buildPostUserWidget(
+                          post,
+                          screenWidth,
+                          screenHeight,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
     );
   }
 

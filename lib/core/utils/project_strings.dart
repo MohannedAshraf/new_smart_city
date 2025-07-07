@@ -475,6 +475,8 @@ class AppStrings {
   static const String logout = 'تسجيل الخروج';
   static const String community = 'المجتمع';
   static const String confirmDeleteTitle = "confirmDeleteTitle";
-  static const String confirmDeleteMessage = "confirmDeleteMessage";
+  static const String confirmDeleteMessage =
+      "confirmDeleteMessage  Static const String ";
   static const String confirmDeleteButton = "confirmDeleteButton";
+  static const String otpSend = " تم إرسال الرمز بنجاح";
 }
