@@ -68,7 +68,7 @@ abstract class Styles {
       'icon': Icons.cancel,
       'fontColor': MyColors.rejected,
     },
-    'ُEdited': {
+    "Edited": {
       'color': MyColors.firefighterShade,
       'icon': Icons.edit_note,
       'fontColor': MyColors.firefighter,
