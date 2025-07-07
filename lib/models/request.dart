@@ -38,9 +38,10 @@ class Request {
 }
 
 String getTimeAgo(String dateString) {
+  DateTime localDate = DateTime.parse(dateString + 'Z').toLocal();
   final date = DateTime.parse(dateString).toLocal();
   final now = DateTime.now();
-  final diff = now.difference(date);
+  final diff = now.difference(localDate);
 
   if (diff.inSeconds < 60) {
     return 'منذ ${diff.inSeconds} ثانية';

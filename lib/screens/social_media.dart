@@ -6,6 +6,7 @@ import 'package:citio/core/widgets/reaction_button.dart';
 import 'package:citio/core/widgets/reactions.dart';
 import 'package:citio/models/socialmedia_post.dart';
 import 'package:citio/models/socialmedia_user.dart';
+import 'package:citio/screens/comments_screen.dart';
 import 'package:citio/services/get_post.dart';
 import 'package:citio/services/get_socialmedia_user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -15,6 +16,7 @@ import 'package:citio/screens/new_post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:citio/services/get_my_user_minimal.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/core/utils/project_strings.dart';
 
@@ -27,6 +29,7 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
+  String currentUserId = '';
   SocialmediaUserMinimal? myUserMinimal;
   bool isUserLoading = true;
   List<Data>? cachedPosts;
@@ -43,10 +46,19 @@ class _SocialMediaState extends State<SocialMedia> {
     if (SocialMedia.cachedUserMinimal != null) {
       myUserMinimal = SocialMedia.cachedUserMinimal;
       isUserLoading = false;
+      _loadCurrentUserId();
     } else {
       _loadMyUser();
     }
     _fetchPostsPage(page: currentPage);
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString('userId') ?? '';
+    setState(() {
+      currentUserId = id;
+    });
   }
 
   Future<void> _loadMyUser() async {
@@ -247,12 +259,28 @@ class _SocialMediaState extends State<SocialMedia> {
                 icon: FluentIcons.comment_28_regular,
                 count: post.saveCount,
                 hoverColor: Colors.green.withOpacity(0.3),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => CommentsPage(
+                            postId: post.id ?? '',
+                            currentUserId: currentUserId,
+                            postOwnerId: post.authorId ?? '',
+                          ),
+                    ),
+                  );
+                },
               ),
               _buildReactionColumn(
                 icon: FluentIcons.share_48_regular,
                 count: null,
                 label: AppStrings.postShared,
                 hoverColor: Colors.blue.withOpacity(0.3),
+                onPressed: () {
+                  Share.share(post.postCaption ?? '');
+                },
               ),
             ],
           ),
@@ -359,12 +387,17 @@ class _SocialMediaState extends State<SocialMedia> {
     int? count,
     String? label,
     required Color hoverColor,
+    VoidCallback? onPressed,
   }) {
     return Column(
       children: [
         Row(
           children: [
-            Reactions(reactionIcon: Icon(icon), reactionHoverColor: hoverColor),
+            Reactions(
+              reactionIcon: Icon(icon),
+              reactionHoverColor: hoverColor,
+              onPressed: onPressed,
+            ),
             const SizedBox(width: 4),
             if (count != null)
               Text(

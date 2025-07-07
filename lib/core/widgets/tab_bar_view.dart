@@ -1,11 +1,19 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/utils/variables.dart';
+import 'package:citio/models/gov_service_details.dart';
+import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/request.dart';
 import 'package:citio/screens/apply_service.dart';
+import 'package:citio/services/get_file.dart';
+import 'package:citio/services/get_most_requested_services.dart';
 import 'package:citio/services/get_requests_by_status.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class TabBarViewItem extends StatefulWidget {
@@ -120,7 +128,9 @@ class CustomCard extends StatefulWidget {
 
 class _CustomCardState extends State<CustomCard> {
   bool isHovered = false;
-
+  final Map<int, PlatformFile> oldFiles = {};
+  final List<RequiredFields> oldServiceData = [];
+  final List<RequiredFiles> files = [];
   @override
   Widget build(BuildContext context) {
     final sw = widget.screenWidth;
@@ -297,5 +307,36 @@ class _CustomCardState extends State<CustomCard> {
         ),
       ),
     );
+  }
+
+  Future<void> fetchOldData(int requestId) async {
+    try {
+      final requestDetails = await MostRequestedServices().getAttachedFields(
+        requestId,
+      );
+      final fetchedfiles = await ServiceFile().getFile(id: requestId);
+      final files = await MostRequestedServices().getAttachedFiles(requestId);
+
+      if (files != null && files.isNotEmpty) {
+        setState(() {
+          // for (var file in files) {
+          //   Uint8List fileBytes = base64Decode(file.base64Content);
+          //   oldFiles[file.id] = PlatformFile(
+          //     name: file.fileName,
+          //     size: file.bytes.length,
+          //     bytes: file.bytes,
+          //   );
+          // }
+        });
+      }
+
+      if (requestDetails != null && requestDetails.isNotEmpty) {
+        setState(() {
+          oldServiceData.addAll(requestDetails);
+        });
+      }
+    } catch (e) {
+      print('Error fetching old data: $e');
+    }
   }
 }

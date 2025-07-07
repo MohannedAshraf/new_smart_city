@@ -25,22 +25,22 @@ abstract class Urls {
 
 abstract class Styles {
   static const Map<String, Map<String, dynamic>> govTabStyles = {
-    'السجل المدني': {
+    'الأحوال المدنية': {
       'color': Color(0x1A607D8B),
       'icon': Icons.badge,
       'fontColor': Colors.blueGrey,
     },
-    'النقل': {
+    'الإسكان': {
       'color': Color(0x1AFF9800),
       'icon': Icons.directions_bus,
       'fontColor': Colors.orange,
     },
-    'الصحة': {
+    'التموين /التجارة': {
       'color': Color(0x1AFF5252),
       'icon': Icons.local_hospital,
       'fontColor': Colors.redAccent,
     },
-    'المالية': {
+    'الجوازات والهجرة': {
       'color': Color(0x1A4CAF50),
       'icon': Icons.attach_money,
       'fontColor': Colors.green,
@@ -67,6 +67,11 @@ abstract class Styles {
       'color': MyColors.fadedRejected,
       'icon': Icons.cancel,
       'fontColor': MyColors.rejected,
+    },
+    "Edited": {
+      'color': MyColors.firefighterShade,
+      'icon': Icons.edit_note,
+      'fontColor': MyColors.firefighter,
     },
   };
 }

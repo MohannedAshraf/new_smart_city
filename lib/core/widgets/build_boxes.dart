@@ -182,7 +182,7 @@ class BuildBoxes extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: screenHeight * 0.02), // تقريبًا 20.h
+        SizedBox(height: screenHeight * 0.025), // تقريبًا 20.h
       ],
     );
   }
@@ -474,7 +474,7 @@ class ServiceBox extends StatelessWidget {
           BoxShadow(
             color: MyColors.whiteSmoke,
             blurRadius: 4.0,
-            offset: Offset(0, 2),
+            offset: Offset(2, 2),
           ),
         ],
       ),
@@ -482,8 +482,8 @@ class ServiceBox extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(screenWidth * 0.05),
-              topRight: Radius.circular(screenWidth * 0.05),
+              topLeft: Radius.circular(screenWidth * 0.053),
+              topRight: Radius.circular(screenWidth * 0.053),
             ),
             child: Padding(
               padding: imagePadding,
@@ -493,16 +493,16 @@ class ServiceBox extends StatelessWidget {
                         ? [
                           Container(
                             decoration: BoxDecoration(
-                              color: MyColors.whiteSmoke,
+                              color: MyColors.white,
                               borderRadius: BorderRadius.circular(
                                 screenWidth * 0.04,
                               ),
                             ),
-                            width: screenWidth * 0.3,
-                            height: screenHeight * 0.13,
+                            width: imageWidth,
+                            height: imageHeight,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(
-                                screenWidth * 0.04,
+                                screenWidth * 0.053,
                               ),
                               child: imageIcon,
                             ),
@@ -511,13 +511,13 @@ class ServiceBox extends StatelessWidget {
                         : [
                           Image.network(
                             image!,
-                            width: screenWidth * 0.3,
-                            height: screenHeight * 0.13,
+                            width: imageWidth,
+                            height: imageHeight,
                             fit: fit,
                             errorBuilder:
                                 (_, __, ___) => SizedBox(
-                                  width: screenWidth * 0.3,
-                                  height: screenHeight * 0.13,
+                                  width: imageWidth,
+                                  height: imageHeight,
                                   child: const Image(
                                     image: AssetImage(
                                       MyAssetsImage.brokenImage,
