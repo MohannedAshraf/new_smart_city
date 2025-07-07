@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print
 
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
@@ -80,9 +80,9 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             AppStrings.myOrdersTitle,
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
           leading: IconButton(
@@ -140,7 +140,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 : Expanded(
                   child:
                       filteredOrders.isEmpty
-                          ? Center(child: Text(AppStrings.noOrdersFound))
+                          ? const Center(child: Text(AppStrings.noOrdersFound))
                           : ListView.builder(
                             padding: EdgeInsets.all(width * 0.04),
                             itemCount: filteredOrders.length,

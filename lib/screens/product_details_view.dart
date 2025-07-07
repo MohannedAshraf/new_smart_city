@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:citio/core/utils/mycolors.dart';
-import 'package:citio/core/utils/app_strings.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_add_to_cart.dart';
 import 'package:citio/helper/api_product_details.dart';

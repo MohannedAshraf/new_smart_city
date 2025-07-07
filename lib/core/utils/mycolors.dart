@@ -1,3 +1,4 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
 
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ abstract class MyColors {
   static const Color fadedAccepted = Color.fromARGB(26, 48, 126, 95);
   static const Color accepted = Color(0xFF009E60);
   static const Color fontcolor = Color.fromRGBO(0, 0, 0, 1);
+    static const Color lightGrey = Color(0xFFF0F0F0);
   static const Color ambulance = Color(0xFFE53935);
   static const Color ambulanceShade = Color(0x4DE53935);
   static const Color firefighter = Color(0xFFD84315);
@@ -30,7 +32,7 @@ abstract class MyColors {
   static const Color emergencybuttonscolor = Color(0x803D6643);
   static const Color cardfontcolor = Colors.white;
   static const Color backgroundColor = Color(0xffF3F5F4);
-    static const Color background = Color(0xffF3F5F4);
+  static const Color background = Color(0xffF3F5F4);
 
   static const Color red = Color(0xffE4312B);
   static const Color green = Color(0xff149954);

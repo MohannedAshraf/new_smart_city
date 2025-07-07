@@ -6,6 +6,7 @@ import 'package:citio/core/widgets/reaction_button.dart';
 import 'package:citio/core/widgets/reactions.dart';
 import 'package:citio/models/socialmedia_post.dart';
 import 'package:citio/models/socialmedia_user.dart';
+import 'package:citio/screens/comments_screen.dart';
 import 'package:citio/services/get_post.dart';
 import 'package:citio/services/get_socialmedia_user.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
@@ -13,9 +14,9 @@ import 'package:galleryimage/galleryimage.dart';
 import 'package:citio/main.dart';
 import 'package:citio/screens/new_post_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:citio/models/socialmedia_user_minimal.dart';
 import 'package:citio/services/get_my_user_minimal.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:citio/core/utils/project_strings.dart';
 
@@ -28,6 +29,7 @@ class SocialMedia extends StatefulWidget {
 }
 
 class _SocialMediaState extends State<SocialMedia> {
+  String currentUserId = '';
   SocialmediaUserMinimal? myUserMinimal;
   bool isUserLoading = true;
   List<Data>? cachedPosts;
@@ -44,10 +46,19 @@ class _SocialMediaState extends State<SocialMedia> {
     if (SocialMedia.cachedUserMinimal != null) {
       myUserMinimal = SocialMedia.cachedUserMinimal;
       isUserLoading = false;
+      _loadCurrentUserId();
     } else {
       _loadMyUser();
     }
     _fetchPostsPage(page: currentPage);
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getString('userId') ?? '';
+    setState(() {
+      currentUserId = id;
+    });
   }
 
   Future<void> _loadMyUser() async {
@@ -137,7 +148,7 @@ class _SocialMediaState extends State<SocialMedia> {
     final imageUrls =
         post.media?.map((m) => m.url).whereType<String>().toList() ?? [];
     return Padding(
-      padding: EdgeInsets.fromLTRB(7.w, 20.h, 20.w, 7.h),
+      padding: EdgeInsets.fromLTRB(7, 20, 20, 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,7 +163,7 @@ class _SocialMediaState extends State<SocialMedia> {
                       : AppStrings.noAvatarUrl,
                 ),
               ),
-              SizedBox(width: 10.w),
+              SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,16 +171,16 @@ class _SocialMediaState extends State<SocialMedia> {
                     Text(
                       user.name,
                       style: TextStyle(
-                        fontSize: 13.sp,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: MyColors.black,
                       ),
                     ),
                     Text(
                       getTimeAgo(post.createdAt ?? ''),
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color.fromRGBO(134, 133, 133, 1),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromRGBO(134, 133, 133, 1),
                       ),
                     ),
                   ],
@@ -177,14 +188,17 @@ class _SocialMediaState extends State<SocialMedia> {
               ),
               if (post.adminPost)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 8.h,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 5,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
                   ),
                   decoration: BoxDecoration(
                     color: MyColors.ambulance,
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     (post.tags != null && post.tags!.isNotEmpty)
@@ -201,9 +215,9 @@ class _SocialMediaState extends State<SocialMedia> {
 
           if (imageUrls.isNotEmpty)
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 4.h),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(12),
                 child:
                     imageUrls.length == 1
                         ? Image.network(
@@ -226,7 +240,7 @@ class _SocialMediaState extends State<SocialMedia> {
 
           SizedBox(
             width: screenWidth - 10,
-            height: 2.h,
+            height: 2,
             child: const ColoredBox(color: MyColors.fadedGrey),
           ),
 
@@ -245,12 +259,28 @@ class _SocialMediaState extends State<SocialMedia> {
                 icon: FluentIcons.comment_28_regular,
                 count: post.saveCount,
                 hoverColor: Colors.green.withOpacity(0.3),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => CommentsPage(
+                            postId: post.id ?? '',
+                            currentUserId: currentUserId,
+                            postOwnerId: post.authorId ?? '',
+                          ),
+                    ),
+                  );
+                },
               ),
               _buildReactionColumn(
                 icon: FluentIcons.share_48_regular,
                 count: null,
                 label: AppStrings.postShared,
                 hoverColor: Colors.blue.withOpacity(0.3),
+                onPressed: () {
+                  Share.share(post.postCaption ?? '');
+                },
               ),
             ],
           ),
@@ -281,15 +311,15 @@ class _SocialMediaState extends State<SocialMedia> {
             );
           },
         ),
-        toolbarHeight: 50.h,
+        toolbarHeight: 50, // Removed .h, fixed value
         title: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
               SizedBox(width: screenWidth * 0.13),
               Text(
                 AppStrings.latestPosts,
-                style: TextStyle(color: MyColors.black, fontSize: 20.sp),
+                style: const TextStyle(color: MyColors.black, fontSize: 20),
               ),
               const Spacer(),
               IconButton(
@@ -357,22 +387,27 @@ class _SocialMediaState extends State<SocialMedia> {
     int? count,
     String? label,
     required Color hoverColor,
+    VoidCallback? onPressed,
   }) {
     return Column(
       children: [
         Row(
           children: [
-            Reactions(reactionIcon: Icon(icon), reactionHoverColor: hoverColor),
+            Reactions(
+              reactionIcon: Icon(icon),
+              reactionHoverColor: hoverColor,
+              onPressed: onPressed,
+            ),
             const SizedBox(width: 4),
             if (count != null)
               Text(
                 count.toString(),
-                style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+                style: const TextStyle(color: MyColors.gray, fontSize: 10),
               )
             else if (label != null)
               Text(
                 label,
-                style: TextStyle(color: MyColors.gray, fontSize: 10.sp),
+                style: const TextStyle(color: MyColors.gray, fontSize: 10),
               ),
           ],
         ),

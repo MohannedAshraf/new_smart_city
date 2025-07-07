@@ -343,7 +343,18 @@
   "discountApplied": "Discount applied successfully",
   "invalidDiscount": "Invalid discount code"
 
-
+"home": "Home",
+  "government": "Our Government",
+  "issues": "Issues",
+  "services": "Services",
+  "socialMedia": "Social Media",
+  "vendors": "Vendors",
+  "myOrders": "My Orders",
+  "profile": "Profile",
+  "logout": "Logout",
+  "whatDoYouWant": "What do you want?",
+  "community": "Community",
+  "welcome": "Welcome!"
 
 
 }
