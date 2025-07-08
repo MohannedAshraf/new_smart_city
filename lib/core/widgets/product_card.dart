@@ -69,11 +69,11 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Image.network(
                     image,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Image.network(
                         'https://cdn-icons-png.flaticon.com/512/13434/13434972.png',
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.cover,
                       );
                     },
                   ),
