@@ -7,8 +7,13 @@ import 'package:flutter/material.dart';
 
 class TrackOrderView extends StatefulWidget {
   final int orderId;
+  final String vendorId;
 
-  const TrackOrderView({super.key, required this.orderId});
+  const TrackOrderView({
+    super.key,
+    required this.orderId,
+    required this.vendorId,
+  });
 
   @override
   State<TrackOrderView> createState() => _TrackOrderViewState();
