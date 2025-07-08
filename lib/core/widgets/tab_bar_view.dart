@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:citio/core/utils/mycolors.dart';
@@ -10,11 +11,13 @@ import 'package:citio/models/gov_service_details.dart';
 import 'package:citio/models/most_requested_services.dart';
 import 'package:citio/models/request.dart';
 import 'package:citio/screens/apply_service.dart';
+import 'package:citio/screens/reapply.dart';
 import 'package:citio/services/get_file.dart';
 import 'package:citio/services/get_most_requested_services.dart';
 import 'package:citio/services/get_requests_by_status.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TabBarViewItem extends StatefulWidget {
   final String title;
@@ -128,6 +131,8 @@ class CustomCard extends StatefulWidget {
 
 class _CustomCardState extends State<CustomCard> {
   bool isHovered = false;
+  // Map<int, PlatformFile> uploadedFiles = {};
+  List<RequiredFields> serviceData = [];
   final Map<int, PlatformFile> oldFiles = {};
   final List<RequiredFields> oldServiceData = [];
   final List<RequiredFiles> files = [];
@@ -270,14 +275,21 @@ class _CustomCardState extends State<CustomCard> {
                             const Spacer(),
                             if (widget.request.requestStatus == 'Rejected')
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  await fetchOldData(widget.request.serviceId);
+                                  await addFileToUploadedFiles(
+                                    widget.request.serviceId,
+                                  );
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder:
-                                          (context) => ApplyService(
+                                          (context) => Reapply(
                                             id: widget.request.serviceId,
                                             title: widget.request.serviceName,
+                                            oldFiles: oldFiles,
+                                            oldServiceData: oldServiceData,
                                           ),
                                     ),
                                   );
@@ -309,26 +321,54 @@ class _CustomCardState extends State<CustomCard> {
     );
   }
 
+  Future<PlatformFile> convertToPlatformFile(File file) async {
+    final bytes = await file.readAsBytes();
+
+    return PlatformFile(
+      name: file.path.split('/').last,
+      size: bytes.length,
+      bytes: bytes,
+      path: file.path,
+    );
+  }
+
+  Future<File> writeToFile(Uint8List data, String fileName) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/$fileName');
+    await file.writeAsBytes(data);
+    return file;
+  }
+
+  Future<void> addFileToUploadedFiles(int requestId) async {
+    List<RequiredFiles> files = await MostRequestedServices().getAttachedFiles(
+      requestId,
+    );
+
+    for (var file in files) {
+      print('اسم الملف: ${file.fileName}');
+      print('الامتداد: ${file.fileExtension}');
+      print('ID: ${file.id}');
+
+      final fileData = await ServiceFile().getFile(id: file.id);
+      if (fileData == null) return;
+
+      final tempFile = await writeToFile(
+        fileData,
+        '${file.fileName}.${file.fileExtension}',
+      );
+      final platformFile = await convertToPlatformFile(tempFile);
+
+      oldFiles[file.id] = platformFile;
+    }
+  }
+
   Future<void> fetchOldData(int requestId) async {
     try {
       final requestDetails = await MostRequestedServices().getAttachedFields(
         requestId,
       );
-      final fetchedfiles = await ServiceFile().getFile(id: requestId);
-      final files = await MostRequestedServices().getAttachedFiles(requestId);
 
-      if (files != null && files.isNotEmpty) {
-        setState(() {
-          // for (var file in files) {
-          //   Uint8List fileBytes = base64Decode(file.base64Content);
-          //   oldFiles[file.id] = PlatformFile(
-          //     name: file.fileName,
-          //     size: file.bytes.length,
-          //     bytes: file.bytes,
-          //   );
-          // }
-        });
-      }
+      // final files = await MostRequestedServices().getAttachedFiles(requestId);
 
       if (requestDetails != null && requestDetails.isNotEmpty) {
         setState(() {

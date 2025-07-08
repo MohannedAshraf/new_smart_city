@@ -130,7 +130,7 @@ class HomePageState extends State<HomePage> {
                   automaticallyImplyLeading: true,
                   centerTitle: true,
                   backgroundColor: MyColors.white,
-                  foregroundColor: MyColors.white,
+                  foregroundColor: MyColors.black,
                   surfaceTintColor: MyColors.white,
                   elevation: 0,
                   title: Padding(

@@ -61,6 +61,7 @@ dependencies:
   timeago: ^3.7.1
   modal_progress_hud_nsn:
   flutter_rating: ^2.0.2
+  path_provider: ^2.0.15
   search_app_bar_page:
   get:
   fluentui_system_icons:

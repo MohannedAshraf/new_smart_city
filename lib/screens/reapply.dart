@@ -21,6 +21,8 @@ import 'package:intl/intl.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class Reapply extends StatefulWidget {
+  final Map<int, PlatformFile> oldFiles;
+  final List<RequiredFields> oldServiceData;
   final int id;
   final String title;
   final bool? isReApply;
@@ -29,6 +31,8 @@ class Reapply extends StatefulWidget {
     required this.id,
     required this.title,
     this.isReApply,
+    required this.oldFiles,
+    required this.oldServiceData,
   });
 
   @override
@@ -47,7 +51,7 @@ class _Reapply extends State<Reapply> {
   List<RequiredFields> serviceData = [];
 
   Map<String, TextEditingController> controllers = {};
-  Map<int, PlatformFile> uploadedFiles = {};
+  // Map<int, PlatformFile> widget.oldFiles = {};
 
   List<bool> fieldsError = [];
   Map<int, bool> filesError = {};
@@ -56,6 +60,11 @@ class _Reapply extends State<Reapply> {
   void initState() {
     super.initState();
     loadData();
+    if ((widget.oldFiles != null && widget.oldFiles!.isNotEmpty) &&
+        (widget.oldServiceData?.isNotEmpty ?? false)) {
+      //widget.oldFiles.addAll(widget.oldFiles!);
+      serviceData.addAll(widget.oldServiceData!);
+    }
   }
 
   Future<void> loadData() async {
@@ -69,13 +78,20 @@ class _Reapply extends State<Reapply> {
 
       for (var field in fetchedFields) {
         if (!controllers.containsKey(field.fileName)) {
-          controllers[field.fileName] = TextEditingController();
-          fieldsError.add(false);
+          controllers[field.fileName] = TextEditingController(
+            text:
+                field.fieldValueString ??
+                field.fieldValueInt?.toString() ??
+                field.fieldValueFloat?.toString() ??
+                field.fieldValueDate?.toString() ??
+                "",
+          );
+          fieldsError.add(true);
           serviceData.add(field);
         }
       }
       for (var file in fetchedFiles) {
-        filesError[file.id] = false;
+        filesError[file.id] = true;
       }
       setState(() {
         fields = fetchedFields;
@@ -136,7 +152,7 @@ class _Reapply extends State<Reapply> {
                 title: AppStrings.personalInfoTitle,
                 content:
                     fields.map<Widget>((field) {
-                      int index = serviceData.indexWhere(
+                      int index = widget.oldServiceData.indexWhere(
                         (item) => item.id == field.id,
                       );
 
@@ -144,47 +160,50 @@ class _Reapply extends State<Reapply> {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          showError: fieldsError[index],
+                          //showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueString = value;
-                            serviceData[index].valueType = 'string';
+                            widget.oldServiceData[index].fieldValueString =
+                                value;
+                            widget.oldServiceData[index].valueType = 'string';
                           },
                         );
                       } else if (field.htmlType == 'date') {
                         return DateTextField(
                           header: field.fileName,
-                          showError: fieldsError[index],
+                          // showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            serviceData[index].fieldValueDate = value;
-                            serviceData[index].valueType = 'date';
+                            widget.oldServiceData[index].fieldValueDate = value;
+                            widget.oldServiceData[index].valueType = 'date';
                           },
                         );
                       } else if (field.htmlType == 'number') {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          showError: fieldsError[index],
+                          //showError: fieldsError[index],
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueInt = int.parse(value);
-                            serviceData[index].valueType = 'int';
+                            widget
+                                .oldServiceData[index]
+                                .fieldValueInt = int.parse(value);
+                            widget.oldServiceData[index].valueType = 'int';
                           },
                         );
                       } else if (field.htmlType == 'float') {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          showError: fieldsError[index],
+                          // showError: fieldsError[index],
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueFloat = double.parse(
-                              value,
-                            );
-                            serviceData[index].valueType = 'float';
+                            widget
+                                .oldServiceData[index]
+                                .fieldValueFloat = double.parse(value);
+                            widget.oldServiceData[index].valueType = 'float';
                           },
                         );
                       } else {
@@ -204,7 +223,7 @@ class _Reapply extends State<Reapply> {
                 content:
                     files.map<Widget>((file) {
                       return CustomUploadBox(
-                        file: uploadedFiles[file.id],
+                        file: widget.oldFiles[file.id],
                         header: file.fileName,
                         showError: filesError[file.id] ?? false,
                         onTap: () async {
@@ -230,13 +249,13 @@ class _Reapply extends State<Reapply> {
                               return;
                             }
                             setState(() {
-                              uploadedFiles[file.id] = pickedFile;
+                              widget.oldFiles[file.id] = pickedFile;
                             });
                           }
                         },
                         onRemove: () {
                           setState(() {
-                            uploadedFiles.remove(file.id);
+                            widget.oldFiles.remove(file.id);
                           });
                         },
                       );
@@ -383,10 +402,10 @@ class _Reapply extends State<Reapply> {
     bool isValid = true;
     for (int i = 0; i < fields.length; i++) {
       var value =
-          serviceData[i].fieldValueString ??
-          serviceData[i].fieldValueInt ??
-          serviceData[i].fieldValueFloat ??
-          serviceData[i].fieldValueDate;
+          widget.oldServiceData[i].fieldValueString ??
+          widget.oldServiceData[i].fieldValueInt ??
+          widget.oldServiceData[i].fieldValueFloat ??
+          widget.oldServiceData[i].fieldValueDate;
       if (value == null || value.toString().isEmpty) {
         fieldsError[i] = true;
         isValid = false;
@@ -403,7 +422,7 @@ class _Reapply extends State<Reapply> {
     // filesError = List.generate(files.length, (_) => false);
 
     for (int i = 0; i < files.length; i++) {
-      if (!uploadedFiles.containsKey(files[i].id)) {
+      if (!widget.oldFiles.containsKey(files[i].id)) {
         filesError[files[i].id] = true;
         isValid = false;
       }
@@ -507,8 +526,8 @@ class _Reapply extends State<Reapply> {
 
                                       await ApplyGovernmentService().submit(
                                         serviceId: widget.id,
-                                        serviceData: serviceData,
-                                        files: uploadedFiles.values.toList(),
+                                        serviceData: widget.oldServiceData,
+                                        files: widget.oldFiles.values.toList(),
                                         paymentMethodID: paymentMethod.id,
                                       );
 
