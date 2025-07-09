@@ -133,11 +133,12 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   Navigator.pop(context);
                   final picker = ImagePicker();
                   final picked = await picker.pickMultiImage(imageQuality: 85);
-                  if (picked.isNotEmpty &&
-                      _images.length + picked.length <= 5) {
-                    setState(() => _images.addAll(picked));
-                  } else {
-                    _showSnackBarMessage(AppStrings.maxImagesWarning);
+                  if (picked.isNotEmpty) {
+                    if (_images.length + picked.length <= 5) {
+                      setState(() => _images.addAll(picked));
+                    } else {
+                      _showSnackBarMessage(AppStrings.maxImagesWarning);
+                    }
                   }
                 },
               ),
