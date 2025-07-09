@@ -4,7 +4,7 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_register.dart';
 import 'package:citio/screens/mylogin_page.dart';
-import 'package:citio/screens/register_otp_screen.dart';
+import 'package:citio/screens/otp_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
           context,
           MaterialPageRoute(
             builder:
-                (_) => RegisterOtbScreen(email: emailController.toString()),
+                (_) => VerificationScreen(email: emailController.toString()),
           ),
         );
       } else {
