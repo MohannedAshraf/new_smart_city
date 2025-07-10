@@ -3,7 +3,9 @@ class LoginResponse {
   final String? userName;
   final String? email;
   final String? token;
+  final int? expiresIn;
   final String? refreshToken;
+  final bool? isEmailConfirmed;
   final bool? isSuccess;
   final bool? isFailure;
 
@@ -12,19 +14,24 @@ class LoginResponse {
     this.userName,
     this.email,
     this.token,
+    this.expiresIn,
     this.refreshToken,
+    this.isEmailConfirmed,
     this.isSuccess,
     this.isFailure,
   });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    final value = json['value'];
+    final value = json['value'] ?? {};
+
     return LoginResponse(
       id: value['id'],
       userName: value['userName'],
       email: value['email'],
       token: value['token'],
+      expiresIn: value['expiresIn'],
       refreshToken: value['refreshToken'],
+      isEmailConfirmed: value['isEmailConfirmed'],
       isSuccess: json['isSuccess'],
       isFailure: json['isFailure'],
     );

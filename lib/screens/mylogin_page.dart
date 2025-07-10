@@ -5,6 +5,7 @@ import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_login.dart';
 import 'package:citio/helper/api_profile.dart';
 import 'package:citio/main.dart';
+import 'package:citio/screens/otp_page.dart';
 import 'package:citio/screens/register_page.dart';
 import 'package:citio/screens/reset_password_view.dart';
 import 'package:flutter/material.dart';
@@ -51,17 +52,31 @@ class _LoginPageState extends State<MyloginPage> {
         try {
           final profile = await ApiProfileHelper.fetchProfile();
           await prefs.setString('userId', profile!.id ?? '');
-          print('❤️Stored userId: ${profile.id}'); 
+          print('❤️Stored userId: ${profile.id}');
         } catch (e) {
           print("❌ فشل في تحميل البروفايل: $e");
         }
 
         await FCMService().initFCM();
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+        // ✅ هنا الشرط المطلوب:
+        if (result.isEmailConfirmed == true) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => VerificationScreen(
+                    email: emailController.text.trim(),
+                    sourcepage: "login",
+                  ),
+            ),
+          );
+        }
       }
     } catch (e) {
       setState(() => _isLoading = false);

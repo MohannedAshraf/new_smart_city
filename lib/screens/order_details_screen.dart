@@ -80,7 +80,10 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                         context,
                         MaterialPageRoute(
                           builder:
-                              (_) => TrackOrderView(orderId: widget.orderId),
+                              (_) => TrackOrderView(
+                                orderId: widget.orderId,
+                                vendorId: widget.vendorId,
+                              ),
                         ),
                       );
                     },

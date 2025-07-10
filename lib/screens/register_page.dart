@@ -64,7 +64,10 @@ class _RegisterPageState extends State<RegisterPage> {
           context,
           MaterialPageRoute(
             builder:
-                (_) => VerificationScreen(email: emailController.toString()),
+                (_) => VerificationScreen(
+                  email: emailController.text.trim(),
+                  sourcepage: 'register',
+                ),
           ),
         );
       } else {
