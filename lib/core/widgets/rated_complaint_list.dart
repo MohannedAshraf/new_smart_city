@@ -28,7 +28,7 @@ class RatedComplaintList extends StatelessWidget {
         final issue = issues[index];
 
         return SizedBox(
-          height: screenHeight * 0.19,
+          height: screenHeight * 0.20,
           child: Card(
             elevation: 1,
             shape: RoundedRectangleBorder(
