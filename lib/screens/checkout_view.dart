@@ -56,7 +56,8 @@ class _CheckoutViewState extends State<CheckoutView> {
     setState(() => isLoading = true);
 
     try {
-      Stripe.publishableKey = 'pk_test_...'; // 🔐 مفتاحك هنا
+      Stripe.publishableKey =
+          "pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg"; // 🔐 مفتاحك هنا
       await Stripe.instance.applySettings();
 
       final paymentMethod = await Stripe.instance.createPaymentMethod(
