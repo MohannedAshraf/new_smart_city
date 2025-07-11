@@ -3,12 +3,18 @@ import 'package:citio/core/utils/variables.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/helper/api_track_order.dart';
 import 'package:citio/models/track_order_model.dart';
+import 'package:citio/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 
 class TrackOrderView extends StatefulWidget {
   final int orderId;
+  final String vendorId;
 
-  const TrackOrderView({super.key, required this.orderId});
+  const TrackOrderView({
+    super.key,
+    required this.orderId,
+    required this.vendorId,
+  });
 
   @override
   State<TrackOrderView> createState() => _TrackOrderViewState();
@@ -193,7 +199,18 @@ class _TrackOrderViewState extends State<TrackOrderView> {
               borderRadius: BorderRadius.circular(screenWidth * 0.03),
             ),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (_) => ChatScreen(
+                          orderId: widget.orderId,
+                          sellerId: widget.vendorId, // ✅ رقم البائع
+                        ),
+                  ),
+                );
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

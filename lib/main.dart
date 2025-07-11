@@ -47,7 +47,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: false,
-      builder: (context) => CityApp(seenOnboarding: seenOnboarding),
+      builder: (context) => CityApp(seenOnboarding: false),
     ),
   );
 }
