@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:citio/core/utils/mycolors.dart';
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/models/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -105,8 +106,14 @@ class _CommentItemState extends State<CommentItem> {
                     },
                     itemBuilder:
                         (context) => const [
-                          PopupMenuItem(value: 'edit', child: Text('Edit')),
-                          PopupMenuItem(value: 'delete', child: Text('Delete')),
+                          PopupMenuItem(
+                            value: 'edit',
+                            child: Text(AppStrings.edit),
+                          ),
+                          PopupMenuItem(
+                            value: 'delete',
+                            child: Text(AppStrings.delete),
+                          ),
                         ],
                   ),
               ],
@@ -123,7 +130,7 @@ class _CommentItemState extends State<CommentItem> {
             GestureDetector(
               onTap: () => widget.onReply(comment),
               child: const Text(
-                'Reply',
+                AppStrings.reply,
                 style: TextStyle(
                   color: MyColors.primary,
                   fontWeight: FontWeight.w500,
@@ -138,7 +145,7 @@ class _CommentItemState extends State<CommentItem> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, top: 10),
                   child: Text(
-                    'View Replies (${comment.replies.length})',
+                    '${AppStrings.viewReplies} (${comment.replies.length})',
                     style: const TextStyle(
                       color: MyColors.primary,
                       fontSize: 13,

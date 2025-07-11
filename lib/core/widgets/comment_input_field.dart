@@ -1,3 +1,4 @@
+import 'package:citio/core/utils/project_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/models/comment.dart';
@@ -88,7 +89,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        'Replying to ${widget.replyingTo!.userName}',
+                        '${AppStrings.replyingTo} ${widget.replyingTo!.userName}',
                         style: const TextStyle(
                           fontSize: 12,
                           color: MyColors.gray,
@@ -112,11 +113,13 @@ class _CommentInputFieldState extends State<CommentInputField> {
                     minLines: 1,
                     maxLines: 4,
                     decoration: InputDecoration(
-                      hintText: 'Write a comment...',
+                      hintText: AppStrings.writeCommentHint,
                       filled: true,
                       fillColor: MyColors.whiteSmoke,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -128,14 +131,14 @@ class _CommentInputFieldState extends State<CommentInputField> {
                 const SizedBox(width: 8),
                 widget.isLoading
                     ? const SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                     : IconButton(
-                        icon: const Icon(Icons.send, color: MyColors.primary),
-                        onPressed: _handleSubmit,
-                      ),
+                      icon: const Icon(Icons.send, color: MyColors.primary),
+                      onPressed: _handleSubmit,
+                    ),
               ],
             ),
           ],
