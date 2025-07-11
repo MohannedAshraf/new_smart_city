@@ -167,6 +167,13 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                           color: Colors.black87,
                         ),
                       ),
+                      Text(
+                        'تكلفة هذه الخدمة : ${service.fee}',
+                        style: TextStyle(
+                          fontSize: wp(context, 4),
+                          color: Colors.black87,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -177,7 +184,7 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                   content:
                       service.requirements!.isNotEmpty
                           ? service.requirements!
-                              .map((r) => RequirmentItem(text: r.fileName))
+                              .map((r) => RequirmentItem(text: r.fileName!))
                               .toList()
                           : [
                             Text(

@@ -317,77 +317,83 @@ class _AllVendorsScreenState extends State<AllVendorsScreen> {
                 ),
                 Positioned(
                   top: screenHeight * 0.11,
-                  left: screenWidth * 0.05,
-                  child: CircleAvatar(
-                    radius: screenWidth * 0.08,
-                    backgroundImage:
-                        vendors[index].profileImage != null
-                            ? NetworkImage(
-                              Urls.serviceProviderbaseUrl +
-                                  vendors[index].profileImage!,
-                            )
-                            : const AssetImage(MyAssetsImage.brokenImage)
-                                as ImageProvider,
+
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          0,
+                          screenHeight * .02,
+                          screenWidth * .04,
+                          screenHeight * .03,
+                        ),
+                        child: CircleAvatar(
+                          radius: screenWidth * 0.08,
+                          backgroundImage:
+                              vendors[index].profileImage != null
+                                  ? NetworkImage(
+                                    Urls.serviceProviderbaseUrl +
+                                        vendors[index].profileImage!,
+                                  )
+                                  : const AssetImage(MyAssetsImage.brokenImage)
+                                      as ImageProvider,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
 
-            // اسم البزنس
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                screenWidth * 0.05,
-                screenHeight * 0.05,
-                screenWidth * 0.05,
-                0,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  vendors[index].businessName,
-                  style: TextStyle(
-                    color: MyColors.black,
-                    fontSize: screenWidth * 0.045,
-                    fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 40, 20, 0),
+                  child: Text(
+                    vendors[index].businessName,
+                    style: TextStyle(
+                      color: MyColors.black,
+                      fontSize: screenWidth * 0.045,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
 
             // النوع والتقييم
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                screenWidth * 0.025,
-                screenHeight * 0.01,
-                screenWidth * 0.05,
-                screenHeight * 0.02,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    vendors[index].type,
-                    style: TextStyle(
-                      color: MyColors.gray,
-                      fontSize: screenWidth * 0.035,
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.008),
-                  Row(
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.star, color: MyColors.star),
-                      SizedBox(width: screenWidth * 0.015),
-                      Text(
-                        vendors[index].rating.toStringAsFixed(2),
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          color: MyColors.black,
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
+                        child: Text(
+                          vendors[index].type,
+                          style: TextStyle(
+                            color: MyColors.gray,
+                            fontSize: screenWidth * 0.04,
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 20, 15),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star, color: MyColors.star),
+                            const SizedBox(width: 6),
+                            Text(vendors[index].rating.toStringAsFixed(2)),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

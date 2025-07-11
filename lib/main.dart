@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:citio/screens/government_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -140,13 +141,13 @@ class HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Expanded(
-                          child: CustomSearchBar(
-                            height: mq.size.height * 0.05,
-                            borderRadius: mq.size.height * 0.03,
-                            hintText: AppStrings.whatDoYouWant,
-                          ),
-                        ),
+                        // Expanded(
+                        //   child: CustomSearchBar(
+                        //     height: mq.size.height * 0.05,
+                        //     borderRadius: mq.size.height * 0.03,
+                        //     hintText: AppStrings.whatDoYouWant,
+                        //   ),
+                        // ),
                         IconButton(
                           onPressed: () {
                             Navigator.push(
@@ -251,6 +252,17 @@ class HomePageState extends State<HomePage> {
                                 ? const SocialMedia()
                                 : const SocialmediaInitializerScreen(),
                   ),
+                );
+              },
+            ),
+            drawerTile(
+              icon: Icons.account_balance,
+              title: 'خدماتي الحكومية',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const GovernmentServices()),
                 );
               },
             ),

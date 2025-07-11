@@ -52,7 +52,7 @@ class _Reapply extends State<Reapply> {
 
   Map<String, TextEditingController> controllers = {};
   // Map<int, PlatformFile> widget.oldFiles = {};
-
+  Map<int, PlatformFile> uploadedFiles = {};
   List<bool> fieldsError = [];
   Map<int, bool> filesError = {};
 
@@ -63,7 +63,7 @@ class _Reapply extends State<Reapply> {
     if ((widget.oldFiles != null && widget.oldFiles!.isNotEmpty) &&
         (widget.oldServiceData?.isNotEmpty ?? false)) {
       //widget.oldFiles.addAll(widget.oldFiles!);
-      serviceData.addAll(widget.oldServiceData!);
+      // serviceData = widget.oldServiceData;
     }
   }
 
@@ -77,22 +77,59 @@ class _Reapply extends State<Reapply> {
       );
 
       for (var field in fetchedFields) {
-        if (!controllers.containsKey(field.fileName)) {
-          controllers[field.fileName] = TextEditingController(
-            text:
-                field.fieldValueString ??
-                field.fieldValueInt?.toString() ??
-                field.fieldValueFloat?.toString() ??
-                field.fieldValueDate?.toString() ??
-                "",
-          );
-          fieldsError.add(true);
-          serviceData.add(field);
+        // ابحث عن العنصر المقابل له في الداتا القديمة
+        final oldField = widget.oldServiceData.firstWhere(
+          (f) => f.id == field.id || f.fileName == field.fileName,
+          orElse: () => field,
+          // orElse: () => RequiredFields(), // عنصر فاضي لو مش لاقي
+        );
+
+        String? oldValue =
+            oldField.fieldValueString ??
+            oldField.fieldValueInt?.toString() ??
+            oldField.fieldValueFloat?.toString() ??
+            oldField.fieldValueDate?.toString();
+
+        controllers[field.fileName] = TextEditingController(
+          text: oldValue ?? "",
+        );
+        field.fieldValueString = oldField.fieldValueString;
+        field.fieldValueInt = oldField.fieldValueInt;
+        field.fieldValueFloat = oldField.fieldValueFloat;
+        field.fieldValueDate = oldField.fieldValueDate;
+        field.valueType = oldField.valueType;
+        // خزن العنصر للعرض
+        serviceData.add(field);
+        fieldsError.add(false);
+      }
+
+      for (var file in fetchedFiles) {
+        filesError[file.id] = false;
+
+        if (widget.oldFiles.containsKey(file.id)) {
+          print("Loading file: ${widget.oldFiles[file.id]?.name}");
+        } else {
+          print("No file found for ${file.fileName} (id=${file.id})");
+        }
+
+        if (widget.oldFiles.containsKey(file.id)) {
+          setState(() {
+            print(
+              "Old file for ${file.fileName}: ${widget.oldFiles[file.id]?.name}",
+            );
+            widget.oldFiles[file.id] = widget.oldFiles[file.id]!;
+          });
         }
       }
-      for (var file in fetchedFiles) {
-        filesError[file.id] = true;
-      }
+      // for (var file in fetchedFiles) {
+      //   filesError[file.id] = false;
+      //   if (widget.oldFiles.containsKey(file.id)) {
+      //     setState(() {
+      //       uploadedFiles[file.id] =
+      //           widget.oldFiles[file.id]!; // Just to trigger UI
+      //     });
+      //   }
+      // }
       setState(() {
         fields = fetchedFields;
         files = fetchedFiles;
@@ -152,7 +189,7 @@ class _Reapply extends State<Reapply> {
                 title: AppStrings.personalInfoTitle,
                 content:
                     fields.map<Widget>((field) {
-                      int index = widget.oldServiceData.indexWhere(
+                      int index = serviceData.indexWhere(
                         (item) => item.id == field.id,
                       );
 
@@ -160,50 +197,47 @@ class _Reapply extends State<Reapply> {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          //showError: fieldsError[index],
+                          showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            widget.oldServiceData[index].fieldValueString =
-                                value;
-                            widget.oldServiceData[index].valueType = 'string';
+                            serviceData[index].fieldValueString = value;
+                            serviceData[index].valueType = 'string';
                           },
                         );
                       } else if (field.htmlType == 'date') {
                         return DateTextField(
                           header: field.fileName,
-                          // showError: fieldsError[index],
+                          showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            widget.oldServiceData[index].fieldValueDate = value;
-                            widget.oldServiceData[index].valueType = 'date';
+                            serviceData[index].fieldValueDate = value;
+                            serviceData[index].valueType = 'date';
                           },
                         );
                       } else if (field.htmlType == 'number') {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          //showError: fieldsError[index],
+                          showError: fieldsError[index],
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            widget
-                                .oldServiceData[index]
-                                .fieldValueInt = int.parse(value);
-                            widget.oldServiceData[index].valueType = 'int';
+                            serviceData[index].fieldValueInt = int.parse(value);
+                            serviceData[index].valueType = 'int';
                           },
                         );
                       } else if (field.htmlType == 'float') {
                         return CustomTextField(
                           hintText: field.description,
                           header: field.fileName,
-                          // showError: fieldsError[index],
+                          showError: fieldsError[index],
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            widget
-                                .oldServiceData[index]
-                                .fieldValueFloat = double.parse(value);
-                            widget.oldServiceData[index].valueType = 'float';
+                            serviceData[index].fieldValueFloat = double.parse(
+                              value,
+                            );
+                            serviceData[index].valueType = 'float';
                           },
                         );
                       } else {
@@ -224,7 +258,7 @@ class _Reapply extends State<Reapply> {
                     files.map<Widget>((file) {
                       return CustomUploadBox(
                         file: widget.oldFiles[file.id],
-                        header: file.fileName,
+                        header: file.fileName ?? '',
                         showError: filesError[file.id] ?? false,
                         onTap: () async {
                           FilePickerResult? result =
@@ -402,10 +436,10 @@ class _Reapply extends State<Reapply> {
     bool isValid = true;
     for (int i = 0; i < fields.length; i++) {
       var value =
-          widget.oldServiceData[i].fieldValueString ??
-          widget.oldServiceData[i].fieldValueInt ??
-          widget.oldServiceData[i].fieldValueFloat ??
-          widget.oldServiceData[i].fieldValueDate;
+          serviceData[i].fieldValueString ??
+          serviceData[i].fieldValueInt ??
+          serviceData[i].fieldValueFloat ??
+          serviceData[i].fieldValueDate;
       if (value == null || value.toString().isEmpty) {
         fieldsError[i] = true;
         isValid = false;
@@ -422,7 +456,7 @@ class _Reapply extends State<Reapply> {
     // filesError = List.generate(files.length, (_) => false);
 
     for (int i = 0; i < files.length; i++) {
-      if (!widget.oldFiles.containsKey(files[i].id)) {
+      if (!uploadedFiles.containsKey(files[i].id)) {
         filesError[files[i].id] = true;
         isValid = false;
       }

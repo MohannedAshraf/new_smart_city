@@ -41,7 +41,7 @@ class _VendorProfileState extends State<VendorProfile> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.only(top: screenHeight * 0.01),
+        padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
         child: FutureBuilder<List<VendorSubcategory>>(
           future: GetVendor().getVendorSubcategory(widget.id),
           builder: (context, snapshot) {
@@ -55,11 +55,17 @@ class _VendorProfileState extends State<VendorProfile> {
                       future: GetVendor().getVendorById(widget.id),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return vendorCard(snapshot.data!, screenWidth, screenHeight);
+                          return vendorCard(
+                            snapshot.data!,
+                            screenWidth,
+                            screenHeight,
+                          );
                         } else {
                           return SizedBox(
                             height: screenHeight * 0.35,
-                            child: const Center(child: CircularProgressIndicator()),
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           );
                         }
                       },
@@ -77,19 +83,22 @@ class _VendorProfileState extends State<VendorProfile> {
                           dividerColor: MyColors.white,
                           indicatorColor: MyColors.primary,
                           labelColor: MyColors.primary,
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.03,
+                          ),
                           tabs: sub.map((i) => Tab(text: i.name)).toList(),
                         ),
                       ),
                     ),
                     Expanded(
                       child: TabBarView(
-                        children: sub.map((i) {
-                          return CategoryTabView(
-                            categoryId: i.id,
-                            vendorId: widget.id,
-                          );
-                        }).toList(),
+                        children:
+                            sub.map((i) {
+                              return CategoryTabView(
+                                categoryId: i.id,
+                                vendorId: widget.id,
+                              );
+                            }).toList(),
                       ),
                     ),
                   ],
@@ -109,10 +118,7 @@ class _VendorProfileState extends State<VendorProfile> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: MyColors.white,
       shadowColor: MyColors.whiteSmoke,
-      margin: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.05,
-        vertical: screenHeight * 0.015,
-      ),
+      margin: EdgeInsets.fromLTRB(20, 10, 20, 3),
       child: SizedBox(
         width: screenWidth * 0.9,
         height: screenHeight * 0.37,
@@ -122,43 +128,53 @@ class _VendorProfileState extends State<VendorProfile> {
               clipBehavior: Clip.none,
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                  child: vendor.coverImage != null
-                      ? Image.network(
-                          Urls.serviceProviderbaseUrl + vendor.coverImage!,
-                          width: double.infinity,
-                          height: screenHeight * 0.165,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) {
-                            return SizedBox(
-                              height: screenHeight * 0.165,
-                              width: double.infinity,
-                              child: const Image(image: AssetImage(MyAssetsImage.brokenImage)),
-                            );
-                          },
-                        )
-                      : Image.asset(
-                          MyAssetsImage.brokenImage,
-                          width: double.infinity,
-                          height: screenHeight * 0.165,
-                        ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  child:
+                      vendor.coverImage != null
+                          ? Image.network(
+                            Urls.serviceProviderbaseUrl + vendor.coverImage!,
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) {
+                              return SizedBox(
+                                height: screenHeight * 0.165,
+                                width: double.infinity,
+                                child: const Image(
+                                  image: AssetImage(MyAssetsImage.brokenImage),
+                                ),
+                              );
+                            },
+                          )
+                          : Image.asset(
+                            MyAssetsImage.brokenImage,
+                            width: double.infinity,
+                            height: screenHeight * 0.165,
+                          ),
                 ),
                 Positioned(
                   top: screenHeight * 0.11,
                   child: Padding(
-                    padding: EdgeInsets.only(left: screenWidth * 0.05),
+                    padding: EdgeInsets.fromLTRB(0, 8, 20, 20),
                     child: CircleAvatar(
                       radius: screenWidth * 0.085,
-                      backgroundImage: vendor.image != null
-                          ? NetworkImage(Urls.serviceProviderbaseUrl + vendor.image!)
-                          : const AssetImage(MyAssetsImage.brokenImage) as ImageProvider,
+                      backgroundImage:
+                          vendor.image != null
+                              ? NetworkImage(
+                                Urls.serviceProviderbaseUrl + vendor.image!,
+                              )
+                              : const AssetImage(MyAssetsImage.brokenImage)
+                                  as ImageProvider,
                     ),
                   ),
                 ),
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.05, left: screenWidth * 0.05),
+              padding: EdgeInsets.only(top: 40, right: 20),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -171,33 +187,45 @@ class _VendorProfileState extends State<VendorProfile> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.005, left: screenWidth * 0.05),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  vendor.type,
-                  style: TextStyle(
-                    color: MyColors.gray,
-                    fontSize: screenWidth * 0.037,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: screenHeight * 0.005,
+                          left: screenWidth * 0.05,
+                          right: screenWidth * 0.05,
+                        ),
+                        child: Text(
+                          vendor.type,
+                          style: TextStyle(
+                            color: MyColors.gray,
+                            fontSize: screenWidth * 0.037,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 10, 15, 15),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star, color: MyColors.star),
+                            SizedBox(width: screenWidth * 0.02),
+                            Text(vendor.rating.toStringAsFixed(2)),
+                            SizedBox(width: screenWidth * 0.02),
+                            Text(
+                              '(${vendor.numOfReviews} ${AppStrings.ratings})',
+                              style: const TextStyle(color: MyColors.gray),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.01, left: screenWidth * 0.05),
-              child: Row(
-                children: [
-                  const Icon(Icons.star, color: MyColors.star),
-                  SizedBox(width: screenWidth * 0.02),
-                  Text(vendor.rating.toStringAsFixed(2)),
-                  SizedBox(width: screenWidth * 0.02),
-                  Text(
-                    '(${vendor.numOfReviews} ${AppStrings.ratings})',
-                    style: const TextStyle(color: MyColors.gray),
-                  ),
-                ],
-              ),
+              ],
             ),
           ],
         ),

@@ -21,7 +21,7 @@ class RequestsByStatus {
     for (int i = 0; i < data.length; i++) {
       requestsList.add(Request.fromJason(data[i]));
     }
-    return requestsList;
+    return requestsList.reversed.toList();
   }
 
   Future<List<Request>> getAllRequests() async {
@@ -40,7 +40,7 @@ class RequestsByStatus {
     for (int i = 0; i < data.length; i++) {
       requestsList.add(Request.fromJason(data[i]));
     }
-    return requestsList;
+    return requestsList.reversed.toList();
 
     ///commitytt
   }
