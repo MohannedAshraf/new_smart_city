@@ -1,13 +1,9 @@
-// lib/screens/chat_screen.dart
-
-// ignore_for_file: avoid_print
-
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:citio/core/utils/project_strings.dart';
+import 'package:citio/helper/api_chat.dart';
+import 'package:citio/helper/api_signalr_helper.dart';
 import 'package:citio/models/chat_message_model.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final int orderId;
@@ -19,107 +15,72 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen>
-    with SingleTickerProviderStateMixin {
+class _ChatScreenState extends State<ChatScreen> {
+  final SignalRService _signalRService = SignalRService();
   final TextEditingController _controller = TextEditingController();
   final List<ChatMessage> _messages = [];
-  bool _isTyping = false;
-  late AnimationController _typingAnimationController;
-  late Animation<double> _typingAnimation;
 
   @override
   void initState() {
     super.initState();
-    _loadChatHistory();
-
-    _typingAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    )..repeat(reverse: true);
-
-    _typingAnimation = Tween<double>(
-      begin: 0.3,
-      end: 1.0,
-    ).animate(_typingAnimationController);
+    _loadOldMessages();
+    _initSignalR();
   }
 
-  Future<void> _loadChatHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    final chatData = prefs.getString('chat_history_${widget.orderId}');
-    if (chatData != null) {
-      final List<dynamic> decoded = jsonDecode(chatData);
+  Future<void> _loadOldMessages() async {
+    try {
+      final oldMessages = await ApiChatHelper.getOldMessages(
+        otherUserId: widget.sellerId,
+        orderId: widget.orderId,
+      );
       setState(() {
-        _messages.addAll(decoded.map((e) => ChatMessage.fromJson(e)).toList());
+        _messages.addAll(oldMessages);
       });
+    } catch (e) {
+      print("❌ Failed to load old messages: $e");
     }
   }
 
-  Future<void> _saveChatHistory() async {
-    final prefs = await SharedPreferences.getInstance();
-    final encoded = jsonEncode(_messages.map((e) => e.toJson()).toList());
-    await prefs.setString('chat_history_${widget.orderId}', encoded);
+  Future<void> _initSignalR() async {
+    await _signalRService.initConnection(
+      orderId: widget.orderId,
+      onMessageReceived: (msg) {
+        setState(() {
+          _messages.add(msg);
+        });
+      },
+      onError: (error) {
+        print("❌ الاتصال اتقفل: $error");
+      },
+    );
   }
 
-  void _sendMessage(String msg) async {
-    if (msg.trim().isEmpty) return;
-
-    final userMessage = ChatMessage(
-      sender: AppStrings.you,
-      content: msg.trim(),
-    );
-
-    setState(() {
-      _messages.add(userMessage);
-    });
+  void _sendMessage(String text) async {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return;
 
     _controller.clear();
-    await _saveChatHistory();
 
-    // بعد 5 ثواني يظهر vendor بيكتب، وبعدها بثانيتين يرد
-    Future.delayed(const Duration(seconds: 5), () {
-      setState(() {
-        _isTyping = true;
-      });
+    try {
+      await _signalRService.sendMessage(
+        orderId: widget.orderId,
+        sellerId: widget.sellerId,
+        receiverId: widget.sellerId,
+        message: trimmed,
+      );
+    } catch (e) {
+      print("❌ إرسال الرسالة فشل: $e");
+    }
+  }
 
-      Future.delayed(const Duration(seconds: 5), () {
-        String reply;
-        final lower = msg.toLowerCase().trim();
-
-        if (lower == 'السلام عليكم') {
-          reply = 'وعليكم السلام ورحمة الله وبركاته ';
-        } else if (lower.contains('الاوردر متأخر') || lower.contains('متاخر')) {
-          reply = 'آسف جدًا، الطلب في الطريق وهيوصللك قريب إن شاء الله ';
-        } else if (lower.contains('مشكل') || lower.contains('الطلب فيه')) {
-          reply = ' هنتواصل معاك حالًا ونحل المشكلة';
-        } else if (lower.contains('فين الطلب') ||
-            lower.contains('الطلب راح فين') ||
-            (lower.contains("الاوردر  متاخر")) ||
-            (lower.contains("الاوردر  موصلش "))) {
-          reply = 'آسف جدًا، الطلب في الطريق وهيوصللك قريب إن شاء الله ';
-        } else if (lower.contains('مفيش خصم') || lower.contains('الخصم')) {
-          reply = 'في عروض جديده الاسبوع القادم  تابعنا    ';
-        } else if (lower.contains('تمام') || lower.contains('شكرا')) {
-          reply = 'العفو يا فندم إحنا في خدمتك دايمًا ';
-        } else if (lower.contains('الدعم') || lower.contains('اكلم مين')) {
-          reply = 'سيتواصل الدعم الفني معك  ';
-        } else {
-          reply = 'هنبعتلك حد من الفريق يتواصل مع حضرتك في أقرب وقت';
-        }
-
-        final vendorMessage = ChatMessage(sender: 'vendor', content: reply);
-        setState(() {
-          _isTyping = false;
-          _messages.add(vendorMessage);
-        });
-        _saveChatHistory();
-      });
-    });
+  String _formatTime(DateTime time) {
+    return DateFormat('hh:mm a').format(time.toLocal());
   }
 
   @override
   void dispose() {
+    _signalRService.disconnect();
     _controller.dispose();
-    _typingAnimationController.dispose();
     super.dispose();
   }
 
@@ -127,45 +88,17 @@ class _ChatScreenState extends State<ChatScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('الدردشة مع البائع'),
+        title: const Text(AppStrings.chatWithSeller),
         backgroundColor: Colors.teal,
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: _messages.length + (_isTyping ? 1 : 0),
+              itemCount: _messages.length,
               itemBuilder: (_, index) {
-                if (_isTyping && index == _messages.length) {
-                  return Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 12,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: FadeTransition(
-                        opacity: _typingAnimation,
-                        child: const Text(
-                          '...البائع بيكتب',
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
                 final msg = _messages[index];
-                final isUser = msg.sender == AppStrings.you;
+                final isUser = msg.senderRole.toLowerCase() == "user";
 
                 return Align(
                   alignment:
@@ -180,9 +113,19 @@ class _ChatScreenState extends State<ChatScreen>
                       color: isUser ? Colors.teal[200] : Colors.grey[300],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(
-                      msg.content,
-                      style: const TextStyle(fontSize: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(msg.content, style: const TextStyle(fontSize: 16)),
+                        const SizedBox(height: 4),
+                        Text(
+                          _formatTime(msg.time),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -198,14 +141,15 @@ class _ChatScreenState extends State<ChatScreen>
                   child: TextField(
                     controller: _controller,
                     decoration: const InputDecoration(
-                      hintText: 'اكتب رسالتك هنا...',
+                      hintText: AppStrings.writeMessage,
                       border: InputBorder.none,
                     ),
+                    onSubmitted: _sendMessage,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.send, color: Colors.teal),
-                  onPressed: () => _sendMessage(_controller.text.trim()),
+                  onPressed: () => _sendMessage(_controller.text),
                 ),
               ],
             ),

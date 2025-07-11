@@ -480,8 +480,15 @@ class AppStrings {
       "confirmDeleteMessage  Static const String ";
   static const String confirmDeleteButton = "confirmDeleteButton";
 
-  //static const String cancel='الغاء';
   static const String paymentFailure = 'حدث خطأ أثناء الدفع';
   static const String otpSend = " تم إرسال الرمز بنجاح";
   static const String you = "انا";
+  static const String chatWithSeller = "الدردشة مع البائع";
+
+  static const String writeMessage = "اكتب رسالتك...";
+
+  static const String connectionClosed = "❌ الاتصال اتقفل";
+  static const String messageFailed = "❌ فشل إرسال الرسالة";
+  static const String notConnected = "⚠️ غير متصل";
+  static const String connected = "✅ متصل بـ SignalR";
 }
