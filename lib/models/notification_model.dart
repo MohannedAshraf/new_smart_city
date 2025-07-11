@@ -1,5 +1,5 @@
 class NotificationModel {
-  final String id;          
+  final String id;
   final String title;
   final String body;
   final String category;
@@ -16,12 +16,16 @@ class NotificationModel {
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    String rawDate = json['createdAt'] ?? '';
+    if (rawDate.isNotEmpty && !rawDate.endsWith('Z')) {
+      rawDate = rawDate + 'Z'; // إضافة Z لاعتبار الوقت UTC
+    }
     return NotificationModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       body: json['body'] ?? '',
       category: json['category'] ?? '',
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: DateTime.parse(rawDate).toLocal(),
     );
   }
 }
