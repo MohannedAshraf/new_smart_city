@@ -206,13 +206,14 @@ class _CustomCardState extends State<CustomCard> {
                   child: Padding(
                     padding: EdgeInsets.only(right: sw * 0.02, left: sw * 0.04),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [
                             Expanded(
                               child: Text(
                                 widget.request.serviceName,
-                                maxLines: 1,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: MyColors.fontcolor,
@@ -250,6 +251,8 @@ class _CustomCardState extends State<CustomCard> {
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: sw * 0.01),
                           child: Text(
+                            textDirection: TextDirection.rtl,
+                            textAlign: TextAlign.right,
                             widget.request.responseText,
                             maxLines: 3,
                             style: TextStyle(

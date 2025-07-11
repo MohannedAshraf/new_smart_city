@@ -167,6 +167,13 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                           color: Colors.black87,
                         ),
                       ),
+                      Text(
+                        'تكلفة هذه الخدمة : ${service.fee}',
+                        style: TextStyle(
+                          fontSize: wp(context, 4),
+                          color: Colors.black87,
+                        ),
+                      ),
                     ],
                   ),
                 ),
