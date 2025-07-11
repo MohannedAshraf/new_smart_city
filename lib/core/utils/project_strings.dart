@@ -499,5 +499,7 @@ class AppStrings {
   static const viewReplies = 'عرض الردود';
     static const replyingTo = 'رد على'; 
   static const writeCommentHint = 'اكتب تعليق...';
+  static const String writeAReply = 'اكتب ردك هنا...';
+
 
 }

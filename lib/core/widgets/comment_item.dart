@@ -12,6 +12,7 @@ class CommentItem extends StatefulWidget {
   final Function(Comment) onEdit;
   final Function(Comment) onDelete;
   final Function(Comment) onReply;
+  final Function(Comment parent, String content) onReplySubmit;
 
   const CommentItem({
     Key? key,
@@ -21,6 +22,7 @@ class CommentItem extends StatefulWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onReply,
+    required this.onReplySubmit,
   }) : super(key: key);
 
   @override
@@ -29,8 +31,30 @@ class CommentItem extends StatefulWidget {
 
 class _CommentItemState extends State<CommentItem> {
   bool showReplies = false;
+  bool showReplyField = false;
+  final TextEditingController _replyController = TextEditingController();
+  bool _isSendingReply = false;
 
   bool get isOwner => widget.comment.userId == widget.currentUserId;
+
+  @override
+  void dispose() {
+    _replyController.dispose();
+    super.dispose();
+  }
+
+  void _submitReply() async {
+    final text = _replyController.text.trim();
+    if (text.isEmpty) return;
+
+    setState(() => _isSendingReply = true);
+    await widget.onReplySubmit(widget.comment, text);
+    setState(() {
+      _isSendingReply = false;
+      showReplyField = false;
+      _replyController.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +63,7 @@ class _CommentItemState extends State<CommentItem> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       decoration: BoxDecoration(
-        color:
-            comment.parentCommentId == null
-                ? Colors.white
-                : MyColors.whiteSmoke,
+        color: comment.parentCommentId == null ? Colors.white : MyColors.whiteSmoke,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -57,40 +78,27 @@ class _CommentItemState extends State<CommentItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header: avatar + name + time + menu
             Row(
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundImage:
-                      comment.userAvatarUrl != null &&
-                              comment.userAvatarUrl!.isNotEmpty
-                          ? CachedNetworkImageProvider(comment.userAvatarUrl!)
-                          : null,
-                  child:
-                      (comment.userAvatarUrl == null ||
-                              comment.userAvatarUrl!.isEmpty)
-                          ? const Icon(Icons.person)
-                          : null,
+                  backgroundImage: comment.userAvatarUrl != null && comment.userAvatarUrl!.isNotEmpty
+                      ? CachedNetworkImageProvider(comment.userAvatarUrl!)
+                      : null,
+                  child: (comment.userAvatarUrl == null || comment.userAvatarUrl!.isEmpty)
+                      ? const Icon(Icons.person)
+                      : null,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        comment.userName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
+                      Text(comment.userName,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                       Text(
                         timeago.format(comment.createdAt),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                       ),
                     ],
                   ),
@@ -99,36 +107,21 @@ class _CommentItemState extends State<CommentItem> {
                   PopupMenuButton<String>(
                     icon: const Icon(Icons.more_vert, size: 18),
                     onSelected: (value) {
-                      if (value == 'edit')
-                        widget.onEdit(comment);
-                      else if (value == 'delete')
-                        widget.onDelete(comment);
+                      if (value == 'edit') widget.onEdit(comment);
+                      if (value == 'delete') widget.onDelete(comment);
                     },
-                    itemBuilder:
-                        (context) => const [
-                          PopupMenuItem(
-                            value: 'edit',
-                            child: Text(AppStrings.edit),
-                          ),
-                          PopupMenuItem(
-                            value: 'delete',
-                            child: Text(AppStrings.delete),
-                          ),
-                        ],
+                    itemBuilder: (context) => const [
+                      PopupMenuItem(value: 'edit', child: Text(AppStrings.edit)),
+                      PopupMenuItem(value: 'delete', child: Text(AppStrings.delete)),
+                    ],
                   ),
               ],
             ),
-
             const SizedBox(height: 8),
-
-            // Content
             Text(comment.content, style: const TextStyle(fontSize: 14)),
-
             const SizedBox(height: 8),
-
-            // Reply button
             GestureDetector(
-              onTap: () => widget.onReply(comment),
+              onTap: () => setState(() => showReplyField = !showReplyField),
               child: const Text(
                 AppStrings.reply,
                 style: TextStyle(
@@ -137,8 +130,53 @@ class _CommentItemState extends State<CommentItem> {
                 ),
               ),
             ),
-
-            // View Replies toggle
+            if (showReplyField)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${AppStrings.replyingTo} ${comment.userName}',
+                      style: const TextStyle(fontSize: 12, color: MyColors.gray),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _replyController,
+                            minLines: 1,
+                            maxLines: 4,
+                            decoration: InputDecoration(
+                              hintText: AppStrings.writeAReply,
+                              filled: true,
+                              fillColor: MyColors.whiteSmoke,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        _isSendingReply
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : IconButton(
+                                icon: const Icon(Icons.send, color: MyColors.primary),
+                                onPressed: _submitReply,
+                              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             if (comment.replies.isNotEmpty && !showReplies)
               GestureDetector(
                 onTap: () => setState(() => showReplies = true),
@@ -146,16 +184,11 @@ class _CommentItemState extends State<CommentItem> {
                   padding: const EdgeInsets.only(left: 12, top: 10),
                   child: Text(
                     '${AppStrings.viewReplies} (${comment.replies.length})',
-                    style: const TextStyle(
-                      color: MyColors.primary,
-                      fontSize: 13,
-                    ),
+                    style: const TextStyle(color: MyColors.primary, fontSize: 13),
                   ),
                 ),
               ),
-
-            // Replies
-            if (showReplies && comment.replies.isNotEmpty)
+            if (showReplies)
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 10),
                 child: ListView.builder(
@@ -171,6 +204,7 @@ class _CommentItemState extends State<CommentItem> {
                       onEdit: widget.onEdit,
                       onDelete: widget.onDelete,
                       onReply: widget.onReply,
+                      onReplySubmit: widget.onReplySubmit,
                     );
                   },
                 ),

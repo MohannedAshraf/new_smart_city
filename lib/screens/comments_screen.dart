@@ -47,7 +47,6 @@ class _CommentsPageState extends State<CommentsPage> {
 
   Future<void> _addOrUpdateComment(String content) async {
     setState(() => _isLoading = true);
-
     try {
       if (_editingComment != null) {
         await CommentsApi.updateComment(
@@ -139,11 +138,16 @@ class _CommentsPageState extends State<CommentsPage> {
                           await _deleteComment(comment);
                         }
                       },
-                      onReply: (comment) {
-                        setState(() {
-                          _replyingToComment = comment;
-                          _editingComment = null;
-                        });
+                      onReply: (_) {}, 
+                      onReplySubmit: (parent, content) async {
+                        setState(() => _isLoading = true);
+                        await CommentsApi.createComment(
+                          postId: widget.postId,
+                          content: content,
+                          parentCommentId: parent.id,
+                        );
+                        _loadComments();
+                        setState(() => _isLoading = false);
                       },
                     );
                   },
