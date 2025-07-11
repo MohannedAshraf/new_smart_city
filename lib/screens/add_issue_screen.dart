@@ -147,11 +147,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                   },
                   icon: const Icon(Icons.share, color: Colors.white),
                   label: const Text(AppStrings.shareComplaint, style: TextStyle(color: Colors.white)),
-                  style: TextButton.styleFrom(backgroundColor: Colors.green.shade800),
+                  style: TextButton.styleFrom(backgroundColor: const Color.fromARGB(255, 13, 109, 103)),
                 ),
               ],
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: MyColors.primary,
           ),
         );
       } else {
