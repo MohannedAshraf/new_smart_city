@@ -148,7 +148,7 @@ class MostRequestedServices {
       url: '${Urls.governmentbaseUrl}/api/Services/$id/Details',
       token: token,
     );
-    ServiceDetails service = ServiceDetails.fromJason(data);
+    ServiceDetails service = ServiceDetails.fromJson(data);
 
     return service;
   }
@@ -211,7 +211,7 @@ class MostRequestedServices {
     );
     List<RequiredFiles> requestsList = [];
     for (int i = 0; i < data.length; i++) {
-      requestsList.add(RequiredFiles.fromJason(data[i]));
+      requestsList.add(RequiredFiles.fromJson(data[i]));
     }
     return requestsList;
   }
@@ -232,7 +232,7 @@ class MostRequestedServices {
     );
     List<RequiredFiles> requestsList = [];
     for (int i = 0; i < data.length; i++) {
-      requestsList.add(RequiredFiles.fromJason(data[i]));
+      requestsList.add(RequiredFiles.fromJson(data[i]));
     }
     return requestsList;
   }

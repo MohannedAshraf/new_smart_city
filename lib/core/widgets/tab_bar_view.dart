@@ -276,9 +276,9 @@ class _CustomCardState extends State<CustomCard> {
                             if (widget.request.requestStatus == 'Rejected')
                               ElevatedButton(
                                 onPressed: () async {
-                                  await fetchOldData(widget.request.serviceId);
+                                  await fetchOldData(widget.request.requestId);
                                   await addFileToUploadedFiles(
-                                    widget.request.serviceId,
+                                    widget.request.requestId,
                                   );
 
                                   Navigator.push(

@@ -205,7 +205,7 @@ class _ApplyService extends State<ApplyService> {
                     files.map<Widget>((file) {
                       return CustomUploadBox(
                         file: uploadedFiles[file.id],
-                        header: file.fileName,
+                        header: file.fileName ?? '',
                         showError: filesError[file.id] ?? false,
                         onTap: () async {
                           FilePickerResult? result =
@@ -538,10 +538,16 @@ class _ApplyService extends State<ApplyService> {
                                               actions: [
                                                 TextButton(
                                                   onPressed: () {
-                                                    // Navigator.pop(context);
-                                                    Navigator.of(
+                                                    Navigator.pop(
                                                       parentContext,
-                                                    ).pop();
+                                                    );
+                                                    Navigator.pop(
+                                                      parentContext,
+                                                    );
+                                                    // Navigator.of(
+                                                    //   parentContext,
+                                                    // ).pop();
+
                                                     // Navigator.pushReplacement(
                                                     //   parentContext,
                                                     //   MaterialPageRoute(
