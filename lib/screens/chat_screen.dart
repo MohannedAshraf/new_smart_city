@@ -19,6 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final SignalRService _signalRService = SignalRService();
   final TextEditingController _controller = TextEditingController();
   final List<ChatMessage> _messages = [];
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         _messages.addAll(oldMessages);
       });
+      _scrollToBottom();
     } catch (e) {
       print("❌ Failed to load old messages: $e");
     }
@@ -48,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
         setState(() {
           _messages.add(msg);
         });
+        _scrollToBottom();
       },
       onError: (error) {
         print("❌ الاتصال اتقفل: $error");
@@ -77,10 +80,19 @@ class _ChatScreenState extends State<ChatScreen> {
     return DateFormat('hh:mm a').format(time.toLocal());
   }
 
+  void _scrollToBottom() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+  }
+
   @override
   void dispose() {
     _signalRService.disconnect();
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -89,12 +101,14 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppStrings.chatWithSeller),
-        backgroundColor: Colors.teal,
+        // backgroundColor: Colors.teal,
+        centerTitle: true,
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: _messages.length,
               itemBuilder: (_, index) {
                 final msg = _messages[index];
@@ -116,7 +130,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(msg.content, style: const TextStyle(fontSize: 16)),
+                        Text(
+                          msg.content,
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: isUser ? TextAlign.right : TextAlign.left,
+                        ),
                         const SizedBox(height: 4),
                         Text(
                           _formatTime(msg.time),
