@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/emergency_data.dart';
 import 'package:citio/helper/api_add_issue.dart';
+import 'package:citio/helper/api_share_issue.dart';
 import 'package:citio/models/add_issue_model.dart';
 import 'package:citio/screens/first_issue_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +40,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 title: const Text('الكاميرا'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.camera,
+                  );
                   if (pickedFile != null) {
                     setState(() => _selectedImage = File(pickedFile.path));
                   }
@@ -48,7 +53,9 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                 title: const Text('اختيار من المعرض'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                  final pickedFile = await ImagePicker().pickImage(
+                    source: ImageSource.gallery,
+                  );
                   if (pickedFile != null) {
                     setState(() => _selectedImage = File(pickedFile.path));
                   }
@@ -68,13 +75,16 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
   void _previewImage(File imageFile) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.file(imageFile, fit: BoxFit.contain),
-        ),
-      ),
+      builder:
+          (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.file(imageFile, fit: BoxFit.contain),
+            ),
+          ),
     );
   }
 
@@ -91,24 +101,25 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
     if (!status.isGranted) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(AppStrings.locationPermissionRequiredTitle),
-          content: const Text(AppStrings.locationPermissionRequiredBody),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                final newStatus = await Permission.location.request();
-                if (newStatus.isGranted) _sendComplaint();
-              },
-              child: const Text(AppStrings.allowLocation),
+        builder:
+            (context) => AlertDialog(
+              title: const Text(AppStrings.locationPermissionRequiredTitle),
+              content: const Text(AppStrings.locationPermissionRequiredBody),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    final newStatus = await Permission.location.request();
+                    if (newStatus.isGranted) _sendComplaint();
+                  },
+                  child: const Text(AppStrings.allowLocation),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text(AppStrings.cancel),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(AppStrings.cancel),
-            ),
-          ],
-        ),
       );
       return;
     }
@@ -132,23 +143,58 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       );
 
       if (response.isSuccess) {
+        final reportId = response.value;
+
         _controller.clear();
         _selectedImage = null;
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Expanded(child: Text(AppStrings.complaintSuccessMessage)),
-                TextButton.icon(
-                  onPressed: () {
-                    final shareText = "${AppStrings.shareTextPrefix}$description";
-                    Share.share(shareText);
-                  },
-                  icon: const Icon(Icons.share, color: Colors.white),
-                  label: const Text(AppStrings.shareComplaint, style: TextStyle(color: Colors.white)),
-                  style: TextButton.styleFrom(backgroundColor: const Color.fromARGB(255, 13, 109, 103)),
-                ),
+                if (reportId != null)
+                  TextButton.icon(
+                    onPressed: () async {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      await ShareIssueApi().share(reportId);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: MyColors.primary,
+                          content: Row(
+                            children: const [
+                              Icon(Icons.check_circle, color: Colors.white),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'تم مشاركة الشكوى بنجاح 🎉',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.share, color: Colors.white),
+                    label: const Text(
+                      AppStrings.shareComplaint,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 13, 109, 103),
+                    ),
+                  ),
               ],
             ),
             backgroundColor: MyColors.primary,
@@ -161,7 +207,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
       }
     } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text(AppStrings.complaintError), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text(AppStrings.complaintError),
+          backgroundColor: Colors.red,
+        ),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -176,7 +225,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
         backgroundColor: Colors.white,
         centerTitle: true,
         leading: const BackButton(),
-        title: const Text(AppStrings.newComplaintTitle, style: TextStyle(fontSize: 18)),
+        title: const Text(
+          AppStrings.newComplaintTitle,
+          style: TextStyle(fontSize: 18),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -187,7 +239,13 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 8, offset: const Offset(0, 2))],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -233,7 +291,11 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                                   ),
                                   child: const Padding(
                                     padding: EdgeInsets.all(4),
-                                    child: Icon(Icons.close, color: Colors.white, size: 16),
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -248,16 +310,27 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
                     children: [
                       TextButton.icon(
                         onPressed: _pickImage,
-                        icon: const Icon(Icons.camera_alt_outlined, color: Colors.black),
-                        label: const Text(AppStrings.addImage, style: TextStyle(color: Colors.black)),
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.black,
+                        ),
+                        label: const Text(
+                          AppStrings.addImage,
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                       ElevatedButton.icon(
                         onPressed: _isLoading ? null : _sendComplaint,
                         icon: const Icon(Icons.send, color: Colors.white),
-                        label: const Text(AppStrings.send, style: TextStyle(color: Colors.white)),
+                        label: const Text(
+                          AppStrings.send,
+                          style: TextStyle(color: Colors.white),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: MyColors.primary,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
                         ),
                       ),
                     ],
@@ -283,7 +356,10 @@ class _NewComplaintCenterPageState extends State<NewComplaintCenterPage> {
               icon: const Icon(Icons.list_alt, color: MyColors.primary),
               label: const Text(
                 AppStrings.previousComplaints,
-                style: TextStyle(color: MyColors.primary, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: MyColors.primary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             const Spacer(),
