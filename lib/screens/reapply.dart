@@ -121,15 +121,19 @@ class _Reapply extends State<Reapply> {
           });
         }
       }
-      // for (var file in fetchedFiles) {
-      //   filesError[file.id] = false;
-      //   if (widget.oldFiles.containsKey(file.id)) {
-      //     setState(() {
-      //       uploadedFiles[file.id] =
-      //           widget.oldFiles[file.id]!; // Just to trigger UI
-      //     });
-      //   }
-      // }
+      for (var file in fetchedFiles) {
+        filesError[file.id] = false;
+        if (widget.oldFiles != null && widget.oldFiles!.containsKey(file.id)) {
+          uploadedFiles[file.id] = widget.oldFiles![file.id]!;
+          print("تم تحميل الملف القديم: ${uploadedFiles[file.id]!.name}");
+        }
+
+        // لو فيه ملف قديم بنفس الـ id
+        // if (widget.oldFiles != null && widget.oldFiles!.containsKey(file.id)) {
+        //   // نضيفه في uploadedFiles بنفس الـ id (key)، بس بقيمة الملف القديم
+        //   uploadedFiles[file.id] = widget.oldFiles![file.id]!;
+        // }
+      }
       setState(() {
         fields = fetchedFields;
         files = fetchedFiles;
@@ -257,7 +261,7 @@ class _Reapply extends State<Reapply> {
                 content:
                     files.map<Widget>((file) {
                       return CustomUploadBox(
-                        file: widget.oldFiles[file.id],
+                        file: uploadedFiles[file.id],
                         header: file.fileName ?? '',
                         showError: filesError[file.id] ?? false,
                         onTap: () async {
@@ -283,13 +287,13 @@ class _Reapply extends State<Reapply> {
                               return;
                             }
                             setState(() {
-                              widget.oldFiles[file.id] = pickedFile;
+                              uploadedFiles[file.id] = pickedFile;
                             });
                           }
                         },
                         onRemove: () {
                           setState(() {
-                            widget.oldFiles.remove(file.id);
+                            uploadedFiles.remove(file.id);
                           });
                         },
                       );
