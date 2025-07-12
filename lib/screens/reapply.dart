@@ -24,6 +24,7 @@ class Reapply extends StatefulWidget {
   final Map<int, PlatformFile> oldFiles;
   final List<RequiredFields> oldServiceData;
   final int id;
+  final int requestId;
   final String title;
   final bool? isReApply;
   const Reapply({
@@ -32,6 +33,7 @@ class Reapply extends StatefulWidget {
     required this.title,
     this.isReApply,
     required this.oldFiles,
+    required this.requestId,
     required this.oldServiceData,
   });
 
@@ -49,6 +51,7 @@ class _Reapply extends State<Reapply> {
   List<RequiredFields> fields = [];
   List<RequiredFiles> files = [];
   List<RequiredFields> serviceData = [];
+  List<UpdatedFields> updatedFields = [];
 
   Map<String, TextEditingController> controllers = {};
   // Map<int, PlatformFile> widget.oldFiles = {};
@@ -102,37 +105,28 @@ class _Reapply extends State<Reapply> {
         serviceData.add(field);
         fieldsError.add(false);
       }
+      for (int i = 0; i < fetchedFiles.length; i++) {
+        filesError[fetchedFiles[i].id] = false;
 
-      for (var file in fetchedFiles) {
-        filesError[file.id] = false;
+        if (widget.oldFiles != null && widget.oldFiles!.isNotEmpty) {
+          final firstOldFile = widget.oldFiles!.values.first;
 
-        if (widget.oldFiles.containsKey(file.id)) {
-          print("Loading file: ${widget.oldFiles[file.id]?.name}");
-        } else {
-          print("No file found for ${file.fileName} (id=${file.id})");
-        }
+          uploadedFiles[fetchedFiles[i].id] = firstOldFile;
 
-        if (widget.oldFiles.containsKey(file.id)) {
-          setState(() {
-            print(
-              "Old file for ${file.fileName}: ${widget.oldFiles[file.id]?.name}",
-            );
-            widget.oldFiles[file.id] = widget.oldFiles[file.id]!;
-          });
+          print(
+            "تم ربط الملف: ${firstOldFile.name} بالـ id ${fetchedFiles[i].id}",
+          );
+
+          widget.oldFiles!.remove(widget.oldFiles!.keys.first);
         }
       }
+
       for (var file in fetchedFiles) {
         filesError[file.id] = false;
         if (widget.oldFiles != null && widget.oldFiles!.containsKey(file.id)) {
           uploadedFiles[file.id] = widget.oldFiles![file.id]!;
           print("تم تحميل الملف القديم: ${uploadedFiles[file.id]!.name}");
         }
-
-        // لو فيه ملف قديم بنفس الـ id
-        // if (widget.oldFiles != null && widget.oldFiles!.containsKey(file.id)) {
-        //   // نضيفه في uploadedFiles بنفس الـ id (key)، بس بقيمة الملف القديم
-        //   uploadedFiles[file.id] = widget.oldFiles![file.id]!;
-        // }
       }
       setState(() {
         fields = fetchedFields;
@@ -204,9 +198,25 @@ class _Reapply extends State<Reapply> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueString = value;
-                            serviceData[index].valueType = 'string';
+                            int existingIndex = updatedFields.indexWhere(
+                              (e) => e.id == field.id,
+                            );
+                            if (existingIndex == -1) {
+                              updatedFields.add(
+                                UpdatedFields(
+                                  id: field.id,
+                                  fieldValueString: value,
+                                ),
+                              );
+                            } else {
+                              updatedFields[existingIndex].fieldValueString =
+                                  value;
+                            }
                           },
+                          // (value) {
+                          //   updatedFields[index].fieldValueString = value;
+                          //   //updatedFields[index].valueType = 'string';
+                          // },
                         );
                       } else if (field.htmlType == 'date') {
                         return DateTextField(
@@ -214,9 +224,25 @@ class _Reapply extends State<Reapply> {
                           showError: fieldsError[index],
                           controller: controllers[field.fileName],
                           onDateSelected: (value) {
-                            serviceData[index].fieldValueDate = value;
-                            serviceData[index].valueType = 'date';
+                            int existingIndex = updatedFields.indexWhere(
+                              (e) => e.id == field.id,
+                            );
+                            if (existingIndex == -1) {
+                              updatedFields.add(
+                                UpdatedFields(
+                                  id: field.id,
+                                  fieldValueDate: value,
+                                ),
+                              );
+                            } else {
+                              updatedFields[existingIndex].fieldValueDate =
+                                  value;
+                            }
                           },
+                          // (value) {
+                          //  updatedFields[index].fieldValueDate = value;
+                          //  updatedFields[index].valueType = 'date';
+                          //},
                         );
                       } else if (field.htmlType == 'number') {
                         return CustomTextField(
@@ -226,9 +252,27 @@ class _Reapply extends State<Reapply> {
                           isInt: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueInt = int.parse(value);
-                            serviceData[index].valueType = 'int';
+                            int existingIndex = updatedFields.indexWhere(
+                              (e) => e.id == field.id,
+                            );
+                            if (existingIndex == -1) {
+                              updatedFields.add(
+                                UpdatedFields(
+                                  id: field.id,
+                                  fieldValueInt: int.parse(value),
+                                ),
+                              );
+                            } else {
+                              updatedFields[existingIndex]
+                                  .fieldValueInt = int.parse(value);
+                            }
                           },
+                          // (value) {
+                          // updatedFields[index].fieldValueInt = int.parse(
+                          //   value,
+                          // );
+                          // updatedFields[index].valueType = 'int';
+                          //},
                         );
                       } else if (field.htmlType == 'float') {
                         return CustomTextField(
@@ -238,11 +282,27 @@ class _Reapply extends State<Reapply> {
                           isFloat: true,
                           controller: controllers[field.fileName],
                           onChanged: (value) {
-                            serviceData[index].fieldValueFloat = double.parse(
-                              value,
+                            int existingIndex = updatedFields.indexWhere(
+                              (e) => e.id == field.id,
                             );
-                            serviceData[index].valueType = 'float';
+                            if (existingIndex == -1) {
+                              updatedFields.add(
+                                UpdatedFields(
+                                  id: field.id,
+                                  fieldValueFloat: double.parse(value),
+                                ),
+                              );
+                            } else {
+                              updatedFields[existingIndex]
+                                  .fieldValueFloat = double.parse(value);
+                            }
                           },
+                          // (value) {
+                          //   updatedFields[index].fieldValueFloat = double.parse(
+                          //     value,
+                          //   );
+                          //   // updatedFields[index].valueType = 'float';
+                          // },
                         );
                       } else {
                         return const SizedBox();
@@ -403,9 +463,83 @@ class _Reapply extends State<Reapply> {
 
                 if (fieldsValid && filesValid && isChecked) {
                   setState(() => isButtonPressed = true);
-                  await Future.delayed(const Duration(milliseconds: 200));
-                  setState(() => isButtonPressed = false);
-                  showPaymentSheet();
+                  //await Future.delayed(const Duration(milliseconds: 200));
+                  //setState(() => isButtonPressed = false);
+                  await MostRequestedServices().updateFields(
+                    requestId: widget.requestId,
+                    updatedFields: updatedFields,
+                  );
+
+                  if (!mounted) return;
+                  //Navigator.pop(context);
+
+                  showDialog(
+                    context: context,
+                    builder:
+                        (_) => AlertDialog(
+                          backgroundColor: MyColors.white,
+                          title: const Text(
+                            "Citio",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: MyColors.dodgerBlue,
+                            ),
+                          ),
+                          content: const Text(
+                            AppStrings.requestSent,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: MyColors.black,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // Navigator.pop(context);
+                                Navigator.of(context).pop();
+                                // Navigator.pushReplacement(
+                                //   parentContext,
+                                //   MaterialPageRoute(
+                                //     builder:
+                                //         (_) =>
+                                //             GovernmentServiceDetails(
+                                //               id: widget.id,
+                                //             ),
+                                //   ),
+                                // );
+                              },
+
+                              child: const Text(
+                                AppStrings.done,
+                                style: TextStyle(
+                                  color: MyColors.dodgerBlue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Navigator.pop(context);
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const GovernmentScreen(),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              child: const Text(
+                                AppStrings.goToGov,
+                                style: TextStyle(
+                                  color: MyColors.dodgerBlue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                  );
                 }
               },
               icon: Icon(
@@ -561,92 +695,6 @@ class _Reapply extends State<Reapply> {
                                                       PaymentMethodData(),
                                                 ),
                                           );
-
-                                      await ApplyGovernmentService().submit(
-                                        serviceId: widget.id,
-                                        serviceData: widget.oldServiceData,
-                                        files: widget.oldFiles.values.toList(),
-                                        paymentMethodID: paymentMethod.id,
-                                      );
-
-                                      if (!mounted) return;
-                                      Navigator.pop(context);
-
-                                      showDialog(
-                                        context: parentContext,
-                                        builder:
-                                            (_) => AlertDialog(
-                                              backgroundColor: MyColors.white,
-                                              title: const Text(
-                                                "Citio",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
-                                                  color: MyColors.dodgerBlue,
-                                                ),
-                                              ),
-                                              content: const Text(
-                                                AppStrings.requestSent,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: MyColors.black,
-                                                ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    // Navigator.pop(context);
-                                                    Navigator.of(
-                                                      parentContext,
-                                                    ).pop();
-                                                    // Navigator.pushReplacement(
-                                                    //   parentContext,
-                                                    //   MaterialPageRoute(
-                                                    //     builder:
-                                                    //         (_) =>
-                                                    //             GovernmentServiceDetails(
-                                                    //               id: widget.id,
-                                                    //             ),
-                                                    //   ),
-                                                    // );
-                                                  },
-
-                                                  child: const Text(
-                                                    AppStrings.done,
-                                                    style: TextStyle(
-                                                      color:
-                                                          MyColors.dodgerBlue,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    // Navigator.pop(context);
-                                                    Navigator.pushAndRemoveUntil(
-                                                      parentContext,
-                                                      MaterialPageRoute(
-                                                        builder:
-                                                            (_) =>
-                                                                const GovernmentScreen(),
-                                                      ),
-                                                      (route) => false,
-                                                    );
-                                                  },
-                                                  child: const Text(
-                                                    AppStrings.goToGov,
-                                                    style: TextStyle(
-                                                      color:
-                                                          MyColors.dodgerBlue,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                      );
                                     } catch (e) {
                                       if (!mounted) return;
                                       setModalState(() {

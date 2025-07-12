@@ -184,7 +184,11 @@ class _GovernmentServiceDetailsState extends State<GovernmentServiceDetails> {
                   content:
                       service.requirements!.isNotEmpty
                           ? service.requirements!
-                              .map((r) => RequirmentItem(text: r.fileName!))
+                              .map(
+                                (r) => RequirmentItem(
+                                  text: r.attachedFileName ?? '',
+                                ),
+                              )
                               .toList()
                           : [
                             Text(

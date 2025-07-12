@@ -290,6 +290,7 @@ class _CustomCardState extends State<CustomCard> {
                                       builder:
                                           (context) => Reapply(
                                             id: widget.request.serviceId,
+                                            requestId: widget.request.requestId,
                                             title: widget.request.serviceName,
                                             oldFiles: oldFiles,
                                             oldServiceData: oldServiceData,
@@ -348,7 +349,7 @@ class _CustomCardState extends State<CustomCard> {
     );
 
     for (var file in files) {
-      print('اسم الملف: ${file.fileName}');
+      print('اسم الملف: ${file.attachedFileName}');
       print('الامتداد: ${file.fileExtension}');
       print('ID: ${file.id}');
 
@@ -357,7 +358,7 @@ class _CustomCardState extends State<CustomCard> {
 
       final tempFile = await writeToFile(
         fileData,
-        '${file.fileName}.${file.fileExtension}',
+        '${file.attachedFileName}.${file.fileExtension}',
       );
       final platformFile = await convertToPlatformFile(tempFile);
 

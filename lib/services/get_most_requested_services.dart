@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:citio/core/utils/variables.dart';
 import 'package:citio/helper/api.dart';
 import 'package:citio/models/all_services_categories.dart';
@@ -235,5 +237,33 @@ class MostRequestedServices {
       requestsList.add(RequiredFiles.fromJson(data[i]));
     }
     return requestsList;
+  }
+
+  Future<void> updateFields({
+    required int requestId,
+    required List<UpdatedFields> updatedFields,
+  }) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception('لم يتم العثور على التوكن!');
+    }
+
+    final String url =
+        '${Urls.governmentbaseUrl}/api/Fields/Attached/Request/$requestId';
+
+    final body = {
+      "serviceData": updatedFields.map((field) => field.toJson()).toList(),
+    };
+
+    try {
+      final response = await Api().put(url: url, token: token, body: body);
+
+      print('✅ تم التحديث بنجاح: $response');
+    } catch (e) {
+      print('❌ فشل التحديث: $e');
+      throw Exception('فشل التحديث: $e');
+    }
   }
 }

@@ -29,21 +29,24 @@ class Api {
     @required String? token,
   }) async {
     Map<String, String> headers = {};
-    headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
+    headers.addAll({'Content-Type': 'application/json'});
     if (token != null) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
-    http.Response response = await http.post(
+    http.Response response = await http.put(
       Uri.parse(url),
-      body: body,
+      body: jsonEncode(body),
       headers: headers,
     );
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      return data;
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      if (response.body.isEmpty) {
+        return null;
+      } else {
+        return jsonDecode(response.body);
+      }
     } else {
       throw Exception(
-        'there is a problem with status code ${response.statusCode}with body ${jsonDecode(response.body)}',
+        'هناك مشكلة في كود الحالة ${response.statusCode} ومحتوى الاستجابة ${response.body}',
       );
     }
   }
