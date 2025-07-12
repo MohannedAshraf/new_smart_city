@@ -367,7 +367,7 @@ class _ApplyService extends State<ApplyService> {
               style: ElevatedButton.styleFrom(
                 foregroundColor: MyColors.fadedGrey,
                 backgroundColor:
-                    isButtonPressed ? MyColors.primary : MyColors.fadedGrey,
+                    isButtonPressed ? MyColors.fadedGrey : MyColors.fadedGrey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
