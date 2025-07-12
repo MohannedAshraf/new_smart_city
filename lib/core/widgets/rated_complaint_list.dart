@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
 
 import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
@@ -94,6 +94,8 @@ class RatedComplaintList extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
+                                                const Spacer(),
+
                         SizedBox(height: screenHeight * 0.006),
                         Text(
                           AppStrings.solved,
