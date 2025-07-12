@@ -46,27 +46,29 @@ class _LoginPageState extends State<MyloginPage> {
       setState(() => _isLoading = false);
 
       if (result != null && context.mounted) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', result.token!);
-
-        try {
-          final profile = await ApiProfileHelper.fetchProfile();
-          await prefs.setString('userId', profile!.id ?? '');
-          print('❤️Stored userId: ${profile.id}');
-        } catch (e) {
-          print("❌ فشل في تحميل البروفايل: $e");
-        }
-
-        await FCMService().initFCM();
-
-        // ✅ هنا الشرط المطلوب:
+        // ✅ الحساب مفعل؟ خزّن التوكن وادخل
         if (result.isEmailConfirmed == true) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', result.token ?? '');
+          await prefs.setString('refreshToken', result.refreshToken ?? '');
+
+          try {
+            final profile = await ApiProfileHelper.fetchProfile();
+            await prefs.setString('userId', profile?.id ?? '');
+            print('❤️Stored userId: ${profile?.id}');
+          } catch (e) {
+            print("❌ فشل في تحميل البروفايل: $e");
+          }
+
+          await FCMService().initFCM();
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
           );
         } else {
-          Navigator.pushReplacement(
+          // ❌ الحساب غير مفعل → لا يتم تخزين أي توكن، فقط انتقل لصفحة التفعيل
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder:
