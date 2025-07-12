@@ -381,6 +381,8 @@ class AppStrings {
   static const String personalInfoTitle = 'المعلومات الشخصية';
   static const String requiredDocumentsTitle = 'الوثائق المطلوبة';
   static String apply(String serviceName) => 'لطلب $serviceName';
+  static String reapply(String serviceName) => 'لاعادة طلب $serviceName';
+
   static const String vendorsScreenTitle = 'المتاجر والخدمات';
   static const String vendorSearchHint = 'ابحث عن بائع أو خدمة';
   static const String filterTitle = 'تصفية حسب الفئة';
@@ -492,14 +494,11 @@ class AppStrings {
   static const String notConnected = "⚠️ غير متصل";
   static const String connected = "✅ متصل بـ SignalR";
 
-
   static const commentsTitle = 'التعلايقات';
   static const noCommentsYet = 'لا يوجد تعليقات الأن..كن أول من يضع تعليق!';
   static const reply = 'رد';
   static const viewReplies = 'عرض الردود';
-    static const replyingTo = 'رد على'; 
+  static const replyingTo = 'رد على';
   static const writeCommentHint = 'اكتب تعليق...';
   static const String writeAReply = 'اكتب ردك هنا...';
-
-
 }
