@@ -14,7 +14,7 @@ class ServiceFile {
     if (token == null) {
       throw Exception('لم يتم العثور على التوكن!');
     }
-    String url = '${Urls.governmentbaseUrl}/api/Files/Attached/Request/$id';
+    String url = '${Urls.governmentbaseUrl}/api/Files/Attached/Download/$id';
     Map<String, String> headers = {};
     headers.addAll({'Authorization': 'Bearer $token'});
     try {
