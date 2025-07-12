@@ -1,38 +1,70 @@
-// lib/core/helper/api_signalr_helper.dart
+// ignore_for_file: avoid_print
 
 import 'package:signalr_core/signalr_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:citio/models/chat_message_model.dart';
 
 class SignalRService {
   late HubConnection hubConnection;
 
   Future<void> initConnection({
-    required Function(String message) onMessageReceived,
+    required int orderId,
+    required Function(ChatMessage message) onMessageReceived,
     required Function(String error) onError,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token') ?? "";
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
+    if (token == null) {
+      onError("⚠️ لا يوجد توكن.");
+      return;
+    }
 
     hubConnection =
         HubConnectionBuilder()
             .withUrl(
-              'https://service-provider.runasp.net/hubs/message', // 🔁 رابط الـ SignalR
-              HttpConnectionOptions(accessTokenFactory: () async => token),
+              'https://service-provider.runasp.net/hubs/message',
+              HttpConnectionOptions(
+                transport: HttpTransportType.longPolling,
+                accessTokenFactory: () async => token,
+                skipNegotiation: false,
+              ),
             )
             .build();
 
-    hubConnection.on('ReceiveMessage', (arguments) {
-      if (arguments != null && arguments.isNotEmpty) {
-        onMessageReceived(arguments[0].toString());
+    hubConnection.onclose((error) async {
+      print("❌ الاتصال اتقفل: $error");
+      onError(error?.toString() ?? 'Connection closed');
+
+      await Future.delayed(const Duration(seconds: 5));
+      try {
+        await hubConnection.start();
+        await hubConnection.invoke("JoinOrderGroup", args: [orderId]);
+        print("🔄 تم إعادة الاتصال وضم الجروب Order_$orderId");
+      } catch (e) {
+        print("❌ فشل في إعادة الاتصال: $e");
       }
     });
 
-    hubConnection.onclose((error) {
-      onError(error?.toString() ?? 'Connection Closed');
+    hubConnection.on('ReceiveMessage', (arguments) {
+      if (arguments != null && arguments.isNotEmpty) {
+        try {
+          final data = Map<String, dynamic>.from(arguments[0]);
+          final message = ChatMessage.fromApiJson(data);
+          onMessageReceived(message);
+        } catch (e) {
+          print("❌ Error parsing message: $e");
+        }
+      }
     });
 
     try {
       await hubConnection.start();
+      print("✅ Connected to SignalR");
+
+      // ✅ تم تعديل الميثود هنا
+      await hubConnection.invoke("JoinOrderGroup", args: [orderId]);
+      print("✅ Joined group: Order_$orderId");
     } catch (e) {
       onError(e.toString());
     }
@@ -42,12 +74,27 @@ class SignalRService {
     required int orderId,
     required String sellerId,
     required String message,
+    required String receiverId,
   }) async {
     if (hubConnection.state == HubConnectionState.connected) {
-      await hubConnection.invoke(
-        'SendMessage',
-        args: [orderId, sellerId, message],
-      );
+      try {
+        await hubConnection.invoke(
+          'SendMessage',
+          args: [
+            {
+              "receiverId": receiverId,
+              "messageText": message,
+              "orderId": orderId,
+            },
+          ],
+        );
+        print("📤 Message sent: $message");
+      } catch (e) {
+        print("❌ Failed to send message: $e");
+        throw Exception("Failed to send");
+      }
+    } else {
+      print("⚠️ Connection is not active.");
     }
   }
 

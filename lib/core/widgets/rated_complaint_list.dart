@@ -6,6 +6,7 @@ import 'package:citio/helper/api_rating_issue.dart';
 import 'package:citio/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:share_plus/share_plus.dart';
 
 const String _baseUrl = 'https://cms-reporting.runasp.net/';
 
@@ -260,23 +261,69 @@ class RatedComplaintList extends StatelessWidget {
                                                         );
 
                                                 if (response.isSuccess) {
+                                                  Navigator.of(context).pop();
+
                                                   ScaffoldMessenger.of(
                                                     context,
                                                   ).showSnackBar(
                                                     SnackBar(
-                                                      content: Text(
-                                                        AppStrings.ratingSent,
-                                                        style: TextStyle(
-                                                          fontSize:
-                                                              screenWidth *
-                                                              0.035,
-                                                        ),
+                                                      content: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          const Expanded(
+                                                            child: Text(
+                                                              AppStrings
+                                                                  .complaintSuccessMessage,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          TextButton.icon(
+                                                            onPressed: () {
+                                                              final shareText =
+                                                                  "${AppStrings.shareTextPrefix}${issue.description ?? ''}";
+                                                              Share.share(
+                                                                shareText,
+                                                              );
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.share,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            label: const Text(
+                                                              AppStrings
+                                                                  .shareComplaint,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors
+                                                                        .white,
+                                                              ),
+                                                            ),
+                                                            style: TextButton.styleFrom(
+                                                              backgroundColor:
+                                                                  Color.fromARGB(
+                                                                    255,
+                                                                    13,
+                                                                    109,
+                                                                    103,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       backgroundColor:
                                                           MyColors.primary,
+                                                      duration: const Duration(
+                                                        seconds: 4,
+                                                      ),
                                                     ),
                                                   );
-                                                  Navigator.of(context).pop();
                                                 } else {
                                                   ScaffoldMessenger.of(
                                                     context,

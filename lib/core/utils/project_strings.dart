@@ -281,7 +281,7 @@ class AppStrings {
   static const String deleteImageConfirmTitle = "هل أنت متأكد؟";
   static const String deleteImageConfirmContent =
       "هل تريد حذف الصورة الشخصية الحالية؟";
-  static const String delete = "نعم، حذف";
+  static const String delete = " حذف";
   static const String imageDeleted = "تم حذف الصورة الشخصية ✅";
   static const String fillField = "من فضلك املأ هذا الحقل";
   static const String invalidEmail = "برجاء إدخال بريد إلكتروني صحيح";
@@ -480,8 +480,26 @@ class AppStrings {
       "confirmDeleteMessage  Static const String ";
   static const String confirmDeleteButton = "confirmDeleteButton";
 
-  //static const String cancel='الغاء';
   static const String paymentFailure = 'حدث خطأ أثناء الدفع';
   static const String otpSend = " تم إرسال الرمز بنجاح";
   static const String you = "انا";
+  static const String chatWithSeller = "الدردشة مع البائع";
+
+  static const String writeMessage = "اكتب رسالتك...";
+
+  static const String connectionClosed = "❌ الاتصال اتقفل";
+  static const String messageFailed = "❌ فشل إرسال الرسالة";
+  static const String notConnected = "⚠️ غير متصل";
+  static const String connected = "✅ متصل بـ SignalR";
+
+
+  static const commentsTitle = 'التعلايقات';
+  static const noCommentsYet = 'لا يوجد تعليقات الأن..كن أول من يضع تعليق!';
+  static const reply = 'رد';
+  static const viewReplies = 'عرض الردود';
+    static const replyingTo = 'رد على'; 
+  static const writeCommentHint = 'اكتب تعليق...';
+  static const String writeAReply = 'اكتب ردك هنا...';
+
+
 }

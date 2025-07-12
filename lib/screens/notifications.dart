@@ -4,7 +4,6 @@ import 'package:citio/core/utils/mycolors.dart';
 import 'package:citio/core/utils/project_strings.dart';
 import 'package:citio/core/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
-
 import '../models/notification_model.dart';
 import '../services/get_notification.dart';
 import '../services/notification_local_storage.dart';

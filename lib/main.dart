@@ -47,7 +47,7 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: false,
-      builder: (context) => CityApp(seenOnboarding: false),
+      builder: (context) => CityApp(seenOnboarding: seenOnboarding),
     ),
   );
 }
@@ -71,6 +71,7 @@ class CityApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: seenOnboarding ? const StartPage() : const SliderScreen(),
       theme: ThemeData(
+        fontFamily: 'Tajawal',
         hoverColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
@@ -171,153 +172,181 @@ class HomePageState extends State<HomePage> {
       body: pages[currentIndex],
       drawer: Drawer(
         backgroundColor: MyColors.white,
-        child: ListView(
+        child: Column(
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
+            // HEADER
+            SafeArea(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 16,
+                ),
+                width: double.infinity,
                 color: MyColors.specialbackground,
-              ),
-              child: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/icon/citio.svg',
-                    height: mq.size.height * 0.135,
-                    width: mq.size.width * 0.3,
-                    fit: BoxFit.cover,
-                  ),
-                  Text(
-                    AppStrings.welcome,
-                    style: TextStyle(
-                      color: MyColors.black,
-                      fontSize: mq.size.width * 0.043,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 3,
+                      child: SvgPicture.asset(
+                        'assets/icon/citio.svg',
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    const Text(
+                      AppStrings.welcome,
+                      style: TextStyle(
+                        color: MyColors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const Divider(
-              color: MyColors.ghostColor,
-              thickness: 0.6,
-              height: 0,
-            ),
-            drawerTile(
-              icon: Icons.home,
-              title: AppStrings.home,
-              onTap: () {
-                setState(() => currentIndex = 0);
-                Navigator.pop(context);
-              },
-            ),
-            drawerTile(
-              icon: Icons.local_police_rounded,
-              title: AppStrings.government,
-              onTap: () {
-                setState(() => currentIndex = 1);
-                Navigator.pop(context);
-              },
-            ),
-            drawerTile(
-              icon: Icons.report,
-              title: AppStrings.issues,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const IssueScreen()),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.view_compact_sharp,
-              title: AppStrings.services,
-              onTap: () {
-                setState(() => currentIndex = 3);
-                Navigator.pop(context);
-              },
-            ),
-            drawerTile(
-              icon: Icons.groups_outlined,
-              title: AppStrings.socialMedia,
-              onTap: () async {
-                Navigator.pop(context);
-                final prefs = await SharedPreferences.getInstance();
-                final isInitialized =
-                    prefs.getBool('isSocialUserInitialized') ?? false;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (_) =>
-                            isInitialized
-                                ? const SocialMedia()
-                                : const SocialmediaInitializerScreen(),
-                  ),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.account_balance,
-              title: 'خدماتي الحكومية',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const GovernmentServices()),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.shopping_basket_outlined,
-              title: AppStrings.vendors,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AllVendorsScreen()),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.receipt_long_outlined,
-              title: AppStrings.myOrders,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const MyOrdersPage()),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.person,
-              title: AppStrings.profile,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const Profile()),
-                );
-              },
-            ),
-            drawerTile(
-              icon: Icons.logout,
-              title: AppStrings.logout,
-              onTap: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString("token", "");
-                await prefs.setString("refreshToken", "");
-                await prefs.setBool('isSocialUserInitialized', false);
-                SocialMedia.cachedUserMinimal = null;
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const MyloginPage()),
-                );
-              },
+
+            const Divider(color: MyColors.grey, thickness: 0.6, height: 0),
+
+            // SCROLLABLE MENU ITEMS
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    drawerTile(
+                      icon: Icons.home,
+                      title: AppStrings.home,
+                      onTap: () {
+                        setState(() => currentIndex = 0);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.local_police_rounded,
+                      title: AppStrings.government,
+                      onTap: () {
+                        setState(() => currentIndex = 1);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.report,
+                      title: AppStrings.issues,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const IssueScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.view_compact_sharp,
+                      title: AppStrings.services,
+                      onTap: () {
+                        setState(() => currentIndex = 3);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.groups_outlined,
+                      title: AppStrings.socialMedia,
+                      onTap: () async {
+                        Navigator.pop(context);
+                        final prefs = await SharedPreferences.getInstance();
+                        final isInitialized =
+                            prefs.getBool('isSocialUserInitialized') ?? false;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (_) =>
+                                    isInitialized
+                                        ? const SocialMedia()
+                                        : const SocialmediaInitializerScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.account_balance,
+                      title: 'خدماتي الحكومية',
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const GovernmentServices(),
+                          ),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.shopping_basket_outlined,
+                      title: AppStrings.vendors,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AllVendorsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.receipt_long_outlined,
+                      title: AppStrings.myOrders,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MyOrdersPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.person,
+                      title: AppStrings.profile,
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const Profile()),
+                        );
+                      },
+                    ),
+                    drawerTile(
+                      icon: Icons.logout,
+                      title: AppStrings.logout,
+                      onTap: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString("token", "");
+                        await prefs.setString("refreshToken", "");
+                        await prefs.setBool('isSocialUserInitialized', false);
+                        SocialMedia.cachedUserMinimal = null;
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MyloginPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: MyColors.primary,

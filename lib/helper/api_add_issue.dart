@@ -16,6 +16,7 @@ class ComplaintApiService {
     File? image,
   }) async {
     final prefs = await SharedPreferences.getInstance();
+
     final token = prefs.getString('token');
 
     final formData = FormData.fromMap({
@@ -41,6 +42,7 @@ class ComplaintApiService {
         },
       ),
     );
+    print("Response Data: ${response.data}");
 
     return ComplaintResponse.fromJson(response.data);
   }

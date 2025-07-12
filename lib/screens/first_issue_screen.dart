@@ -25,7 +25,6 @@ class _IssueScreenState extends State<IssueScreen> {
   List<Values> inprogress = [];
   bool isLoading = true;
 
-  // دوال لحساب الأبعاد بالعرض والارتفاع بالنسبة للميديا كويري
   double wp(BuildContext context, double percentage) =>
       MediaQuery.of(context).size.width * (percentage / 100);
 
