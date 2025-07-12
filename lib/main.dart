@@ -71,6 +71,7 @@ class CityApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: seenOnboarding ? const StartPage() : const SliderScreen(),
       theme: ThemeData(
+        fontFamily: 'Tajawal',
         hoverColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         splashColor: Colors.transparent,
@@ -206,11 +207,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
 
-            const Divider(
-              color: MyColors.grey,
-              thickness: 0.6,
-              height: 0,
-            ),
+            const Divider(color: MyColors.grey, thickness: 0.6, height: 0),
 
             // SCROLLABLE MENU ITEMS
             Expanded(
