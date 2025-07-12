@@ -158,6 +158,7 @@ class _IssueScreenState extends State<IssueScreen> {
                           overlayColor: MaterialStateProperty.all(
                             Colors.transparent,
                           ),
+                      
                           isScrollable: false,
                           indicatorSize: TabBarIndicatorSize.label,
                           dividerColor: MyColors.white,

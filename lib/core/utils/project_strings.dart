@@ -28,7 +28,7 @@ class AppStrings {
   static const String ratingText = 'تقييما';
   static const String trackOrderTitle = "تتبع الطلب";
   static const String failedToLoadOrder = "فشل تحميل الطلب";
-  static const String pendingStatus = "Pending";
+  static const String pendingStatus = "معلقة";
   static const String estimatedDelivery = "Est. delivery";
   static const String noEstimation = "غير متوفر";
   static const String contactVendor = "تواصل مع  البائع";
