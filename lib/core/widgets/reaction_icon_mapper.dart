@@ -5,7 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 class ReactionIconMapper {
   static Widget getReactionIcon(String? type, {double size = 24}) {
-    // استخدام media query بدل الحجم الثابت
+ 
     return Builder(
       builder: (context) {
         final screenWidth = MediaQuery.of(context).size.width;
