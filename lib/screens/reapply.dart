@@ -161,7 +161,7 @@ class _Reapply extends State<Reapply> {
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: Text(
-            AppStrings.apply(widget.title),
+            AppStrings.reapply(widget.title),
             style: TextStyle(
               fontSize: media.width * 0.05, // تقريبًا 20 من 400
               fontWeight: FontWeight.bold,
