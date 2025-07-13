@@ -24,10 +24,10 @@ class ApiDiscount {
     );
 
     if (response.statusCode == 200) {
-      final jsonBody = json.decode(response.body);
-      return DiscountResponse.fromJson(jsonBody);
+      final body = json.decode(response.body);
+      return DiscountResponse.fromJson(body);
     } else {
-      throw Exception('Failed to load discount');
+      throw Exception('فشل في جلب الخصم');
     }
   }
 }

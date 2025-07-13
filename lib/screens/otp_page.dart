@@ -100,7 +100,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
         ),
       );
 
-      // ✅ التنقل حسب نوع الصفحة
       if (widget.sourcepage == "login" || widget.sourcepage == "register") {
         Navigator.pushReplacement(
           context,
@@ -152,134 +151,129 @@ class _VerificationScreenState extends State<VerificationScreen> {
     final width = size.width;
     final height = size.height;
 
-    return SingleChildScrollView(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(AppStrings.otpCode),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(centerTitle: true, title: const Text(AppStrings.otpCode)),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: width * 0.05,
+          right: width * 0.05,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 20,
         ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: height * 0.02),
-              Center(
-                child: SvgPicture.asset(
-                  "assets/icon/citio.svg",
-                  height: height * 0.18,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: height * 0.02),
+            Center(
+              child: SvgPicture.asset(
+                "assets/icon/citio.svg",
+                height: height * 0.18,
+              ),
+            ),
+            Text(
+              AppStrings.enterOtp,
+              style: TextStyle(
+                fontSize: width * 0.05,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: height * 0.01),
+            Text(
+              AppStrings.sentOtpToEmail,
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: width * 0.035,
+              ),
+            ),
+            SizedBox(height: height * 0.01),
+            Text(
+              obscureEmail(widget.email),
+              style: TextStyle(fontSize: width * 0.037, color: Colors.black87),
+            ),
+            SizedBox(height: height * 0.025),
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: SizedBox(
+                width: width * 0.65,
+                child: PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  controller: _pinController,
+                  keyboardType: TextInputType.number,
+                  animationType: AnimationType.fade,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(width * 0.025),
+                    fieldHeight: height * 0.065,
+                    fieldWidth: width * 0.12,
+                    activeFillColor: Colors.white,
+                    selectedFillColor: Colors.white,
+                    inactiveFillColor: Colors.white,
+                    activeColor: MyColors.primary,
+                    selectedColor: MyColors.primary,
+                    inactiveColor: Colors.grey[300]!,
+                  ),
+                  enableActiveFill: true,
+                  onChanged: (value) {},
                 ),
               ),
-              Text(
-                AppStrings.enterOtp,
-                style: TextStyle(
-                  fontSize: width * 0.05,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: height * 0.01),
-              Text(
-                AppStrings.sentOtpToEmail,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: width * 0.035,
-                ),
-              ),
-              SizedBox(height: height * 0.01),
-              Text(
-                obscureEmail(widget.email),
-                style: TextStyle(
-                  fontSize: width * 0.037,
-                  color: Colors.black87,
-                ),
-              ),
-              SizedBox(height: height * 0.025),
-
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: SizedBox(
-                  width: width * 0.65,
-                  child: PinCodeTextField(
-                    appContext: context,
-                    length: 4,
-                    controller: _pinController,
-                    keyboardType: TextInputType.number,
-                    animationType: AnimationType.fade,
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(width * 0.025),
-                      fieldHeight: height * 0.065,
-                      fieldWidth: width * 0.12,
-                      activeFillColor: Colors.white,
-                      selectedFillColor: Colors.white,
-                      inactiveFillColor: Colors.white,
-                      activeColor: MyColors.primary,
-                      selectedColor: MyColors.primary,
-                      inactiveColor: Colors.grey[300]!,
-                    ),
-                    enableActiveFill: true,
-                    onChanged: (value) {},
+            ),
+            SizedBox(height: height * 0.02),
+            SizedBox(
+              width: double.infinity,
+              height: height * 0.065,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : _submitOtp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(width * 0.025),
                   ),
                 ),
-              ),
-              SizedBox(height: height * 0.02),
-              SizedBox(
-                width: double.infinity,
-                height: height * 0.065,
-                child: ElevatedButton(
-                  onPressed: isLoading ? null : _submitOtp,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(width * 0.025),
-                    ),
-                  ),
-                  child:
-                      isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                            AppStrings.send,
-                            style: TextStyle(
-                              fontSize: width * 0.05,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                child:
+                    isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                          AppStrings.send,
+                          style: TextStyle(
+                            fontSize: width * 0.05,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                ),
+                        ),
               ),
-              SizedBox(height: height * 0.02),
-              Text(
-                AppStrings.didNotReceiveOtp,
-                style: TextStyle(fontSize: width * 0.045),
-              ),
-              TextButton(
-                onPressed:
-                    (_secondsLeft > 0 || isResending) ? null : _resendOtp,
-                child: Text(
-                  (_secondsLeft > 0)
-                      ? "${AppStrings.resendIn} $_secondsLeft ${AppStrings.seconds}"
-                      : AppStrings.resendOtp,
-                  style: TextStyle(
-                    fontSize: width * 0.04,
-                    color: (_secondsLeft > 0) ? Colors.grey : MyColors.primary,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Text(
-                AppStrings.poweredBy,
-                style: TextStyle(color: Colors.black, fontSize: width * 0.04),
-              ),
-              Text(
-                AppStrings.version,
+            ),
+            SizedBox(height: height * 0.02),
+            Text(
+              AppStrings.didNotReceiveOtp,
+              style: TextStyle(fontSize: width * 0.045),
+            ),
+            TextButton(
+              onPressed: (_secondsLeft > 0 || isResending) ? null : _resendOtp,
+              child: Text(
+                (_secondsLeft > 0)
+                    ? "${AppStrings.resendIn} $_secondsLeft ${AppStrings.seconds}"
+                    : AppStrings.resendOtp,
                 style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: width * 0.035,
+                  fontSize: width * 0.04,
+                  color: (_secondsLeft > 0) ? Colors.grey : MyColors.primary,
                 ),
               ),
-              SizedBox(height: height * 0.02),
-            ],
-          ),
+            ),
+            SizedBox(height: height * 0.04),
+            Text(
+              AppStrings.poweredBy,
+              style: TextStyle(color: Colors.black, fontSize: width * 0.04),
+            ),
+            Text(
+              AppStrings.version,
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: width * 0.035,
+              ),
+            ),
+            SizedBox(height: height * 0.02),
+          ],
         ),
       ),
     );

@@ -57,16 +57,12 @@ class _CartViewState extends State<CartView> {
 
     try {
       final discount = await ApiDiscount.getDiscount(code);
-      if (discount != null && discount.isSuccess) {
+      if (discount != null) {
         setState(() {
           discountValue = discount.value;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text(AppStrings.discountApplied)),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text(AppStrings.invalidDiscount)),
         );
       }
     } catch (e) {

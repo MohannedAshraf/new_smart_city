@@ -98,7 +98,7 @@ class ProductCard extends StatelessWidget {
                           ? description
                           : AppStrings.noDescription,
                       style: TextStyle(
-                        fontSize: screenHeight * 0.01,
+                        fontSize: screenHeight * 0.017,
                         color: Colors.grey,
                       ),
                       overflow: TextOverflow.ellipsis,

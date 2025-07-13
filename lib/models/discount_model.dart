@@ -2,20 +2,10 @@
 
 class DiscountResponse {
   final double value;
-  final bool isSuccess;
-  final bool isFailure;
 
-  DiscountResponse({
-    required this.value,
-    required this.isSuccess,
-    required this.isFailure,
-  });
+  DiscountResponse({required this.value});
 
-  factory DiscountResponse.fromJson(Map<String, dynamic> json) {
-    return DiscountResponse(
-      value: (json['value'] ?? 0).toDouble(),
-      isSuccess: json['isSuccess'] ?? false,
-      isFailure: json['isFailure'] ?? false,
-    );
+  factory DiscountResponse.fromJson(dynamic json) {
+    return DiscountResponse(value: (json is num) ? json.toDouble() : 0.0);
   }
 }
