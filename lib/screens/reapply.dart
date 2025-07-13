@@ -11,6 +11,7 @@ import 'package:citio/screens/government_screen.dart';
 import 'package:citio/screens/government_service_details.dart';
 import 'package:citio/services/apply_government_service.dart';
 import 'package:citio/services/get_most_requested_services.dart';
+import 'package:citio/services/update_attcahed_files.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,6 +57,8 @@ class _Reapply extends State<Reapply> {
   Map<String, TextEditingController> controllers = {};
   // Map<int, PlatformFile> widget.oldFiles = {};
   Map<int, PlatformFile> uploadedFiles = {};
+  Map<int, PlatformFile> updatedFiles = {};
+  Map<int, bool> removedFiles = {};
   List<bool> fieldsError = [];
   Map<int, bool> filesError = {};
 
@@ -91,7 +94,12 @@ class _Reapply extends State<Reapply> {
             oldField.fieldValueString ??
             oldField.fieldValueInt?.toString() ??
             oldField.fieldValueFloat?.toString() ??
-            oldField.fieldValueDate?.toString();
+            (oldField.fieldValueDate != null
+                ? DateFormat(
+                  'MM/dd/yy',
+                  'en_US',
+                ).format(oldField.fieldValueDate!)
+                : null);
 
         controllers[field.fileName] = TextEditingController(
           text: oldValue ?? "",
@@ -153,7 +161,7 @@ class _Reapply extends State<Reapply> {
           surfaceTintColor: MyColors.white,
           automaticallyImplyLeading: true,
           title: Text(
-            AppStrings.apply(widget.title),
+            AppStrings.reapply(widget.title),
             style: TextStyle(
               fontSize: media.width * 0.05, // تقريبًا 20 من 400
               fontWeight: FontWeight.bold,
@@ -322,7 +330,7 @@ class _Reapply extends State<Reapply> {
                     files.map<Widget>((file) {
                       return CustomUploadBox(
                         file: uploadedFiles[file.id],
-                        header: file.fileName ?? '',
+                        header: '',
                         showError: filesError[file.id] ?? false,
                         onTap: () async {
                           FilePickerResult? result =
@@ -348,12 +356,18 @@ class _Reapply extends State<Reapply> {
                             }
                             setState(() {
                               uploadedFiles[file.id] = pickedFile;
+                              updatedFiles[file.id] = pickedFile;
                             });
                           }
                         },
                         onRemove: () {
                           setState(() {
-                            uploadedFiles.remove(file.id);
+                            if (uploadedFiles.containsKey(file.id)) {
+                              uploadedFiles.remove(file.id);
+                            } else if (updatedFiles != null &&
+                                updatedFiles!.containsKey(file.id)) {
+                              updatedFiles!.remove(file.id);
+                            }
                           });
                         },
                       );
@@ -469,6 +483,10 @@ class _Reapply extends State<Reapply> {
                     requestId: widget.requestId,
                     updatedFields: updatedFields,
                   );
+                  await UpdateAttachedFiles().updateAttachedFiles(
+                    widget.requestId,
+                    updatedFiles.values.toList(),
+                  );
 
                   if (!mounted) return;
                   //Navigator.pop(context);
@@ -497,6 +515,7 @@ class _Reapply extends State<Reapply> {
                             TextButton(
                               onPressed: () {
                                 // Navigator.pop(context);
+                                Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                                 // Navigator.pushReplacement(
                                 //   parentContext,

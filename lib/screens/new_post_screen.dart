@@ -248,7 +248,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   TextField(
                     controller: _captionController,
                     maxLength: _maxLength,
-                    maxLines: null,
+                    minLines: 3,
+                    maxLines: 6,
                     onChanged: (_) => setState(() {}),
                     decoration: const InputDecoration(
                       hintText: AppStrings.captionHint,
